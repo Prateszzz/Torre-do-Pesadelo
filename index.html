@@ -4787,11 +4787,11 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
             <span class="formula-editor-title">Pontos de Vida (PV)</span>
           </div>
           <div class="formula-editor-body">
-            <div class="formula-desc">Resistência total. Padrão: <code>(vigor + alma) × (2 + ⌊nível÷2⌋)</code></div>
+            <div class="formula-desc">Resistência total. Padrão: <code>20 + (vigor × 3) + (8 + modVigor × 2) × (nível − 1)</code></div>
             <div class="formula-vars">Variáveis recomendadas: <code>vigor</code> <code>alma</code> <code>nivel</code> <code>modVigor</code> <code>modAlma</code> <code>bonusPV</code></div>
             <div class="formula-row" style="margin-top:.75rem">
               <span class="formula-label">Fórmula PV Base</span>
-              <input type="text" class="formula-input" id="form-pv" value="(vigor + alma) * (2 + floor(nivel / 2))">
+              <input type="text" class="formula-input" id="form-pv" value="20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)">
               <button class="apply-formula-btn" onclick="aplicarFormula(&#39;pv&#39;)">Aplicar</button>
             </div>
             <div class="formula-result" id="res-pv">✓ Fórmula salva e aplicada.</div>
@@ -4804,11 +4804,11 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
             <span class="formula-editor-title">Stamina (STA)</span>
           </div>
           <div class="formula-editor-body">
-            <div class="formula-desc">Fôlego e esforço físico. Por padrão igual ao PV base.</div>
-            <div class="formula-vars">Variáveis recomendadas: <code>vigor</code> <code>alma</code> <code>nivel</code> <code>pvBase</code> <code>bonusSTA</code></div>
+            <div class="formula-desc">Fôlego e esforço físico. Padrão: <code>20 + (alma × 2 + intelecto) + (6 + modAlma + modIntelecto) × (nível − 1)</code></div>
+            <div class="formula-vars">Variáveis recomendadas: <code>alma</code> <code>intelecto</code> <code>modAlma</code> <code>modIntelecto</code> <code>nivel</code> <code>bonusSTA</code></div>
             <div class="formula-row" style="margin-top:.75rem">
               <span class="formula-label">Fórmula STA</span>
-              <input type="text" class="formula-input" id="form-sta" value="(vigor + alma) * (2 + floor(nivel / 2))">
+              <input type="text" class="formula-input" id="form-sta" value="20 + (alma * 2 + intelecto) + (6 + modAlma + modIntelecto) * (nivel - 1)">
               <button class="apply-formula-btn" onclick="aplicarFormula(&#39;sta&#39;)">Aplicar</button>
             </div>
             <div class="formula-result" id="res-sta">✓ Fórmula salva e aplicada.</div>
@@ -4821,11 +4821,11 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
             <span class="formula-editor-title">Pontos de Energia (PE)</span>
           </div>
           <div class="formula-editor-body">
-            <div class="formula-desc">Energia para poderes. Padrão: <code>(⌊nível÷2⌋ + 2) × (modAlma + modIntelecto)</code></div>
+            <div class="formula-desc">Energia para poderes. Padrão: <code>(⌊nível÷2⌋ + 2) × (modAlma + modIntelecto + 1)</code></div>
             <div class="formula-vars">Variáveis recomendadas: <code>nivel</code> <code>modAlma</code> <code>modIntelecto</code> <code>bonusPE</code></div>
             <div class="formula-row" style="margin-top:.75rem">
               <span class="formula-label">Fórmula PE</span>
-              <input type="text" class="formula-input" id="form-pe" value="(floor(nivel / 2) + 2) * (modAlma + modIntelecto) + bonusPE">
+              <input type="text" class="formula-input" id="form-pe" value="(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE">
               <button class="apply-formula-btn" onclick="aplicarFormula(&#39;pe&#39;)">Aplicar</button>
             </div>
             <div class="formula-result" id="res-pe">✓ Fórmula salva e aplicada.</div>
@@ -4838,7 +4838,8 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
             <span class="formula-editor-title">Custo de cada Ponto de Energia</span>
           </div>
           <div class="formula-editor-body">
-            <div class="formula-desc">Calculado automaticamente, sem precisar editar nada: <code>INT((STA máx ÷ 2) ÷ PE máx)</code></div>
+            <div class="formula-desc">Calculado automaticamente, sem precisar editar nada: <code>(STA máx ÷ 2) ÷ PE máx</code> — arredondado para cima, mínimo 1.</div>
+            <div class="formula-vars">Regra de ouro: primeiro calcula-se o <strong>total de PE</strong> (fórmula própria); depois divide-se <strong>metade da STA máxima</strong> por esse total → <strong>custo de cada PE</strong>. Gastando todos os PE, o custo total consome exatamente 50% da STA.</div>
             <div class="formula-vars">Aparece no campo <strong>Custo</strong> do bloco de PE da ficha, e é usado para descontar PE/STA quando você gasta Pontos de Energia.</div>
             <div class="formula-desc" style="margin-top:.5rem">
               <strong style="color:var(--silver)">PE Atual</strong> = PE máx − (Gasto PE × Custo)<br>
@@ -5010,7 +5011,7 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
 
     <section id="cap3" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 3</span><h1>Atributos</h1><p>Todo personagem possui seis atributos que definem do que ele é capaz — no corpo, na mente e na alma. Ao criar, você recebe <strong class="key-term">80 pontos</strong> para distribuir entre eles. Cada valor gera um <strong>modificador</strong> (a tabela no fim do capítulo), que é o número que de fato entra nas rolagens.</p><div class="attr-grid"><div class="attr-card"><h4>Força (FOR)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Poder físico bruto do corpo.</p><ul><li>O quanto você acerta num soco ou golpe corpo a corpo</li><li>Levantar, empurrar ou arrastar peso</li><li>Quebrar, dobrar ou forçar objetos</li><li>Resistir a um agarrão ou se soltar dele</li></ul></div><div class="attr-card"><h4>Destreza (DES)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Agilidade, reflexos e precisão.</p><ul><li>Esquivar de ataques e desviar de perigos</li><li>Mirar com precisão à distância</li><li>Equilíbrio, acrobacia e furtividade</li><li>Quem age primeiro no combate (iniciativa)</li></ul></div><div class="attr-card"><h4>Vigor (VIG)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Resistência e vitalidade do corpo.</p><ul><li>Seus Pontos de Vida</li><li>Aguentar dano, veneno, frio e exaustão</li><li>Sustentar esforço físico prolongado</li><li>Segurar o próprio poder sem o corpo colapsar</li></ul></div><div class="attr-card"><h4>Intelecto (INT)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Raciocínio, percepção e saber.</p><ul><li>Resolver problemas e bolar estratégias</li><li>Investigar, deduzir e notar detalhes</li><li>Conhecimento sobre o mundo e suas ameaças</li><li>Controle mental sobre poderes complexos</li></ul></div><div class="attr-card"><h4>Alma (ALM)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">A força do seu Núcleo e do seu poder.</p><ul><li>A potência bruta do seu Poder</li><li>Manipular energia e o sobrenatural</li><li>Resistir à corrupção da Névoa</li><li>Firmeza espiritual diante do medo e do horror</li></ul></div><div class="attr-card"><h4>Carisma (CAR)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Presença e força de personalidade.</p><ul><li>Convencer, enganar ou intimidar</li><li>Liderar e inspirar aliados</li><li>Resistir a manipulação mental ou espiritual</li><li>O peso da sua presença num ambiente</li></ul></div></div><p style="margin-top:1.25rem"><strong>Como o modificador funciona:</strong> o valor que você coloca no atributo não é usado diretamente nas rolagens — o que conta é o modificador derivado dele. A partir de 10 (o valor "humano médio"), cada 2 pontos sobem o modificador em +1. É esse número que você soma aos dados.</p><div class="table-wrapper"><table><thead><tr><th>Valor do Atributo</th><th>Modificador</th></tr></thead><tbody><tr><td>8–9</td><td>−1</td></tr><tr><td>10–11</td><td>+0</td></tr><tr><td>12–13</td><td>+1</td></tr><tr><td>14–15</td><td>+2</td></tr><tr><td>16–17</td><td>+3</td></tr><tr><td>18–19</td><td>+4</td></tr><tr><td>20–21</td><td>+5</td></tr></tbody></table></div></section>
 
-    <section id="cap4" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 4</span><h1>Recursos</h1><p>Recursos são os números que dizem o quanto o personagem aguenta, quanto poder consegue gastar e quão difícil é atingi-lo. Eles não são distribuídos manualmente: a ficha calcula todos automaticamente a partir dos seus atributos e nível. Quando você sobe um atributo, os recursos ligados a ele sobem junto.</p><div class="attr-grid"><div class="attr-card"><h4>PV — Pontos de Vida</h4><p style="font-size:.87rem;color:var(--text-muted)">O quanto o corpo aguenta antes de cair. Nasce do Vigor (durabilidade física) somado à Alma (energia vital que sustenta o corpo).</p></div><div class="attr-card"><h4>STA — Stamina</h4><p style="font-size:.87rem;color:var(--text-muted)">Fôlego para esforço físico intenso: correr, escalar, lutar de forma prolongada. Esgotar a stamina deixa o personagem exausto.</p></div><div class="attr-card"><h4>PE — Energia</h4><p style="font-size:.87rem;color:var(--text-muted)">O combustível dos poderes e técnicas. Cada técnica tem um custo em PE — sem energia, o poder não se manifesta.</p></div><div class="attr-card"><h4>CA — Classe de Armadura</h4><p style="font-size:.87rem;color:var(--text-muted)">O quão difícil é acertar o personagem. Quanto maior, mais ataques erram ou são desviados antes de causar dano.</p></div><div class="attr-card"><h4>Iniciativa</h4><p style="font-size:.87rem;color:var(--text-muted)">Define quem age primeiro quando o combate começa. Ligada à Destreza — reflexos rápidos agem antes.</p></div><div class="attr-card"><h4>Proficiência</h4><p style="font-size:.87rem;color:var(--text-muted)">O bônus de treinamento que cresce com o nível. É somado às perícias em que você tem Maestria ou Especialização.</p></div></div><div class="system-card"><strong>Fórmula dos Pontos de Vida:</strong><br><br>PV = (Vigor + Alma) × (2 + ⌊Nível ÷ 2⌋)<br><br>O Vigor entra como durabilidade do corpo; a Alma, como a energia vital que o mantém de pé. Um Desperto pode ser fisicamente frágil mas ainda resistente, se a alma dele for forte o bastante para sustentá-lo. A Stamina (STA) usa exatamente a mesma fórmula — os dois recursos crescem juntos conforme o personagem sobe de nível.</div></section>
+    <section id="cap4" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 4</span><h1>Recursos</h1><p>Recursos são os números que dizem o quanto o personagem aguenta, quanto poder consegue gastar e quão difícil é atingi-lo. Eles não são distribuídos manualmente: a ficha calcula todos automaticamente a partir dos seus atributos e nível. Quando você sobe um atributo, os recursos ligados a ele sobem junto.</p><div class="attr-grid"><div class="attr-card"><h4>PV — Pontos de Vida</h4><p style="font-size:.87rem;color:var(--text-muted)">O quanto o corpo aguenta antes de cair. Nasce do Vigor (durabilidade física) somado à Alma (energia vital que sustenta o corpo).</p></div><div class="attr-card"><h4>STA — Stamina</h4><p style="font-size:.87rem;color:var(--text-muted)">Fôlego para esforço físico intenso: correr, escalar, lutar de forma prolongada. Esgotar a stamina deixa o personagem exausto.</p></div><div class="attr-card"><h4>PE — Energia</h4><p style="font-size:.87rem;color:var(--text-muted)">O combustível dos poderes e técnicas. Cada técnica tem um custo em PE — sem energia, o poder não se manifesta.</p></div><div class="attr-card"><h4>CA — Classe de Armadura</h4><p style="font-size:.87rem;color:var(--text-muted)">O quão difícil é acertar o personagem. Quanto maior, mais ataques erram ou são desviados antes de causar dano.</p></div><div class="attr-card"><h4>Iniciativa</h4><p style="font-size:.87rem;color:var(--text-muted)">Define quem age primeiro quando o combate começa. Ligada à Destreza — reflexos rápidos agem antes.</p></div><div class="attr-card"><h4>Proficiência</h4><p style="font-size:.87rem;color:var(--text-muted)">O bônus de treinamento que cresce com o nível. É somado às perícias em que você tem Maestria ou Especialização.</p></div></div><div class="system-card"><strong>Fórmulas dos Recursos:</strong><br><br>PV = 20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)<br>STA = 20 + (Alma × 2 + Intelecto) + (6 + ModAlma + ModIntelecto) × (Nível − 1)<br>PE = (⌊Nível ÷ 2⌋ + 2) × (ModAlma + ModIntelecto + 1)<br><br>O Vigor é o coração dos Pontos de Vida — cada ponto soma 3 PV, e o crescimento por nível é acelerado pelo seu modificador. A Stamina é alimentada pela Alma e pelo Intelecto, e a Energia (PE) nasce dos modificadores de Alma e Intelecto. Os três recursos crescem juntos conforme o personagem sobe de nível.</div></section>
 
     <section id="cap5" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 5</span><h1>Poder</h1><p>O Poder é o coração do personagem — mas é muito mais do que uma "habilidade". Ele é a <strong class="key-term">expressão da sua Alma</strong>: nasce de quem o personagem é, da sua personalidade, das suas dores e da sua história. Dois Despertos nunca manifestam o mesmo poder da mesma forma, porque nenhum deles tem a mesma alma.</p><p>O poder não vive separado do corpo. Ele está ligado diretamente à pessoa: ao que ela sente, ao que ela suporta fisicamente e ao quanto ela compreende a si mesma. Por isso, para funcionar de verdade, todo poder se apoia em <strong>três pilares</strong> que precisam crescer juntos.</p><div class="attr-grid"><div class="attr-card"><h4>Poder — a Expressão</h4><p style="font-size:.88rem;color:var(--text-muted)">A matéria-prima do seu conceito: espadas, fogo, sombras, telecinese, ecos. É a parte visível — o "o quê" você manifesta.</p></div><div class="attr-card"><h4>Mente — o Controle</h4><p style="font-size:.88rem;color:var(--text-muted)">Sua capacidade de moldar, direcionar e compreender o poder. Quanto mais complexo ele fica, mais exige foco, vontade e entendimento.</p></div><div class="attr-card"><h4>Corpo — o Suporte</h4><p style="font-size:.88rem;color:var(--text-muted)">O quanto seu corpo aguenta sustentar o poder. Mesmo poderes "mentais" cobram um preço físico quando usados de forma intensa.</p></div></div><div class="lore-box"><strong>A verdade sobre o Poder:</strong> os melhores poderes não são os mais fortes no começo — são aqueles cujos donos fizeram os três pilares evoluírem em equilíbrio. Um poder que cresce torto sempre cobra um preço: na sanidade, no corpo, ou na própria alma. À medida que você avança pelos Despertares, o conceito se expande, mas a exigência sobre mente e corpo cresce junto.</div><div class="system-card"><strong>Na ficha, seu Poder reúne:</strong><br><br><strong>Poder Principal</strong> — o conceito central da sua Alma.<br><strong>Conceito do Poder</strong> — por que ele é assim, ligado à sua personalidade e história.<br><strong>Atributo Principal</strong> — o atributo que rege sua manifestação.<br><strong>Técnicas</strong> — as aplicações concretas que você usa em combate, com custos e efeitos.<br><strong>Despertares</strong> — as evoluções que expandem o que seu poder pode fazer.</div></section>
 
@@ -8644,7 +8645,7 @@ function atualizarFichaHero() {
           <div class="ficha-hero-recursos">
             <div class="ficha-hero-recurso-pill nivel"><span class="pill-label">Nível</span><strong>${nivel}</strong></div>
             <div class="ficha-hero-recurso-pill pv" title="PV Atual / Máximo"><span class="pill-label">PV</span><strong style="color:${corRecurso(pvAtual,pvMax,'pv')}">${pvAtual}</strong><span style="opacity:.5;font-size:.7em;font-weight:400">/${pvMax}</span></div>
-            <div class="ficha-hero-recurso-pill pe" title="PE Atual / Máximo — (⌊nível÷2⌋+2)×(modAlma+modInt)"><span class="pill-label">PE</span><strong style="color:${corRecurso(peAtual,peMax,'pe')}">${peAtual}</strong><span style="opacity:.5;font-size:.7em;font-weight:400">/${peMax}</span></div>
+            <div class="ficha-hero-recurso-pill pe" title="PE Atual / Máximo — (⌊nível÷2⌋+2)×(modAlma+modInt+1)"><span class="pill-label">PE</span><strong style="color:${corRecurso(peAtual,peMax,'pe')}">${peAtual}</strong><span style="opacity:.5;font-size:.7em;font-weight:400">/${peMax}</span></div>
             <div class="ficha-hero-recurso-pill sta" title="STA Atual / Máximo"><span class="pill-label">STA</span><strong style="color:${corRecurso(staAtual,staMax,'sta')}">${staAtual}</strong><span style="opacity:.5;font-size:.7em;font-weight:400">/${staMax}</span></div>
           </div>
         </div>
@@ -9551,11 +9552,11 @@ function _bonusPericiaSafe(formulaCfg, formulaKey, ctx, attrMod) {
 
 function getFormulas() {
   const def = {
-    // Fórmulas oficiais Torre do Pesadelo
-    pv:         '(vigor + alma) * (2 + floor(nivel / 2))',
-    sta:        '(vigor + alma) * (2 + floor(nivel / 2))',
+    // Fórmulas oficiais Torre do Pesadelo — padrão único PV/STA/PE
+    pv:         '20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)',
+    sta:        '20 + (alma * 2 + intelecto) + (6 + modAlma + modIntelecto) * (nivel - 1)',
     // PE inclui bonusPE explicitamente — a variável existe no contexto
-    pe:         '(floor(nivel / 2) + 2) * (modAlma + modIntelecto) + bonusPE',
+    pe:         '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE',
     ca:         '10 + modDestreza + ceil(modVigor / 2) + bonusCA',
     init:       'modDestreza',
     // Maestria = 1 + ⌈nível÷4⌉  (mínimo 2, máximo 6 no nível 20)
@@ -9624,9 +9625,9 @@ function getFormulas() {
 // (localStorage + Firestore compartilhado), e recalcula a ficha aberta.
 function restaurarFormulasPadrao() {
   const def = {
-    pv:         '(vigor + alma) * (2 + floor(nivel / 2))',
-    sta:        '(vigor + alma) * (2 + floor(nivel / 2))',
-    pe:         '(floor(nivel / 2) + 2) * (modAlma + modIntelecto) + bonusPE',
+    pv:         '20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)',
+    sta:        '20 + (alma * 2 + intelecto) + (6 + modAlma + modIntelecto) * (nivel - 1)',
+    pe:         '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE',
     ca:         '10 + modDestreza + ceil(modVigor / 2) + bonusCA',
     init:       'modDestreza',
     maestria:   '1 + ceil(nivel / 4)',
@@ -9661,7 +9662,7 @@ async function carregarFormulasDaNuvem() {
         (peNorm.includes('max(') && !peNorm.includes('bonusPE'));
       if (peInvalido) {
         console.warn('[Firestore] PE corrompido na nuvem, descartando:', f.pe);
-        f.pe = '(floor(nivel / 2) + 2) * (modAlma + modIntelecto) + bonusPE';
+        f.pe = '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE';
         // Persiste a correção de volta na nuvem também
         salvarFormulas(f);
       }
@@ -9883,11 +9884,11 @@ function calcTudo() {
   set('r-init',    fmtMod(Math.round(avaliarFormula(f['init'], ctx))));
   set('r-maestria', '+' + Math.round(maestria));
 
-  // ── Custo de cada Ponto de Energia: floor(STA_max ÷ PE_max) ──
-  // Fórmula: STA ÷ Pontos de Núcleo (PE Max). STA máx inclui bônus extra.
+  // ── Custo de cada Ponto de Energia: ceil((STA_max ÷ 2) ÷ PE_max), mínimo 1 ──
+  // Regra de ouro: gastar TODOS os PE consome exatamente 50% da STA máxima.
   const staExtra = parseInt(document.getElementById('sta-extra')?.value) || 0;
   const staMaxTotal = staBase + bonusSTA + staExtra;
-  const peCusto = peMax > 0 ? Math.floor(staMaxTotal / peMax) : 0;
+  const peCusto = peMax > 0 ? Math.max(1, Math.ceil((staMaxTotal / 2) / peMax)) : 0;
   const peCustoEl = document.getElementById('pe-custo');
   if (peCustoEl) peCustoEl.value = peCusto;
 
@@ -10277,7 +10278,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
           <!-- PV -->
           <div style="background:linear-gradient(160deg,#161220,#0e0c14);border:1px solid rgba(50,40,65,.5);border-top:2px solid var(--accent);padding:.75rem .6rem">
             <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.5rem;display:flex;align-items:center;gap:.3rem">
-              PV <span class="info-btn" style="font-size:.65rem">ⓘ<span class="tooltip">(vigor + alma) × (2 + ⌊nível÷2⌋)</span></span>
+              PV <span class="info-btn" style="font-size:.65rem">ⓘ<span class="tooltip">20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)</span></span>
             </div>
             <div style="text-align:center;font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--accent-light);line-height:1;margin-bottom:.3rem" id="r-pv">0</div>
             <div style="font-size:.58rem;color:#555;text-align:center;margin-bottom:.5rem">máximo</div>
@@ -10331,7 +10332,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
           <!-- PE -->
           <div style="background:linear-gradient(160deg,#161220,#0e0c14);border:1px solid rgba(50,40,65,.5);border-top:2px solid rgba(180,140,30,.7);padding:.75rem .6rem">
             <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);margin-bottom:.5rem;display:flex;align-items:center;gap:.3rem">
-              PE <span class="info-btn" style="font-size:.65rem">ⓘ<span class="tooltip">Máx = (⌊nível÷2⌋ + 2) × (modAlma + modIntelecto). Custo de cada PE = INT(STA máx ÷ PE máx). Atual = PE Máx − (Gasto × Custo)</span></span>
+              PE <span class="info-btn" style="font-size:.65rem">ⓘ<span class="tooltip">Máx = (⌊nível÷2⌋ + 2) × (modAlma + modIntelecto + 1). Custo de cada PE = (STA máx ÷ 2) ÷ PE máx (arred. para cima, mín. 1). Atual = PE Máx − (Gasto × Custo)</span></span>
             </div>
             <div style="text-align:center;font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold-light);line-height:1;margin-bottom:.3rem" id="r-pe">0</div>
             <div style="font-size:.58rem;color:#555;text-align:center;margin-bottom:.5rem">máximo</div>
@@ -10345,8 +10346,8 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
                 <input type="number" id="pe-gasto" value="0" style="width:44px;background:var(--bg-input);border:1px solid var(--accent-t40);color:var(--accent-text);padding:.15rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="calcRecursoAtual('pe');salvarLocal()">
               </div>
               <div style="display:flex;align-items:center;justify-content:space-between;gap:.3rem">
-                <span style="font-size:.6rem;color:var(--gold);white-space:nowrap" title="INT(STA máx ÷ PE máx)">Custo</span>
-                <input type="number" id="pe-custo" value="0" readonly style="width:44px;background:var(--bg-input);border:1px solid rgba(180,140,30,.3);color:var(--gold);padding:.15rem .3rem;font-size:.78rem;outline:none;text-align:center" title="Custo de cada Ponto de Energia = INT(STA máx ÷ PE máx) — calculado automaticamente">
+                <span style="font-size:.6rem;color:var(--gold);white-space:nowrap" title="(STA máx ÷ 2) ÷ PE máx — arred. para cima, mín. 1">Custo</span>
+                <input type="number" id="pe-custo" value="0" readonly style="width:44px;background:var(--bg-input);border:1px solid rgba(180,140,30,.3);color:var(--gold);padding:.15rem .3rem;font-size:.78rem;outline:none;text-align:center" title="Custo de cada Ponto de Energia = (STA máx ÷ 2) ÷ PE máx (arredondado para cima, mínimo 1) — gastar todos os PE consome 50% da STA">
               </div>
               <div style="border-top:1px solid var(--border);padding-top:.3rem;text-align:center">
                 <div style="font-size:.55rem;color:var(--gold-light);letter-spacing:1px;margin-bottom:.1rem">ATUAL</div>
@@ -14035,15 +14036,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
             </div>
 
-            <h3>Pontos de Vida (PV) e Stamina (STA)</h3>
-            <p>Seus Pontos de Vida e sua Stamina são calculados com a mesma fórmula, que cresce junto com o seu nível de personagem (1 a 20):</p>
+            <h3>Pontos de Vida (PV), Stamina (STA) e Energia (PE)</h3>
+            <p>Seus recursos principais crescem com o nível de personagem (1 a 20). Cada atributo alimenta um aspecto diferente dos seus pools:</p>
             <div class="system-card">
-                <strong>PV = STA = (Vigor + Alma) × (2 + ⌊Nível ÷ 2⌋)</strong><br><br>
-                Vigor representa durabilidade corporal e resistência física.<br>
-                Alma representa energia vital e sustentação energética.<br>
-                No nível 1, a fórmula é equivalente a <em>(Vigor × 2) + (Alma × 2)</em> — a base clássica; a cada níveis pares, seus pools crescem.
+                <strong>PV = 20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)</strong><br><br>
+                O Vigor é o coração dos Pontos de Vida: cada ponto de Vigor adiciona 3 PV, e a cada nível o crescimento é acelerado pelo seu modificador de Vigor.
             </div>
-            <p><strong>PV</strong> é sua vida física — ao chegar a 0, você fica incapacitado e corre risco de morte. <strong>STA</strong> é o principal combustível de combate e esforço físico, usado para Técnicas, Utilizações e manobras. Recomenda-se calcular na ficha (o portal já faz isso automaticamente).</p>
+            <div class="system-card">
+                <strong>STA = 20 + (Alma × 2 + Intelecto) + (6 + ModAlma + ModIntelecto) × (Nível − 1)</strong><br><br>
+                A Stamina é alimentada pela Alma (×2) e pelo Intelecto, com crescimento por nível guiado pelos dois modificadores.
+            </div>
+            <div class="system-card">
+                <strong>PE = (⌊Nível ÷ 2⌋ + 2) × (ModAlma + ModIntelecto + 1)</strong><br><br>
+                A Energia é a reserva de poder sobrenatural — nasce dos modificadores de Alma e Intelecto e cresce a cada dois níveis.
+            </div>
+            <div class="system-card">
+                <strong>Custo por PE = (STA máxima ÷ 2) ÷ PE máximo</strong> — arredondado para cima, mínimo 1.
+            </div>
+            <div class="lore-box">
+                <strong>A regra de ouro:</strong> primeiro calcula-se o <strong>total de PE</strong> (fórmula própria); depois divide-se <strong>metade da STA máxima</strong> por esse total → <strong>custo de cada PE</strong>. Gastando todos os PE, o custo total consome exatamente <strong>50% da STA</strong>.
+            </div>
+            <p><strong>PV</strong> é sua vida física — ao chegar a 0, você fica incapacitado e corre risco de morte. <strong>STA</strong> é o principal combustível de combate e esforço físico, usado para Técnicas, Utilizações e manobras. <strong>PE</strong> é o combustível dos poderes e técnicas. Recomenda-se calcular na ficha (o portal já faz isso automaticamente).</p>
+            <p>Exemplo de progressão com <strong>Vigor 14, Alma 14, Intelecto 12</strong> (modificadores +2/+2/+1):</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>PV</th><th>STA</th><th>PE</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>62</td><td>60</td><td>8</td></tr>
+                        <tr><td>2</td><td>74</td><td>69</td><td>12</td></tr>
+                        <tr><td>3</td><td>86</td><td>78</td><td>12</td></tr>
+                        <tr><td>4</td><td>98</td><td>87</td><td>16</td></tr>
+                        <tr><td>5</td><td>110</td><td>96</td><td>16</td></tr>
+                        <tr><td>6</td><td>122</td><td>105</td><td>20</td></tr>
+                        <tr><td>7</td><td>134</td><td>114</td><td>20</td></tr>
+                        <tr><td>8</td><td>146</td><td>123</td><td>24</td></tr>
+                        <tr><td>9</td><td>158</td><td>132</td><td>24</td></tr>
+                        <tr><td>10</td><td>170</td><td>141</td><td>28</td></tr>
+                        <tr><td>11</td><td>182</td><td>150</td><td>28</td></tr>
+                        <tr><td>12</td><td>194</td><td>159</td><td>32</td></tr>
+                        <tr><td>13</td><td>206</td><td>168</td><td>32</td></tr>
+                        <tr><td>14</td><td>218</td><td>177</td><td>36</td></tr>
+                        <tr><td>15</td><td>230</td><td>186</td><td>36</td></tr>
+                        <tr><td>16</td><td>242</td><td>195</td><td>40</td></tr>
+                        <tr><td>17</td><td>254</td><td>204</td><td>40</td></tr>
+                        <tr><td>18</td><td>266</td><td>213</td><td>44</td></tr>
+                        <tr><td>19</td><td>278</td><td>222</td><td>44</td></tr>
+                        <tr><td>20</td><td>290</td><td>231</td><td>48</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="lore-box">
                 <strong>Use a Ficha de Personagem:</strong> Existe um arquivo separado <code>Ficha_Personagem_Torre_do_Pesadelo.html</code> (na mesma pasta) feito exatamente para este sistema. Ele é editável no navegador, calcula automaticamente HP/CA/Núcleo/Mods/Balance de Traços, tem seletor dos 20 Antecedentes, slots dinâmicos para Técnicas (com sugestão de dano por tipo/nível), seções para Forja, Barmans, Relacionamentos (4 slots), Sanidade/Corrupção, etc. Preencha uma cópia por jogador, imprima como PDF ou exporte JSON. Consulte também o arquivo <code>SUGESTOES_PARA_ADICOES_LIVRO_DO_JOGADOR.md</code> para ideias futuras de expansão do livro.
@@ -16293,7 +16334,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Conceitos Fundamentais:</strong><br><br>
                 • <strong>HP</strong> — Vida física. Quando chega a 0, o personagem fica incapacitado e corre risco de morte.<br>
                 • <strong>STA (Stamina)</strong> — O principal combustível de combate e esforço físico. Representa fôlego, concentração e capacidade de continuar lutando.<br>
-                • <strong>Núcleo</strong> — A energia da Alma. Equivale a metade da STA máxima. É o recurso usado para alimentar poderes sobrenaturais.
+                • <strong>PE (Pontos de Energia)</strong> — A reserva de poder da Alma, com fórmula própria. Cada PE custa <strong>(STA máxima ÷ 2) ÷ PE máximo</strong> de Stamina (arredondado para cima, mínimo 1) — gastar todos os PE consome exatamente 50% da STA.
             </div>
 
             <h2 id="testes-atributo">Testes de Atributo</h2>
