@@ -9697,9 +9697,11 @@ function carregarFormulaEditor() {
 }
 
 // ─── CÁLCULO COM FÓRMULAS CUSTOMIZADAS ───
+// getMod segue a tabela oficial do Livro do Jogador (decisão D3B):
+// Math.floor arredonda para baixo (mais negativo) — 9→−1, 8→−1, 7→−2... 30→+10.
 function getMod(val) {
   val = parseInt(val) || 10;
-  return val >= 10 ? Math.floor((val-10)/2) : Math.ceil((val-10)/2);
+  return Math.floor((val - 10) / 2);
 }
 function fmtMod(m) { return (m>=0?'+':'')+m; }
 
@@ -14033,14 +14035,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
             </div>
 
-            <h3>Pontos de Vida (HP)</h3>
-            <p>Seu HP é calculado com a seguinte fórmula:</p>
+            <h3>Pontos de Vida (PV) e Stamina (STA)</h3>
+            <p>Seus Pontos de Vida e sua Stamina são calculados com a mesma fórmula, que cresce junto com o seu nível de personagem (1 a 20):</p>
             <div class="system-card">
-                <strong>HP = (Vigor × 2) + (Alma × 2)</strong><br><br>
+                <strong>PV = STA = (Vigor + Alma) × (2 + ⌊Nível ÷ 2⌋)</strong><br><br>
                 Vigor representa durabilidade corporal e resistência física.<br>
-                Alma representa energia vital e sustentação energética.
+                Alma representa energia vital e sustentação energética.<br>
+                No nível 1, a fórmula é equivalente a <em>(Vigor × 2) + (Alma × 2)</em> — a base clássica; a cada níveis pares, seus pools crescem.
             </div>
-            <p>Recomenda-se calcular o HP manualmente ou em uma ficha própria.</p>
+            <p><strong>PV</strong> é sua vida física — ao chegar a 0, você fica incapacitado e corre risco de morte. <strong>STA</strong> é o principal combustível de combate e esforço físico, usado para Técnicas, Utilizações e manobras. Recomenda-se calcular na ficha (o portal já faz isso automaticamente).</p>
 
             <div class="lore-box">
                 <strong>Use a Ficha de Personagem:</strong> Existe um arquivo separado <code>Ficha_Personagem_Torre_do_Pesadelo.html</code> (na mesma pasta) feito exatamente para este sistema. Ele é editável no navegador, calcula automaticamente HP/CA/Núcleo/Mods/Balance de Traços, tem seletor dos 20 Antecedentes, slots dinâmicos para Técnicas (com sugestão de dano por tipo/nível), seções para Forja, Barmans, Relacionamentos (4 slots), Sanidade/Corrupção, etc. Preencha uma cópia por jogador, imprima como PDF ou exporte JSON. Consulte também o arquivo <code>SUGESTOES_PARA_ADICOES_LIVRO_DO_JOGADOR.md</code> para ideias futuras de expansão do livro.
@@ -15751,6 +15754,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </ul>
             <p>Cada categoria concede uma quantidade de XP de acordo com sua importância durante a sessão. Não é necessário que todos os critérios estejam presentes — uma sessão sem combate pode conceder mais XP do que uma sessão cheia de lutas, desde que apresente maior qualidade narrativa.</p>
 
+            <div class="system-card">
+                <strong>Bônus por Risco:</strong><br>
+                Além do XP por qualidade narrativa, quem <strong>arrisca a alma aprende mais</strong>. O Mestre concede um <strong>+bônus de XP por rolagens pagas com Sanidade</strong> (push) ou resolvidas <strong>em situação desesperada</strong> — <strong>1 vez por sessão</strong>, com valor pequeno (ex.: <strong>+25 a +50 XP</strong>).
+            </div>
+
             <h2>A Escala de Qualidade da Sessão</h2>
 
             <div class="system-card">
@@ -16292,30 +16300,37 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Quando um Desperto tenta realizar algo difícil ou arriscado, ele realiza um <strong>Teste de Atributo</strong>.</p>
 
             <div class="system-card">
-                <strong>Fórmula:</strong> d20 + Modificador do Atributo + Bônus de Proficiência (se aplicável) + outros bônus (Traços, equipamentos, circunstâncias)
+                <strong>Fórmula:</strong> d20 + Modificador do Atributo + Maestria (se aplicável) + outros bônus (Traços, equipamentos, circunstâncias)
             </div>
 
-            <h3>Bônus de Proficiência</h3>
-            <p>Conforme o Desperto ascende, sua Alma se torna mais afinada com o mundo das Torres. Isso se reflete em um bônus crescente chamado <strong>Proficiência</strong>.</p>
+            <h3>Maestria — Bônus de Treinamento</h3>
+            <p>Conforme o Desperto sobe de <strong>nível de personagem (1–20)</strong>, sua Alma se torna mais afinada com o mundo das Torres. Isso se reflete em um bônus crescente chamado <strong>Maestria</strong>, o bônus de treinamento do sistema.</p>
+
+            <div class="system-card">
+                <strong>Maestria = 1 + ⌈Nível ÷ 4⌉</strong> (mínimo 2)
+            </div>
 
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>Nível de Ascensão</th><th>Classificação</th><th>Bônus de Proficiência</th></tr>
+                        <tr><th>Nível de Personagem (1–20)</th><th>Maestria</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>1</td><td>Desperto</td><td>+2</td></tr>
-                        <tr><td>2–3</td><td>Inflamado / Gravado</td><td>+3</td></tr>
-                        <tr><td>4–5</td><td>Manifesto / Ungido</td><td>+4</td></tr>
-                        <tr><td>6–7</td><td>Arauto / Eclipse</td><td>+5</td></tr>
-                        <tr><td>8–9</td><td>Abissal / Transcendente</td><td>+6</td></tr>
-                        <tr><td>10</td><td>Trono Vazio</td><td>+7</td></tr>
+                        <tr><td>Nível 1–4</td><td>+2</td></tr>
+                        <tr><td>Nível 5–8</td><td>+3</td></tr>
+                        <tr><td>Nível 9–12</td><td>+4</td></tr>
+                        <tr><td>Nível 13–16</td><td>+5</td></tr>
+                        <tr><td>Nível 17–20</td><td>+6</td></tr>
                     </tbody>
                 </table>
             </div>
 
+            <div class="lore-box">
+                <strong>E a Ascensão?</strong> A Ascensão (0–10) deixou de ser fonte de bônus de treinamento. Ela agora concede <strong>capacidades</strong>: novos dados, novas ações, Despertares — evolução qualitativa, não acerto. O mundo não acompanha o personagem: um monstro comum segue ameaçando no nível 20.
+            </div>
+
             <h3>Classes de Dificuldade (CD)</h3>
-            <p>As Torres são hostis. Os números abaixo refletem essa realidade.</p>
+            <p>As Torres são hostis. Os números abaixo refletem essa realidade. Entre os patamares, o Mestre pode usar <strong>granularidade fina em passos de 2</strong> (CD 14, 18, 22, 26, 30) para desafios intermediários, e aplicar <strong>ajustes situacionais</strong> para premiar ou punir o contexto.</p>
 
             <div class="table-wrapper">
                 <table>
@@ -16326,9 +16341,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>Difícil</td><td>20</td><td>Andares intermediários de torres comuns ou andares iniciais de uma Guardiã</td></tr>
                         <tr><td>Muito Difícil</td><td>24</td><td>Andares profundos de torres comuns ou andares intermediários de uma Torre Guardiã</td></tr>
                         <tr><td>Extrema</td><td>28</td><td>Andares altos da Torre do Pesadelo (acima do 25º–30º andar)</td></tr>
-                        <tr><td>Quase Impossível</td><td>32+</td><td>Enfrentar Ruínas, Calamidades ou andares muito profundos da Torre do Pesadelo</td></tr>
+                        <tr><td>Quase Impossível</td><td>32</td><td>Enfrentar Ruínas, Calamidades ou andares muito profundos da Torre do Pesadelo</td></tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Granularidade fina (passos de 2):</strong> 14 · 18 · 22 · 26 · 30 — para quando um desafio fica entre dois patamares nomeados.<br><br>
+                <strong>Ajustes situacionais:</strong><br>
+                • <strong>+2</strong> — pressa, condições adversas, contexto hostil.<br>
+                • <strong>−2</strong> — terreno excelente, preparação cuidadosa, vantagem tática clara.<br>
+                • <strong>+5</strong> — cena épica, ambiente extremamente hostil, aposta desesperada.
             </div>
 
             <h2 id="ataque-defesa">Jogadas de Ataque</h2>
@@ -16336,7 +16359,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="system-card">
                 <strong>Fórmula de Ataque:</strong><br>
-                d20 + Modificador do Atributo principal + Bônus de Proficiência + bônus de equipamento/traços/poderes
+                d20 + Modificador do Atributo principal + Maestria + bônus de equipamento/traços/poderes
             </div>
 
             <p>O resultado é comparado com a <strong>Classe de Armadura (CA)</strong> do alvo.</p>
@@ -16351,7 +16374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Quando um efeito perigoso ameaça o personagem (veneno, ilusão, corrupção, medo, explosão, etc.), ele realiza uma <strong>Salvaguarda</strong>.</p>
 
             <div class="system-card">
-                <strong>Fórmula:</strong> d20 + Modificador do Atributo apropriado + Bônus de Proficiência (quando aplicável)
+                <strong>Fórmula:</strong> d20 + Modificador do Atributo apropriado + Maestria (quando aplicável)
             </div>
 
             <p>Cada atributo está ligado a certos tipos de ameaça:</p>
@@ -16388,7 +16411,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>2. Efeitos Diversos (Resistência vs. CD)</strong><br>
                 Usado para efeitos de área, mentais, biológicos ou de ambiente. Aqui quem rola o dado é a <strong>vítima</strong> tentando resistir.<br><br>
                 <strong>Como calcular a CD da sua habilidade:</strong><br>
-                <strong>CD = 8 + Bônus de Nível + Modificador de Alma</strong>
+                <strong>CD = 8 + Maestria + Modificador do Atributo-chave</strong><br>
+                Geralmente o atributo-chave é a <strong>Alma</strong> (a fonte do poder); o Mestre pode usar o atributo do poder se for diferente. Exemplo: um poder de Alma com Maestria +3 e mod de Alma +2 tem CD 13.
             </div>
 
             <p>Existem três tipos de teste de resistência, cada um ligado a um tipo de ameaça:</p>
@@ -16402,6 +16426,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td><strong>Fortitude</strong></td><td>Vigor / Corpo</td><td>Venenos, paralisia física, petrificação, drenagem vital, gases</td><td>Alvo (Fortitude) vs. CD</td><td><strong>Falha:</strong> sofre o efeito/debuff por completo · <strong>Sucesso:</strong> o corpo resiste, ignorando a condição</td></tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>Graus de sucesso nas resistências (Reflexos, Vontade e Fortitude):</strong><br>
+                • <strong>Sucesso crítico</strong> (20 natural, ou resultado ≥ CD + 10) — efeito <strong>nulo</strong>.<br>
+                • <strong>Sucesso</strong> — efeito <strong>metade/reduzido</strong> (dano pela metade, duração reduzida, etc.).<br>
+                • <strong>Falha</strong> — efeito <strong>pleno</strong>.<br>
+                • <strong>Falha crítica</strong> (1 natural, ou resultado ≤ CD − 10) — efeito pleno <strong>+ custo dobrado</strong> (ex.: Corrupção dobrada, perda de Sanidade dobrada).<br><br>
+                <em>Misericórdia do horror:</em> um 20 natural em salvaguarda resiste totalmente, mesmo sem treino.
             </div>
 
             <div class="lore-box">
@@ -16425,16 +16458,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><th>Nível</th><th>Bônus Adicionado</th><th>O que significa na prática</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><strong>Não treinado</strong></td><td>0</td><td>Apenas o modificador do atributo. O Mestre pode permitir + metade da Proficiência em ações simples sob pressão leve. Falhas tendem a ser mais graves.</td></tr>
-                        <tr><td><strong>Treinado (Mt. - Maestria)</strong></td><td>+ ⌊Nível ÷ 2⌋ + Proficiência</td><td>Você adiciona metade do seu nível mais o bônus completo de Proficiência. É o padrão para "ser competente" em algo. A maioria dos Despertos veteranos tem 4–8 perícias com Maestria.</td></tr>
-                        <tr><td><strong>Especializado (Es.)</strong></td><td>+ ⌊Nível ÷ 2⌋ + ⌊Proficiência × 1,5⌋</td><td>Expertise verdadeira — a habilidade está gravada na sua Alma. Você adiciona metade do nível mais <strong>1,5× o bônus de Proficiência</strong> (arredondado para baixo). Raro abaixo do nível Inflamado/Gravado. Marcas visíveis ou mudanças de personalidade frequentemente acompanham Especialização alta.</td></tr>
+                        <tr><td><strong>Não treinado</strong></td><td>0</td><td>Apenas o modificador do atributo. O Mestre pode permitir + metade da Maestria em ações simples sob pressão leve. Falhas tendem a ser mais graves.</td></tr>
+                        <tr><td><strong>Treinado (Mt. - Maestria)</strong></td><td>+ ⌊Nível ÷ 2⌋ + Maestria</td><td>Você adiciona metade do seu nível mais o bônus completo de Maestria. É o padrão para "ser competente" em algo. A maioria dos Despertos veteranos tem 4–8 perícias com Maestria.</td></tr>
+                        <tr><td><strong>Especializado (Es.)</strong></td><td>+ ⌊Nível ÷ 2⌋ + ⌊Maestria × 1,5⌋</td><td>Expertise verdadeira — a habilidade está gravada na sua Alma. Você adiciona metade do nível mais <strong>1,5× o bônus de Maestria</strong> (arredondado para baixo). Raro abaixo do nível Inflamado/Gravado. Marcas visíveis ou mudanças de personalidade frequentemente acompanham Especialização alta.</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <p><strong>Importante:</strong> Nem toda ação exige uma perícia. Use o atributo bruto (ou uma salvaguarda) quando não houver perícia relevante, ou quando o Mestre julgar que o treinamento não se aplica. Perícias são ferramentas de precisão, não substituem o julgamento da Torre.</p>
 
-            <p><strong>Como funciona na prática:</strong> Uma perícia com <strong>Maestria (Mt.)</strong> recebe metade do seu nível mais o bônus de Proficiência do seu nível de Ascensão. Já uma <strong>Especialização (Es.)</strong> é mais poderosa: usa a mesma metade do nível, mas multiplica a Proficiência por 1,5 em vez de somá-la inteira. Isso torna Especializações mais valiosas em todos os níveis, crescendo proporcionalmente conforme o personagem evolui.</p>
+            <p><strong>Como funciona na prática:</strong> Uma perícia com <strong>Maestria (Mt.)</strong> recebe metade do seu nível mais o bônus de Maestria do seu nível de personagem. Já uma <strong>Especialização (Es.)</strong> é mais poderosa: usa a mesma metade do nível, mas multiplica a Maestria por 1,5 em vez de somá-la inteira. Isso torna Especializações mais valiosas em todos os níveis, crescendo proporcionalmente conforme o personagem evolui.</p>
+
+            <div class="system-card">
+                <strong>O Gate da Maestria (D2D):</strong><br>
+                Algumas ações são <strong>sagradas</strong> para uma perícia — os gestos que separam o conhecedor do diletante. Só quem tem <strong>Maestria</strong> na perícia pode tentá-las. Exemplos:<br>
+                • <strong>Magia/Feitiçaria (Alma):</strong> identificar rituais, maldições e técnicas inimigas — apenas quem estudou reconhece o que a Torre esculpiu.<br>
+                • <strong>Medicina (Intelecto):</strong> estabilizar um aliado à beira da morte (0 PV) — sem Maestria, o Mestre pode exigir desvantagem ou negar a tentativa.<br>
+                • <strong>Religião (Intelecto):</strong> conduzir ou quebrar rituais de invocação sem ser consumido por eles.<br><br>
+                <em>Exemplo:</em> Lyra, sem Maestria em Medicina, pode enfaixar um corte (teste comum de Intelecto), mas não consegue impedir que um aliado morrendo sangre até a morte. Apenas um aliado com Maestria em Medicina pode estabilizar — a Torre não perdoa meia medida.
+            </div>
 
             <h3>Visão Geral Rápida</h3>
             <div class="table-wrapper">
@@ -16535,58 +16577,239 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Todo uso significativo de poder consome <strong>STA e Núcleo</strong>. O custo exato deve ser definido no momento da criação ou evolução do poder, sempre buscando equilíbrio.</p>
 
             <h2>Críticos e Falhas Críticas</h2>
-            <p>O d20 carrega o peso do julgamento da Torre. Um resultado de <strong>20 natural</strong> é um momento de glória da Alma. Um resultado de <strong>1 natural</strong> é quando a Torre nota sua fraqueza — e responde.</p>
+            <p>O d20 carrega o peso do julgamento da Torre. Um resultado de <strong>20 natural</strong> é um momento de glória da Alma — além de <strong>dobrar o dano</strong>, role <strong>1d100</strong> na tabela de Acerto Crítico. Um resultado de <strong>1 natural</strong> é quando a Torre nota sua fraqueza — <strong>falha automática</strong> e rolagem de <strong>1d100</strong> na tabela de Falha Crítica.</p>
 
-            <h3>Crítico Positivo (20 Natural)</h3>
-            <p>Além de dobrar o dano do ataque ou efeito, role <strong>1d100</strong> na tabela abaixo:</p>
+            <div class="system-card">
+                <strong>Graus de sucesso (D3/C3):</strong><br>
+                • <strong>Crítico:</strong> 20 natural <em>ou</em> resultado ≥ alvo + 10 → dano dobrado + tabela de Acerto Crítico.<br>
+                • <strong>Sucesso:</strong> resultado ≥ alvo.<br>
+                • <strong>Falha:</strong> resultado &lt; alvo.<br>
+                • <strong>Falha crítica:</strong> 1 natural <em>ou</em> resultado ≤ alvo − 10 → tabela de Falha Crítica.<br><br>
+                Aplicável a ataques e testes. Nas salvaguardas (Reflexos, Vontade, Fortitude): sucesso crítico = efeito nulo; sucesso = metade; falha = pleno; falha crítica = efeito + custo dobrado.
+            </div>
+
+            <h3>Acerto Crítico — O Julgamento Favorável</h3>
+            <p>Um 20 natural, além de dobrar o dano, carrega o peso da Alma. Role <strong>1d100</strong>:</p>
 
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>d100</th><th>Efeito do Crítico Positivo</th></tr>
+                        <tr><th>d100</th><th>Nome</th><th>Efeito</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>01–08</td><td><strong>Alma Desperta</strong> — O poder manifesta um efeito secundário poderoso por 1d4 rodadas (ex: área aumentada, dano elemental extra, ou controle sobre o ambiente).</td></tr>
-                        <tr><td>09–16</td><td><strong>Corte da Essência</strong> — O alvo sofre dano adicional igual ao seu modificador de Alma e fica com -2 em todos os testes até o fim do combate.</td></tr>
-                        <tr><td>17–24</td><td><strong>Ressonância da Torre</strong> — O personagem recupera 1d6 de Núcleo imediatamente.</td></tr>
-                        <tr><td>25–32</td><td><strong>Visão Clara</strong> — O personagem ganha vantagem em todos os testes contra esse tipo de criatura até o fim da incursão.</td></tr>
-                        <tr><td>33–40</td><td><strong>Impacto da Alma</strong> — O alvo é empurrado ou derrubado e sofre desvantagem em sua próxima ação.</td></tr>
-                        <tr><td>41–48</td><td><strong>Eco Poderoso</strong> — O efeito do poder se repete parcialmente no próximo turno sem custo adicional.</td></tr>
-                        <tr><td>49–56</td><td><strong>Marca da Ascensão</strong> — O personagem ganha +1 permanente em um atributo relacionado ao poder usado (máximo 1 vez por nível de ascensão).</td></tr>
-                        <tr><td>57–64</td><td><strong>Quebra de Corrupção</strong> — Se o alvo for um monstro, ele sofre penalidade de corrupção temporária, ficando mais vulnerável.</td></tr>
-                        <tr><td>65–72</td><td><strong>Presença Intimidadora</strong> — Todos os inimigos próximos sofrem desvantagem em testes de medo até o fim do combate.</td></tr>
-                        <tr><td>73–80</td><td><strong>Fluxo da Alma</strong> — O personagem pode realizar uma ação adicional neste turno.</td></tr>
-                        <tr><td>81–88</td><td><strong>Revelação</strong> — O personagem descobre uma fraqueza importante do alvo ou do ambiente (informação útil concedida pelo Mestre).</td></tr>
-                        <tr><td>89–94</td><td><strong>Transbordamento</strong> — O dano é triplicado em vez de dobrado (apenas uma vez por cena).</td></tr>
-                        <tr><td>95–99</td><td><strong>Momento de Glória</strong> — O personagem recupera metade da STA gasta neste ataque e causa medo em inimigos comuns.</td></tr>
-                        <tr><td>100</td><td><strong>Julgamento Favorável</strong> — Efeito lendário: o poder deixa uma marca permanente na realidade (ex: cria uma fraqueza permanente no tipo de monstro, ou o personagem ganha um traço temporário poderoso por 24h).</td></tr>
+                        <tr><td>01</td><td><strong>Corte Limpo</strong></td><td>O golpe acerta com precisão cirúrgica. +1 dado de dano (máx. 1d6).</td></tr>
+                        <tr><td>02</td><td><strong>Fenda Profunda</strong></td><td>O alvo sangra: sofre 1 de dano contínuo no início de cada rodada até ser tratado.</td></tr>
+                        <tr><td>03</td><td><strong>Impacto Brutal</strong></td><td>O alvo é empurrado 1 zona para trás.</td></tr>
+                        <tr><td>04</td><td><strong>Golpe Surdo</strong></td><td>O alvo fica atordoado até o fim do próximo turno (perde Ação Bônus).</td></tr>
+                        <tr><td>05</td><td><strong>Aproveitamento</strong></td><td>Você pode realizar imediatamente 1 Ataque de Oportunidade contra o alvo, sem gastar Reação.</td></tr>
+                        <tr><td>06</td><td><strong>Ponto Vital</strong></td><td>Ignora 50% da Redução de Dano do alvo neste ataque.</td></tr>
+                        <tr><td>07</td><td><strong>Ataque Combinado</strong></td><td>Um aliado em zona Curta ganha Vantagem no próximo ataque contra o mesmo alvo.</td></tr>
+                        <tr><td>08</td><td><strong>Ritmo de Caça</strong></td><td>Seu próximo ataque contra o mesmo alvo recebe +2 no teste de acerto.</td></tr>
+                        <tr><td>09</td><td><strong>Presa Fincada</strong></td><td>O alvo fica enredado/agarrado até passar em um teste de Força ou Destreza.</td></tr>
+                        <tr><td>10</td><td><strong>Derrubada</strong></td><td>O alvo cai no chão (fica caído).</td></tr>
+                        <tr><td>11</td><td><strong>Dois Golpes</strong></td><td>O dano é aplicado duas vezes (dobre os dados, não os modificadores).</td></tr>
+                        <tr><td>12</td><td><strong>Arremesso</strong></td><td>O alvo é arremessado para a zona Longa e sofre 1d6 de dano de queda.</td></tr>
+                        <tr><td>13</td><td><strong>Fúria da Alma</strong></td><td>Você causa +1d6 de dano de Alma (ignora RD).</td></tr>
+                        <tr><td>14</td><td><strong>Lâmina Sôfrega</strong></td><td>O alvo perde 1d4 de STA (esforço/medo).</td></tr>
+                        <tr><td>15</td><td><strong>Perfuração</strong></td><td>O ataque ignora toda a Redução de Dano do alvo.</td></tr>
+                        <tr><td>16</td><td><strong>Golpe Fantasma</strong></td><td>O alvo fica cego (Desvantagem em ataques) por 1 rodada.</td></tr>
+                        <tr><td>17</td><td><strong>Fratura</strong></td><td>O alvo sofre Desvantagem em testes de Força ou Destreza até o fim do combate.</td></tr>
+                        <tr><td>18</td><td><strong>Dreno Rápido</strong></td><td>Você rouba 1d4 de STA do alvo e a adiciona à sua.</td></tr>
+                        <tr><td>19</td><td><strong>Marca do Caçador</strong></td><td>O alvo fica marcado: seu próximo ataque contra ele tem Vantagem.</td></tr>
+                        <tr><td>20</td><td><strong>Silêncio Mortal</strong></td><td>O alvo não pode falar nem emitir sons por 1d4 rodadas.</td></tr>
+                        <tr><td>21</td><td><strong>Esmagamento</strong></td><td>O dano é dobrado e o alvo fica caído.</td></tr>
+                        <tr><td>22</td><td><strong>Quebra de Guarda</strong></td><td>O alvo perde 2 de CA até o início do seu próximo turno.</td></tr>
+                        <tr><td>23</td><td><strong>Área de Impacto</strong></td><td>O ataque atinge também 1 criatura adjacente ao alvo (dano reduzido pela metade).</td></tr>
+                        <tr><td>24</td><td><strong>Desarme</strong></td><td>A arma/objeto do alvo cai no chão.</td></tr>
+                        <tr><td>25</td><td><strong>Imobilização</strong></td><td>O alvo fica imobilizado até passar em uma Salvaguarda de Força.</td></tr>
+                        <tr><td>26</td><td><strong>Refluxo da Alma</strong></td><td>Você recupera 1d6 de Núcleo/PE.</td></tr>
+                        <tr><td>27</td><td><strong>Fôlego Renovado</strong></td><td>Você recupera 1d6 de STA.</td></tr>
+                        <tr><td>28</td><td><strong>Essência Roubada</strong></td><td>Você rouba 1 PE do alvo (se ele tiver).</td></tr>
+                        <tr><td>29</td><td><strong>Canalização</strong></td><td>Seu próximo poder/Técnica custa metade do PE (mín. 1).</td></tr>
+                        <tr><td>30</td><td><strong>Resiliência</strong></td><td>Você recupera 1 ponto de Exaustão removido (se tiver).</td></tr>
+                        <tr><td>31</td><td><strong>Pavor Incutido</strong></td><td>O alvo deve passar em Salvaguarda de Carisma ou fica Amedrontado por 1 rodada.</td></tr>
+                        <tr><td>32</td><td><strong>Lágrima na Alma</strong></td><td>O alvo perde 1d4 de Sanidade (se for um ser consciente).</td></tr>
+                        <tr><td>33</td><td><strong>Visão da Queda</strong></td><td>O alvo tem uma visão aterrorizante: perde 1d6 de Sanidade ou fica abalado.</td></tr>
+                        <tr><td>34</td><td><strong>Grito da Torre</strong></td><td>O alvo ouve a Torre: Desvantagem em testes de Intelecto por 1 rodada.</td></tr>
+                        <tr><td>35</td><td><strong>Trauma Reaberto</strong></td><td>O alvo revive um trauma: falha na Salvaguarda de Alma = fica imóvel 1 rodada.</td></tr>
+                        <tr><td>36</td><td><strong>Onda de Medo</strong></td><td>Criaturas comuns próximas ao alvo fazem Salvaguarda de Carisma ou fogem.</td></tr>
+                        <tr><td>37</td><td><strong>Quebra de Vontade</strong></td><td>O alvo sofre Desvantagem em Salvaguardas de Alma até o fim do combate.</td></tr>
+                        <tr><td>38</td><td><strong>Mente Fraturada</strong></td><td>O alvo esquece 1 Técnica/poder até o fim do combate (ou 1d4 rodadas).</td></tr>
+                        <tr><td>39</td><td><strong>Eco do Pesadelo</strong></td><td>O alvo confunde aliado com inimigo por 1 rodada (ataca aleatoriamente).</td></tr>
+                        <tr><td>40</td><td><strong>Corrupção Rasgada</strong></td><td>Se o alvo for um monstro, ele perde 1 de Corrupção efetiva (enfraquece).</td></tr>
+                        <tr><td>41</td><td><strong>Runa Desperta</strong></td><td>O dano do ataque recebe um elemento (gelo/fogo/trevas) escolhido por você.</td></tr>
+                        <tr><td>42</td><td><strong>Presa Corrupta</strong></td><td>O alvo ganha 1 de Corrupção temporária (se suscetível) até o fim do combate.</td></tr>
+                        <tr><td>43</td><td><strong>Peso da Alma</strong></td><td>O alvo perde metade da STA de manutenção de efeitos ativos por 1 rodada.</td></tr>
+                        <tr><td>44</td><td><strong>Fome da Torre</strong></td><td>O ataque absorve parte da essência do alvo: você ganha +2 no próximo teste.</td></tr>
+                        <tr><td>45</td><td><strong>Herança de Monstro</strong></td><td>Você percebe uma fraqueza do alvo: recebe uma dica do Mestre.</td></tr>
+                        <tr><td>46</td><td><strong>Olhar do Abismo</strong></td><td>O alvo sente o vazio: falha na Salvaguarda de Alma = fica atordoado 1 rodada.</td></tr>
+                        <tr><td>47</td><td><strong>Sentença</strong></td><td>Você "marca" o alvo com a essência do seu poder: seu próximo ataque contra ele é crítico em 19–20.</td></tr>
+                        <tr><td>48</td><td><strong>Quebra de Runa</strong></td><td>O ataque enfraquece 1 efeito mágico/runa ativo no alvo.</td></tr>
+                        <tr><td>49</td><td><strong>Apagão</strong></td><td>O alvo perde 1d4 de PE (se tiver).</td></tr>
+                        <tr><td>50</td><td><strong>Chama da Alma</strong></td><td>O dano é convertido em dano de Alma (ignora armadura física).</td></tr>
+                        <tr><td>51</td><td><strong>Visão Clara</strong></td><td>Você ganha Vantagem em todos os testes contra esse tipo de criatura até o fim da incursão.</td></tr>
+                        <tr><td>52</td><td><strong>Revelação</strong></td><td>O Mestre revela uma fraqueza ou segredo útil do ambiente/alvo.</td></tr>
+                        <tr><td>53</td><td><strong>Instinto</strong></td><td>Você percebe o próximo movimento do alvo: +2 de CA contra ele até seu próximo turno.</td></tr>
+                        <tr><td>54</td><td><strong>Leitura do Fluxo</strong></td><td>Você sente a energia do local: +1 em testes de Alma até o fim da cena.</td></tr>
+                        <tr><td>55</td><td><strong>Faro</strong></td><td>Você descobre 1 pista sobre o que está acontecendo no andar atual.</td></tr>
+                        <tr><td>56</td><td><strong>Memória de Sangue</strong></td><td>Você "lembra" como combater esse tipo de alvo: +1 em ataques contra ele por 24h.</td></tr>
+                        <tr><td>57</td><td><strong>Mapa Mental</strong></td><td>Você entende a disposição do ambiente: ignora terreno difícil por 1 rodada.</td></tr>
+                        <tr><td>58</td><td><strong>Presságio</strong></td><td>Você prevê 1 perigo iminente: recebe uma dica do Mestre.</td></tr>
+                        <tr><td>59</td><td><strong>Terceiro Olho</strong></td><td>Você detecta ilusões/mascaramentos na cena.</td></tr>
+                        <tr><td>60</td><td><strong>Eco do Local</strong></td><td>Você ouve um eco do que aconteceu neste lugar (1 dica).</td></tr>
+                        <tr><td>61</td><td><strong>Presença Imponente</strong></td><td>Criaturas próximas sofrem Desvantagem em testes de medo até o fim do combate.</td></tr>
+                        <tr><td>62</td><td><strong>Voz de Comando</strong></td><td>Uma criatura com menos PV que você deve obedecer a 1 comando simples (Salvaguarda de Carisma).</td></tr>
+                        <tr><td>63</td><td><strong>Aura de Liderança</strong></td><td>Aliados a até 9m ganham +1 em testes de ataque até o fim do combate.</td></tr>
+                        <tr><td>64</td><td><strong>Grito de Guerra</strong></td><td>Aliados ganham Vantagem no próximo teste de medo/terror.</td></tr>
+                        <tr><td>65</td><td><strong>Momento de Glória</strong></td><td>Você recupera metade da STA gasta neste ataque.</td></tr>
+                        <tr><td>66</td><td><strong>Inspiração</strong></td><td>Um aliado recupera 1d4 de Sanidade ao ver seu feito.</td></tr>
+                        <tr><td>67</td><td><strong>Fama nascente</strong></td><td>Você chama atenção positiva de uma facção/personagem (1 contato ou rumor).</td></tr>
+                        <tr><td>68</td><td><strong>Presença do Herói</strong></td><td>NPCs comuns ficam dispostos a ajudá-lo nesta cena.</td></tr>
+                        <tr><td>69</td><td><strong>Palavra de Poder</strong></td><td>Uma criatura falha automaticamente na próxima Salvaguarda de Carisma contra você.</td></tr>
+                        <tr><td>70</td><td><strong>Símbolo de Esperança</strong></td><td>Aliados removem 1 condição de medo/pânico.</td></tr>
+                        <tr><td>71</td><td><strong>Fluxo da Alma</strong></td><td>Você pode realizar 1 Ação Bônus adicional neste turno.</td></tr>
+                        <tr><td>72</td><td><strong>Segundo Fôlego</strong></td><td>Você age antes na próxima rodada (Iniciativa +5).</td></tr>
+                        <tr><td>73</td><td><strong>Reação em Cadeia</strong></td><td>Você pode usar sua Reação sem gastá-la uma vez antes do fim do combate.</td></tr>
+                        <tr><td>74</td><td><strong>Dança da Batalha</strong></td><td>Você pode mover 1 zona gratuitamente.</td></tr>
+                        <tr><td>75</td><td><strong>Tempestade</strong></td><td>O dano é triplicado (uma vez por cena).</td></tr>
+                        <tr><td>76</td><td><strong>Sincronia</strong></td><td>Um aliado pode agir imediatamente após você (ganha sua Reação).</td></tr>
+                        <tr><td>77</td><td><strong>Espelho</strong></td><td>Você copia o efeito do último poder usado contra você (se coerente).</td></tr>
+                        <tr><td>78</td><td><strong>Passo do Vento</strong></td><td>Você surge em outra zona da cena sem provocar reações.</td></tr>
+                        <tr><td>79</td><td><strong>Oportunidade</strong></td><td>Você causa um segundo ataque básico (sem custo) no mesmo turno.</td></tr>
+                        <tr><td>80</td><td><strong>Mestre do Tempo</strong></td><td>Você age de novo no fim da rodada (uma ação simples).</td></tr>
+                        <tr><td>81</td><td><strong>A Torre Nota (favor)</strong></td><td>Você recebe uma recompensa pequena da própria Torre: +1d4 de PE. <em>(mas ela registra seu nome…)</em></td></tr>
+                        <tr><td>82</td><td><strong>Bênção Ambígua</strong></td><td>+1 permanente em um atributo secundário (máx. 1 por Ascensão) — mas ganha 1 de Corrupção.</td></tr>
+                        <tr><td>83</td><td><strong>Olhar do Boss</strong></td><td>A atenção de algo grande se volta para você: Vantagem em testes sociais — e +1 de atenção da Torre.</td></tr>
+                        <tr><td>84</td><td><strong>Fragmento de Runa</strong></td><td>O golpe arranca um fragmento de runa do alvo (material de forja valioso).</td></tr>
+                        <tr><td>85</td><td><strong>Testamento de Essência</strong></td><td>Você absorve 1d4 de "energia da Alma" do alvo (progresso de Ascensão).</td></tr>
+                        <tr><td>86</td><td><strong>Marca do Predador</strong></td><td>Você ganha +1 de dano contra esse tipo de criatura por 24h — e monstros desse tipo o reconhecem.</td></tr>
+                        <tr><td>87</td><td><strong>Juramento</strong></td><td>Você jura derrubar o alvo: +2 no próximo teste contra ele, mas -1 de Sanidade se falhar.</td></tr>
+                        <tr><td>88</td><td><strong>Herança da Forja</strong></td><td>Seu equipamento ganha uma pequena propriedade (runa despertada) até o fim da cena.</td></tr>
+                        <tr><td>89</td><td><strong>Onda de Cinzas</strong></td><td>O ataque deixa o ambiente hostil: terreno difícil para inimigos por 1 rodada.</td></tr>
+                        <tr><td>90</td><td><strong>Sussurro da Névoa</strong></td><td>A Névoa ao redor se agita: inimigos têm Desvantagem em Percepção por 1 rodada.</td></tr>
+                        <tr><td>91</td><td><strong>Julgamento da Alma</strong></td><td>O alvo deve passar em Salvaguarda de Alma ou é subjugado (perde a próxima ação).</td></tr>
+                        <tr><td>92</td><td><strong>Corte do Destino</strong></td><td>O golpe fere o conceito do alvo: ele perde acesso a 1 Técnica/poder por 1d4 rodadas.</td></tr>
+                        <tr><td>93</td><td><strong>Apocalipse Pessoal</strong></td><td>O alvo sofre dano de Alma igual ao seu mod de Alma (ignora RD) + fica abalado.</td></tr>
+                        <tr><td>94</td><td><strong>Transbordamento</strong></td><td>O dano é triplicado e você recupera 1d6 de Núcleo/PE.</td></tr>
+                        <tr><td>95</td><td><strong>Momento Épico</strong></td><td>O efeito do seu poder se repete no próximo turno sem custo.</td></tr>
+                        <tr><td>96</td><td><strong>Imposição</strong></td><td>O alvo é forçado a fazer uma Salvaguarda de Alma contra medo paralisante ou fica imóvel 1 rodada.</td></tr>
+                        <tr><td>97</td><td><strong>Ressonância</strong></td><td>Sua Alma ecoa: aliados recuperam 1d4 de STA, você perde 1 de Sanidade (o preço do êxtase).</td></tr>
+                        <tr><td>98</td><td><strong>Quebra da Realidade</strong></td><td>Um efeito menor do ambiente se distorce a seu favor (porta abre, armadilha falha, parede cede).</td></tr>
+                        <tr><td>99</td><td><strong>Herança da Torre</strong></td><td>Você ganha um traço temporário poderoso por 24h — e 1 de Corrupção (a Torre cobra).</td></tr>
+                        <tr><td>100</td><td><strong>Julgamento Favorável</strong></td><td>Efeito lendário: o poder deixa uma marca permanente — o Mestre escolhe (fraqueza permanente do tipo, traço, marcar o local). A Torre lembra do seu nome.</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <h3>Falha Crítica (1 Natural)</h3>
-            <p>Além de falhar automaticamente na ação, role <strong>1d100</strong> na tabela abaixo. A Torre raramente perdoa.</p>
+            <h3>Falha Crítica — O Olhar da Torre</h3>
+            <p>Um 1 natural é quando a Torre nota sua fraqueza — e responde. Role <strong>1d100</strong>:</p>
 
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>d100</th><th>Efeito da Falha Crítica</th></tr>
+                        <tr><th>d100</th><th>Nome</th><th>Efeito</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>01–08</td><td><strong>Recuo da Alma</strong> — O personagem perde 1d6 de Núcleo e sofre desvantagem em todos os usos de poder até o fim do combate.</td></tr>
-                        <tr><td>09–16</td><td><strong>Dano Reverso</strong> — O personagem sofre o dano que tentaria causar (ou metade, se for em área).</td></tr>
-                        <tr><td>17–24</td><td><strong>Atenção da Torre</strong> — A Torre nota o personagem. Aumenta em 1 o nível de risco de emboscadas e eventos aleatórios nas próximas 1d4 horas.</td></tr>
-                        <tr><td>25–32</td><td><strong>Ruptura Interna</strong> — O personagem sofre 1 ponto de Corrupção e perde 1d4 de Sanidade.</td></tr>
-                        <tr><td>33–40</td><td><strong>Arma/Poder Instável</strong> — A arma ou poder usado fica inutilizável por 1d6 rodadas (ou perde um dado de dano permanentemente até reparo, se for equipamento).</td></tr>
-                        <tr><td>41–48</td><td><strong>Exaustão Súbita</strong> — O personagem ganha 2 níveis de Exaustão.</td></tr>
-                        <tr><td>49–56</td><td><strong>Revelação Involuntária</strong> — O personagem revela uma fraqueza própria ou um segredo para todos os inimigos presentes.</td></tr>
-                        <tr><td>57–64</td><td><strong>Colapso Parcial</strong> — O personagem cai no chão e perde sua ação no próximo turno.</td></tr>
-                        <tr><td>65–72</td><td><strong>Eco Mental</strong> — O personagem ouve vozes da Torre por algum tempo, sofrendo desvantagem em testes de Intelecto e Alma por 1 hora.</td></tr>
-                        <tr><td>73–80</td><td><strong>Consumo Excessivo</strong> — O personagem gasta o dobro de STA e Núcleo na tentativa falha.</td></tr>
-                        <tr><td>81–88</td><td><strong>Marca Visível</strong> — O personagem recebe uma marca física temporária da falha (olhos escuros, veias pulsantes, etc.), causando penalidades sociais e +1 de risco de atração de monstros.</td></tr>
-                        <tr><td>89–94</td><td><strong>Amplificação do Inimigo</strong> — O alvo (se for monstro) se fortalece temporariamente com a falha do personagem.</td></tr>
-                        <tr><td>95–99</td><td><strong>Trauma da Alma</strong> — O personagem ganha um ponto de Trauma (penalidade persistente leve até descansar em segurança por 24h).</td></tr>
-                        <tr><td>100</td><td><strong>Ira da Torre</strong> — Efeito catastrófico. O Mestre pode impor algo grave: perda temporária de um traço, aumento permanente de Corrupção, ou até mesmo a Torre enviar algo específico atrás do personagem.</td></tr>
+                        <tr><td>01</td><td><strong>Tropeço</strong></td><td>Você cai no chão (fica caído) e perde a Ação Bônus neste turno.</td></tr>
+                        <tr><td>02</td><td><strong>Gasto Inútil</strong></td><td>Você gasta o dobro de STA/Núcleo na tentativa falha.</td></tr>
+                        <tr><td>03</td><td><strong>Foco Perdido</strong></td><td>Você perde a Concentração em todos os efeitos ativos.</td></tr>
+                        <tr><td>04</td><td><strong>Nervos</strong></td><td>Você sofre Desvantagem no próximo teste até o fim do turno.</td></tr>
+                        <tr><td>05</td><td><strong>Equívoco</strong></td><td>Você erra o alvo e atinge 1 criatura adjacente (aliado ou inimigo, Mestre escolhe).</td></tr>
+                        <tr><td>06</td><td><strong>Fadiga</strong></td><td>Você ganha 1 nível de Exaustão.</td></tr>
+                        <tr><td>07</td><td><strong>Recuo da Alma</strong></td><td>Você perde 1d4 de Núcleo/PE.</td></tr>
+                        <tr><td>08</td><td><strong>Dano Reverso</strong></td><td>Você sofre metade do dano que causaria.</td></tr>
+                        <tr><td>09</td><td><strong>Ruptura Interna</strong></td><td>Você ganha 1 de Corrupção e perde 1d4 de Sanidade.</td></tr>
+                        <tr><td>10</td><td><strong>Arma Instável</strong></td><td>Sua arma/poder falha: inutilizável por 1d4 rodadas (ou perde 1 dado de dano até reparo).</td></tr>
+                        <tr><td>11</td><td><strong>Sangramento</strong></td><td>Você sangra: sofre 1 de dano por rodada até ser tratado.</td></tr>
+                        <tr><td>12</td><td><strong>Entorse</strong></td><td>Desvantagem em testes de Destreza por 1d4 rodadas.</td></tr>
+                        <tr><td>13</td><td><strong>Golpe Defletido</strong></td><td>O alvo ganha +2 de CA contra você até o fim do combate.</td></tr>
+                        <tr><td>14</td><td><strong>Postura Aberta</strong></td><td>Você sofre Desvantagem em Defesa até o início do seu próximo turno.</td></tr>
+                        <tr><td>15</td><td><strong>Reação Alheia</strong></td><td>O alvo pode realizar 1 Ataque de Oportunidade contra você (sem gastar Reação).</td></tr>
+                        <tr><td>16</td><td><strong>Esforço Excessivo</strong></td><td>Você sofre 1d4 de dano de Sobrecarga (HP direto).</td></tr>
+                        <tr><td>17</td><td><strong>Puxão</strong></td><td>Uma criatura o agarra (Salvaguarda de Força para escapar).</td></tr>
+                        <tr><td>18</td><td><strong>Voo</strong></td><td>Você é deslocado 1 zona na direção do golpe.</td></tr>
+                        <tr><td>19</td><td><strong>Fratura Menor</strong></td><td>-1 em testes de Força ou Vigor até descanso completo.</td></tr>
+                        <tr><td>20</td><td><strong>Colapso Parcial</strong></td><td>Você cai e perde a próxima Ação Principal.</td></tr>
+                        <tr><td>21</td><td><strong>Atenção da Torre</strong></td><td>A Torre nota você: +1 de atenção (eventos aleatórios pioram 1 nível por 1d4 horas).</td></tr>
+                        <tr><td>22</td><td><strong>Sussurro da Névoa</strong></td><td>Você ouve vozes: Desvantagem em testes de Intelecto por 1 hora.</td></tr>
+                        <tr><td>23</td><td><strong>Marca Visível</strong></td><td>Você ganha uma marca física temporária: -2 em testes sociais, +1 de atração de monstros.</td></tr>
+                        <tr><td>24</td><td><strong>Eco Mental</strong></td><td>Você ouve um eco de um monstro que enfrentou: perde 1d4 de Sanidade.</td></tr>
+                        <tr><td>25</td><td><strong>Visão da Queda</strong></td><td>Você vê um futuro horrível: perde 1d6 de Sanidade e fica abalado 1d4 rodadas.</td></tr>
+                        <tr><td>26</td><td><strong>Trauma da Alma</strong></td><td>Você ganha 1 ponto de Trauma (penalidade leve até descanso seguro de 24h).</td></tr>
+                        <tr><td>27</td><td><strong>Paranoia</strong></td><td>Você desconfia de um aliado por 1d4 rodadas (Desvantagem em trabalho em equipe).</td></tr>
+                        <tr><td>28</td><td><strong>Ruptura de Vontade</strong></td><td>Você ganha 1 de Corrupção e sofre Desvantagem em Salvaguardas de Alma por 1 hora.</td></tr>
+                        <tr><td>29</td><td><strong>Medo Súbito</strong></td><td>Falha na Salvaguarda de Carisma = você recua 1 zona ou congela.</td></tr>
+                        <tr><td>30</td><td><strong>Pânico</strong></td><td>Você age irracionalmente por 1 rodada (Mestre decide: atacar, fugir, congelar).</td></tr>
+                        <tr><td>31</td><td><strong>Consumo Excessivo</strong></td><td>A tentativa drena você: perde 1d6 de STA extra.</td></tr>
+                        <tr><td>32</td><td><strong>Dreno da Torre</strong></td><td>A Torre suga parte de você: perde 1 PE permanentemente até descanso completo.</td></tr>
+                        <tr><td>33</td><td><strong>Instabilidade</strong></td><td>Seu poder fica instável: próximo uso tem Desvantagem.</td></tr>
+                        <tr><td>34</td><td><strong>Fenda no Núcleo</strong></td><td>Seu PE máximo é reduzido em 1 até um ritual de purificação.</td></tr>
+                        <tr><td>35</td><td><strong>Sobrecarga da Alma</strong></td><td>Você sofre 1d6 de dano psíquico (ignora RD).</td></tr>
+                        <tr><td>36</td><td><strong>Fome da Essência</strong></td><td>Você sente um impulso de absorver um núcleo imediatamente (Salvaguarda de Alma).</td></tr>
+                        <tr><td>37</td><td><strong>Vício de Poder</strong></td><td>Você ganha +1 de Corrupção (a tentação foi doce).</td></tr>
+                        <tr><td>38</td><td><strong>Marca do Predador</strong></td><td>Um monstro próximo percebe sua fraqueza: ele o prioriza neste combate.</td></tr>
+                        <tr><td>39</td><td><strong>Rejeição</strong></td><td>Sua Alma recusa o poder: você não pode usar a mesma técnica por 1d4 rodadas.</td></tr>
+                        <tr><td>40</td><td><strong>Cicatriz da Torre</strong></td><td>Você sente uma dor antiga: -1 em todos os testes por 1d4 rodadas.</td></tr>
+                        <tr><td>41</td><td><strong>Amplificação do Inimigo</strong></td><td>O alvo (se monstro) se fortalece: +1 de dano e +1 de CA até o fim do combate.</td></tr>
+                        <tr><td>42</td><td><strong>Ensinamento do Alvo</strong></td><td>O alvo aprende seu padrão: ganha +2 no próximo ataque contra você.</td></tr>
+                        <tr><td>43</td><td><strong>Exposição</strong></td><td>Você revela uma fraqueza sua a todos os inimigos presentes.</td></tr>
+                        <tr><td>44</td><td><strong>Grito de Alerta</strong></td><td>Um monstro próximo chama outros (1d4 criaturas menores chegam em 2 rodadas).</td></tr>
+                        <tr><td>45</td><td><strong>Provocação</strong></td><td>O alvo fica enfurecido contra você: o foca até o fim do combate.</td></tr>
+                        <tr><td>46</td><td><strong>Ensinar o Errado</strong></td><td>Você demonstra sua técnica a inimigos: eles resistem melhor a ela (-1 no próximo uso).</td></tr>
+                        <tr><td>47</td><td><strong>Solo Escorregadio</strong></td><td>Terreno difícil ao seu redor por 1 rodada (você e aliados próximos).</td></tr>
+                        <tr><td>48</td><td><strong>Armadilha do Ambiente</strong></td><td>Você aciona um perigo local (Mestre: runa, névoa, estrutura).</td></tr>
+                        <tr><td>49</td><td><strong>Distração</strong></td><td>Você não percebe um perigo iminente (perde Vantagem de Defesa).</td></tr>
+                        <tr><td>50</td><td><strong>Erro de Leitura</strong></td><td>Você interpreta mal a situação: o próximo plano do grupo tem Desvantagem.</td></tr>
+                        <tr><td>51</td><td><strong>Equipamento Danificado</strong></td><td>Uma peça do seu equipamento (arma/armadura/ferramenta) sofre dano (-1 até reparo).</td></tr>
+                        <tr><td>52</td><td><strong>Runa Apagada</strong></td><td>Uma runa/efeito seu é dissipado.</td></tr>
+                        <tr><td>53</td><td><strong>Munição Perdida</strong></td><td>Você perde um item menor ou material (1d4 de material de forja).</td></tr>
+                        <tr><td>54</td><td><strong>Forja Instável</strong></td><td>Seu item com memória de luta "reclama": -1 de dano até o fim do combate.</td></tr>
+                        <tr><td>55</td><td><strong>Alquimia Vazada</strong></td><td>Um consumível seu estraga (1 dose/poção).</td></tr>
+                        <tr><td>56</td><td><strong>Lâmina Cega</strong></td><td>Sua arma sofre Desvantagem no próximo ataque (fio/energia instável).</td></tr>
+                        <tr><td>57</td><td><strong>Proteção Caída</strong></td><td>Um efeito defensivo seu (escudo/aura) falha e se dissipa.</td></tr>
+                        <tr><td>58</td><td><strong>Ferramenta Quebrada</strong></td><td>Um item de perícia (kit, corda, foco) quebra/inutiliza até reparo.</td></tr>
+                        <tr><td>59</td><td><strong>Peso Morto</strong></td><td>Você fica sobrecarregado: deslocamento reduzido pela metade por 1d4 rodadas.</td></tr>
+                        <tr><td>60</td><td><strong>Vestígio</strong></td><td>Algo do seu poder vaza: uma pequena manifestação hostil surge ao seu lado.</td></tr>
+                        <tr><td>61</td><td><strong>Revelação Involuntária</strong></td><td>Você fala em voz alta um segredo ou plano (todos ouvem).</td></tr>
+                        <tr><td>62</td><td><strong>Confissão</strong></td><td>Você revela uma informação sensível a alguém (Barman/facção sabe).</td></tr>
+                        <tr><td>63</td><td><strong>Fama Ruim</strong></td><td>Sua falha é testemunhada: -1 de reputação com um grupo/facção.</td></tr>
+                        <tr><td>64</td><td><strong>Mal-entendido</strong></td><td>Um aliado interpreta sua ação como hostil (roleplay + teste social).</td></tr>
+                        <tr><td>65</td><td><strong>Culpa</strong></td><td>Você ganha 1d4 de Sanidade a menos (peso da falha) — recuperável com descanso.</td></tr>
+                        <tr><td>66</td><td><strong>Promessa Quebrada</strong></td><td>Um contato seu cobra um favor agora (o Mestre decide).</td></tr>
+                        <tr><td>67</td><td><strong>Olhar de Julgamento</strong></td><td>Alguém importante presencia sua falha e anota seu nome.</td></tr>
+                        <tr><td>68</td><td><strong>Rumor</strong></td><td>Uma história distorcida sobre você começa a circular.</td></tr>
+                        <tr><td>69</td><td><strong>Dívida</strong></td><td>Você deve um favor a alguém (Mestre decide quem).</td></tr>
+                        <tr><td>70</td><td><strong>Silêncio</strong></td><td>Você fica sem palavras/rosto reconhecível por 1d4 rodadas (sem testes sociais).</td></tr>
+                        <tr><td>71</td><td><strong>Exaustão Súbita</strong></td><td>Você ganha 2 níveis de Exaustão.</td></tr>
+                        <tr><td>72</td><td><strong>Sobrecarga Total</strong></td><td>Você perde metade da STA restante.</td></tr>
+                        <tr><td>73</td><td><strong>Apagão de Núcleo</strong></td><td>Você perde metade do PE restante.</td></tr>
+                        <tr><td>74</td><td><strong>Colapso da Alma</strong></td><td>Você fica à beira da Ruptura: perde 1d6 de Sanidade e 1 de Corrupção.</td></tr>
+                        <tr><td>75</td><td><strong>Morte Branca</strong></td><td>Você desmaia por 1d4 rodadas (PV &gt; 0, mas inconsciente).</td></tr>
+                        <tr><td>76</td><td><strong>Ferimento Grave</strong></td><td>Você sofre um ferimento que exige tratamento (perícia Medicina ou descanso longo).</td></tr>
+                        <tr><td>77</td><td><strong>Sangramento Interno</strong></td><td>Você perde 1d4 de HP no início de cada rodada até ser estabilizado.</td></tr>
+                        <tr><td>78</td><td><strong>Deslocamento</strong></td><td>Você é arremessado para Longa distância e sofre 1d6 de dano.</td></tr>
+                        <tr><td>79</td><td><strong>Fratura Exposta</strong></td><td>-1 permanente em um atributo físico até tratamento sério (Mestre decide qual).</td></tr>
+                        <tr><td>80</td><td><strong>Perto da Morte</strong></td><td>Você cai a 0 PV em vez de falhar (se já estiver ferido, sofre 1 ferimento).</td></tr>
+                        <tr><td>81</td><td><strong>A Torre Acorda</strong></td><td>Um evento de Risco da Torre é rolado imediatamente (com +2 de risco).</td></tr>
+                        <tr><td>82</td><td><strong>Manifestação</strong></td><td>Uma entidade menor da Torre surge para investigar o barulho.</td></tr>
+                        <tr><td>83</td><td><strong>Névoa Aproxima-se</strong></td><td>A Névoa avança sobre o grupo: perigo ambiental iminente.</td></tr>
+                        <tr><td>84</td><td><strong>Surtos de Atividade</strong></td><td>O andar fica mais perigoso: +1 de dificuldade em eventos até o fim da incursão.</td></tr>
+                        <tr><td>85</td><td><strong>O Andar Reage</strong></td><td>O ambiente se fecha: uma passagem se bloqueia, uma armadilha se arma.</td></tr>
+                        <tr><td>86</td><td><strong>Presença Superior</strong></td><td>Um monstro mais forte (1 tier acima) nota o grupo.</td></tr>
+                        <tr><td>87</td><td><strong>Chamado da Torre</strong></td><td>Você ouve seu nome: -1 de Sanidade e a Torre o marca (atenção +1 permanente nesta incursão).</td></tr>
+                        <tr><td>88</td><td><strong>Corrupção em Cascata</strong></td><td>Você ganha 1d4 de Corrupção (o preço da falha).</td></tr>
+                        <tr><td>89</td><td><strong>Marca Permanente</strong></td><td>Você ganha uma Marca da Torre (mecânica: -1 em testes sociais até purificação).</td></tr>
+                        <tr><td>90</td><td><strong>Traição da Alma</strong></td><td>Seu poder o fere: sofre o dano que tentava causar (integral).</td></tr>
+                        <tr><td>91</td><td><strong>Fragmento Perdido</strong></td><td>Você perde acesso a 1 Técnica/poder por 24h (a Alma "esquece").</td></tr>
+                        <tr><td>92</td><td><strong>Cicatriz de Alma</strong></td><td>Você perde 1 ponto de Sanidade máxima até um evento narrativo de recuperação.</td></tr>
+                        <tr><td>93</td><td><strong>Drenagem da Torre</strong></td><td>Você perde 1d6 de PE máximo até descanso completo fora da Torre.</td></tr>
+                        <tr><td>94</td><td><strong>Vozes</strong></td><td>Você passa a ouvir sussurros constantes por 1d4 horas (Desvantagem em testes de Alma).</td></tr>
+                        <tr><td>95</td><td><strong>Possessão Menor</strong></td><td>Algo antigo pisca dentro de você por 1 rodada (age por você; 1 de Corrupção).</td></tr>
+                        <tr><td>96</td><td><strong>Ruptura da Alma</strong></td><td>Você ganha 1 Trauma permanente leve (fobia/mania — Mestre define).</td></tr>
+                        <tr><td>97</td><td><strong>Oferenda</strong></td><td>A Torre aceita sua falha como oferenda: você perde 1d4 de Sanidade máxima até purificação.</td></tr>
+                        <tr><td>98</td><td><strong>Despertar do Predador</strong></td><td>Algo na Torre das Disputas sente sua falha: um rival/gladiador passa a te procurar.</td></tr>
+                        <tr><td>99</td><td><strong>Espiral</strong></td><td>Você perde o controle: Mestre assume seu personagem por 1d4 rodadas (age segundo seus medos).</td></tr>
+                        <tr><td>100</td><td><strong>Ira da Torre</strong></td><td>Catástrofe: o Mestre escolhe o pior — perda de traço, Corrupção permanente, a Torre envia algo atrás de você, ou uma Marca que nunca some.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -16607,6 +16830,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p><strong>Exemplos comuns de Desvantagem:</strong> Lutar na Névoa densa, usar um poder enquanto exausto ou com Núcleo baixo, enfrentar algo que explora uma Fraqueza da Alma do personagem, a Torre "notando" o grupo.</p>
 
+            <h2>Ousadia com Custo — Push</h2>
+            <p>Quando o destino vira as costas, ainda existe uma última moeda — e ela não é paga em ouro.</p>
+
+            <div class="lore-box">
+                <strong>Push (Ousadia com Custo):</strong><br><br>
+                <strong>1 vez por cena</strong>, você pode <strong>re-rolar um teste, ataque ou salvaguarda</strong> que tenha acabado de falhar, pagando <strong>1d4 de Sanidade</strong>. Se o re-rolar resultar em <strong>1 natural</strong>, você ganha <strong>1 de Corrupção</strong>.<br><br>
+                <em>"A ousadia é dívida."</em>
+            </div>
+
             <h2 id="exemplos-praticos">Exemplos Práticos de Combate e Resolução</h2>
             <p>Abaixo você vai ver como o sistema funciona na prática, explicado de forma clara e passo a passo. Cada exemplo mostra um tipo diferente de situação que um jogador pode enfrentar: combate direto, uso de poderes em ambiente hostil, e os riscos de poderes mentais quando a Sanidade está baixa.</p>
 
@@ -16623,8 +16855,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <p><strong>Situação:</strong> Seu grupo precisa atravessar um corredor instável. O Mestre pede um teste de Destreza CD 16 para não cair.</p>
             <p><strong>Como você resolve:</strong></p>
             <ul>
-                <li>Você rola d20 + Mod Destreza (+2) + Proficiência (+3) = d20 + 5.</li>
-                <li>Rola 14 → total 19. Sucesso! Você atravessa sem problemas.</li>
+                <li>Você rola d20 + Mod Destreza (+2) + Maestria (+2) = d20 + 4.</li>
+                <li>Rola 14 → total 18. Sucesso! Você atravessa sem problemas.</li>
                 <li>Nenhum recurso foi gasto.</li>
             </ul>
             <p>Se tivesse rolado baixo (ex: 9), cairia, sofreria dano e possivelmente teria que fazer uma Salvaguarda de Vigor para não ficar preso.</p>
@@ -16641,12 +16873,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Atributo principal:</strong> Alma
             </div>
 
-            <p><strong>Cenário:</strong> Kael está no 5º andar de uma torre comum, enfrentando um Carnífice (nível baixo, CA 16). Ele está no nível 3 de Ascensão (Bônus de Proficiência +3).</p>
+            <p><strong>Cenário:</strong> Kael está no 5º andar de uma torre comum, enfrentando um Carnífice (nível baixo, CA 16). Ele está no nível 3 de personagem (Maestria +2).</p>
 
             <p><strong>O que acontece no turno de Kael:</strong></p>
             <ol>
-                <li><strong>Jogada de Ataque:</strong> d20 + Mod Alma (+3) + Proficiência (+3) = d20 + 6.<br>
-                    Ele rola 17 → 23 no total. Acerta fácil contra CA 16.</li>
+                <li><strong>Jogada de Ataque:</strong> d20 + Mod Alma (+3) + Maestria (+2) = d20 + 5.<br>
+                    Ele rola 17 → 22 no total. Acerta fácil contra CA 16.</li>
                 <li><strong>Dano:</strong> 1d10 + 3. Rola 8 → causa <strong>11 de dano</strong>.</li>
                 <li><strong>Custo pago:</strong> -3 STA e -2 Núcleo.</li>
             </ol>
@@ -16654,7 +16886,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p><strong>No turno seguinte (complicação):</strong></p>
             <ul>
                 <li>O monstro ataca. Kael tenta desviar com um teste de Destreza (CD 18).</li>
-                <li>Rola 11 + Mod Destreza (+2) + Proficiência (+3) = 16 → Falha.</li>
+                <li>Rola 11 + Mod Destreza (+2) + Maestria (+2) = 15 → Falha.</li>
                 <li>O Mestre pede uma Salvaguarda de Vigor (CD 16) por fadiga acumulada.</li>
                 <li>Kael falha. Perde 4 STA extras e ganha <strong>1 nível de Exaustão</strong> (–1 em todos os testes).</li>
             </ul>
@@ -16679,7 +16911,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <ol>
                 <li>Ela tenta atacar os dois monstros ao mesmo tempo com lâminas flutuantes.</li>
                 <li>Por causa da Névoa, rola com <strong>Desvantagem</strong> (2d20, pega o menor).</li>
-                <li>Rola 7 e 14 → usa o 7 + Mod Intelecto (+2) + Proficiência (+3) = <strong>12</strong>. Falha contra CA 14.</li>
+                <li>Rola 7 e 14 → usa o 7 + Mod Intelecto (+2) + Maestria (+2) = <strong>11</strong>. Falha contra CA 14.</li>
                 <li>Mesmo falhando, ela gasta os recursos: <strong>-4 STA e -3 Núcleo</strong>.</li>
                 <li>Por ter falhado de forma ruim em ambiente hostil, o Mestre pede uma Salvaguarda de Intelecto (CD 16) para manter o controle mental.</li>
                 <li>Ela falha. Perde <strong>3 de Sanidade</strong> e fica com desvantagem em testes de Intelecto por 1 hora.</li>
@@ -16702,7 +16934,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p><strong>O que acontece:</strong></p>
             <ol>
-                <li>Thorne usa o poder mental. Rolagem de ataque (Carisma): 19 + Mod Carisma (+1) + Proficiência (+3) = <strong>23</strong>. Acerta.</li>
+                <li>Thorne usa o poder mental. Rolagem de ataque (Carisma): 19 + Mod Carisma (+1) + Maestria (+2) = <strong>22</strong>. Acerta.</li>
                 <li>Dano: 2d6 = 11 de dano psíquico. O monstro falha na Salvaguarda de Alma (CD 18) e perde 4 de Sanidade.</li>
                 <li><strong>Preço pago por Thorne:</strong> Ele precisa fazer uma Salvaguarda de Alma (CD 16) por usar um poder mental com Sanidade tão baixa.</li>
                 <li>Ele falha. Perde <strong>5 de Sanidade</strong> e ganha <strong>1 de Corrupção</strong>.</li>
@@ -16727,11 +16959,20 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>O combate em Torre do Pesadelo é perigoso, custoso e raramente favorável. Não é um exercício tático limpo — é uma luta desesperada pela sobrevivência, onde cada uso de poder drena sua alma e o ambiente ao seu redor pode se voltar contra você a qualquer momento.</p>
 
             <h3>Iniciativa</h3>
-            <p>No início de cada combate, determine quem age primeiro:</p>
+            <p>No início de cada combate, role a iniciativa <strong>uma única vez</strong> — a ordem da batalha fica fixa até o fim:</p>
             <ul>
-                <li><strong>Método Recomendado (Rápido):</strong> Os jogadores decidem entre si a ordem em que querem agir. Depois que todos os personagens agiram, o Mestre age com todos os inimigos.</li>
-                <li><strong>Método Estruturado:</strong> Cada lado (personagens vs inimigos) faz um teste coletivo de Destreza (o personagem com maior modificador rola para o grupo). O lado vencedor age primeiro.</li>
+                <li><strong>Rolagem única:</strong> <strong>d20 + Modificador de Destreza</strong> (ou Percepção, a critério do Mestre — útil em emboscadas). Ordena-se do maior para o menor.</li>
             </ul>
+
+            <div class="system-card">
+                <strong>Rápido ou Lento (a cada rodada):</strong><br><br>
+                No início de cada rodada, cada criatura declara turno <strong>rápido</strong> ou <strong>lento</strong>.<br>
+                • Todos os turnos <strong>rápidos</strong> acontecem primeiro, na ordem da iniciativa.<br>
+                • Depois, todos os turnos <strong>lentos</strong>, na mesma ordem.<br>
+                • Quem escolhe <strong>lento</strong> pode ceder a vez e agir <em>depois</em> de ver o que os rápidos fizeram — e pode reagir (ou fugir) ao que viu.<br><br>
+                <strong>Surpresa:</strong> criaturas surpresas não agem na 1ª rodada e não usam Reação até o fim do próprio turno. Emboscada da Torre é punição.<br><br>
+                <strong>Delay/Ready (opcional):</strong> adiar a vez (Delay) ou preparar uma ação (Ready) são ações básicas; a ação preparada dispara quando a condição acontece, gastando sua Reação.
+            </div>
 
             <h3>Estrutura do Turno</h3>
             <p>Em seu turno, um personagem pode realizar as seguintes ações:</p>
@@ -16768,19 +17009,86 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><strong>Médio</strong>: Distância de um lance de lança ou poder de médio alcance.</li>
                 <li><strong>Longo</strong>: Distância de arco ou poder de longo alcance.</li>
             </ul>
-            <p>Mover-se de uma zona para outra adjacente custa sua Ação de Movimento. Mover-se duas zonas no mesmo turno exige sua Ação Principal + Movimento (ou uma Ação Bônus extra, se disponível).</p>
+            <div class="system-card">
+                <strong>Regras de Movimento:</strong><br><br>
+                • Mover <strong>1 zona</strong> = 1 Ação de Movimento.<br>
+                • Mover <strong>2 zonas</strong> = Ação Principal + Movimento (ou uma Ação Bônus extra, se disponível).<br>
+                • <strong>Alcance de armas:</strong> corpo a corpo atinge apenas a <strong>zona atual</strong>; arma longa ou de haste atinge a zona atual <strong>+ 1 adjacente</strong>.<br>
+                • <strong>Terreno difícil</strong> (escombros, névoa densa, solo instável) custa <strong>+1 zona</strong> de movimento para atravessar.<br>
+                • Sair de uma zona <strong>engajada</strong> (inimigo em Curto) provoca <strong>Ataque de Oportunidade</strong>.
+            </div>
 
             <h3>Ataques de Oportunidade</h3>
             <p>Quando um inimigo tenta se afastar de você sem se defender adequadamente (ou seja, usa sua Ação de Movimento para sair da zona Curto enquanto você está em Curto com ele), você pode usar sua <strong>Reação</strong> para realizar um ataque de oportunidade.</p>
+            <p><strong>Disengage:</strong> gastar a <strong>Ação de Movimento inteira</strong> para recuar com cuidado evita todos os Ataques de Oportunidade.</p>
 
             <h3>Reações</h3>
-            <p>Cada personagem tem direito a <strong>uma Reação por rodada</strong>. Reações comuns incluem:</p>
+            <p>Cada personagem tem direito a <strong>uma Reação por rodada</strong> (recuperada no início do próprio turno). Reações comuns incluem:</p>
             <ul>
                 <li><strong>Desviar</strong>: Tentar reduzir o dano de um ataque (teste de Destreza contra o ataque do oponente).</li>
                 <li><strong>Proteger Aliado</strong>: Sofrer o ataque no lugar de um aliado próximo.</li>
                 <li><strong>Contra-ataque</strong>: Alguns poderes ou traços permitem contra-atacar como reação.</li>
                 <li><strong>Interromper</strong>: Tentar atrapalhar a ação de um inimigo (ex: derrubar concentração).</li>
+                <li><strong>Ataque de Oportunidade</strong> (ver acima).</li>
             </ul>
+            <div class="lore-box">
+                <strong>Reação extra (Guardião):</strong> a 1ª Reação por rodada é <strong>grátis</strong>. A Reação adicional do Guardião custa <strong>1 PE ou 1 de Sanidade por uso</strong> — todo ganho tem custo.
+            </div>
+
+            <h3>Dano e Redução de Dano (RD)</h3>
+            <p>O dano em Torre do Pesadelo é sempre <strong>físico ou de Alma</strong>. A <strong>Redução de Dano (RD)</strong> é um <strong>número fixo</strong> — nunca percentual (ex.: "RD 5 contra fogo"). Bônus de talentos (como a Perfuração do Bélico) continuam como exceção.</p>
+
+            <div class="system-card">
+                <strong>Tipos de dano:</strong><br>
+                • <strong>Cortante</strong> — lâminas, garras afiadas.<br>
+                • <strong>Perfurante</strong> — flechas, lanças, presas.<br>
+                • <strong>Contundente</strong> — martelos, impactos, quedas.<br>
+                • <strong>Fogo</strong> — chamas, brasas, runas incandescentes.<br>
+                • <strong>Frio</strong> — geada, toque gélido, névoa congelante.<br>
+                • <strong>Necrose</strong> — putrefação, drenagem vital.<br>
+                • <strong>Dano de Alma</strong> — especial: atinge a própria essência e <strong>ignora RD física</strong>.
+            </div>
+
+            <h3>Ferimento Grave e Morte</h3>
+            <p>A Torre não perdoa a fraqueza. Quando o corpo quebra, a morte deixa de ser um conceito e vira uma contagem regressiva.</p>
+
+            <div class="system-card">
+                <strong>Ferimento Grave (Major Wound):</strong><br>
+                Um <strong>golpe único</strong> que cause dano <strong>≥ metade dos PV Máximos</strong> exige uma <strong>Salvaguarda de Corpo (Vigor)</strong>. <strong>Falha</strong> = fica <strong>incapacitado</strong> (mesmo com PV restantes). <strong>Sucesso</strong> = continua em pé, mas fica abalado (Desvantagem em testes até o fim do combate ou até tratamento).
+            </div>
+
+            <div class="system-card">
+                <strong>Morrendo 1–4:</strong><br><br>
+                • <strong>0 PV</strong> → fica <strong>Morrendo 1</strong> (Morrendo 2 se o golpe foi crítico).<br>
+                • No início do turno, faça o <strong>teste de recuperação</strong>: <strong>d20 ≥ 10 + Morrendo</strong> (sem modificadores). <strong>Sucesso:</strong> Morrendo −1 · <strong>Falha:</strong> Morrendo +1 · <strong>20 natural:</strong> Morrendo −2 e acorda com 1 PV · <strong>1 natural:</strong> Morrendo +2.<br>
+                • <strong>Morrendo 4 = morte.</strong><br>
+                • Dano extra a 0 PV: Morrendo +1 (+2 se crítico).<br><br>
+                <strong>Morte instantânea:</strong> se o dano restante (após redução) for <strong>≥ seus PV Máximos</strong>, morte imediata — a Torre não perdoa.<br><br>
+                <strong>Estabilização:</strong> a perícia <strong>Medicina</strong> com <strong>Maestria</strong> (ou traço/técnica de cura) estabiliza o morrendo, parando a contagem.
+            </div>
+
+            <h3>Condições</h3>
+            <p>As condições seguem o formato <strong>nome + valor + efeito</strong>. Quanto maior o valor, pior o estado:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Condição</th><th>Efeito base</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Apavorado X</strong></td><td>−X em testes e CA; foge/paralisa em X alto; cai 1 por turno</td></tr>
+                        <tr><td><strong>Sangrando X</strong></td><td>Perde X de PV no início de cada rodada; Medicina/RD estanca</td></tr>
+                        <tr><td><strong>Envenenado X</strong></td><td>−X em Vigor; dano contínuo ou desvantagem conforme o veneno</td></tr>
+                        <tr><td><strong>Cegado</strong></td><td>Desvantagem em ataques; testes de Percepção falham automaticamente</td></tr>
+                        <tr><td><strong>Caído</strong></td><td>Desvantagem em ataques corpo a corpo; alvos à distância têm Vantagem; levantar = metade do movimento</td></tr>
+                        <tr><td><strong>Agarrado X</strong></td><td>Deslocamento 0; Desvantagem em Destreza; escapar = Salvaguarda de Força/Destreza vs X</td></tr>
+                        <tr><td><strong>Incapacitado</strong></td><td>Não age, não reage; concentração quebrada</td></tr>
+                        <tr><td><strong>Exausto X</strong> (1–6)</td><td>−1 em tudo por nível; níveis altos reduzem movimento/PV; 6 = morte</td></tr>
+                        <tr><td><strong>Corrompido X</strong></td><td>−X em testes de Alma; ganho de Corrupção mais fácil (espiral)</td></tr>
+                        <tr><td><strong>Enlouquecido X</strong></td><td>−X em Intelecto/Carisma; risco de ações irracionais (Mestre rola)</td></tr>
+                        <tr><td><strong>Enfraquecido X</strong></td><td>−X em Força/Vigor; dano físico reduzido</td></tr>
+                        <tr><td><strong>Concentração quebrada</strong></td><td>Perde efeito contínuo (técnica/aura)</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
             <h3>Combate na Torre — Conselhos Práticos</h3>
             <p>As Torres não são arenas neutras. Elas observam, reagem e punem quem demora demais. Aqui vão conselhos diretos para jogadores:</p>
@@ -16793,14 +17101,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>A Torre aprende.</strong> Se você usa o mesmo tipo de tática várias vezes, ela pode começar a enviar inimigos que resistem ou exploram isso.
             </div>
 
-            <h3>Fuga e Moral</h3>
+            <h3>Fuga e Perseguição</h3>
             <p>Às vezes, a melhor opção é fugir. Para desengajar de um combate:</p>
             <ul>
-                <li>Um personagem pode usar sua Ação Principal + Movimento para tentar fugir. Todos os inimigos em Curto podem fazer um ataque de oportunidade.</li>
-                <li>Se o grupo inteiro decidir fugir, o Mestre pode pedir testes de Destreza ou Vigor para escapar com sucesso, com penalidades dependendo da diferença de velocidade e número de inimigos.</li>
+                <li><strong>Disengage:</strong> gastar a Ação de Movimento inteira evita os Ataques de Oportunidade.</li>
+                <li>Se o grupo inteiro decidir fugir, o Mestre pode pedir um teste de Destreza ou Vigor coletivo, com penalidades pela diferença de velocidade e número de inimigos.</li>
+                <li><strong>Perseguição por zonas:</strong> cada zona atravessada exige 1 ação e uma <strong>Salvaguarda de Corpo ou Agilidade</strong>. Falha = condição <strong>Exausto</strong> ou <strong>+1 tick no Relógio de Atenção da Torre</strong>.</li>
             </ul>
 
             <p>Inimigos também podem fugir se estiverem claramente perdendo (especialmente monstros inteligentes ou covardes).</p>
+
+            <div class="lore-box">
+                <strong>Relógio de Atenção da Torre:</strong><br><br>
+                Combates longos atraem a Torre. A cada <strong>rodada de combate além da 1ª</strong>, o Mestre marca <strong>1 tick</strong> — <strong>2 ticks</strong> se houve fogo, magia de alto nível ou muito sangue.<br><br>
+                Ao <strong>encher o relógio</strong> (6–8 ticks): acontece um <strong>evento da Torre</strong> — reforço chega, o ambiente piora, ou o grupo ganha <strong>+1 de Corrupção/Atenção</strong>. Combates longos deixaram de ser um aviso; são uma sentença.
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Ticks</th><th>Estado da Torre</th><th>Consequência</th></tr></thead>
+                    <tbody>
+                        <tr><td>1–2</td><td>Curiosidade</td><td>A Torre observa; eventos aleatórios ficam mais prováveis.</td></tr>
+                        <tr><td>3–5</td><td>Atenção</td><td>Monstros se movem em sua direção; ambiente fica hostil.</td></tr>
+                        <tr><td>6–8</td><td><strong>Ira</strong></td><td>Evento da Torre: reforço, ambiente piora, ou +1 Corrupção/Atenção.</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="lore-box">
                 <strong>Lembrete Importante:</strong> Em Torre do Pesadelo, vencer um combate não significa apenas reduzir os inimigos a zero. Significa sobreviver com recursos suficientes para continuar subindo — e com sua sanidade e alma relativamente intactas.
@@ -16979,6 +17305,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>Sempre que você falha em uma Salvaguarda de Intelecto ou Carisma contra medo, ilusão, influência mental ou a própria presença da Torre, role 1d4. Esse é o dano mental que você sofre.</p>
         <p>Em andares muito profundos ou situações extremamente traumáticas, o Mestre pode fazer você rolar mais dados ou causar perda automática de Sanidade.</p>
 
+        <div class="lore-box">
+            <strong>A Alma nunca volta inteira:</strong><br><br>
+            • <strong>Teto decrescente:</strong> conhecimentos e atos proibidos da Torre <strong>reduzem o teto de Sanidade máxima</strong> de forma permanente. A Torre cobra antes do uso: o que você aprendeu não pode ser desaprendido, e o que fez continua existindo.<br>
+            • <strong>Mínimo permanente:</strong> algumas falhas críticas (tabela d100 "O Olhar da Torre") impõem uma <strong>Sanidade mínima permanente</strong> — mesmo que você recupere pontos, a Alma nunca volta inteira. Escreva na ficha o que a Torre levou.
+        </div>
+
         <div class="system-card">
             <strong>Dicas para jogadores:</strong><br>
             • Sanidade baixa não é só "ficar louco". É ficar vulnerável. Seus piores medos começam a ter poder real sobre você.<br>
@@ -17007,6 +17339,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <tr><td>12+</td><td><strong>Abissal / Inominável</strong></td><td>Você está à beira de deixar de ser uma pessoa. A Torre pode estar te chamando de casa.</td><td>Poder monstruoso extremo.</td><td>Risco real de perder o controle do personagem. O grupo e o Mestre precisam decidir se você ainda pode continuar como jogador ou se deve se tornar algo pior.</td></tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="lore-box">
+            <strong>A espiral autocatalítica:</strong> a partir do estágio <strong>Marcado (3+)</strong>, cada <strong>falha em Salvaguarda de Alma</strong> soma <strong>+1 de Corrupção adicional</strong>. Quanto mais corrompido você está, mais fácil se corromper — a Torre cobra em dobro de quem já se entregou.
         </div>
 
         <div class="lore-box">
