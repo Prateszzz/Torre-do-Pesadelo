@@ -13354,6 +13354,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#evolucao-poder">Evolução do Poder</a></li>
             <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
             <li><a href="#tecnicas-habilidades">Criação de Técnicas e Habilidades</a></li>
+            <li><a href="#arvore-alma">A Árvore da Alma</a></li>
+            <li><a href="#utilizacao-manifestacao">Sistema de Utilização da Manifestação</a></li>
         </ul>
 
         <!-- IV. PROGRESSÃO E ASCENSÃO -->
@@ -13361,6 +13363,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <ul>
             <li><a href="#ascensao">As Espirais da Ascensão (Humanos)</a></li>
             <li><a href="#corrupcao">As Espirais da Corrupção — Monstros</a></li>
+            <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
         </ul>
 
         <!-- V. ECONOMIA E ARTESANATO -->
@@ -13377,6 +13380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="toc-label">VI. Regras de Jogo</span>
         <ul>
             <li><a href="#sistema-resolucao">Sistema de Resolução</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ataques-resistencias">Ataques Diretos e Resistências</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#pericias">Perícias</a></li>
             <li><a href="#combate">Combate</a></li>
             <li><a href="#sobrecarga">Sobrecarga, Exaustão e Colapso</a></li>
@@ -13468,6 +13472,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li><a href="#evolucao-poder">Evolução do Poder</a></li>
                             <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
                             <li><a href="#tecnicas-habilidades">Criação de Técnicas e Habilidades</a></li>
+                            <li><a href="#arvore-alma">A Árvore da Alma</a></li>
+                            <li><a href="#utilizacao-manifestacao">Sistema de Utilização da Manifestação</a></li>
                         </ul>
                     </div>
 
@@ -13477,6 +13483,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#ascensao">As Espirais da Ascensão (Humanos)</a></li>
                             <li><a href="#corrupcao">As Espirais da Corrupção — Monstros</a></li>
+                            <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
                         </ul>
                     </div>
 
@@ -13497,6 +13504,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VI. Regras de Jogo</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sistema-resolucao">Sistema de Resolução</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ataques-resistencias">Ataques Diretos e Resistências</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#pericias">Perícias</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#combate">Combate</a></li>
                             <li><a href="#sobrecarga">Sobrecarga, Exaustão e Colapso</a></li>
@@ -14861,6 +14869,615 @@ document.addEventListener('DOMContentLoaded', () => {
         </section>
 
 
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             A ÁRVORE DA ALMA — novo capítulo (15/08/2026)
+             Fonte: Google Doc do usuário + decisões de design resolvidas.
+             Estrutura oficial: 5 Aspectos × 3 Ramos × 10 níveis (3×10).
+        ═══════════════════════════════════════════════════════════ -->
+        <section id="arvore-alma">
+            <h1>A Árvore da Alma</h1>
+
+            <p>Cada Manifestação nasce de uma alma única. Ao longo da jornada, essa alma amadurece e passa a desenvolver diferentes <strong>Aspectos</strong> de si mesma. Esses Aspectos representam como o personagem escolheu evoluir sua Manifestação, moldando completamente seu estilo de combate.</p>
+
+            <div class="system-card">
+                <strong>A Cadeia da Alma:</strong><br>
+                Manifestação (seu poder, único e imutável) → <strong>Aspectos</strong> (5 caminhos de evolução) → <strong>Ramos</strong> (3 por Aspecto) → <strong>Frutos</strong> (níveis 3, 5 e 8) → <strong>Flor da Alma</strong> (nível 10) → <strong>Raiz da Alma</strong> (completar o Aspecto inteiro).
+            </div>
+
+            <p>Todo personagem desenvolve sua Árvore da Alma através dos <strong>Pontos da Alma</strong>, recebidos ao subir de nível (6 pontos por nível de personagem). Esses pontos podem ser distribuídos livremente entre quaisquer Ramos desbloqueados — não existem restrições de distribuição.</p>
+
+            <div class="lore-box">
+                <strong>Como os Pontos da Alma funcionam na prática:</strong><br>
+                • Você recebe <strong>6 Pontos da Alma</strong> a cada nível de personagem (1 a 20).<br>
+                • Distribua livremente entre os Ramos dos Aspectos que deseja desenvolver.<br>
+                • No nível máximo, você pode dominar <strong>3 Aspectos completamente</strong> (todos os Ramos no nível 10) e desenvolver <strong>1 Aspecto parcial</strong> (nível 5 em cada um de seus Ramos).<br>
+                • Uma <strong>Missão de Maestria</strong> (missão especial de fim de jogo) concede Pontos adicionais suficientes para completar mais uma Ramificação.
+            </div>
+
+            <h2>A Estrutura dos Ramos</h2>
+            <p>Cada Aspecto possui exatamente <strong>3 Ramos</strong>, e cada Ramo possui exatamente <strong>10 níveis</strong>. Todos os Aspectos seguem essa mesma estrutura, com a mesma progressão:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Tipo</th><th>O que concede</th></tr></thead>
+                    <tbody>
+                        <tr><td>1, 2, 4, 6, 7, 9</td><td><strong>Nível Comum</strong></td><td>Melhorias Universais puramente numéricas: redução de PE ou Stamina, aumento de alcance, área, quantidade, velocidade, duração, dano ou bônus em testes. <em>Nunca alteram regras do sistema.</em></td></tr>
+                        <tr><td>3, 5, 8</td><td><strong>Fruto da Alma</strong></td><td>Modifica permanentemente a maneira como o personagem utiliza sua Manifestação. Um Fruto <strong>pode</strong>: alterar uma regra, criar uma nova interação, melhorar usos comuns do poder, ampliar passivas, modificar técnicas, criar novas possibilidades. Um Fruto <strong>nunca pode</strong>: criar um novo poder, ignorar completamente limitações do sistema, invadir a identidade de outro Aspecto.</td></tr>
+                        <tr><td>10</td><td><strong>Flor da Alma</strong></td><td>O ápice daquele Ramo. Uma Flor <strong>pode</strong>: quebrar uma pequena regra do sistema, criar uma mecânica única, alterar profundamente aquele estilo de jogo, representar a identidade máxima daquele Ramo. Uma Flor <strong>nunca pode</strong>: tornar outro Aspecto inútil, substituir um Fruto, conceder um novo poder.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>O Princípio da Progressão:</strong><br>
+                Níveis comuns fortalecem <em>números</em>. Frutos fortalecem <em>possibilidades</em>. Flores fortalecem <em>identidade</em>. Um personagem no nível 9 de um Ramo deve sentir um ganho muito mais impactante do que no nível 2 — a Árvore recompensa profundidade, não acúmulo raso.
+            </div>
+
+            <h2>Os Princípios da Árvore</h2>
+            <p>Sete princípios regem toda a Árvore da Alma. Qualquer conteúdo criado para ela — Ramos, Frutos, Flores ou Raízes — deve respeitá-los:</p>
+            <ul>
+                <li><strong>Princípio da Especialização</strong> — Todo Ramo melhora apenas <strong>uma</strong> propriedade da Manifestação. Nunca duas.</li>
+                <li><strong>Princípio da Compatibilidade</strong> — A Árvore nunca cria capacidades que a Manifestação seja incapaz de realizar. Ela apenas amplia o que já faz parte do potencial do poder.</li>
+                <li><strong>Princípio da Universalidade</strong> — Toda melhoria da Árvore deve funcionar em Técnicas, Passivas, Usos Comuns, Evoluções da Manifestação e Habilidades Permanentes — desde que compartilhem a propriedade fortalecida.</li>
+                <li><strong>Princípio da Identidade</strong> — Nenhum Aspecto pode realizar melhor a função principal de outro Aspecto. O Arcano jamais será melhor que o Bélico em dano; o Bélico jamais será melhor que o Arcano em controle.</li>
+                <li><strong>Princípio da Progressão</strong> — Níveis comuns fortalecem números; Frutos fortalecem possibilidades; Flores fortalecem identidade.</li>
+                <li><strong>Princípio da Criatividade</strong> — A Árvore nunca limita a criatividade do jogador. Ela apenas recompensa diferentes formas de utilizar a Manifestação dentro da identidade do personagem.</li>
+                <li><strong>Princípio da Especialização Crescente</strong> — Os bônus dos Ramos não crescem de forma linear. O ganho do nível 9 deve ser muito mais impactante que o do nível 2.</li>
+            </ul>
+
+            <div class="lore-box">
+                <strong>A regra mais importante:</strong> nenhum Aspecto concede algo que sua Manifestação seja incapaz de realizar. Ele apenas fortalece propriedades já existentes. Quem respeita essa regra nunca quebra o jogo — quem a ignora, desperta algo que não era seu. E a Torre sempre nota.
+            </div>
+
+            <h2>Os Aspectos</h2>
+            <p>Existem cinco Aspectos, cada um com uma pergunta fundamental e três Ramos. Você pode combiná-los livremente — as combinações representam a identidade única do personagem.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Aspecto</th><th>Frase</th><th>Ramos</th></tr></thead>
+                    <tbody>
+                        <tr><td>🌌 <strong>Arcano</strong></td><td>"Eu aperfeiçoo minha Manifestação."</td><td>Controle · Expansão · Versatilidade</td></tr>
+                        <tr><td>⚔️ <strong>Bélico</strong></td><td>"Eu transformo minha Manifestação em uma arma."</td><td>Impacto · Perfuração · Execução</td></tr>
+                        <tr><td>🏃 <strong>Mobilidade</strong></td><td>"Meu corpo acompanha minha alma."</td><td>Deslocamento · Instinto · Acrobacia</td></tr>
+                        <tr><td>🛡️ <strong>Guardião</strong></td><td>"Nada será capaz de me derrubar."</td><td>Resistência · Vitalidade · Fortaleza</td></tr>
+                        <tr><td>✨ <strong>Catalisador</strong></td><td>"Minha Manifestação altera o estado da batalha."</td><td>Fortalecimento · Sustentação · Supressão</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─────────── ASPECTO ARCANO ─────────── -->
+            <h2 id="aspecto-arcano">🌌 Aspecto Arcano</h2>
+            <p><em>"Como aperfeiçoo minha Manifestação?"</em> O Aspecto Arcano representa aqueles que buscam o domínio absoluto sobre o próprio poder. Quanto maior seu domínio, menor a diferença entre aquilo que imagina e aquilo que sua alma realiza.</p>
+
+            <h3>Ramo Controle</h3>
+            <p><em>"Nada do meu poder é desperdiçado."</em> Precisão, eficiência e economia.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Refinamento</strong></td><td>Seus Usos Comuns custam <strong>50% menos Stamina</strong> (mínimo 1). Só isso. É um bônus gigante.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Mão Firme</strong></td><td>Utilizações de Controle que exigiriam testes ganham <strong>Vantagem</strong>, e falhas menores nunca desperdiçam o uso.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Eficiência</strong></td><td>Utilizações de Controle que exijam manutenção custam <strong>metade da manutenção</strong>.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Domínio</strong></td><td>Sua Manifestação responde instantaneamente: você pode utilizá-la como <strong>Reação</strong>, mesmo que normalmente exigisse uma ação.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Perfeição</strong></td><td>Utilizações de Controle nunca produzem efeito colateral indesejado — o poder faz exatamente o que você quer.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Economia Absoluta</strong></td><td>Todas as suas Técnicas custam <strong>1 PE a menos</strong> (mínimo 1).</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Harmonia</strong></td><td>Sua Manifestação passa a agir sozinha, realizando automaticamente pequenas correções coerentes em suas Utilizações.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto do Domínio</strong></td><td>Uma vez por rodada, você pode executar uma Utilização de Controle <strong>sem gastar sua ação</strong>.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Domínio Absoluto</strong></td><td>A categoria de suas Utilizações passa a ser determinada muito mais pela <strong>coerência</strong> do que pela dificuldade técnica.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor do Controle</strong></td><td>Você mantém simultaneamente <strong>duas Utilizações de Controle contínuas</strong> sem custo de manutenção adicional.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Expansão</h3>
+            <p><em>"Meu poder alcança onde ninguém mais consegue."</em> Alcance, área, duração, quantidade e escala.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Ampliação</strong></td><td>Utilizações de Expansão ganham <strong>+1 Escala gratuita</strong> (Área, Alcance, Quantidade ou Duração).</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Expansão</strong></td><td>Uma vez por rodada, qualquer Utilização pode aumentar <strong>duas Escalas</strong> sem aumentar sua categoria.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto do Alcance</strong></td><td>Utilizações de Expansão podem afetar <strong>+1 alvo ou área</strong> dentro do alcance.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Duração Prolongada</strong></td><td>Utilizações contínuas de Expansão duram <strong>+1 rodada</strong> antes de exigirem nova manutenção.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Escala Colossal</strong></td><td>Toda Utilização passa a ser tratada como uma <strong>categoria inferior apenas para Escala</strong>.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Presença Ampla</strong></td><td>Área e alcance de Utilizações de Expansão aumentam em <strong>50%</strong>.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Fluxo Expandido</strong></td><td>Duas vezes por rodada, você pode aumentar <strong>uma Escala gratuitamente</strong>.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Presença</strong></td><td>Uma vez por combate, você pode preparar uma Utilização de Expansão e ativá-la como <strong>Reação</strong>.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Domínio da Extensão</strong></td><td>Suas Utilizações de Expansão podem cobrir a <strong>cena inteira</strong> em vez de áreas limitadas.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Expansão</strong></td><td>Suas Utilizações de Expansão <strong>contínuas não exigem manutenção</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Versatilidade</h3>
+            <p><em>"Um único poder pode resolver qualquer situação."</em> Evolução de Técnicas e Passivas.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Adaptação</strong></td><td>Uma Passiva da sua Manifestação ganha <strong>+1 aplicação coerente</strong>.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Ressignificação</strong></td><td>Uma vez por descanso, adapte uma Utilização a uma nova aplicação da mesma Característica.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Evolução</strong></td><td>Escolha uma Técnica: ela recebe uma <strong>evolução permanente</strong> (novo efeito, aplicação, duração, área ou comportamento). É praticamente um mini despertar.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Eficiência Versátil</strong></td><td>Técnicas custam <strong>1 PE a menos</strong> (mínimo 1).</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Adaptação</strong></td><td>Uma vez por rodada, você pode <strong>modificar uma Utilização ativa</strong> sem recriá-la.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Sinergia</strong></td><td>Duas de suas Técnicas podem compartilhar um <strong>efeito secundário</strong> entre si.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Evolução Dupla</strong></td><td>Mais uma Técnica (ou o aprofundamento de uma já evoluída) recebe uma evolução permanente.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Evolução Suprema</strong></td><td>Escolha: <strong>uma Técnica Suprema</strong> ou <strong>duas Técnicas</strong>. Todas recebem evolução permanente.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Versatilidade Absoluta</strong></td><td>Uma vez por combate, adicione uma pequena propriedade coerente a uma Utilização ativa, sem aumentar sua categoria.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Versatilidade</strong></td><td>Suas Técnicas e Passivas podem ser <strong>combinadas entre si em efeitos compostos</strong> inéditos (Mestre aprova a interação).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Mestre Arcano</strong> — ao completar as três Flores do Aspecto (Controle 🌸, Expansão 🌸 e Versatilidade 🌸), você desperta o título de <strong>Mestre Arcano</strong> e recebe:<br><br>
+                • <strong>Manifestação Suprema:</strong> desbloqueia uma nova categoria do Sistema de Uso Comum, <strong>acima da categoria Suprema</strong> — aplicações impossíveis para usuários comuns. Somente Mestres Arcanos podem realizá-las.<br>
+                • <strong>Harmonia Arcana:</strong> sua Manifestação torna-se uma extensão da própria alma. Você pode remodelar uma Utilização ativa sem interrompê-la, e pequenas adaptações coerentes deixam de exigir aprovação prévia do Mestre.<br>
+                • <strong>Domínio Absoluto:</strong> vantagem em testes de execução de Utilizações que combinem Controle, Expansão e Versatilidade simultaneamente.<br>
+                • <strong>Evolução Contínua:</strong> uma vez por combate, adicione uma pequena propriedade coerente a uma Utilização ativa.<br>
+                • <strong>Mestre da Manifestação:</strong> o Mestre passa a avaliar suas Utilizações principalmente pela coerência, e não pela dificuldade técnica.
+            </div>
+
+            <div class="lore-box">
+                <strong>Raiz Arcana</strong> — "Minha Manifestação tornou-se parte da minha própria existência."<br>
+                Sua Manifestação deixa de desperdiçar energia: Utilizações <strong>Simples e Médias tornam-se gratuitas</strong>; <strong>Altas</strong> consomem 25% da STA; <strong>Extremas</strong> 50%; <strong>Supremas</strong> 75%. Além disso, <strong>todas as suas Técnicas custam 2 PE a menos</strong> (mínimo 1). O Mestre Arcano praticamente deixa de se preocupar com custos.
+            </div>
+
+            <!-- ─────────── ASPECTO BÉLICO ─────────── -->
+            <h2 id="aspecto-belico">⚔️ Aspecto Bélico</h2>
+            <p><em>"Como derroto meus adversários?"</em> O Bélico representa aqueles que acreditam que uma batalha deve terminar o mais rápido possível. Seu corpo, sua arma e sua Manifestação tornam-se uma única ferramenta de destruição.</p>
+
+            <h3>Ramo Impacto</h3>
+            <p><em>"Cada golpe deve ser devastador."</em> Potência, destruição e força bruta.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Golpe Devastador</strong></td><td>Toda Técnica ou Utilização cujo objetivo principal seja causar dano causa <strong>+50% de dano final</strong>.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Força Bruta</strong></td><td>Utilizações de Impacto causam <strong>+1 dado de dano</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto do Impacto</strong></td><td>O dano de suas Utilizações de Impacto ignora <strong>25% da Redução de Dano</strong> do alvo.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Impacto Contínuo</strong></td><td>Ataques de Impacto causam <strong>+2 de dano</strong> por acerto.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Devastação</strong></td><td>Uma vez por rodada, uma Utilização de Impacto em área causa <strong>dano completo</strong> em vez de metade.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Domínio Bélico</strong></td><td>Sempre que causar dano, recupere <strong>25% da STA</strong> gasta naquela Técnica (arredondado para cima).</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Fúria Crescente</strong></td><td>Seus ataques causam <strong>+50% de dano</strong> contra alvos já feridos.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto do Esmagamento</strong></td><td>Uma vez por combate, uma Utilização de Impacto derruba ou empurra o alvo e causa dano extra.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Arte da Destruição</strong></td><td>Uma vez por combate, transforme qualquer ataque que acertar em um <strong>Golpe Perfeito</strong>: todos os dados de dano são considerados no valor máximo.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor do Impacto</strong></td><td>Uma vez por rodada, um ataque seu pode atingir <strong>um alvo adicional adjacente</strong> ao primeiro, com dano completo.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Perfuração</h3>
+            <p><em>"Nenhuma defesa é intransponível."</em> Penetração, concentração de força e superação de defesas.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Fio da Lâmina</strong></td><td>Seus ataques ignoram <strong>10%</strong> de toda Redução de Dano.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Perfuração</strong></td><td>Seus ataques ignoram <strong>50%</strong> de toda Redução de Dano, armadura, barreiras físicas e defesas semelhantes (arredondando para baixo).</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Perfuração</strong></td><td>Seus ataques ignoram <strong>cobertura parcial</strong> do alvo.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Contra Armaduras</strong></td><td>Você tem <strong>Vantagem</strong> em ataques contra alvos com armadura pesada ou defesas reforçadas.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Penetração</strong></td><td>Uma vez por rodada, um ataque seu ignora <strong>100% da Redução de Dano</strong> do alvo.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Fenda nas Barreiras</strong></td><td>Barreiras e proteções criadas por poderes têm a Redução de Dano <strong>reduzida pela metade</strong> contra você.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Marca da Fenda</strong></td><td>Ataques de Perfuração marcam o alvo: ele sofre <strong>-1 de CA</strong> contra você até o fim do combate (acumula).</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Quebra</strong></td><td>Uma vez por combate, seu ataque <strong>quebra um efeito defensivo ativo</strong> do alvo (escudo, aura, proteção).</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Perfuração Absoluta</strong></td><td>A Redução de Dano do alvo conta como <strong>25% do valor</strong> contra seus ataques.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Perfuração</strong></td><td>Seus ataques ignoram <strong>toda a Redução de Dano</strong> (mínimo 0).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Execução</h3>
+            <p><em>"Uma abertura é tudo o que eu preciso."</em> Críticos, finalizações e pressão ofensiva.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Olho Crítico</strong></td><td>Sua margem de crítico passa para <strong>19–20</strong>.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Fenda Precisa</strong></td><td>Seus acertos críticos causam <strong>+1d4 de dano</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto do Executor</strong></td><td>Sua margem de crítico passa para <strong>18–20</strong>.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Pressão Ofensiva</strong></td><td>Cada golpe torna o próximo mais perigoso: ao acertar um ataque ofensivo, seu próximo ataque contra o mesmo alvo recebe <strong>Vantagem</strong>.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto do Destruidor</strong></td><td>Todos os acertos críticos causam <strong>+3d4 de dano adicional</strong>, e todos esses dados possuem resultado mínimo 3.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Ritmo de Caça</strong></td><td>Cada acerto consecutivo no mesmo alvo concede <strong>+1 de dano</strong> acumulativo.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Instinto Assassino</strong></td><td>Uma vez por combate, um ataque pode ser declarado <strong>inevitável</strong>: o alvo não recebe bônus de cobertura, terreno ou efeitos semelhantes na Defesa.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Máquina de Guerra</strong></td><td>Sempre que derrotar um inimigo, você pode realizar imediatamente <strong>outro ataque ofensivo</strong> contra um alvo diferente (máximo uma vez por rodada).</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Executor Supremo</strong></td><td>Sua margem de crítico passa para <strong>17–20</strong>.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Execução</strong></td><td>Seus acertos críticos causam <strong>+50% de dano final</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Mestre Bélico</strong> — ao completar as três Flores (Impacto 🌸, Perfuração 🌸 e Execução 🌸), você desperta o título de <strong>Guerreiro Absoluto</strong>: uma vez por rodada, ao utilizar uma Técnica ofensiva, você recebe uma <strong>segunda Ação Ofensiva</strong>, utilizável apenas para causar dano. Esta Ação adicional <strong>não é cumulativa</strong> com outras Ações extras.
+            </div>
+
+            <div class="lore-box">
+                <strong>Raiz Bélica</strong> — "Minha alma nasceu para vencer batalhas."<br>
+                Seu instinto ofensivo atinge a perfeição: sua margem de crítico passa permanentemente para <strong>16–20</strong>; sempre que realizar um Acerto Crítico, seu ataque e o próximo recebem <strong>+2 no teste de acerto</strong>; e todos os Acertos Críticos causam <strong>+15% de dano final</strong>. Você entra em um ritmo ofensivo onde cada crítico aumenta a chance do próximo.
+            </div>
+
+            <!-- ─────────── ASPECTO MOBILIDADE ─────────── -->
+            <h2 id="aspecto-mobilidade">🏃 Aspecto Mobilidade</h2>
+            <p><em>"Como domino o campo de batalha?"</em> Especializar-se em Mobilidade significa transformar o próprio corpo em uma arma de posicionamento. Nenhum lugar está fora do seu alcance.</p>
+
+            <h3>Ramo Deslocamento</h3>
+            <p><em>"Eu estou sempre onde preciso estar."</em> Velocidade e movimento puro.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Velocidade Sobrehumana</strong></td><td>Seu deslocamento base é <strong>dobrado</strong> e movimentar-se deixa de provocar Ataques de Oportunidade.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Passo Leve</strong></td><td>Mover-se custa <strong>metade da Ação de Movimento</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto do Passo Fantasma</strong></td><td>Uma vez por rodada, reposicione-se para qualquer ponto dentro do seu deslocamento <strong>sem provocar reações</strong>, como parte de outra ação.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Sprint</strong></td><td>Você pode mover <strong>duas zonas</strong> com uma única Ação de Movimento.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto do Movimento Implacável</strong></td><td>Você atravessa livremente espaços ocupados por criaturas menores ou do mesmo tamanho, e seu deslocamento nunca é reduzido por terreno difícil.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Vento Constante</strong></td><td>Você pode usar sua <strong>Ação Bônus para mover-se</strong> uma zona adicional.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Leitura de Combate</strong></td><td>Uma vez por rodada, após qualquer criatura finalizar seu turno, você pode mover até <strong>metade do seu deslocamento</strong>.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Velocidade Relâmpago</strong></td><td>Uma vez por rodada, realize um <strong>deslocamento completo adicional</strong> sem consumir sua ação nem sua movimentação normal.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Presença Inalcançável</strong></td><td>Enquanto permanecer em movimento durante seu turno, todos os ataques contra você recebem <strong>Desvantagem</strong> até o início do seu próximo turno.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor do Deslocamento</strong></td><td>Uma vez por rodada, você pode surgir instantaneamente em qualquer ponto da cena alcançável de forma coerente, <strong>ignorando obstáculos e terreno difícil</strong>, sem consumir Movimento nem Ações.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Instinto</h3>
+            <p><em>"Eu ajo antes mesmo de pensar."</em> Reflexos, percepção e antecipação.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Reflexos Afiados</strong></td><td><strong>+2</strong> em Iniciativa e em testes de Reflexos.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Instinto Absoluto</strong></td><td>Você recebe <strong>Vantagem permanente</strong> em todos os testes de Iniciativa, Percepção e Reflexos.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Antecipação</strong></td><td>Uma vez por rodada, você pode <strong>agir fora de ordem</strong> (antes do turno de uma criatura) gastando sua Reação.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Sentido de Perigo</strong></td><td>Você nunca é <strong>surpreendido</strong>: percebe emboscadas e ataques inesperados antes que aconteçam.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Esquiva Perfeita</strong></td><td><strong>Duas vezes por combate</strong>, quando um ataque acertar você, obrigue o atacante a <strong>rerrolar</strong> o teste de acerto e usar o novo resultado.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Leitura Corporal</strong></td><td>Você prevê o próximo movimento de criaturas próximas: <strong>+2 de CA</strong> contra ataques corpo a corpo.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Reação em Cadeia</strong></td><td>Você pode usar sua Reação <strong>duas vezes por rodada</strong> para esquivas e defesas.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto do Olhar</strong></td><td>Uma vez por rodada, você pode fazer com que um aliado próximo ganhe <strong>Vantagem</strong> em uma Salvaguarda de Reflexos.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Pressentimento</strong></td><td>Você age primeiro em qualquer combate, <strong>independentemente da Iniciativa</strong> (uma vez por combate).</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor do Instinto</strong></td><td>Uma vez por rodada, quando um ataque falhar contra você, mova-se até <strong>metade do seu deslocamento</strong> imediatamente, sem gastar Reação.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Acrobacia</h3>
+            <p><em>"O campo de batalha nunca limita meus movimentos."</em> Esquivas, equilíbrio e domínio tridimensional.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Corpo Leve</strong></td><td><strong>+2</strong> em testes de Acrobacia e equilíbrio.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Salto Fluido</strong></td><td>Seus saltos e escaladas usam <strong>metade do deslocamento</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto do Corpo Perfeito</strong></td><td>Escalar, nadar, saltar, se equilibrar ou atravessar obstáculos deixa de exigir testes, <strong>salvo em situações extraordinárias</strong> definidas pelo Mestre.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Esquiva Ágil</strong></td><td>Você pode usar sua Reação para <strong>Desviar</strong> com Vantagem.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Queda Segura</strong></td><td>Você <strong>ignora dano de queda</strong> e aterrissa sempre de pé.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Combate em Movimento</strong></td><td>Você não sofre penalidades por atacar <strong>após se mover</strong>, e pode usar Manobras Acrobáticas como parte do ataque.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Zona Livre</strong></td><td>Terreno difícil e obstáculos <strong>não custam movimento extra</strong> para você.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto do Domínio Tridimensional</strong></td><td>Você pode se mover <strong>verticalmente</strong> (paredes, tetos) sem testes, e posições elevadas não limitam seus ataques.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Dança da Batalha</strong></td><td>Após uma esquiva bem-sucedida, você pode <strong>reposicionar uma zona</strong> gratuitamente.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Acrobacia</strong></td><td>Ataques corpo a corpo contra você têm <strong>Desvantagem</strong> permanente, e você nunca é atingido por <strong>efeitos de área</strong> que exijam Reflexos (sucesso automático).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Mestre da Mobilidade</strong> — ao completar as três Flores (Deslocamento 🌸, Instinto 🌸 e Acrobacia 🌸), você desperta o título de <strong>Mobilidade Absoluta</strong>: você recebe <strong>+1 Ação por rodada</strong>, utilizável para qualquer finalidade permitida. Essa Ação adicional <strong>não é cumulativa</strong> com outras Ações extras.
+            </div>
+
+            <div class="lore-box">
+                <strong>Raiz da Mobilidade</strong> — "Nenhum lugar está fora do meu alcance."<br>
+                Seu corpo rompe completamente os limites físicos: todo o seu deslocamento <strong>dobra permanentemente</strong>; <strong>três vezes por combate</strong>, quando um ataque o acertaria, você pode declarar uma <strong>Esquiva Absoluta</strong> (o ataque erra automaticamente). Esses usos se recuperam no início do próximo combate. Você parece impossível de atingir.
+            </div>
+
+            <!-- ─────────── ASPECTO GUARDIÃO ─────────── -->
+            <h2 id="aspecto-guardiao">🛡️ Aspecto Guardião</h2>
+            <p><em>"Como permaneço de pé diante de qualquer ameaça?"</em> O Guardião não é um saco de números gigantes — ele é o mestre da sobrevivência. Assim como o Arcano domina a Manifestação e o Bélico domina o dano, o Guardião domina a defesa.</p>
+
+            <h3>Ramo Resistência</h3>
+            <p><em>"Quanto mais tentam me ferir, menos conseguem."</em> Redução de dano e mitigação.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Corpo Temperado</strong></td><td>Você recebe <strong>+5 de Redução de Dano (RD)</strong> contra qualquer fonte de dano.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Pele Densa</strong></td><td>Você recebe <strong>+2 de CA</strong> natural.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto do Inabalável</strong></td><td>Vantagem em qualquer teste para resistir a empurrões, quedas, agarrões, atordoamentos, deslocamentos forçados ou efeitos que prejudiquem sua estabilidade física.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Mitigação</strong></td><td>Toda RD que você possui é <strong>+50% mais eficaz</strong> contra ataques físicos.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Fortaleza Viva</strong></td><td>Uma vez por rodada, quando sofrer dano de uma única fonte superior a <strong>25% dos seus PV Máximos</strong>, reduza esse dano em 50%.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Resistência Absoluta</strong></td><td>Vantagem em <strong>todos os testes de resistência</strong> contra Técnicas, poderes e efeitos negativos.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Adaptação ao Impacto</strong></td><td>Ao sofrer dano de um tipo pela primeira vez no combate, você ganha <strong>resistência permanente a ele</strong> até o fim do combate (RD +5).</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Muralha Viva</strong></td><td>Sempre que sofrer dano, receba <strong>+10 de RD</strong> até o início do seu próximo turno. Quanto mais batem, mais difícil fica.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Núcleo de Pedra</strong></td><td>Efeitos que reduziriam seus atributos, PV máximos ou RD <strong>falham automaticamente</strong> contra você.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Resistência</strong></td><td>Você recebe <strong>+15 de RD</strong> permanente contra qualquer fonte de dano.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Vitalidade</h3>
+            <p><em>"Meu corpo continua lutando quando qualquer outro cairia."</em> Vida e recuperação.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Constituição Forte</strong></td><td><strong>+10</strong> de PV Máximos.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Vitalidade Superior</strong></td><td>Seus PV Máximos aumentam em <strong>25%</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Recuperação Contínua</strong></td><td>No início de cada rodada, recupere PV iguais a <strong>5% dos seus PV Máximos</strong> (não funciona se sofreu dano crítico desde seu último turno).</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Cura Acelerada</strong></td><td>Toda Cura, Regeneração ou Recuperação de PV que você recebe é <strong>+25% mais eficaz</strong>.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto do Vigor</strong></td><td>Ao cair a 0 PV, você pode se <strong>estabilizar automaticamente</strong> com 1 PV uma vez por combate.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Fôlego Profundo</strong></td><td>Durante um descanso curto, recupere <strong>PV adicionais</strong> iguais aos seus PV Máximos.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Último Fôlego</strong></td><td>A primeira vez em cada combate que seus PV chegarem a 0, você permanece com <strong>1 PV</strong>. Clássico de tanque.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto do Renascimento</strong></td><td>Uma vez por combate, ao sofrer dano que o reduziria a 0 PV, você recupera <strong>50% dos seus PV Máximos</strong> no lugar.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Fonte de Vida</strong></td><td>No início de cada rodada, recupere PV iguais a <strong>10% dos seus PV Máximos</strong>, mesmo após dano crítico.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Vitalidade</strong></td><td>Seus PV Máximos aumentam em <strong>+50%</strong> (cumulativo com Vitalidade Superior).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Fortaleza</h3>
+            <p><em>"Eu sou uma muralha inabalável."</em> Escudos, estabilidade e resistência a controle.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Postura de Muralha</strong></td><td>Enquanto não se mover, você recebe <strong>+3 de CA</strong>.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Pés Fincados</strong></td><td>Você <strong>ignora empurrões e deslocamentos forçados</strong> de criaturas do seu tamanho ou menores.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Estabilidade</strong></td><td>Você não pode ser <strong>derrubado, agarrado ou imobilizado</strong> por efeitos de nível igual ou inferior ao seu.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Proteção de Aliados</strong></td><td>Uma vez por rodada, você pode <strong>sofrer o ataque no lugar de um aliado</strong> próximo (Reação).</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Escolta</strong></td><td>Aliados a até 9 metros de você recebem <strong>+2 de CA</strong> contra ataques que você possa interceptar.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Mente Inabalável</strong></td><td>Você tem <strong>Vantagem</strong> contra efeitos de controle mental, medo e possessão.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Bastião</strong></td><td>Barreiras e escudos que você cria têm <strong>+50% de durabilidade</strong>.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto do Guardião Supremo</strong></td><td>Uma vez por rodada, quando uma criatura a até metade do seu deslocamento sofrer um ataque, use sua Reação para <strong>mover-se até ela e tornar-se o novo alvo</strong> — ou conceder Vantagem na Defesa/Esquiva dela.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Fortaleza de Alma</strong></td><td>Efeitos que tentem <strong>remover ou anular suas proteções</strong> falham contra você.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Fortaleza</strong></td><td>Uma vez por combate, você pode se colocar na frente de um ataque que atingiria um aliado, <strong>mesmo sem Reação disponível</strong>, e sofrer o dano no lugar dele.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Mestre Guardião</strong> — ao completar as três Flores (Resistência 🌸, Vitalidade 🌸 e Fortaleza 🌸), você desperta o título de <strong>Guardião Absoluto</strong>: <strong>+1 Reação por rodada</strong> (apenas para defesas, esquivas, proteger aliados, interceptar ataques e bloquear golpes — nunca para ataques de oportunidade). Além disso, <strong>uma vez por combate, quando deveria morrer</strong>, permaneça com <strong>50% dos seus PV Máximos</strong> e remova automaticamente todas as condições negativas comuns.
+            </div>
+
+            <div class="lore-box">
+                <strong>Raiz do Guardião</strong> — "Meu corpo tornou-se uma fortaleza viva."<br>
+                Sua resistência ultrapassa os limites da carne: seus PV Máximos aumentam em <strong>50%</strong>; toda Redução de Dano que você possui aumenta em <strong>50%</strong> (arredondando para cima); e sempre que receber Cura, Regeneração ou Recuperação de PV, recupere <strong>50% a mais</strong>. O Guardião sobrevive por muito mais tempo do que qualquer outro personagem.
+            </div>
+
+            <!-- ─────────── ASPECTO CATALISADOR ─────────── -->
+            <h2 id="aspecto-catalisador">✨ Aspecto Catalisador</h2>
+            <p><em>"Como altero o estado das criaturas durante o combate?"</em> O Catalisador domina a arte de modificar estados — fortalecendo aliados, enfraquecendo inimigos e alterando o fluxo da batalha. Suas alterações podem ser aplicadas em qualquer alvo válido: você mesmo, aliados, inimigos, invocações e criaturas controladas.</p>
+
+            <h3>Ramo Fortalecimento</h3>
+            <p><em>"Todo poder pode tornar-se ainda maior."</em> Buffs e benefícios.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Amplificação</strong></td><td>Todos os <strong>Buffs</strong> aplicados por você tornam-se <strong>50% mais eficientes</strong> (também funciona quando o alvo é você mesmo).</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Toque Inspirador</strong></td><td>Buffs aplicados por você duram <strong>+1 rodada</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Propagação</strong></td><td>Uma vez por rodada, um Buff aplicado por você pode afetar gratuitamente um <strong>segundo alvo válido</strong> dentro do alcance.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Potencial Oculto</strong></td><td>Uma vez por combate, escolha uma criatura sob um Buff seu: até o fim do combate, <strong>todas as Técnicas dela custam 50% menos PE</strong> (mínimo 1).</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto do Domínio do Fluxo</strong></td><td>Sempre que uma criatura sob um Buff seu derrotar um inimigo, <strong>todos os Buffs ativos nela têm a duração renovada</strong>.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Fortalecimento Coletivo</strong></td><td>Buffs aplicados por você afetam <strong>+1 aliado</strong> gratuitamente.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Essência Ampliada</strong></td><td>Buffs que concedem bônus numéricos concedem <strong>+50% do bônus</strong> adicional.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Imunidade</strong></td><td>Uma vez por combate, conceda a uma criatura <strong>imunidade temporária</strong> a um tipo de efeito ou dano por 1 rodada.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Maestro</strong></td><td>Uma vez por rodada, você pode aplicar gratuitamente um Buff já conhecido <strong>sem consumir sua Ação principal</strong>.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor do Fortalecimento</strong></td><td>Buffs que você aplica <strong>persistem mesmo se você cair a 0 PV</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Sustentação</h3>
+            <p><em>"Enquanto minha Manifestação permanecer ativa, a batalha continuará."</em> Curas, regeneração e manutenção.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Cura Reforçada</strong></td><td>Toda Cura, Regeneração ou Recuperação de PV, STA ou PE concedida por você recupera <strong>25% a mais</strong>.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Sustentação Absoluta</strong></td><td>Toda Cura, Regeneração ou Recuperação de PV, STA ou PE concedida por você recupera <strong>50% a mais</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto do Fluxo Contínuo</strong></td><td>Você pode manter simultaneamente <strong>duas Técnicas que exijam Concentração</strong>, desde que ambas pertençam ao Aspecto Catalisador.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Manutenção Leve</strong></td><td>Técnicas de sustentação do Catalisador custam <strong>metade da manutenção</strong>.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto da Vida Renovada</strong></td><td>Uma vez por combate, ao conceder Cura a uma criatura, ela também remove <strong>uma condição negativa</strong> comum.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Regeneração Ativa</strong></td><td>Uma vez por rodada, uma criatura sob sua sustentação recupera <strong>1d6 de PV</strong>.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Estabilização</strong></td><td>Aliados a até 9 metros de você <strong>não sangram</strong> e se estabilizam automaticamente a 0 PV.</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Recuperação em Massa</strong></td><td>Uma vez por combate, conceda Cura a <strong>todas as criaturas aliadas</strong> no alcance simultaneamente.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Fonte Inesgotável</strong></td><td>Uma vez por descanso, recupere <strong>50% da STA e do PE</strong> de uma criatura aliada (ou de você).</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Sustentação</strong></td><td>Curas que você concede são <strong>maximizadas</strong> uma vez por rodada (todos os dados no valor máximo).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Ramo Supressão</h3>
+            <p><em>"Antes de vencer meu inimigo, eu enfraqueço sua própria alma."</em> Debuffs e remoção de benefícios.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Toque Corrosivo</strong></td><td>Todos os <strong>Debuffs</strong> aplicados por você tornam-se <strong>25% mais eficientes</strong>.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Duração Perversa</strong></td><td>Debuffs aplicados por você duram <strong>+1 rodada</strong>.</td></tr>
+                        <tr><td><strong>3</strong> 🍎</td><td><strong>Fruto da Supressão</strong></td><td>Todos os <strong>Debuffs</strong> aplicados por você tornam-se <strong>50% mais eficientes</strong> e têm duração aumentada em +1 rodada.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Enfraquecimento</strong></td><td>Debuffs que reduzem atributos ou recursos reduzem <strong>+1 ponto</strong> adicional.</td></tr>
+                        <tr><td><strong>5</strong> 🍎</td><td><strong>Fruto do Domínio da Supressão</strong></td><td>Você pode <strong>suprimir um Buff ativo</strong> de uma criatura por 1 rodada (uma vez por combate).</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Marca do Alvo</strong></td><td>Debuffs aplicados por você <strong>reduzem a CA</strong> do alvo em -1 (acumula).</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Ruína Progressiva</strong></td><td>Debuffs aplicados por você <strong>intensificam-se</strong> a cada rodada (efeito +1 estágio até o limite).</td></tr>
+                        <tr><td><strong>8</strong> 🍎</td><td><strong>Fruto da Contaminação</strong></td><td>Sempre que uma criatura sob um Debuff seu morrer ou for derrotada, o Debuff é <strong>transferido</strong> para outra criatura válida, mantendo a duração restante.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Supressor Mestre</strong></td><td>Efeitos de Debuff aplicados por você <strong>não podem ser removidos</strong> por habilidades comuns.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Flor da Supressão</strong></td><td>Debuffs aplicados por você <strong>permanecem ativos mesmo se você perder a Concentração</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Mestre Catalisador</strong> — ao completar as três Flores (Fortalecimento 🌸, Sustentação 🌸 e Supressão 🌸), você desperta o título de <strong>Catalisador Absoluto</strong>: <strong>+1 Ação de Alteração por rodada</strong>, utilizável apenas para aplicar Buffs/Debuffs, Curar, Regenerar, Recuperar STA ou PE, remover condições, conceder imunidades, alterar atributos e manter Técnicas do Aspecto. Além disso, <strong>uma vez por combate</strong>, escolha uma criatura afetada por um efeito seu: até o fim da rodada, todos os Buffs e Debuffs que você aplicou nela têm a <strong>eficiência dobrada</strong>.
+            </div>
+
+            <div class="lore-box">
+                <strong>Raiz do Catalisador</strong> — "Toda alteração provocada por minha Manifestação tornou-se perfeita."<br>
+                Sua capacidade de modificar estados alcançou seu auge: todos os <strong>Buffs, Debuffs, Curas e Recuperações</strong> aplicados por você tornam-se <strong>50% mais eficientes</strong>; todas as <strong>Passivas</strong> da sua Manifestação recebem um Aprimoramento Permanente (novo efeito coerente ou efeito existente fortalecido, com aprovação do Mestre); e sempre que uma Técnica ou Passiva modificar atributos, duração, intensidade ou eficiência, ela recebe <strong>+1 estágio</strong> nesse aspecto, quando aplicável.
+            </div>
+
+            <!-- ─────────── RESSONÂNCIAS ─────────── -->
+            <h2 id="ressonancias">As Ressonâncias da Alma</h2>
+            <p>Quando um personagem domina (Flor no nível 10) os <strong>três Ramos de um mesmo Aspecto</strong>, ele desperta automaticamente a <strong>Ressonância</strong> daquele Aspecto. Não é um quarto Ramo. Não precisa de pontos. É um bônus passivo exclusivo por ter levado aquele Aspecto ao máximo — e ele <strong>acumula</strong> com a Raiz correspondente.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Ressonância</th><th>Nome</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td>🌌 Arcana</td><td><strong>Manifestação em Fluxo</strong></td><td>1×/rodada, ao usar uma Utilização, aplicar a ela um pequeno efeito coerente de outra característica arcana (Controle↔Expansão↔Versatilidade) sem aumentar a categoria.</td></tr>
+                        <tr><td>⚔️ Bélica</td><td><strong>Golpe Completo</strong></td><td>1×/rodada, seu ataque pode combinar um efeito secundário de outro ramo bélico (ex.: um golpe de Impacto também perfura 25% da RD).</td></tr>
+                        <tr><td>🏃 Mobilidade</td><td><strong>Movimento Total</strong></td><td>Após usar duas das três capacidades (Deslocamento, Instinto, Acrobacia) no mesmo turno, mover metade do deslocamento sem gastar ação.</td></tr>
+                        <tr><td>🛡️ Guardião</td><td><strong>Muralha em Pé</strong></td><td>Se você não se moveu no seu turno, recebe +5 RD e Vantagem em Salvaguardas até o início do próximo turno.</td></tr>
+                        <tr><td>✨ Catalisador</td><td><strong>Fluxo Duplo</strong></td><td>1×/rodada, um Buff ou Debuff aplicado por você pode afetar uma segunda criatura válida sem custo adicional.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>Aviso da Torre:</strong> a Árvore da Alma é o caminho mais direto para o domínio absoluto de um Desperto — e o mais vigiado. Despertar uma Flor ou uma Raiz exige mais do que pontos: exige um <strong>evento narrativo</strong> (uma missão, um ritual, um momento marcante) e, nos casos mais poderosos, um preço que a alma paga em <strong>Sanidade ou Corrupção</strong>. A Torre sempre cobra — e ela observa com atenção redobrada quem floresce.
+            </div>
+        </section>
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             SISTEMA DE UTILIZAÇÃO DA MANIFESTAÇÃO (USO COMUM)
+             Novo capítulo (15/08/2026) — Google Doc + decisões.
+             Vocabulário oficial: 9 Características.
+        ═══════════════════════════════════════════════════════════ -->
+        <section id="utilizacao-manifestacao">
+            <h1>Sistema de Utilização da Manifestação</h1>
+
+            <p>Enquanto as <strong>Técnicas</strong> representam golpes refinados, exclusivos e treinados, as <strong>Utilizações</strong> da Manifestação representam qualquer aplicação natural que o usuário seja capaz de realizar com seu próprio poder — moldar fogo em uma espada, erguer um objeto com telecinese, condensar a própria energia em uma barreira. O sistema não limita a criatividade do jogador. Ele limita apenas o esforço necessário para executar cada utilização.</p>
+
+            <div class="lore-box">
+                <strong>A pergunta certa nunca é "meu personagem pode fazer isso?"</strong><br>
+                A pergunta correta é: <em>"quanto esforço essa utilização exige?"</em>
+            </div>
+
+            <h2>Os Três Princípios do Sistema</h2>
+            <p>Toda Utilização deve obedecer a apenas três princípios:</p>
+            <div class="system-card">
+                <strong>1. Deve ser compatível com a Manifestação.</strong><br>
+                O jogador só pode realizar aplicações que façam sentido para seu poder. Se sua Manifestação controla fogo, você pode moldá-lo, condensá-lo, expandi-lo e manipulá-lo. Caso sua Manifestação não possua relação com determinado efeito, essa utilização não poderá ser realizada.
+            </div>
+            <div class="system-card">
+                <strong>2. O custo depende da complexidade.</strong><br>
+                Quanto maior, mais refinada ou mais difícil for a utilização, maior será seu custo de Stamina. O dano causado <em>não</em> determina esse custo. O que determina é o esforço necessário para produzir aquela aplicação.
+            </div>
+            <div class="system-card">
+                <strong>3. A criatividade nunca é limitada.</strong><br>
+                Caso uma utilização faça sentido para a Manifestação do personagem, ela poderá ser realizada mesmo que nunca tenha sido utilizada anteriormente. O Mestre apenas determinará sua categoria e seu custo.
+            </div>
+
+            <h2>As Categorias de Utilização</h2>
+            <p>Toda Utilização pertence a uma das categorias abaixo. Elas representam o esforço físico necessário para moldar a Manifestação naquele momento.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Categoria</th><th>Exemplos</th><th>Custo Inicial</th><th>Manutenção</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Simples</strong></td><td>Criar uma espada de fogo, levantar pequenos objetos, criar uma plataforma, produzir pequenas rajadas, manifestar vetores</td><td>2–8 STA</td><td>1–4 STA</td></tr>
+                        <tr><td><strong>Média</strong></td><td>Condensar uma espada em um sabre, criar uma prisão de fogo, levantar um carro, produzir um pequeno tornado, manipular diversos objetos</td><td>6–15 STA</td><td>3–8 STA</td></tr>
+                        <tr><td><strong>Alta</strong></td><td>Mar de fogo, tornado de grande porte, controlar dezenas de objetos, criar grandes estruturas, manipulações em larga escala</td><td>12–30 STA</td><td>6–15 STA</td></tr>
+                        <tr><td><strong>Extrema</strong></td><td>Grandes tempestades, campos gravitacionais enormes, manipulações sobre áreas gigantescas, construções colossais</td><td>25–60 STA</td><td>12–30 STA</td></tr>
+                        <tr><td><strong>Suprema</strong></td><td>O ápice das aplicações naturais da Manifestação — feitos capazes de alterar completamente o cenário de batalha</td><td>60+ STA</td><td>30+ STA</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>A Categoria Suprema da Alma — Manifestação Suprema:</strong><br>
+                Existe uma sexta categoria, <strong>acima da Suprema</strong>: a <strong>Manifestação Suprema</strong>. Ela representa aplicações impossíveis para usuários comuns — feitos que dobram a realidade ao redor da própria alma. Somente <strong>Mestres Arcanos</strong> (aqueles que completaram o Aspecto Arcano da Árvore da Alma) podem realizar Utilizações dessa categoria. O custo, as limitações e os requisitos são definidos pelo Mestre, e a coerência com a Manifestação é inegociável.
+            </div>
+
+            <h2>Limitação por Nível</h2>
+            <p>Mesmo que possua Stamina suficiente, um personagem não possui domínio para executar utilizações extremamente complexas logo no início da aventura. O nível representa a evolução natural da Manifestação.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível do personagem</th><th>Maior Utilização Permitida</th></tr></thead>
+                    <tbody>
+                        <tr><td>1–4</td><td>Simples e Média</td></tr>
+                        <tr><td>5–9</td><td>Alta</td></tr>
+                        <tr><td>10–14</td><td>Extrema</td></tr>
+                        <tr><td>15–20</td><td>Suprema</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>A Manifestação Suprema, por ser exclusiva de Mestres Arcanos, ignora essa limitação de nível — o requisito é a própria maestria.</p>
+
+            <h2>Determinando o Custo</h2>
+            <p>Quando um jogador desejar improvisar uma nova utilização, o Mestre segue três passos simples:</p>
+            <ol>
+                <li><strong>A utilização faz sentido para a Manifestação?</strong> Caso não faça, ela não poderá ser realizada.</li>
+                <li><strong>Qual categoria melhor representa essa utilização?</strong> Simples, Média, Alta, Extrema, Suprema (ou Manifestação Suprema, se o usuário for Mestre Arcano).</li>
+                <li><strong>Dentro da faixa daquela categoria, qual custo representa melhor o esforço exigido?</strong> Uma espada de fogo pode custar apenas 3 de Stamina; outra muito maior pode custar 7. Ambas continuam sendo Utilizações Simples.</li>
+            </ol>
+
+            <h2>Manutenção</h2>
+            <p>Utilizações contínuas exigem apenas um custo de manutenção por rodada. O custo de manutenção normalmente corresponde a <strong>aproximadamente metade do custo inicial</strong>.</p>
+            <div class="system-card">
+                <strong>Exemplo:</strong> criar um tornado custa <strong>22 Stamina</strong>. Mantê-lo ativo custa <strong>10 Stamina por rodada</strong>. O Mestre poderá ajustar esse valor quando a utilização exigir maior ou menor esforço para permanecer ativa.
+            </div>
+
+            <h2>A Característica da Utilização</h2>
+            <p>Toda Utilização da Manifestação possui uma <strong>única Característica Principal</strong>. Essa característica representa qual é o aspecto predominante daquela utilização e determina qual Ramificação da Árvore da Alma poderá influenciá-la. A característica <em>não depende</em> da Manifestação do personagem — ela depende da forma como aquela Manifestação está sendo utilizada naquele momento.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Característica</th><th>Como determinar (pela intenção principal)</th><th>Ramo da Árvore</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Controle</strong></td><td>Controlar ou moldar a Manifestação</td><td>Arcano · Controle</td></tr>
+                        <tr><td><strong>Expansão</strong></td><td>Aumentar área, alcance, quantidade ou escala</td><td>Arcano · Expansão</td></tr>
+                        <tr><td><strong>Expressão</strong></td><td>Utilizar de maneiras mais sofisticadas, adaptando ou remodelando o funcionamento</td><td>Arcano · Versatilidade</td></tr>
+                        <tr><td><strong>Ofensiva</strong></td><td>Causar dano</td><td>Bélico · Impacto</td></tr>
+                        <tr><td><strong>Combate</strong></td><td>Obter vantagem em combate através de movimentação, ritmo ou adaptação</td><td>Bélico · Execução</td></tr>
+                        <tr><td><strong>Domingação</strong></td><td>Limitar, prender, empurrar, interromper ou controlar um inimigo</td><td>Catalisador · Supressão</td></tr>
+                        <tr><td><strong>Proteção</strong></td><td>Defender, bloquear ou reduzir dano</td><td>Guardião · Fortaleza</td></tr>
+                        <tr><td><strong>Sustentação</strong></td><td>Curar ou recuperar</td><td>Catalisador · Sustentação</td></tr>
+                        <tr><td><strong>Inspiração</strong></td><td>Fortalecer aliados ou conceder benefícios</td><td>Catalisador · Fortalecimento</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Exemplo contínuo — um usuário de fogo:</strong><br>
+                • Cria uma espada de fogo → <strong>Controle</strong> (moldar e condensar as chamas).<br>
+                • Usa essa espada para atacar um inimigo → <strong>Ofensiva</strong> (busca causar dano).<br>
+                • Cria uma muralha de fogo para impedir a passagem → <strong>Proteção</strong>.<br>
+                • Expande a muralha até cobrir uma rua inteira → <strong>Expansão</strong>.<br>
+                • Envolve as armas dos aliados em chamas → <strong>Inspiração</strong>.<br><br>
+                A Manifestação nunca mudou. O que mudou foi a forma como ela foi utilizada.
+            </div>
+
+            <div class="lore-box">
+                <strong>Regra Geral:</strong> cada Utilização possui apenas <strong>uma Característica Principal</strong>. Mesmo que uma aplicação envolva diversos elementos ao mesmo tempo, apenas a característica predominante será considerada para receber os benefícios da Árvore da Alma. Essa regra mantém o sistema simples, rápido e evita dúvidas durante o combate.
+            </div>
+
+            <h2>Registro de Utilizações</h2>
+            <p>Sempre que uma nova utilização for aprovada pelo Mestre, o jogador pode registrá-la na ficha. Após registrada, aquela utilização manterá seu custo e categoria, permitindo reutilização imediata em combates futuros sem nova negociação.</p>
+            <p>Cada registro deve conter: <strong>Nome · Categoria · Característica · Custo Inicial · Manutenção · Descrição</strong>.</p>
+
+            <div class="system-card">
+                <strong>Exemplo de Utilização Registrada:</strong><br>
+                <strong>Tornado</strong> — Categoria: Alta · Característica: Expansão · Custo Inicial: 22 Stamina · Manutenção: 10 Stamina.<br>
+                <em>Descrição:</em> Cria um tornado de aproximadamente dez metros capaz de sugar partículas, fumaça e objetos leves.
+            </div>
+
+            <h2>Evolução das Utilizações</h2>
+            <p>As Utilizações Registradas evoluem automaticamente junto com a Árvore da Alma. Caso o personagem obtenha bônus que reduzam custos ou aprimorem determinadas características, todas as Utilizações compatíveis são atualizadas — sem necessidade de recalcular ou registrar novamente.</p>
+            <div class="system-card">
+                <strong>Exemplo:</strong> o personagem aprende um efeito que reduz em 5 a Stamina de todas as Utilizações de Controle. Uma espada de fogo registrada anteriormente custava 8 de Stamina; agora passa a custar apenas 3.
+            </div>
+
+            <h2>Utilizações e Técnicas</h2>
+            <p>Uma Utilização pode, futuramente, tornar-se uma <strong>Técnica</strong>. Ao transformar uma Utilização em Técnica, ela deixa de depender apenas da Stamina e <strong>passa a utilizar PE</strong>, recebendo propriedades exclusivas impossíveis de serem alcançadas apenas através do uso comum da Manifestação. As Técnicas representam o refinamento máximo de uma aplicação já dominada — e, como sempre, o preço da maestria é pago em alma.</p>
+
+            <div class="lore-box">
+                <strong>Lembrete da Torre:</strong> registre suas Utilizações. Cada aplicação dominada é um passo a mais em direção à maestria — e cada vez que você improvisa, a Torre aprende um pouco mais sobre como você pensa. Use a criatividade com sabedoria, Desperto.
+            </div>
+        </section>
     <section id="ascensao">
         <h1>As Espirais da Ascensão</h1>
         
@@ -14965,6 +15582,125 @@ document.addEventListener('DOMContentLoaded', () => {
         </p>
     </section>
 
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             SISTEMA DE SESSÕES E EXPERIÊNCIA (XP)
+             Novo capítulo (15/08/2026) — Google Doc + decisões.
+             "O XP é concedido pela história que foi construída,
+             não pela quantidade de ações realizadas."
+        ═══════════════════════════════════════════════════════════ -->
+        <section id="sessoes-xp">
+            <h1>Sistema de Sessões e Experiência (XP)</h1>
+
+            <p>A progressão do seu personagem é baseada na <strong>qualidade da história</strong>, e não apenas em combates ou no tempo de jogo. Ao final de cada sessão, o Mestre avalia diversos aspectos da narrativa e concede XP de acordo com o que foi construído. O objetivo não é terminar uma sessão rapidamente — é criar uma narrativa interessante, coerente e marcante.</p>
+
+            <div class="lore-box">
+                <strong>A filosofia do sistema:</strong><br>
+                "O XP é concedido pela história que foi construída, não pela quantidade de ações realizadas. Quanto mais viva e bem desenvolvida for a história, maior será sua recompensa."
+            </div>
+
+            <h2>Os Tipos de Sessão</h2>
+            <p>O RPG possui três tipos de sessão, cada uma com objetivos e recompensas próprias.</p>
+
+            <div class="system-card">
+                <strong>1. Sessão Oficial</strong> — Sessões narradas por um Mestre. São as principais aventuras do RPG e normalmente fazem parte da história principal ou de missões importantes.<br><br>
+                <strong>Recompensas:</strong> em média, <strong>300 de XP por sessão</strong>, além de itens e outros. Em casos extraordinários, o Mestre (com o acordo do grupo) poderá conceder mais de 500 XP. Também podem ser concedidos: Núcleos, Equipamentos, Títulos, Contatos, Benefícios narrativos e outras recompensas especiais.
+            </div>
+
+            <div class="system-card">
+                <strong>2. Sessão Livre</strong> — Sessões organizadas pelos próprios jogadores. Seu objetivo é desenvolver personagens, relações e pequenas histórias dentro do mundo. Não é necessário haver combate.<br><br>
+                <strong>Recompensas:</strong> 25–75 XP para uma sessão simples · 100–250 XP para uma sessão bem desenvolvida · até 500 XP apenas mediante aprovação do Mestre com o acordo do grupo. Também existe a possibilidade de receber Núcleos ou outras recompensas se a narrativa justificar. <em>Sessões criadas apenas para farm de XP ou com desenvolvimento superficial receberão pouca ou nenhuma recompensa.</em>
+            </div>
+
+            <div class="system-card">
+                <strong>3. Sessão de Lore</strong> — Sessões exclusivas focadas na história de um personagem. Normalmente são divididas em diversas etapas até a conclusão de um arco narrativo.<br><br>
+                <strong>Recompensas:</strong> em cada etapa, cerca de <strong>250 XP</strong>; ao concluir o arco, o personagem normalmente recebe entre <strong>750 e 1.500 XP</strong> totais. Além do XP, o Mestre poderá conceder: Núcleos, Equipamentos, Técnicas, Contatos, Informações, Benefícios exclusivos e Evoluções narrativas.
+            </div>
+
+            <h2>Como o XP é Calculado</h2>
+            <p>O Mestre avalia a sessão utilizando os seguintes critérios:</p>
+            <ul>
+                <li><strong>Desenvolvimento da narrativa</strong></li>
+                <li><strong>Dificuldade dos desafios</strong></li>
+                <li><strong>Quantidade de desafios relevantes</strong></li>
+                <li><strong>Consequências das escolhas</strong></li>
+                <li><strong>Risco enfrentado</strong></li>
+                <li><strong>Evolução da história dos personagens</strong></li>
+                <li><strong>Descobertas importantes</strong></li>
+                <li><strong>Qualidade da interpretação</strong></li>
+                <li><strong>Criatividade na resolução dos problemas</strong></li>
+            </ul>
+            <p>Cada categoria concede uma quantidade de XP de acordo com sua importância durante a sessão. Não é necessário que todos os critérios estejam presentes — uma sessão sem combate pode conceder mais XP do que uma sessão cheia de lutas, desde que apresente maior qualidade narrativa.</p>
+
+            <h2>A Escala de Qualidade da Sessão</h2>
+
+            <div class="system-card">
+                <strong>Sessão Simples (25–100 XP)</strong> — Histórias rápidas, com poucos acontecimentos e pouco desenvolvimento: pequenos conflitos, missões curtas, acontecimentos com poucas consequências. Existe um início, meio e fim, mas praticamente não há desenvolvimento.
+            </div>
+
+            <div class="system-card">
+                <strong>Sessão Desenvolvida (125–250 XP)</strong> — Sessões bem construídas, com desenvolvimento consistente, diversos diálogos, mais de um desafio e consequências reais nas escolhas. Uma sessão nesse nível deve parecer um episódio completo: investigações, negociações, perseguições, estratégias, pequenas reviravoltas. <em>Esse será o padrão da maioria das boas aventuras.</em>
+            </div>
+
+            <div class="system-card">
+                <strong>Sessão Excepcional (275–500 XP)</strong> — Sessões marcantes, com narrativa profunda, subtramas, NPCs com objetivos próprios, mundo vivo, grandes revelações, conflitos internos, reviravoltas e consequências duradouras. Uma sessão desse nível deve ser rara — ao terminar, os jogadores devem sentir que participaram de algo memorável.
+            </div>
+
+            <p><strong>Recompensas acima de 500 XP</strong> são reservadas apenas para acontecimentos extraordinários aprovados pelo Mestre com o acordo do grupo (finais de arco, guerras, derrotas de chefes lendários, acontecimentos únicos). Nesse nível, também podem ser concedidos Núcleos, Equipamentos, Itens raros, Contatos, Informações exclusivas, Títulos, Licenças, Reconhecimento e Benefícios narrativos.</p>
+
+            <h2>Diretrizes Gerais</h2>
+            <ul>
+                <li>O XP recompensa a qualidade da narrativa, e não apenas a quantidade de eventos.</li>
+                <li>Sessões curtas, repetitivas ou criadas apenas para obter XP receberão recompensas reduzidas.</li>
+                <li>Combates, por si só, não aumentam significativamente a recompensa — eles precisam estar inseridos em uma narrativa coerente e contribuir para o desenvolvimento da história.</li>
+                <li>Uma sessão sem combate pode conceder mais XP do que uma sessão com diversas lutas, desde que apresente maior qualidade narrativa.</li>
+                <li>Recompensas acima de 500 XP são reservadas para acontecimentos extraordinários e só poderão ser concedidas mediante aprovação do Mestre com o acordo do grupo.</li>
+            </ul>
+
+            <h2>A Tabela de Progressão</h2>
+            <p>Cada nível de personagem exige uma quantidade crescente de XP para ser alcançado:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>XP para subir</th><th>XP Total</th></tr></thead>
+                    <tbody>
+                        <tr><td>1 → 2</td><td>200</td><td>200</td></tr>
+                        <tr><td>2 → 3</td><td>300</td><td>500</td></tr>
+                        <tr><td>3 → 4</td><td>400</td><td>900</td></tr>
+                        <tr><td>4 → 5</td><td>500</td><td>1.400</td></tr>
+                        <tr><td>5 → 6</td><td>600</td><td>2.000</td></tr>
+                        <tr><td>6 → 7</td><td>700</td><td>2.700</td></tr>
+                        <tr><td>7 → 8</td><td>800</td><td>3.500</td></tr>
+                        <tr><td>8 → 9</td><td>900</td><td>4.400</td></tr>
+                        <tr><td>9 → 10</td><td>1.000</td><td>5.400</td></tr>
+                        <tr><td>10 → 11</td><td>1.100</td><td>6.500</td></tr>
+                        <tr><td>11 → 12</td><td>1.200</td><td>7.700</td></tr>
+                        <tr><td>12 → 13</td><td>1.300</td><td>9.000</td></tr>
+                        <tr><td>13 → 14</td><td>1.500</td><td>10.500</td></tr>
+                        <tr><td>14 → 15</td><td>1.700</td><td>12.200</td></tr>
+                        <tr><td>15 → 16</td><td>1.900</td><td>14.100</td></tr>
+                        <tr><td>16 → 17</td><td>2.100</td><td>16.200</td></tr>
+                        <tr><td>17 → 18</td><td>2.400</td><td>18.600</td></tr>
+                        <tr><td>18 → 19</td><td>2.900</td><td>21.500</td></tr>
+                        <tr><td>19 → 20</td><td>3.500</td><td><strong>25.000</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Referência de Progressão:</strong><br>
+                • <strong>Iniciante</strong> (níveis 1–5): aprendendo o mundo e desenvolvendo as primeiras habilidades.<br>
+                • <strong>Aprendiz</strong> (níveis 6–10): já enfrentou diversas ameaças e começa a ganhar reconhecimento.<br>
+                • <strong>Veterano</strong> (níveis 11–15): experiente, capaz de influenciar acontecimentos importantes.<br>
+                • <strong>Elite</strong> (níveis 16–20): entre os indivíduos mais poderosos do mundo. Cada nível é uma grande conquista.<br>
+                • <strong>Transcendente</strong> (níveis 21–25): níveis obtidos apenas por eventos únicos da narrativa, sem valores fixos de XP.
+            </div>
+
+            <div class="lore-box">
+                <strong>Lembrete da Torre:</strong> subir de nível é a recompensa por histórias bem contadas — não por números acumulados. A Torre não premia quem corre em círculos. Ela premia quem constrói algo que vale a pena ser lembrado. E ela lembra de tudo.
+            </div>
+        </section>
     <section id="economia">
         <h1>Sistema Monetário e de Equipamentos</h1>
 
@@ -15518,6 +16254,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
             </div>
 
+            <h2 id="ataques-resistencias">Ataques Diretos e Resistências</h2>
+            <p>Para não deixar a CA ser o único status importante do jogo — e dar valor real às perícias de Resistência (Reflexos, Fortitude e Vontade) —, os efeitos são divididos em duas mecânicas: <strong>Ataques Diretos</strong>, que testam a esquiva e a armadura do alvo, e <strong>Efeitos Diversos</strong>, que testam a resistência da própria vítima.</p>
+
+            <div class="system-card">
+                <strong>1. Ataques Diretos (Ataque vs. CA)</strong><br>
+                Usado quando o efeito exige mira, precisão ou projéteis.<br><br>
+                • <strong>Quem rola:</strong> o Atacante / Conjurador.<br>
+                • <strong>Rolagem:</strong> Teste de Ataque (Mágico ou Físico) contra a <strong>CA</strong> do inimigo.<br>
+                • <strong>Exemplos:</strong> dardos de energia, tiros, flechas, golpes de espada.<br><br>
+                <em>Lógica:</em> o alvo tenta evitar o golpe usando a própria esquiva ou armadura natural.
+            </div>
+
+            <div class="system-card">
+                <strong>2. Efeitos Diversos (Resistência vs. CD)</strong><br>
+                Usado para efeitos de área, mentais, biológicos ou de ambiente. Aqui quem rola o dado é a <strong>vítima</strong> tentando resistir.<br><br>
+                <strong>Como calcular a CD da sua habilidade:</strong><br>
+                <strong>CD = 8 + Bônus de Nível + Modificador de Alma</strong>
+            </div>
+
+            <p>Existem três tipos de teste de resistência, cada um ligado a um tipo de ameaça:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Teste</th><th>Atributo</th><th>Quando usar</th><th>Quem rola</th><th>Resultado</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Reflexos</strong></td><td>Destreza / Agilidade</td><td>Explosões, fendas no chão, chuva de espinhos, efeitos em área</td><td>Alvo (Reflexos) vs. CD</td><td><strong>Falha:</strong> toma 100% do dano · <strong>Sucesso:</strong> metade do dano (ou esquiva do efeito)</td></tr>
+                        <tr><td><strong>Vontade</strong></td><td>Alma / Mente</td><td>Controle mental, ilusões, medo, paralisação espiritual, possessão</td><td>Alvo (Vontade) vs. CD</td><td><strong>Falha:</strong> fica sob o efeito (Atordoado, Amedrontado, Controlado) · <strong>Sucesso:</strong> anula o efeito ou reduz a duração</td></tr>
+                        <tr><td><strong>Fortitude</strong></td><td>Vigor / Corpo</td><td>Venenos, paralisia física, petrificação, drenagem vital, gases</td><td>Alvo (Fortitude) vs. CD</td><td><strong>Falha:</strong> sofre o efeito/debuff por completo · <strong>Sucesso:</strong> o corpo resiste, ignorando a condição</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>Por que isso melhora o jogo:</strong><br>
+                • <strong>Valoriza toda a ficha:</strong> um chefe pode ter uma CA gigante, mas ter Vontade baixa. Atacar a mente dele vira a melhor estratégia.<br>
+                • <strong>Mais variedade tática:</strong> o grupo precisa pensar em qual fraqueza do inimigo explorar.<br>
+                • <strong>Coerência narrativa:</strong> não faz sentido alguém se defender de uma fumaça tóxica "com a armadura de metal" — a pessoa precisa testar o pulmão (Fortitude).
+            </div>
             <h2 id="pericias">Perícias</h2>
             <p>As <strong>Perícias</strong> representam treinamento especializado e afinidade da Alma com tarefas específicas. Enquanto um Teste de Atributo bruto reflete o que qualquer Desperto pode tentar, uma perícia indica que o personagem investiu tempo, sangue, trauma ou poder para se destacar — e a Torre nota isso.</p>
 
