@@ -3701,6 +3701,8 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   /* Nova ordem das seções — espelha a ordem do HTML */
   #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 3; }       /* Ficha Base   */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 4; }  /* Poder        */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 5; }            /* Atributos    */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
@@ -8433,7 +8435,7 @@ function resetarContadoresFicha() {
   numPets = 1;
   _armaCounter = 1;
   _slotsPericia = { maestrias: [], especializacoes: [] };
-  _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1 };
+  _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1, util: 1 };
 }
 
 function addArmaRow() {
@@ -8558,7 +8560,7 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false };
+let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
@@ -9204,7 +9206,7 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
@@ -9315,7 +9317,7 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false };
+      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
       _aplicarEstadoFichaExpand();
     }
   }
@@ -10114,6 +10116,103 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div id="tecnicas-lista"></div>
   </div>
   </div>
+</div>
+
+<!-- ÁRVORE DA ALMA — pontos da alma e ramos por aspecto -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('arvore')" id="toggle-arvore">
+    <span class="ficha-expand-seta" id="seta-arvore">▶</span> Árvore da Alma
+  </div>
+  <div class="ficha-expand-area" id="area-arvore">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap">
+      <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Pontos da Alma disponíveis</span>
+      <input type="number" id="aa-pontos" min="0" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100px" oninput="salvarLocal()">
+    </div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">6 pontos por nível · máx. 3 Aspectos completos + 1 parcial</p>
+
+    <!-- ARCANO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Arcano</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Controle</label><input type="number" id="aa-arcano-controle" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Expansão</label><input type="number" id="aa-arcano-expansao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Versatilidade</label><input type="number" id="aa-arcano-versatilidade" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+      </div>
+    </div>
+
+    <!-- BÉLICO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Bélico</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Impacto</label><input type="number" id="aa-belico-impacto" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Perfuração</label><input type="number" id="aa-belico-perfuracao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Execução</label><input type="number" id="aa-belico-execucao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+      </div>
+    </div>
+
+    <!-- MOBILIDADE -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Mobilidade</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Deslocamento</label><input type="number" id="aa-mobilidade-deslocamento" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Instinto</label><input type="number" id="aa-mobilidade-instinto" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Acrobacia</label><input type="number" id="aa-mobilidade-acrobacia" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+      </div>
+    </div>
+
+    <!-- GUARDIÃO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Guardião</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Resistência</label><input type="number" id="aa-guardiao-resistencia" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Vitalidade</label><input type="number" id="aa-guardiao-vitalidade" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Fortaleza</label><input type="number" id="aa-guardiao-fortaleza" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+      </div>
+    </div>
+
+    <!-- CATALISADOR -->
+    <div>
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Catalisador</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label>Fortalecimento</label><input type="number" id="aa-catalisador-fortalecimento" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Sustentação</label><input type="number" id="aa-catalisador-sustentacao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label>Supressão</label><input type="number" id="aa-catalisador-supressao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /area-arvore -->
+</div>
+
+<!-- UTILIZAÇÕES REGISTRADAS — linhas dinâmicas de utilização de técnicas/poderes -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('utilizacoes')" id="toggle-utilizacoes">
+    <span class="ficha-expand-seta" id="seta-utilizacoes">▶</span> Utilizações Registradas
+  </div>
+  <div class="ficha-expand-area" id="area-utilizacoes">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+      <div class="ficha-panel-title" style="font-size:.72rem;padding:.4rem 0">Utilizações</div>
+      <div style="display:flex;gap:.4rem">
+        <button onclick="addUtilizacao()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Utilização</button>
+      </div>
+    </div>
+    <div class="table-wrapper"><table>
+      <thead><tr><th style="min-width:140px">Nome</th><th style="min-width:110px">Categoria</th><th style="min-width:120px">Característica</th><th style="min-width:110px">Custo Inicial</th><th style="min-width:110px">Manutenção</th><th>Descrição</th><th style="width:30px"></th></tr></thead>
+      <tbody id="util-tbody">
+        <tr>
+          <td data-label="Nome"><input type="text" id="util1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+          <td data-label="Categoria"><input type="text" id="util1-categoria" placeholder="Simples/Média/Alta/..." oninput="salvarLocal()"></td>
+          <td data-label="Característica"><input type="text" id="util1-caracteristica" placeholder="Controle/Expansão/..." oninput="salvarLocal()"></td>
+          <td data-label="Custo Inicial"><input type="text" id="util1-custo" placeholder="Ex: 22 Stamina" oninput="salvarLocal()"></td>
+          <td data-label="Manutenção"><input type="text" id="util1-manut" placeholder="Ex: 10 Stamina" oninput="salvarLocal()"></td>
+          <td data-label="Descrição"><input type="text" id="util1-desc" placeholder="Descrição..." oninput="salvarLocal()"></td>
+          <td><button onclick="removerUtilizacaoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+  </div><!-- /area-utilizacoes -->
 </div>
 
 <!-- ATRIBUTOS — logo abaixo da ficha base, largura total -->
@@ -10972,6 +11071,13 @@ function coletarDados() {
     'f-mov','f-mov-voo','f-mov-nado','f-mt','f-es','f-nucleo',
     // poder
     'p-principal','p-attr','p-max','p-descricao','p-suprema','p-conceito',
+    // árvore da alma
+    'aa-pontos',
+    'aa-arcano-controle','aa-arcano-expansao','aa-arcano-versatilidade',
+    'aa-belico-impacto','aa-belico-perfuracao','aa-belico-execucao',
+    'aa-mobilidade-deslocamento','aa-mobilidade-instinto','aa-mobilidade-acrobacia',
+    'aa-guardiao-resistencia','aa-guardiao-vitalidade','aa-guardiao-fortaleza',
+    'aa-catalisador-fortalecimento','aa-catalisador-sustentacao','aa-catalisador-supressao',
     // registro
     'r-personalidade','r-mentalidade','r-comportamento',
     'r-tracos','r-defeitos','r-ideais','r-ligacoes','r-antecedentes','r-historia','r-eventos','r-npcs',
@@ -11041,8 +11147,9 @@ function coletarDados() {
   const consFields  = _scanLinhasInventario('inv-cons-tbody',  'cons', ['nome','qtd','efei']);
   const matFields   = _scanLinhasInventario('inv-mat-tbody',   'mat',  ['nome','qtd']);
   const nucFields   = _scanLinhasInventario('inv-nuc-tbody',   'nuc',  ['nome','tipo','efei']);
+  const utilFields  = _scanLinhasInventario('util-tbody', 'util', ['nome','categoria','caracteristica','custo','manut','desc']);
 
-  const todos = [...campos,...armaFields,...passFields,...despFields,...itemFields,...consFields,...matFields,...nucFields,...petFields];
+  const todos = [...campos,...armaFields,...passFields,...despFields,...itemFields,...consFields,...matFields,...nucFields,...petFields,...utilFields];
   const d = {};
   todos.forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.value; });
   ['ms1','ms2','ms3','mf1','mf2','mf3'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
@@ -11385,7 +11492,7 @@ function removerPet(n) {
 }
 
 // ─── INVENTÁRIO DINÂMICO ───────────────────────────────────────
-let _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1 };
+let _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1, util: 1 };
 
 function addInvRow(tbodyId, prefix, fields, labels) {
   const tbody = document.getElementById(tbodyId);
@@ -11411,6 +11518,16 @@ function removeInvRow(tbodyId, minRows) {
 }
 
 function removeInvRowEl(btn) {
+  const tr = btn.closest('tr');
+  if (tr) { tr.remove(); salvarLocal(); }
+}
+
+// ─── UTILIZAÇÕES REGISTRADAS (linhas dinâmicas) — reusa o inventário genérico ───
+function addUtilizacao() {
+  addInvRow('util-tbody', 'util', ['nome','categoria','caracteristica','custo','manut','desc'], ['Nome','Categoria','Característica','Custo Inicial','Manutenção','Descrição']);
+}
+
+function removerUtilizacaoEl(btn) {
   const tr = btn.closest('tr');
   if (tr) { tr.remove(); salvarLocal(); }
 }
@@ -11590,6 +11707,7 @@ function preencherCampos(d) {
     { prefix: 'cons', tbodyId: 'inv-cons-tbody', fields: ['nome','qtd','efei'], labels: ['Nome','Qtd','Efeito'], base: 1 },
     { prefix: 'mat',  tbodyId: 'inv-mat-tbody',  fields: ['nome','qtd'], labels: ['Material','Qtd'], base: 1 },
     { prefix: 'nuc',  tbodyId: 'inv-nuc-tbody',  fields: ['nome','tipo','efei'], labels: ['Nome','Tipo','Efeito'], base: 1 },
+    { prefix: 'util', tbodyId: 'util-tbody',     fields: ['nome','categoria','caracteristica','custo','manut','desc'], labels: ['Nome','Categoria','Característica','Custo Inicial','Manutenção','Descrição'], base: 1 },
   ];
   invRestaurar.forEach(({ prefix, tbodyId, fields, labels, base }) => {
     const tbody = document.getElementById(tbodyId);
@@ -11679,7 +11797,7 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
