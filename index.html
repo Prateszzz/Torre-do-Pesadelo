@@ -9550,6 +9550,36 @@ function _bonusPericiaSafe(formulaCfg, formulaKey, ctx, attrMod) {
   return (ofiVal > cfgVal) ? ofiVal : cfgVal;
 }
 
+// ─── MIGRAÇÃO AUTOMÁTICA DE FÓRMULAS (padrão antigo → Novo Padrão Único PV/STA/PE) ───
+// Jogadores com fórmulas antigas salvas (localStorage `tp_formulas` ou Firestore
+// `config/formulas`) são migrados automaticamente na leitura, sem precisar clicar
+// em "Restaurar Fórmulas Padrão". Fórmulas personalizadas pelo GM são preservadas.
+// Idempotente: a normalização (sem espaços, minúsculas) garante que as fórmulas
+// NOVAS nunca casem com os padrões antigos, então re-executar não altera nada.
+const _MIGRACAO_FORMULAS_V2 = true;
+const _FORMULA_ANTIGA = {
+  pv:  '(vigor+alma)*(2+floor(nivel/2))',
+  sta: '(vigor+alma)*(2+floor(nivel/2))',
+  pe:  '(floor(nivel/2)+2)*(modalma+modintelecto)+bonuspe',
+};
+const _FORMULA_NOVA = {
+  pv:  '20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)',
+  sta: '20 + (alma * 2 + intelecto) + (6 + modAlma + modIntelecto) * (nivel - 1)',
+  pe:  '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE',
+};
+function _normFormula(s) {
+  return String(s == null ? '' : s).replace(/\s+/g, '').toLowerCase();
+}
+function _migrarFormulasAntigas(f) {
+  if (!f || typeof f !== 'object') return f;
+  Object.keys(_FORMULA_ANTIGA).forEach(chave => {
+    if (typeof f[chave] === 'string' && _normFormula(f[chave]) === _FORMULA_ANTIGA[chave]) {
+      f[chave] = _FORMULA_NOVA[chave];
+    }
+  });
+  return f;
+}
+
 function getFormulas() {
   const def = {
     // Fórmulas oficiais Torre do Pesadelo — padrão único PV/STA/PE
@@ -9584,7 +9614,18 @@ function getFormulas() {
     localStorage.removeItem('tp_formulas');
     saved = {};
   }
+  // ─── Migração automática (localStorage): fórmulas antigas → novo padrão ───
+  // Compara com os padrões antigos via normalização (sem espaços, minúsculas);
+  // se algo foi migrado, persiste de volta (localStorage + nuvem).
+  const antesMig = JSON.stringify(saved);
+  saved = _migrarFormulasAntigas(saved);
+  const migrouAntigas = _MIGRACAO_FORMULAS_V2 && JSON.stringify(saved) !== antesMig;
   const merged = { ...def, ...saved };
+
+  if (migrouAntigas) {
+    console.log('[Fórmulas] Fórmulas antigas migradas para o padrão único PV/STA/PE.');
+    salvarFormulas(merged);
+  }
 
   // ─── Auto-correção: fórmula de PE corrompida ───
   // Restaura para o padrão oficial APENAS se depender de pvBase/staBase (bug real)
@@ -9664,6 +9705,15 @@ async function carregarFormulasDaNuvem() {
         console.warn('[Firestore] PE corrompido na nuvem, descartando:', f.pe);
         f.pe = '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE';
         // Persiste a correção de volta na nuvem também
+        salvarFormulas(f);
+      }
+      // ── Migração automática (nuvem): padrão antigo → Novo Padrão Único PV/STA/PE ──
+      // Migra ANTES de aplicar no editor e persiste de volta (nuvem + local)
+      // para que o grupo inteiro passe ao novo padrão na próxima leitura.
+      const antesMigNuvem = JSON.stringify(f);
+      f = _migrarFormulasAntigas(f);
+      if (_MIGRACAO_FORMULAS_V2 && JSON.stringify(f) !== antesMigNuvem) {
+        console.log('[Firestore] Fórmulas antigas migradas para o padrão único PV/STA/PE.');
         salvarFormulas(f);
       }
       localStorage.setItem('tp_formulas', JSON.stringify(f));
