@@ -5792,6 +5792,10 @@ let _inputListener = null;
 
 // ═══ LIVRO DAS LENDAS — estado global ═══
 let _lendasFichas = []; // cache de todas as fichas
+// Flag de cache sujo: marcado quando updateRankingEntry grava (ex.: botão
+// "+ Núcleo" na ficha). Ao abrir a aba ranking / Livro das Lendas, se o
+// cache está sujo, recarrega do Firestore em vez de exibir dados velhos.
+let _lendasSujo = false;
 let _abaAtual = 'geral';
 let _personalizacoes = {}; // { docId: { tema, wallpaper, gifPoder, gifTransformacao, gifSuprema } }
 
@@ -6052,7 +6056,7 @@ function _fichaFromRankingGlobal(docId, d) {
     // aparecerem "empatados em 10" por um valor que nunca foi real.
     atributos: d.atributos || null,
     atributosTotal: (typeof d.atributosTotal === 'number') ? d.atributosTotal : null,
-    score: (typeof d.score === 'number') ? d.score : (nivel * 10 + nucleos),
+    score: (typeof d.score === 'number') ? d.score : (nivel * 1000 + nucleos),
     ts: d.ts || 0,
     vitorias: parseInt(d.vitorias) || 0,
     foto: d.foto || null,
@@ -6114,7 +6118,7 @@ async function _fichaFallbackIndividual(user, info, nomePersonagem, fichaDocId) 
   const nucleos = parseInt(nucleoRaw.toString().split('/')[0]) || 0;
   const nivel = parseInt(dados['f-nivel'] || '1') || 1;
   const nomeExibido = dados['f-nome'] || nomePersonagem;
-  const score = nivel * 10 + nucleos;
+  const score = nivel * 1000 + nucleos;
   const ts = fichaSnap.data().ts || 0;
   const atributos = {
     for: parseInt(dados['a-for']) || 10,
@@ -7676,6 +7680,14 @@ function _mudarAbaLivro(aba, btn) {
   btn.classList.add('active');
   btn.setAttribute('aria-selected','true');
   document.getElementById('livro-pane-' + aba)?.classList.add('active');
+  // Auto-refresh do ranking ao abrir a aba "Ranking" do Grimório: recarrega
+  // do Firestore se o cache (_lendasFichas) ainda está vazio OU desatualizado
+  // (flag _lendasSujo, marcado quando a ficha grava novo score). O botão
+  // "Atualizar" continua disponível para refresh manual a qualquer momento.
+  if (aba === 'ranking' && typeof carregarRanking === 'function' && (_lendasSujo || !_lendasFichas || !_lendasFichas.length)) {
+    _lendasSujo = false;
+    carregarRanking();
+  }
   // Rola o modal para o topo do corpo ao trocar de aba (conforto em telas pequenas)
   overlay.querySelector('.livro-body')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -9697,6 +9709,22 @@ function getFormulas() {
   });
   if (_formulasCorrigidas) salvarFormulas(merged);
 
+  // ─── Auto-correção: fórmula de PE sem o termo bonusPE ───
+  // Bug real: mudar o input b-pe não alterava r-pe para quem tinha uma
+  // fórmula de PE salva ANTIGA (ou personalizada pelo GM) sem o termo
+  // + bonusPE — o merge ({...def, ...saved}) deixava essa fórmula sobreviver
+  // à migração e às auto-correções acima, e o contexto bonusPE ficava órfão.
+  // Em vez de substituir a expressão inteira, apenas anexa o termo ao final,
+  // preservando o resto da fórmula personalizada. O padrão oficial já inclui
+  // o termo, então quem está no padrão (ou já foi migrado) não é tocado.
+  let _peBonusAnexado = false;
+  if (typeof merged.pe === 'string' && merged.pe.trim() !== '' && !_normFormula(merged.pe).includes('bonuspe')) {
+    merged.pe = merged.pe + ' + bonusPE';
+    _peBonusAnexado = true;
+    console.log('[Fórmulas] PE sem o termo bonusPE — termo anexado automaticamente. Nova:', merged.pe);
+  }
+  if (_peBonusAnexado) salvarFormulas(merged);
+
   return merged;
 }
 
@@ -10150,7 +10178,15 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       ${fieldGroup('Técnicas Máximas','p-max','number',{default:0})}
     </div>
     <div class="field-row cols-2">
-      ${fieldGroup('Núcleo Absorvido (atual/máx)','f-nucleo')}
+      <div class="field-group">
+        <label>Núcleo Absorvido (atual/máx)</label>
+        <div style="display:flex;gap:.4rem;align-items:center">
+          <input type="text" id="f-nucleo" value="${''}" ${isObs ? 'readonly' : ''} oninput="salvarLocal()" title="Formato: atual/máximo — os botões +/− ajustam os núcleos absorvidos" style="flex:1;min-width:0${isObs ? ';cursor:default;opacity:.85' : (isAdm ? ';border-color:rgba(180,140,30,.3)' : '')}">
+          <button type="button" onclick="ajustarNucleos(-1)" title="− Núcleo (subtrai 1 dos absorvidos)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.55rem .85rem;font-family:inherit;font-size:.95rem;cursor:pointer;transition:all .2s;flex-shrink:0;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
+          <button type="button" onclick="ajustarNucleos(1)" title="+ Núcleo (adiciona 1 aos absorvidos)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.55rem .85rem;font-family:inherit;font-size:.95rem;cursor:pointer;transition:all .2s;flex-shrink:0;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
+        </div>
+        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem;letter-spacing:.3px;line-height:1.45">Botões +/− ajustam os núcleos absorvidos — alimentam o ranking (Lendas das Torres).</small>
+      </div>
       ${fieldGroup('Progressão do Núcleo','f-nucleo-prog')}
     </div>
     <div class="field-row cols-2">
@@ -11820,6 +11856,10 @@ async function salvarFichaFirestore(user, dados) {
 
 async function updateRankingEntry(user, personagem, dados, foto, silencioso) {
   if (!window.db || !window.doc || !window.setDoc) return;
+  // Marca o cache do Livro das Lendas como desatualizado: qualquer gravação
+  // aqui (ex.: botão "+ Núcleo" → salvarLocal → salvarFichaFirestore) deve
+  // ser refletida na aba ranking na próxima abertura — o refresh usa o flag.
+  _lendasSujo = true;
   const docId = _fsDocId(user, personagem); // fora do try: precisa estar visível no catch
   try {
     const userNorm = _normUser(user);
@@ -11856,7 +11896,7 @@ async function updateRankingEntry(user, personagem, dados, foto, silencioso) {
       nucleos,
       foto: foto || null,
       despertar: dados['f-despertar'] || 'Desperto',
-      score: nivel * 10 + nucleos,
+      score: nivel * 1000 + nucleos,
       vitorias: parseInt(dados['f-vitorias'] || '0') || 0,
       status: 'ativo',
       ts: Date.now(),
@@ -13054,6 +13094,23 @@ function salvarFicha() {
     // pedido explícito: editar personagem deve refletir no ranking sozinho.
     if (document.getElementById('ranking-grid')) carregarRanking();
   });
+}
+
+// Botões +/− do campo "Núcleo Absorvido (atual/máx)" (f-nucleo, aba Poder).
+// Mantém o formato "atual/máx" (compatível com dados antigos e com o parse do
+// ranking `parseInt(f-nucleo.split('/')[0])`), ajusta o "atual", dispara o
+// recálculo e o salvamento automático — que por sua vez atualiza o ranking.
+function ajustarNucleos(delta) {
+  const el = document.getElementById('f-nucleo');
+  if (!el || el.readOnly) return;
+  const raw = String(el.value || '').trim();
+  const partes = raw.split('/');
+  let atual = parseInt(partes[0], 10) || 0;
+  const max = partes.length > 1 ? (parseInt(partes[1], 10) || 0) : 0;
+  atual = Math.max(0, atual + (delta || 0));
+  el.value = atual + '/' + max;
+  if (typeof calcTudoDebounced === 'function') calcTudoDebounced();
+  salvarLocal();
 }
 
 async function carregarDados(targetUser) {
@@ -14445,6 +14502,13 @@ function navTo(id) {
   if (backdrop) backdrop.classList.remove('show');
   setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); },100);
   _syncTabbar(id);
+  // Auto-refresh do ranking ao navegar para o Livro das Lendas (secao-ranking):
+  // recarrega se o cache (_lendasFichas) está vazio ou desatualizado (flag
+  // _lendasSujo) — o botão "Atualizar" continua disponível para refresh manual.
+  if (id === 'secao-ranking' && typeof carregarRanking === 'function' && (_lendasSujo || !_lendasFichas || !_lendasFichas.length)) {
+    _lendasSujo = false;
+    carregarRanking();
+  }
   // Recarregamento automático ao navegar REMOVIDO a pedido: o ranking só
   // atualiza no carregamento da página (login) ou no clique do botão
   // "Atualizar" (.lendas-refresh-btn) — navegar até a aba só rola até ela.
