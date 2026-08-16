@@ -12113,7 +12113,7 @@ const TABELA_CRITICO_ACERTO = [
   { n:23, nome:'Área de Impacto', efeito:'O ataque atinge também 1 criatura adjacente ao alvo (dano reduzido pela metade).' },
   { n:24, nome:'Desarme', efeito:'A arma/objeto do alvo cai no chão.' },
   { n:25, nome:'Imobilização', efeito:'O alvo fica imobilizado até passar em uma Salvaguarda de Força.' },
-  { n:26, nome:'Refluxo da Alma', efeito:'Você recupera 1d6 de Núcleo/PE.' },
+      { n:26, nome:'Refluxo da Alma', efeito:'Você recupera 1d6 de PE.' },
   { n:27, nome:'Fôlego Renovado', efeito:'Você recupera 1d6 de STA.' },
   { n:28, nome:'Essência Roubada', efeito:'Você rouba 1 PE do alvo (se ele tiver).' },
   { n:29, nome:'Canalização', efeito:'Seu próximo poder/Técnica custa metade do PE (mín. 1).' },
@@ -12181,7 +12181,7 @@ const TABELA_CRITICO_ACERTO = [
   { n:91, nome:'Julgamento da Alma', efeito:'O alvo deve passar em Salvaguarda de Alma ou é subjugado (perde a próxima ação).' },
   { n:92, nome:'Corte do Destino', efeito:'O golpe fere o conceito do alvo: ele perde acesso a 1 Técnica/poder por 1d4 rodadas.' },
   { n:93, nome:'Apocalipse Pessoal', efeito:'O alvo sofre dano de Alma igual ao seu mod de Alma (ignora RD) + fica abalado.' },
-  { n:94, nome:'Transbordamento', efeito:'O dano é triplicado e você recupera 1d6 de Núcleo/PE.' },
+      { n:94, nome:'Transbordamento', efeito:'O dano é triplicado e você recupera 1d6 de PE.' },
   { n:95, nome:'Momento Épico', efeito:'O efeito do seu poder se repete no próximo turno sem custo.' },
   { n:96, nome:'Imposição', efeito:'O alvo é forçado a fazer uma Salvaguarda de Alma contra medo paralisante ou fica imóvel 1 rodada.' },
   { n:97, nome:'Ressonância', efeito:'Sua Alma ecoa: aliados recuperam 1d4 de STA, você perde 1 de Sanidade (o preço do êxtase).' },
@@ -12197,7 +12197,7 @@ const TABELA_CRITICO_FALHA = [
   { n:4,  nome:'Nervos', efeito:'Você sofre Desvantagem no próximo teste até o fim do turno.' },
   { n:5,  nome:'Equívoco', efeito:'Você erra o alvo e atinge 1 criatura adjacente (aliado ou inimigo, Mestre escolhe).' },
   { n:6,  nome:'Fadiga', efeito:'Você ganha 1 nível de Exaustão.' },
-  { n:7,  nome:'Recuo da Alma', efeito:'Você perde 1d4 de Núcleo/PE.' },
+      { n:7,  nome:'Recuo da Alma', efeito:'Você perde 1d4 de PE.' },
   { n:8,  nome:'Dano Reverso', efeito:'Você sofre metade do dano que causaria.' },
   { n:9,  nome:'Ruptura Interna', efeito:'Você ganha 1 de Corrupção e perde 1d4 de Sanidade.' },
   { n:10, nome:'Arma Instável', efeito:'Sua arma/poder falha: inutilizável por 1d4 rodadas (ou perde 1 dado de dano até reparo).' },
@@ -15427,7 +15427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Antecedente:</strong> Sobrevivente de Surto (perdeu toda a família no Surto Carmesim).<br><br>
                 <strong>Traços:</strong><br>
                 • <strong>Instinto de Sobrevivência</strong> (3 pontos) – Vantagem em testes para evitar morte súbita.<br>
-                • <strong>Fome da Alma</strong> (4 pontos) – Recupera Núcleo ou Sanidade ao absorver núcleos fortes.<br>
+                • <strong>Fome da Alma</strong> (4 pontos) – Recupera PE ou Sanidade ao absorver núcleos fortes.<br>
                 • <strong>Ira Acumulada</strong> (+3 pontos) – Quando provocado por injustiça, pode entrar em fúria difícil de controlar.<br><br>
                 <strong>Aparência:</strong> Cabelo preto curto, cicatriz profunda no lado esquerdo do rosto, sempre usa roupas escuras e práticas com detalhes em vermelho escuro. Carrega uma lâmina comum como “lembrete” do que perdeu.
             </div>
@@ -15518,58 +15518,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
             </div>
 
-            <h3>Pontos de Vida (PV), Stamina (STA) e Energia (PE)</h3>
-            <p>Seus recursos principais crescem com o nível de personagem (1 a 20). Cada atributo alimenta um aspecto diferente dos seus pools:</p>
+            <h3>Pontos de Vida (PV), Stamina (STA) e Energia da Alma (PE)</h3>
+            <p>Cada recurso tem sua própria fórmula e cresce junto com o nível de personagem (1 a 20):</p>
             <div class="system-card">
-                <strong>PV = 20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)</strong><br><br>
-                O Vigor é o coração dos Pontos de Vida: cada ponto de Vigor adiciona 3 PV, e a cada nível o crescimento é acelerado pelo seu modificador de Vigor.
-            </div>
-            <div class="system-card">
-                <strong>STA = 20 + (Alma × 2 + Intelecto) + (6 + ModAlma + ModIntelecto) × (Nível − 1)</strong><br><br>
-                A Stamina é alimentada pela Alma (×2) e pelo Intelecto, com crescimento por nível guiado pelos dois modificadores.
-            </div>
-            <div class="system-card">
-                <strong>PE = (⌊Nível ÷ 2⌋ + 2) × (ModAlma + ModIntelecto + 1)</strong><br><br>
-                A Energia é a reserva de poder sobrenatural — nasce dos modificadores de Alma e Intelecto e cresce a cada dois níveis.
-            </div>
-            <div class="system-card">
+                <strong>PV = 20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)</strong><br>
+                <em>Vigor é o principal: cada ponto de Vigor vale 3 na base e o modificador de Vigor dobra no crescimento.</em><br><br>
+                <strong>STA = 20 + (Alma × 2 + Intelecto) + (6 + ModAlma + ModIntelecto) × (Nível − 1)</strong><br>
+                <em>Alma (peso 2) e Intelecto alimentam a Stamina: fôlego, concentração e canalização.</em><br><br>
+                <strong>PE = (⌊Nível ÷ 2⌋ + 2) × (ModAlma + ModIntelecto + 1)</strong><br>
+                <em>Fórmula própria; Alma e Intelecto determinam a energia da Alma.</em><br><br>
                 <strong>Custo por PE = (STA máxima ÷ 2) ÷ PE máximo</strong> — arredondado para cima, mínimo 1.
             </div>
-            <div class="lore-box">
-                <strong>A regra de ouro:</strong> primeiro calcula-se o <strong>total de PE</strong> (fórmula própria); depois divide-se <strong>metade da STA máxima</strong> por esse total → <strong>custo de cada PE</strong>. Gastando todos os PE, o custo total consome exatamente <strong>50% da STA</strong>.
-            </div>
-            <p><strong>PV</strong> é sua vida física — ao chegar a 0, você fica incapacitado e corre risco de morte. <strong>STA</strong> é o principal combustível de combate e esforço físico, usado para Técnicas, Utilizações e manobras. <strong>PE</strong> é o combustível dos poderes e técnicas. Recomenda-se calcular na ficha (o portal já faz isso automaticamente).</p>
-            <p>Exemplo de progressão com <strong>Vigor 14, Alma 14, Intelecto 12</strong> (modificadores +2/+2/+1):</p>
+
+            <p><strong>Exemplo de progressão</strong> (personagem equilibrado: Vigor 14 (+2) · Alma 13 (+1) · Intelecto 12 (+1)):</p>
             <div class="table-wrapper">
                 <table>
-                    <thead><tr><th>Nível</th><th>PV</th><th>STA</th><th>PE</th></tr></thead>
+                    <thead>
+                        <tr><th>Nível</th><th>PV</th><th>STA</th><th>PE</th><th>Custo por PE</th></tr>
+                    </thead>
                     <tbody>
-                        <tr><td>1</td><td>62</td><td>60</td><td>8</td></tr>
-                        <tr><td>2</td><td>74</td><td>69</td><td>12</td></tr>
-                        <tr><td>3</td><td>86</td><td>78</td><td>12</td></tr>
-                        <tr><td>4</td><td>98</td><td>87</td><td>16</td></tr>
-                        <tr><td>5</td><td>110</td><td>96</td><td>16</td></tr>
-                        <tr><td>6</td><td>122</td><td>105</td><td>20</td></tr>
-                        <tr><td>7</td><td>134</td><td>114</td><td>20</td></tr>
-                        <tr><td>8</td><td>146</td><td>123</td><td>24</td></tr>
-                        <tr><td>9</td><td>158</td><td>132</td><td>24</td></tr>
-                        <tr><td>10</td><td>170</td><td>141</td><td>28</td></tr>
-                        <tr><td>11</td><td>182</td><td>150</td><td>28</td></tr>
-                        <tr><td>12</td><td>194</td><td>159</td><td>32</td></tr>
-                        <tr><td>13</td><td>206</td><td>168</td><td>32</td></tr>
-                        <tr><td>14</td><td>218</td><td>177</td><td>36</td></tr>
-                        <tr><td>15</td><td>230</td><td>186</td><td>36</td></tr>
-                        <tr><td>16</td><td>242</td><td>195</td><td>40</td></tr>
-                        <tr><td>17</td><td>254</td><td>204</td><td>40</td></tr>
-                        <tr><td>18</td><td>266</td><td>213</td><td>44</td></tr>
-                        <tr><td>19</td><td>278</td><td>222</td><td>44</td></tr>
-                        <tr><td>20</td><td>290</td><td>231</td><td>48</td></tr>
+                        <tr><td>1</td><td>62</td><td>58</td><td>6</td><td>5</td></tr>
+                        <tr><td>2</td><td>70</td><td>66</td><td>9</td><td>4</td></tr>
+                        <tr><td>3</td><td>78</td><td>74</td><td>9</td><td>5</td></tr>
+                        <tr><td>4</td><td>86</td><td>82</td><td>12</td><td>4</td></tr>
+                        <tr><td>5</td><td>110</td><td>90</td><td>12</td><td>4</td></tr>
+                        <tr><td>6</td><td>118</td><td>98</td><td>15</td><td>4</td></tr>
+                        <tr><td>7</td><td>126</td><td>106</td><td>15</td><td>4</td></tr>
+                        <tr><td>8</td><td>134</td><td>114</td><td>18</td><td>4</td></tr>
+                        <tr><td>9</td><td>142</td><td>122</td><td>18</td><td>4</td></tr>
+                        <tr><td>10</td><td>170</td><td>130</td><td>21</td><td>4</td></tr>
+                        <tr><td>11</td><td>178</td><td>138</td><td>21</td><td>4</td></tr>
+                        <tr><td>12</td><td>186</td><td>146</td><td>24</td><td>4</td></tr>
+                        <tr><td>13</td><td>194</td><td>154</td><td>24</td><td>4</td></tr>
+                        <tr><td>14</td><td>202</td><td>162</td><td>27</td><td>3</td></tr>
+                        <tr><td>15</td><td>230</td><td>170</td><td>27</td><td>4</td></tr>
+                        <tr><td>16</td><td>238</td><td>178</td><td>30</td><td>3</td></tr>
+                        <tr><td>17</td><td>246</td><td>186</td><td>30</td><td>4</td></tr>
+                        <tr><td>18</td><td>254</td><td>194</td><td>33</td><td>3</td></tr>
+                        <tr><td>19</td><td>262</td><td>202</td><td>33</td><td>4</td></tr>
+                        <tr><td>20</td><td>290</td><td>210</td><td>36</td><td>3</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="lore-box">
-                <strong>Use a Ficha de Personagem:</strong> Existe um arquivo separado <code>Ficha_Personagem_Torre_do_Pesadelo.html</code> (na mesma pasta) feito exatamente para este sistema. Ele é editável no navegador, calcula automaticamente HP/CA/Núcleo/Mods/Balance de Traços, tem seletor dos 20 Antecedentes, slots dinâmicos para Técnicas (com sugestão de dano por tipo/nível), seções para Forja, Barmans, Relacionamentos (4 slots), Sanidade/Corrupção, etc. Preencha uma cópia por jogador, imprima como PDF ou exporte JSON. Consulte também o arquivo <code>SUGESTOES_PARA_ADICOES_LIVRO_DO_JOGADOR.md</code> para ideias futuras de expansão do livro.
+                <strong>A regra de ouro:</strong> primeiro calcula-se o <strong>total de PE</strong> (fórmula própria); depois divide-se <strong>metade da STA máxima</strong> por esse total → <strong>custo de cada PE</strong>. Gastando todos os pontos de PE, o custo total consome exatamente <strong>50% da STA</strong> — a reserva de energia é metade da stamina, a ponte correta entre PE e STA.
+            </div>
+
+            <div class="lore-box">
+                <strong>Perfis na prática:</strong><br>
+                • <strong>Tanque</strong> (Vigor 18 +4 · Alma 12 +1 · Intelecto 10 +0): PV 74 no nível 1 → <strong>378</strong> no nível 20; STA 54 → <strong>187</strong>; PE 4 → <strong>24</strong>. Vigor cria o escudo de carne.<br>
+                • <strong>Mago</strong> (Vigor 10 +0 · Alma 16 +3 · Intelecto 17 +3): PV 50 → <strong>202</strong>; STA 69 → <strong>297</strong>; PE 14 → <strong>84</strong>. Alma e Intelecto criam o conjurador.
+            </div>
+
+            <p><strong>PV</strong> é sua vida física — ao chegar a 0, você fica incapacitado e corre risco de morte. <strong>STA</strong> é o principal combustível de combate e esforço físico, usado para Técnicas, Utilizações e manobras. <strong>PE</strong> é a energia da Alma usada para alimentar poderes. Recomenda-se calcular na ficha (o portal já faz isso automaticamente).</p>
+
+            <div class="lore-box">
+                <strong>Use a Ficha de Personagem:</strong> A ficha digital oficial está no <strong>portal do jogo</strong> (<a href="https://prateszzz.github.io/Torre-do-Pesadelo/" target="_blank" rel="noopener">prateszzz.github.io/Torre-do-Pesadelo</a>) — editável no navegador, calcula automaticamente PV/CA/PE/Mods/Balance de Traços, tem seletor dos 20 Antecedentes, slots dinâmicos para Técnicas (com sugestão de dano por tipo/nível), seções para Forja, Barmans, Relacionamentos (4 slots), Sanidade/Corrupção, etc. Você também pode fazer a ficha em papel seguindo as regras deste livro.
             </div>
         </section>
 
@@ -15746,8 +15751,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Benefícios Iniciais:</strong><br>
                 • +2 em todos os testes de medicina, estabilização, tratamento de venenos e cuidados com ferimentos graves.<br>
                 • Começa com um kit de curativos e ervas de qualidade superior (pode ser usado 3-4 vezes antes de precisar de reposição).<br>
-                • Uma vez por cena, você pode estabilizar automaticamente um aliado que esteja a 0 HP (sem teste), mas sofre 1d4 de Sanidade se a pessoa morrer nas próximas 24 horas mesmo assim.<br><br>
-                <strong>Gancho / Complicação:</strong> Você carrega o peso de todos os que não conseguiu salvar. Sempre que um aliado próximo cair a 0 HP ou sofrer trauma grave, você deve fazer uma Salvaguarda de Carisma CD 14 ou perder 1d4 de Sanidade. Além disso, você pode ter "pacientes" que voltaram diferentes — e que agora te procuram por razões que não são gratidão.<br><br>
+                • Uma vez por cena, você pode estabilizar automaticamente um aliado que esteja a 0 PV (sem teste), mas sofre 1d4 de Sanidade se a pessoa morrer nas próximas 24 horas mesmo assim.<br><br>
+                <strong>Gancho / Complicação:</strong> Você carrega o peso de todos os que não conseguiu salvar. Sempre que um aliado próximo cair a 0 PV ou sofrer trauma grave, você deve fazer uma Salvaguarda de Carisma CD 14 ou perder 1d4 de Sanidade. Além disso, você pode ter "pacientes" que voltaram diferentes — e que agora te procuram por razões que não são gratidão.<br><br>
                 <strong>Traços Sugeridos:</strong> Empatia Excessiva, Aura de Calma, Toque da Alma, Trauma Psíquico, Mente Focada, Calor Humano, Desejo de Morte.
             </div>
 
@@ -15766,7 +15771,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>12. Marcado pelo Primeiro Toque</strong><br><br>
                 <strong>Vida Anterior:</strong> Você não despertou de forma "natural". Você teve um encontro direto com algo da Torre — um núcleo exposto, uma distorção de espaço, uma "voz" que falou sem som, uma onda de energia durante um surto. A maioria das pessoas morre ou enlouquece. Você acordou com o Núcleo queimando dentro de você. Alguns dizem que a Torre te escolheu. Outros dizem que você roubou algo dela.<br><br>
                 <strong>Benefícios Iniciais:</strong><br>
-                • Sua reserva máxima de Núcleo começa com +2 (acima do normal para o seu nível inicial).<br>
+                • Sua reserva máxima de PE começa com +2 (acima do normal para o seu nível inicial).<br>
                 • Quando você cria sua primeira técnica (Nível 0 ou 1), ela pode ter um efeito adicional menor gratuito escolhido da tabela de Efeitos Ofensivos (ou equivalente temático para outros tipos).<br>
                 • Você sente a presença de fontes fortes de energia da Torre com mais clareza que a maioria.<br><br>
                 <strong>Gancho / Complicação:</strong> A Torre já te "vê". Você começa com 1 ponto de Corrupção (ou role: em alguns casos o "toque" foi limpo, mas deixou uma marca que monstros de alta Qualidade reconhecem). Eventos aleatórios dentro de Torres podem te afetar com mais frequência ou intensidade. Alguns Despertos mais velhos podem te olhar com inveja, medo ou desejo de estudar você.<br><br>
@@ -15902,7 +15907,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>1</td><td>Aliados Fiéis</td><td>Você possui 1–2 contatos leais em uma cidadela importante. Uma vez por sessão, pode pedir um favor menor (informação, abrigo por uma noite ou suprimentos básicos) sem custo em Espíritos.</td></tr>
                         <tr><td>1~2</td><td>Rede de Contatos</td><td>Em qualquer cidadela ou posto avançado, role 1d20. Em 12+, você conhece alguém que pode fornecer informação relevante sobre a região ou uma torre próxima.</td></tr>
                         <tr><td>3</td><td>Ligação com Organização</td><td>Você tem influência moderada em uma facção. Uma vez por incursão, pode pedir um favor de valor médio (até 50 Esp em equipamentos, informações privilegiadas ou reforços menores).</td></tr>
-                        <tr><td>5</td><td>Corpo de Gigante</td><td>+2 em testes de Força e Vigor relacionados a tamanho, carga ou resistência física. Seu HP máximo aumenta em +4. Você causa +1 de dano em ataques corpo a corpo com armas pesadas.</td></tr>
+                        <tr><td>5</td><td>Corpo de Gigante</td><td>+2 em testes de Força e Vigor relacionados a tamanho, carga ou resistência física. Seu PV máximo aumenta em +4. Você causa +1 de dano em ataques corpo a corpo com armas pesadas.</td></tr>
                         <tr><td>2</td><td>Fôlego da Alma</td><td>Você pode prender a respiração por até 10 minutos sem testes. Em áreas de Névoa densa, você sofre apenas metade da penalidade normal em testes de Constituição/Vigor.</td></tr>
                         <tr><td>1</td><td>Sentidos Aguçados</td><td>Escolha um sentido (visão, audição ou olfato). Você ganha vantagem em testes de percepção relacionados a esse sentido.</td></tr>
                         <tr><td>2</td><td>Visão no Escuro</td><td>Você enxerga perfeitamente em escuridão total dentro de Torres (sem desvantagem em combate ou testes de percepção no escuro).</td></tr>
@@ -15911,15 +15916,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>1</td><td>Empatia com Criaturas</td><td>Vantagem em testes para acalmar, entender ou prever o comportamento de animais e criaturas não-inteligentes.</td></tr>
                         <tr><td>3</td><td>Tempo de Vida Estendido</td><td>Você envelhece 50% mais devagar. Além disso, testes de Vigor contra doenças e venenos de longa duração recebem +2.</td></tr>
                         <tr><td>2~4</td><td>Ambidestria da Alma</td><td>Você pode usar duas armas leves ou realizar ações com as duas mãos sem penalidade. No nível 4, você pode atacar com a mão secundária uma vez por turno sem usar sua ação bônus.</td></tr>
-                        <tr><td>6</td><td>Aura Reforçada</td><td>Sua reserva máxima de Núcleo aumenta em +4. Além disso, uma vez por descanso longo, você recupera 2d6 de Núcleo durante um descanso curto.</td></tr>
+                        <tr><td>6</td><td>Aura Reforçada</td><td>Sua reserva máxima de PE aumenta em +4. Além disso, uma vez por descanso longo, você recupera 2d6 de PE durante um descanso curto.</td></tr>
                         <tr><td>2~4</td><td>Resistência Sobrenatural</td><td>Vantagem em Salvaguardas contra venenos, doenças e efeitos de corrupção. No nível 4, você reduz pela metade qualquer dano de veneno ou corrupção que sofrer.</td></tr>
                         <tr><td>2~4</td><td>Flexibilidade Sobrenatural</td><td>Você pode se espremer por espaços extremamente apertados e ganha +2 em testes de Destreza para escapar de agarrões ou restrições. No nível 4, você pode se contorcer para evitar um ataque uma vez por combate (sem usar reação).</td></tr>
                         <tr><td>2</td><td>Explorador da Névoa</td><td>Vantagem em testes para navegar ou resistir a desorientação causada pela Névoa. Além disso, a chance de eventos aleatórios hostis enquanto viaja na Névoa é reduzida em 1 nível.</td></tr>
                         <tr><td>4</td><td>Noção do Perigo</td><td>Você sente perigo iminente. Uma vez por cena, você pode rolar com vantagem um teste para detectar emboscadas ou armadilhas antes que elas sejam ativadas.</td></tr>
                         <tr><td>3</td><td>Imponência da Alma</td><td>Você causa impressão forte. Ganha +2 em testes de intimidação e liderança. Criaturas comuns sentem desconforto perto de você (desvantagem em testes de moral contra você).</td></tr>
-                        <tr><td>3</td><td>Instinto de Sobrevivência</td><td>Quando você seria reduzido a 0 HP por queda, armadilha ou ataque surpresa, role 1d20. Em 12+, você cai com 1 HP em vez de 0. Além disso, +2 em testes para evitar quedas.</td></tr>
+                        <tr><td>3</td><td>Instinto de Sobrevivência</td><td>Quando você seria reduzido a 0 PV por queda, armadilha ou ataque surpresa, role 1d20. Em 12+, você cai com 1 PV em vez de 0. Além disso, +2 em testes para evitar quedas.</td></tr>
                         <tr><td>3</td><td>Mente Focada</td><td>Você pode manter concentração em até dois efeitos simultaneamente (em vez de um). Além disso, testes para resistir a distrações mentais recebem +2.</td></tr>
-                        <tr><td>4</td><td>Regeneração Leve da Alma</td><td>Durante um descanso curto, recupere 1d6+2 de HP e STA adicionais. Uma vez por dia, quando você cai a 0 HP, role 1d20. Em 15+, você se estabiliza com 1 HP.</td></tr>
+                        <tr><td>4</td><td>Regeneração Leve da Alma</td><td>Durante um descanso curto, recupere 1d6+2 de PV e STA adicionais. Uma vez por dia, quando você cai a 0 PV, role 1d20. Em 15+, você se estabiliza com 1 PV.</td></tr>
                         <tr><td>4</td><td>Afinidade com uma Torre Guardiã</td><td>Escolha uma das quatro Guardiãs. Dentro dela, você reduz em 2 o nível de dificuldade de todos os testes de sobrevivência e navegação, e recebe vantagem em uma Salvaguarda específica relacionada ao tema da torre.</td></tr>
                         <tr><td>2</td><td>Caçador de Anomalias</td><td>Você tem vantagem em testes para rastrear, identificar ou prever o comportamento de criaturas corrompidas ou anômalas.</td></tr>
                         <tr><td>3</td><td>Presença Inspiradora</td><td>Aliados a até 9 metros de você recebem +1 em testes contra medo e exaustão. Uma vez por cena, você pode dar vantagem a um aliado em um teste de Sanidade.</td></tr>
@@ -15927,25 +15932,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>3</td><td>Voz da Alma</td><td>Sua voz carrega peso sobrenatural. Ganha +2 em testes de intimidação, persuasão ou comando. Uma vez por cena, você pode forçar uma criatura a fazer uma Salvaguarda de Carisma CD 14 ou obedecer a um comando simples por um turno.</td></tr>
                         <tr><td>2</td><td>Olhar Penetrante</td><td>Você é extremamente perceptivo com intenções. Vantagem em testes para perceber mentiras, intenções hostis ou disfarces superficiais.</td></tr>
                         <tr><td>4</td><td>Passo da Sombra</td><td>Você se move com silêncio sobrenatural. Ganha vantagem em testes de Furtividade em qualquer condição de baixa luz ou Névoa. Criaturas sem sentidos especiais têm desvantagem para detectá-lo.</td></tr>
-                        <tr><td>4</td><td>Fome da Alma</td><td>Quando você absorve o núcleo de um <strong>monstro</strong> de nível igual ou superior ao seu, recupere 1d6 de Núcleo ou 1d4 de Sanidade (escolha uma). Essa recuperação só pode ocorrer uma vez por monstro. <em>Núcleos humanos não ativam este traço — e tentar absorvê-los costuma ser muito pior do que qualquer benefício.</em></td></tr>
+                        <tr><td>4</td><td>Fome da Alma</td><td>Quando você absorve o núcleo de um <strong>monstro</strong> de nível igual ou superior ao seu, recupere 1d6 de PE ou 1d4 de Sanidade (escolha uma). Essa recuperação só pode ocorrer uma vez por monstro. <em>Núcleos humanos não ativam este traço — e tentar absorvê-los costuma ser muito pior do que qualquer benefício.</em></td></tr>
                         <tr><td>3</td><td>Equilíbrio Interno</td><td>Quando você está com penalidades por Exaustão, Sobrecarga ou dano em Poder/Mente/Corpo, essas penalidades são reduzidas em 1 (mínimo 0).</td></tr>
                         <tr><td>3</td><td>Herança Ancestral</td><td>Você possui conhecimento ou instinto de um ancestral. Escolha uma perícia ou tipo de conhecimento. Você tem vantagem em testes relacionados a esse campo de conhecimento.</td></tr>
                         <tr><td>3</td><td>Aura de Calma</td><td>Aliados a até 6 metros de você recebem +2 em testes contra medo e desorientação. Uma vez por cena, você pode automaticamente estabilizar um aliado que esteja em pânico ou com Sanidade muito baixa.</td></tr>
                         <tr><td>4</td><td>Pele Endurecida</td><td>Sua pele é naturalmente resistente. Você ganha +2 de CA natural. Além disso, reduz em 2 o dano de ataques cortantes ou perfurantes de armas mundanas.</td></tr>
                         <tr><td>4</td><td>Sentido do Fluxo</td><td>Você sente o fluxo de energia das Torres e de poderes. Uma vez por cena, você pode automaticamente detectar a presença de um poder ativo, uma armadilha mágica ou a direção de uma fonte de energia próxima.</td></tr>
-                        <tr><td>5</td><td>Renascimento Parcial</td><td>Uma vez por incursão, quando você seria reduzido a 0 HP, você pode ativar uma explosão de regeneração. Role 2d6 + seu modificador de Alma. Você recupera essa quantidade de HP e se levanta com ela.</td></tr>
+                        <tr><td>5</td><td>Renascimento Parcial</td><td>Uma vez por incursão, quando você seria reduzido a 0 PV, você pode ativar uma explosão de regeneração. Role 2d6 + seu modificador de Alma. Você recupera essa quantidade de PV e se levanta com ela.</td></tr>
                         <tr><td>3</td><td>Afinidade com Metal</td><td>Você tem facilidade com armas e armaduras. Ganha +1 de dano com armas de metal e +1 de CA quando usa armadura de metal. Pode improvisar armas de metal com qualidade surpreendente.</td></tr>
                         <tr><td>2</td><td>Memória Muscular</td><td>Você aprende técnicas físicas rapidamente. Quando aprende uma nova manobra ou estilo de combate, você a domina em metade do tempo normal. +2 em testes para copiar ou adaptar movimentos observados.</td></tr>
                         <tr><td>4</td><td>Presença Etérea</td><td>Uma vez por cena, você pode se tornar parcialmente intangível por 1 rodada. Durante esse tempo, você pode atravessar objetos sólidos finos e ataques físicos normais têm 50% de chance de falhar contra você.</td></tr>
                         <tr><td>5</td><td>Guardião Interno</td><td>Você possui uma proteção interna poderosa. Vantagem em Salvaguardas contra possessão, ilusões mentais e efeitos de controle mental. Uma vez por incursão, você pode automaticamente passar em uma Salvaguarda de Alma que teria falhado.</td></tr>
 
                         <!-- NOVOS TRAÇOS POSITIVOS ADICIONADOS -->
-                        <tr><td>2</td><td>Laços de Sangue</td><td>Você compartilha um vínculo profundo com uma pessoa específica (aliado ou familiar). Quando estiver a até 30 metros dessa pessoa, ambos ganham +1 em testes de Vigor e Salvaguardas contra medo. Se um de vocês cair a 0 HP, o outro pode rolar com vantagem para estabilizá-lo uma vez por cena.</td></tr>
+                        <tr><td>2</td><td>Laços de Sangue</td><td>Você compartilha um vínculo profundo com uma pessoa específica (aliado ou familiar). Quando estiver a até 30 metros dessa pessoa, ambos ganham +1 em testes de Vigor e Salvaguardas contra medo. Se um de vocês cair a 0 PV, o outro pode rolar com vantagem para estabilizá-lo uma vez por cena.</td></tr>
                         <tr><td>3</td><td>Visão da Torre</td><td>Uma vez por cena, você pode fechar os olhos e receber uma breve visão sobre um perigo iminente ou caminho seguro nos próximos minutos (Mestre fornece uma dica curta e útil). Não funciona se a Torre estiver deliberadamente ocultando algo.</td></tr>
-                        <tr><td>4</td><td>Consumidor de Essência</td><td>Quando você derrota um inimigo e absorve seu núcleo, recupere 1d8 de HP ou 1d4 de Núcleo (escolha). Esse benefício só pode ser usado uma vez por combate.</td></tr>
+                        <tr><td>4</td><td>Consumidor de Essência</td><td>Quando você derrota um inimigo e absorve seu núcleo, recupere 1d8 de PV ou 1d4 de PE (escolha). Esse benefício só pode ser usado uma vez por combate.</td></tr>
                         <tr><td>3</td><td>Mente de Aço</td><td>Vantagem em Salvaguardas contra efeitos de medo, ilusão e manipulação mental. Além disso, você pode rolar um teste de Intelecto CD 16 para ignorar completamente um efeito mental de baixo nível uma vez por cena.</td></tr>
                         <tr><td>3</td><td>Andarilho das Ruínas</td><td>Em áreas arruinadas, corrompidas ou abandonadas (incluindo andares altos de torres), você ganha +2 em testes de sobrevivência, navegação e furtividade. Monstros nessas áreas têm mais dificuldade para rastreá-lo.</td></tr>
-                        <tr><td>4</td><td>Toque da Alma</td><td>Uma vez por cena, você pode tocar um aliado e transferir parte de sua vitalidade: role 1d8. Você perde essa quantidade de HP (mínimo 1) e o aliado recupera o mesmo valor. Não pode ser usado em si mesmo.</td></tr>
+                        <tr><td>4</td><td>Toque da Alma</td><td>Uma vez por cena, você pode tocar um aliado e transferir parte de sua vitalidade: role 1d8. Você perde essa quantidade de PV (mínimo 1) e o aliado recupera o mesmo valor. Não pode ser usado em si mesmo.</td></tr>
                         <tr><td>3</td><td>Olhos da Névoa</td><td>Você enxerga através de névoa leve e ilusões menores criadas por criaturas da Torre. Testes de percepção dentro da Névoa são feitos com vantagem, e você reduz pela metade a chance de ser afetado por desorientação causada por ela.</td></tr>
                         <tr><td>2</td><td>Irmão de Armas</td><td>Você tem um vínculo tático forte com um aliado específico. Quando lutam lado a lado, ambos ganham +1 de CA e +1 em testes de ataque contra o mesmo inimigo.</td></tr>
                         <tr><td>5</td><td>Alma de Aço</td><td>Você resiste melhor à corrupção em troca de um preço. Ganha +2 em todas as Salvaguardas de Alma. No entanto, quando você ganha Corrupção, ganha 1 ponto a mais do que o normal.</td></tr>
@@ -15973,21 +15978,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>+1</td><td>Esquecido</td><td>Sua memória é falha. Desvantagem em testes para lembrar nomes, rostos, detalhes de conversas ou informações importantes obtidas recentemente.</td></tr>
                         <tr><td>+2</td><td>Honestidade Compulsiva</td><td>Você é quase incapaz de mentir. Em situações onde mentir seria vantajoso, você deve fazer uma Salvaguarda de Carisma CD 16. Em falha, você revela a verdade ou fica visivelmente desconfortável.</td></tr>
                         <tr><td>+5</td><td>Indecisão da Alma</td><td>Em situações de alta pressão (combate, perseguição, dilemas morais), sua mente trava. No início de cada turno ou decisão crítica, role 1d6. Em 1–2, você perde sua ação ou decisão nesse turno.</td></tr>
-                        <tr><td>+4</td><td>Covardia Instintiva</td><td>Seu instinto de autopreservação é extremamente forte. Sempre que um aliado cair a 0 HP ou você sofrer mais de metade do seu HP em um único ataque, você deve fazer uma Salvaguarda de Carisma CD 15 ou fugir/retirar-se no seu próximo turno.</td></tr>
+                        <tr><td>+4</td><td>Covardia Instintiva</td><td>Seu instinto de autopreservação é extremamente forte. Sempre que um aliado cair a 0 PV ou você sofrer mais de metade do seu PV em um único ataque, você deve fazer uma Salvaguarda de Carisma CD 15 ou fugir/retirar-se no seu próximo turno.</td></tr>
                         <tr><td>+1~3</td><td>Código de Honra Rígido</td><td>Você segue um código pessoal inflexível. Quando esse código entrar em conflito com uma situação vantajosa, você sofre desvantagem em todos os testes até resolver o conflito de acordo com seu código (valor de pontos define quão restritivo é o código).</td></tr>
                         <tr><td>+3</td><td>Aleijado / Lesão Permanente</td><td>Uma lesão antiga limita você. Escolha uma limitação permanente (ex: manca, braço fraco, pulmão danificado). Você sofre -2 em testes relacionados a essa limitação e seu deslocamento é reduzido em 1,5m se for na perna.</td></tr>
                         <tr><td>+2</td><td>Problema Visual</td><td>Sua visão é permanentemente ruim. Você sofre desvantagem em testes de percepção visual a longa distância e em condições de baixa luz (mesmo com visão no escuro, se aplicável).</td></tr>
                         <tr><td>+3~5</td><td>Cegueira Parcial</td><td>Você tem perda significativa de visão (valor define o grau). Você sofre desvantagem em todos os testes de ataque à distância e em testes de percepção visual. No nível 5, você é considerado cego em combate à distância.</td></tr>
                         <tr><td>+3</td><td>Trauma Psíquico</td><td>Você carrega memórias traumáticas das Torres. Sempre que enfrentar uma situação que lembre um trauma passado (Mestre decide), você deve fazer uma Salvaguarda de Intelecto ou Carisma CD 15 ou perder 1d4 de Sanidade e ficar abalado por 1d4 rodadas.</td></tr>
-                        <tr><td>+4</td><td>Alma Instável</td><td>Seu Núcleo é volátil. Sempre que você gastar 5 ou mais de Núcleo em um único turno, role uma Salvaguarda de Alma CD 15. Em falha, você ganha 1 ponto de Corrupção e sofre 1d6 de dano psíquico.</td></tr>
+                        <tr><td>+4</td><td>Alma Instável</td><td>Seu PE é volátil. Sempre que você gastar 5 ou mais de PE em um único turno, role uma Salvaguarda de Alma CD 15. Em falha, você ganha 1 ponto de Corrupção e sofre 1d6 de dano psíquico.</td></tr>
                         <tr><td>+3</td><td>Inimigo Marcado</td><td>Uma entidade poderosa (pessoa, monstro ou organização) te caça ativamente. O Mestre pode introduzir esse inimigo ou seus agentes em momentos inoportunos, forçando confrontos ou complicações.</td></tr>
                         <tr><td>+2</td><td>Dependência de um Item</td><td>Sua Alma está ligada a um objeto específico. Se você perder ou ficar sem esse item por mais de 24 horas, você sofre -2 em todos os testes e perde acesso a um de seus poderes principais até recuperá-lo.</td></tr>
                         <tr><td>+2</td><td>Medo de um Tipo de Monstro</td><td>Você tem pavor profundo de um tipo específico de criatura (ex: insetos gigantes, mortos-vivos, humanoides distorcidos). Contra esse tipo, você sofre desvantagem em todos os testes e ataques, e deve fazer Salvaguarda de Carisma para não fugir ou congelar.</td></tr>
                         <tr><td>+3</td><td>Eco Mental</td><td>Você ocasionalmente escuta ecos de monstros que já enfrentou. Uma vez por cena, o Mestre pode forçar você a fazer um teste de Sanidade CD 14. Em falha, você perde 1d4 de Sanidade e fica distraído por 1 rodada.</td></tr>
                         <tr><td>+4</td><td>Sede de Poder</td><td>Você tem dificuldade em recuar ou ser cauteloso quando há chance de evolução. Sempre que tiver a oportunidade de absorver um núcleo poderoso, você deve fazer uma Salvaguarda de Alma CD 16 para resistir ao impulso, mesmo que seja obviamente perigoso.</td></tr>
-                        <tr><td>+3</td><td>Corpo Desarmonizado</td><td>Existe um descompasso entre seu corpo e sua Alma. Você se cansa mais rápido ao usar poderes. Sempre que usar um poder que custe 3+ de Núcleo, sofra 1 ponto de Exaustão adicional.</td></tr>
+                        <tr><td>+3</td><td>Corpo Desarmonizado</td><td>Existe um descompasso entre seu corpo e sua Alma. Você se cansa mais rápido ao usar poderes. Sempre que usar um poder que custe 3+ de PE, sofra 1 nível de Exaustão adicional.</td></tr>
                         <tr><td>+2</td><td>Marca Visível</td><td>Sua Alma deixou marcas físicas visíveis. Você sofre -2 em testes sociais com humanos que não o conhecem bem, e tem +1 de risco de atrair atenção hostil de monstros e facções preconceituosas.</td></tr>
-                        <tr><td>+2</td><td>Sono Instável</td><td>Você tem dificuldade para dormir profundamente. Durante um descanso completo, role 1d6. Em 1–3, você só recupera metade do HP e STA normal, e não recupera Sanidade.</td></tr>
+                        <tr><td>+2</td><td>Sono Instável</td><td>Você tem dificuldade para dormir profundamente. Durante um descanso completo, role 1d6. Em 1–3, você só recupera metade do PV e STA normal, e não recupera Sanidade.</td></tr>
                         <tr><td>+4</td><td>Rejeição da Torre</td><td>A Torre parece te rejeitar ativamente. Você sofre desvantagem em todas as rolagens de Risco da Torre e eventos aleatórios dentro de Torres. Além disso, monstros parecem te notar mais facilmente.</td></tr>
                         <tr><td>+3</td><td>Empatia Excessiva</td><td>Você sente o sofrimento alheio com intensidade dolorosa. Sempre que um aliado próximo sofrer dano grave ou trauma, você deve fazer uma Salvaguarda de Carisma CD 14 ou perder 1d4 de Sanidade.</td></tr>
                         <tr><td>+2</td><td>Dependência Emocional</td><td>Você se apega demais a pessoas ou objetos importantes. Se um aliado próximo ou item amado for perdido ou ameaçado, você sofre -2 em todos os testes até resolver a situação ou fazer um teste de Sanidade CD 15.</td></tr>
@@ -16001,7 +16006,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>+3</td><td>Pavor do Vazio</td><td>Você tem medo profundo de espaços abertos, andares muito altos ou o vazio das Torres. Em áreas expostas ou com grande altura, sofre desvantagem em todos os testes e deve fazer Salvaguarda contra pânico se ficar sozinho.</td></tr>
                         <tr><td>+2</td><td>Lealdade Cega</td><td>Você é excessivamente leal a um grupo, líder ou ideal. Quando esse grupo ou ideal está em perigo, você tem dificuldade em recuar ou tomar decisões frias (desvantagem em testes de raciocínio estratégico nessas situações).</td></tr>
                         <tr><td>+4</td><td>Cicatriz da Torre</td><td>Uma cicatriz física e espiritual da Torre dói quando você está perto de fontes de corrupção. Em áreas com alta corrupção ou andares profundos, você sofre -1 em todos os testes e perde 1 ponto de Sanidade a cada 4 horas.</td></tr>
-                        <tr><td>+3</td><td>Desejo de Morte</td><td>Em momentos de grande estresse ou desespero, você sente um impulso suicida. Quando reduzido a menos de 25% do HP, deve fazer uma Salvaguarda de Carisma CD 16 ou agir de forma temerária (sem se defender adequadamente) no próximo turno.</td></tr>
+                        <tr><td>+3</td><td>Desejo de Morte</td><td>Em momentos de grande estresse ou desespero, você sente um impulso suicida. Quando reduzido a menos de 25% do PV, deve fazer uma Salvaguarda de Carisma CD 16 ou agir de forma temerária (sem se defender adequadamente) no próximo turno.</td></tr>
                         <tr><td>+2</td><td>Fragmento de Outro</td><td>Uma pequena parte de uma entidade antiga vive dentro de você. Uma vez por cena, o Mestre pode assumir temporariamente controle de suas ações por 1 rodada (o fragmento age de forma alienígena, mas não necessariamente hostil).</td></tr>
 
                         <!-- NOVAS FRAQUEZAS -->
@@ -16021,7 +16026,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="system-card">
                 <strong>Exemplo 2 — Fome da Alma + Sede de Poder</strong><br>
-                Você tem Fome da Alma (recupera Núcleo/Sanidade ao absorver núcleos fortes) e Sede de Poder (impulso difícil de resistir). Durante uma incursão, você encontra um núcleo extremamente poderoso de um monstro muito acima do seu nível. O conflito interno entre "eu preciso disso para sobreviver" e "isso pode me destruir" pode gerar um momento dramático incrível.
+                Você tem Fome da Alma (recupera PE/Sanidade ao absorver núcleos fortes) e Sede de Poder (impulso difícil de resistir). Durante uma incursão, você encontra um núcleo extremamente poderoso de um monstro muito acima do seu nível. O conflito interno entre "eu preciso disso para sobreviver" e "isso pode me destruir" pode gerar um momento dramático incrível.
             </div>
 
             <div class="system-card">
@@ -16311,7 +16316,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <th>Ofensiva Pura (foco total em dano)</th>
                             <th>Mista (dano + efeitos/condições complexas)</th>
                             <th>Padrão / Equilibrada (efeitos básicos)</th>
-                            <th>Custo Base (principalmente Núcleo)</th>
+                            <th>Custo Base (principalmente PE)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -16320,48 +16325,48 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>2d10 + mod</td>
                             <td>2d6 + mod</td>
                             <td>2d8 + mod</td>
-                            <td>2 Núcleo</td>
+                            <td>2 PE</td>
                         </tr>
                         <tr>
                             <td><strong>1</strong></td>
                             <td>3d10 + mod</td>
                             <td>3d6 + mod</td>
                             <td>3d8 + mod</td>
-                            <td>4 Núcleo</td>
+                            <td>4 PE</td>
                         </tr>
                         <tr>
                             <td><strong>2</strong></td>
                             <td>4d10 + mod</td>
                             <td>4d6 + mod</td>
                             <td>4d8 + mod</td>
-                            <td>6 Núcleo</td>
+                            <td>6 PE</td>
                         </tr>
                         <tr>
                             <td><strong>3</strong></td>
                             <td>5d10 + mod</td>
                             <td>5d6 + mod</td>
                             <td>5d8 + mod</td>
-                            <td>8 Núcleo</td>
+                            <td>8 PE</td>
                         </tr>
                         <tr>
                             <td><strong>4</strong></td>
                             <td>6d10 + mod</td>
                             <td>6d6 + mod</td>
                             <td>6d8 + mod</td>
-                            <td>10 Núcleo</td>
+                            <td>10 PE</td>
                         </tr>
                         <tr>
                             <td><strong>5</strong></td>
                             <td>7d10 + mod</td>
                             <td>7d6 + mod</td>
                             <td>7d8 + mod</td>
-                            <td>12 Núcleo</td>
+                            <td>12 PE</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <p><strong>Sobre o Custo:</strong> O custo das técnicas é focado principalmente em <strong>pontos de energia (Núcleo)</strong>. A Stamina (STA) é gasta principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (manutenção, campos, auras, etc.). O custo em Núcleo começa em 2 no Nível 0 e aumenta de 2 em 2 a cada nível.</p>
+            <p><strong>Sobre o Custo:</strong> O custo das técnicas é focado principalmente em <strong>pontos de energia (PE)</strong>. A Stamina (STA) é gasta principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (manutenção, campos, auras, etc.). O custo em PE começa em 2 no Nível 0 e aumenta de 2 em 2 a cada nível.</p>
 
             <ul>
                 <li><strong>Ofensiva Pura (d10)</strong>: Técnicas cujo único propósito é causar o máximo de dano possível. Não costumam ter efeitos adicionais complexos.</li>
@@ -16449,7 +16454,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 • Invoca uma manifestação secundária ou "aspecto" semi-independente do poder que age por várias rodadas (1d4+1 ou mais), podendo ser um campo persistente, uma entidade conceitual menor, uma maldição ativa ou um eco que repete ou amplia a técnica original.<br>
                                 • Aplica uma "quebra conceitual" grave que remove ou suprime permanentemente (por cena ou até ser reparado de forma custosa) uma resistência, imunidade, regeneração, bônus importante ou até o acesso a uma capacidade chave do alvo diretamente ligada ao conceito do poder.<br>
                                 • Permite um "juízo da Alma" poderoso: o alvo deve superar um teste conceitual difícil baseado no Poder Principal do usuário; em falha, sofre um efeito narrativo e mecânico grave (ex: para um poder de justiça, o alvo é forçado a "pagar" por atos passados com perda de recursos ou ações; para um poder de ecos, o alvo perde a capacidade de se comunicar ou ouvir por cena).<br>
-                                • O efeito escala diretamente com o nível de Ascensão do usuário e permite drenar um recurso de forma semi-permanente (ex: reduzir o máximo de STA, Núcleo ou Sanidade do alvo por cena, ou impor uma penalidade acumulativa).<br>
+                                • O efeito escala diretamente com o nível de Ascensão do usuário e permite drenar um recurso de forma semi-permanente (ex: reduzir o máximo de STA, PE ou Sanidade do alvo por cena, ou impor uma penalidade acumulativa).<br>
                                 • Cria um laço conceitual bidirecional forte que permite ao usuário transferir parte do dano, condições ou efeitos negativos sofridos de volta para o alvo, ou compartilhar poder de forma poderosa com aliados próximos (bônus significativos ou cura conceitual).<br>
                                 • A técnica amplifica drasticamente a atenção da Torre sobre o alvo (e possivelmente sobre o usuário), podendo ser usada taticamente para forçar eventos aleatórios, distrair inimigos poderosos ou criar aberturas — mas traz riscos graves de corrupção, atenção hostil ou consequências narrativas para todos envolvidos.
                             </td>
@@ -16464,7 +16469,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><strong>Escolha o Nível</strong> (0 a 5). O Nível máximo disponível é geralmente igual ao seu número atual de Despertares de Poder (ou seu nível de Ascensão, à critério do Mestre). Nível 0 representa técnicas básicas ou recém-descobertas.</li>
                 <li><strong>Defina o Conceito</strong>: "O que essa técnica faz dentro do meu poder?" Ex: Para um poder de "Espada" → "Corte que drena força" (Ofensiva).</li>
                 <li><strong>Consulte as Tabelas</strong>: Escolha a linha de dado de acordo com a natureza da técnica (d10 para ofensiva pura, d6 para mistas, d8 para equilibradas). Use os exemplos de efeitos e poderes acompanhantes abaixo como inspiração para enriquecer sua técnica com camadas temáticas e mecânicas adicionais (adapte ao tipo escolhido).</li>
-                <li><strong>Defina Custo</strong>: O custo principal é em Núcleo (começa em 2 no Nível 0 e sobe de 2 em 2 por nível). Stamina é usada principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (campos, auras, manutenção, etc.).</li>
+                <li><strong>Defina Custo</strong>: O custo principal é em PE (começa em 2 no Nível 0 e sobe de 2 em 2 por nível). Stamina é usada principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (campos, auras, manutenção, etc.).</li>
                 <li><strong>Equilíbrio</strong>: Se a técnica for muito forte para o nível, adicione um custo extra, limitação conceitual ou cooldown (ex: só 1x por cena).</li>
                 <li><strong>Nome e Flavor</strong>: Dê um nome que combine com seu poder e descreva o visual/efeito narrativo.</li>
             </ol>
@@ -16474,13 +16479,13 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 <strong>Poder: Espada de Justiça Impiedosa (Elara)</strong><br><br>
                 <strong>Ofensiva Nível 1 – "Corte Executor"</strong><br>
-                Dano: 3d8 + mod Alma (ofensiva pura). Custo: 4 Núcleo. Efeito: O alvo sofre -1 em testes de Vigor até o fim da cena (sangramento conceitual).<br><br>
+                Dano: 3d8 + mod Alma (ofensiva pura). Custo: 4 PE. Efeito: O alvo sofre -1 em testes de Vigor até o fim da cena (sangramento conceitual).<br><br>
                 
                 <strong>Defensiva Nível 2 – "Lâmina Protetora"</strong><br>
-                Efeito: Absorve 3d8 dano de um ataque contra você ou aliado próximo (mista). Se o escudo absorver todo o dano, você causa 1d6 de retaliate no atacante. Custo: 6 Núcleo + 2 STA por rodada de manutenção (Reação).<br><br>
+                Efeito: Absorve 3d8 dano de um ataque contra você ou aliado próximo (mista). Se o escudo absorver todo o dano, você causa 1d6 de retaliate no atacante. Custo: 6 PE + 2 STA por rodada de manutenção (Reação).<br><br>
                 
                 <strong>Suplementar Nível 3 – "Campo de Lâminas Orbitais"</strong><br>
-                Efeito: Cria um campo ao seu redor por 1d4 rodadas. Inimigos que entrarem ou começarem o turno dentro sofrem 4d6 dano e têm desvantagem em testes de movimento. Custo: 8 Núcleo + 3 STA por rodada de manutenção. (Alcance e área definidos pelo conceito do poder).
+                Efeito: Cria um campo ao seu redor por 1d4 rodadas. Inimigos que entrarem ou começarem o turno dentro sofrem 4d6 dano e têm desvantagem em testes de movimento. Custo: 8 PE + 3 STA por rodada de manutenção. (Alcance e área definidos pelo conceito do poder).
             </div>
 
             <div class="system-card">
@@ -16489,19 +16494,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 Efeito: Você pode ouvir ecos de conversas ou eventos importantes que aconteceram no local nas últimas 24 horas (teste de Intelecto baseado em atributo + perícia relevante para detalhes claros). Não gasta recursos.<br><br>
                 
                 <strong>Ofensiva Nível 2 – "Grito do Silêncio"</strong><br>
-                Dano: 3d8 psíquico (mista) + o alvo fica surdo por 1 rodada (não pode ouvir comandos ou usar poderes baseados em som). Custo: 6 Núcleo.<br><br>
+                Dano: 3d8 psíquico (mista) + o alvo fica surdo por 1 rodada (não pode ouvir comandos ou usar poderes baseados em som). Custo: 6 PE.<br><br>
                 
                 <strong>Defensiva Nível 3 – "Bolha de Ausência"</strong><br>
-                Efeito: Cria uma bolha onde sons e poderes auditivos/mentais são suprimidos por 1d4 rodadas. Aliados dentro ganham +2 em Salvaguardas contra ilusão e medo. Inimigos dentro têm desvantagem em testes de percepção. Custo: 8 Núcleo + 3 STA por rodada de manutenção. (Alcance e tamanho definidos pelo conceito do poder).
+                Efeito: Cria uma bolha onde sons e poderes auditivos/mentais são suprimidos por 1d4 rodadas. Aliados dentro ganham +2 em Salvaguardas contra ilusão e medo. Inimigos dentro têm desvantagem em testes de percepção. Custo: 8 PE + 3 STA por rodada de manutenção. (Alcance e tamanho definidos pelo conceito do poder).
             </div>
 
             <div class="system-card">
                 <strong>Poder: Telecinese (exemplo genérico)</strong><br><br>
                 <strong>Suplementar Nível 1 – "Empurrão Telecinético"</strong><br>
-                Efeito: Empurra um alvo para trás. Se o alvo bater em obstáculo, sofre 3d6 dano (mista). Custo: 4 Núcleo. (Alcance definido pelo conceito do poder).<br><br>
+                Efeito: Empurra um alvo para trás. Se o alvo bater em obstáculo, sofre 3d6 dano (mista). Custo: 4 PE. (Alcance definido pelo conceito do poder).<br><br>
                 
                 <strong>Ofensiva Nível 4 – "Esmagamento Gravitacional"</strong><br>
-                Dano: 6d10 + mod em alvo único (ofensiva pura). O alvo fica imobilizado por 1 rodada (salvaguarda de Vigor baseada em atributo + perícia relevante para resistir). Custo: 10 Núcleo.<br><br>
+                Dano: 6d10 + mod em alvo único (ofensiva pura). O alvo fica imobilizado por 1 rodada (salvaguarda de Vigor baseada em atributo + perícia relevante para resistir). Custo: 10 PE.<br><br>
                 
                 <strong>Passiva Nível 2 – "Leveza Mental"</strong><br>
                 Efeito: Você pode levitar permanentemente (sem custo). Ganha +1 em testes de Destreza para equilíbrio e pode ignorar terreno difícil de chão. Custo de manutenção: 2 STA por rodada se quiser manter em combate intenso.
@@ -17136,6 +17141,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         <p>Subir de nível não é apenas acumular poder. É permitir que sua Alma se expanda — e isso muda quem você é, como o mundo te percebe e como a Torre te observa.</p>
 
+        <div class="lore-box">
+            <strong>Dois eixos paralelos:</strong> a <strong>Espiral da Ascensão (0–10)</strong> é a evolução da Alma por absorção de núcleos — Despertares, marcas e atenção da Torre. Ela é <strong>paralela</strong> ao Nível de Personagem (1–20, via XP), que alimenta Maestria, PV/STA/PE e perícias. Não são a mesma escala.
+        </div>
+
         <p>A partir do nível Manifesto, o Desperto deixa de ser completamente humano. Sua presença começa a pesar no ambiente. Pessoas comuns sentem instintivamente que algo neles não é mais natural.</p>
 
         <div class="table-wrapper">
@@ -17308,7 +17317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </ul>
 
             <h2>A Tabela de Progressão</h2>
-            <p>Cada nível de personagem exige uma quantidade crescente de XP para ser alcançado:</p>
+            <p>Cada nível de personagem exige uma quantidade crescente de XP para ser alcançado. Lembre-se: o Nível de Personagem (1–20) é alimentado por XP; a Ascensão (0–10) por núcleos — dois eixos independentes.</p>
 
             <div class="table-wrapper">
                 <table>
@@ -17343,7 +17352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Aprendiz</strong> (níveis 6–10): já enfrentou diversas ameaças e começa a ganhar reconhecimento.<br>
                 • <strong>Veterano</strong> (níveis 11–15): experiente, capaz de influenciar acontecimentos importantes.<br>
                 • <strong>Elite</strong> (níveis 16–20): entre os indivíduos mais poderosos do mundo. Cada nível é uma grande conquista.<br>
-                • <strong>Transcendente</strong> (níveis 21–25): níveis obtidos apenas por eventos únicos da narrativa, sem valores fixos de XP.
+                • Níveis além do 20 (até 25) existem apenas como faixa de <strong>eventos únicos narrativos</strong>, sem tabela de XP — a Maestria, PV/STA/PE e perícias não têm fórmulas definidas além do nível 20.
             </div>
 
             <div class="lore-box">
@@ -17356,30 +17365,30 @@ document.addEventListener('DOMContentLoaded', () => {
         <h2 id="moeda">A Moeda é Espíritos (Esp)</h2>
         <p>Quando os governos caíram e o papel-moeda perdeu todo o valor, os sobreviventes precisavam de algo universal, impossível de falsificar e que tivesse valor real. Os núcleos se tornaram essa moeda.</p>
 
-        <p>A unidade básica é o <strong>Espírito (Esp)</strong> — o equivalente ao núcleo puro de uma Prole, a criatura mais fraca e comum. Carregar núcleos de alto valor é extremamente perigoso. Muitos Despertos morrem não dentro das Torres, mas logo depois de sair delas, vítimas de emboscadas por causa do que trazem no bolso.</p>
+        <p>A unidade básica é o <strong>Espírito (Esp)</strong> — o equivalente ao núcleo puro de uma Larva, a criatura mais fraca e comum. Carregar núcleos de alto valor é extremamente perigoso. Muitos Despertos morrem não dentro das Torres, mas logo depois de sair delas, vítimas de emboscadas por causa do que trazem no bolso.</p>
 
         <div class="table-wrapper">
             <table>
                 <thead>
-                    <tr><th>Núcleo</th><th>Pontos de Evolução</th><th>Valor em Espíritos (Esp)</th></tr>
+                    <tr><th>Núcleo (Tier)</th><th>Pontos de Evolução</th><th>Valor em Espíritos (Esp)</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Prole</td><td>10</td><td>1 Esp</td></tr>
-                    <tr><td>Sombra</td><td>25</td><td>3 Esp</td></tr>
-                    <tr><td>Torvo</td><td>60</td><td>7 Esp</td></tr>
-                    <tr><td>Carniceiro</td><td>120</td><td>15 Esp</td></tr>
-                    <tr><td>Pesadelo</td><td>240</td><td>30 Esp</td></tr>
-                    <tr><td>Abominação</td><td>450</td><td>55 Esp</td></tr>
-                    <tr><td>Cataclismo</td><td>900</td><td>110 Esp</td></tr>
-                    <tr><td>Primordial</td><td>1.700</td><td>200 Esp</td></tr>
-                    <tr><td>Apocalipse</td><td>3.000</td><td>350 Esp</td></tr>
+                    <tr><td>Larva (Tier 1)</td><td>10</td><td>1 Esp</td></tr>
+                    <tr><td>Rastejante (Tier 2)</td><td>50</td><td>3 Esp</td></tr>
+                    <tr><td>Disforme (Tier 3)</td><td>125</td><td>7 Esp</td></tr>
+                    <tr><td>Carnífice (Tier 4)</td><td>320</td><td>15 Esp</td></tr>
+                    <tr><td>Profano (Tier 5)</td><td>750</td><td>30 Esp</td></tr>
+                    <tr><td>Aberrante (Tier 6)</td><td>1.700</td><td>55 Esp</td></tr>
+                    <tr><td>Ruína (Tier 7)</td><td>4.200</td><td>110 Esp</td></tr>
+                    <tr><td>Arcaico (Tier 8)</td><td>9.500</td><td>200 Esp</td></tr>
+                    <tr><td>Calamidade (Tier 9)</td><td>21.000</td><td>350 Esp</td></tr>
                 </tbody>
             </table>
         </div>
 
-        <p>Os <strong>Pontos de Evolução</strong> representam a energia real que o núcleo fornece quando absorvido para a Ascensão. Mesmo os mais poderosos (como um Apocalipse) oferecem um avanço significativo, mas nunca substituem o acúmulo constante de muitos núcleos ao longo de múltiplas incursões — exatamente como exige a expansão da Alma.</p>
+        <p>Os <strong>Pontos de Evolução</strong> representam a energia real que o núcleo fornece quando absorvido para a Ascensão. Mesmo os mais poderosos (como um Calamidade) oferecem um avanço significativo, mas nunca substituem o acúmulo constante de muitos núcleos ao longo de múltiplas incursões — exatamente como exige a expansão da Alma.</p>
 
-        <p><strong>Núcleos com Runa</strong> valem de 2 a 10 vezes mais, dependendo da raridade da runa. Núcleos são indivisíveis — para valores menores, usa-se núcleos de Prole como troco.</p>
+        <p><strong>Núcleos com Runa</strong> valem de 2 a 10 vezes mais, dependendo da raridade da runa. Núcleos são indivisíveis — para valores menores, usa-se núcleos de Larva como troco.</p>
 
         <div class="system-card">
             <strong>O Risco da Moeda:</strong><br>
@@ -17766,8 +17775,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="system-card">
             <strong>2. Venda Segura de Núcleos</strong><br><br>
-            Vender núcleos diretamente na rua é convite para ser roubado ou morto. Um Barman de confiança cobra uma taxa (geralmente 10–15%) mas garante que a transação não deixe rastros e que o dinheiro não seja marcado.<br><br>
-            Barmans de qualidade Excelente ou superior podem até “lavar” núcleos de fontes duvidosas.
+            Vender núcleos diretamente na rua é convite para ser roubado ou morto. Um Barman de confiança cobra uma taxa sobre a venda, que varia pela qualidade do Barman — a escala oficial:<br><br>
+            • <strong>Comum:</strong> 18%<br>
+            • <strong>Bom:</strong> 12%<br>
+            • <strong>Excelente:</strong> 8%<br>
+            • <strong>Lendário:</strong> 5% ou favores<br><br>
+            Em troca, o Barman garante que a transação não deixe rastros e que o dinheiro não seja marcado.<br><br>
+            Barmans de qualidade Excelente ou superior podem até "lavar" núcleos de fontes duvidosas.<br><br>
+            <em>Detalhes por qualidade no Livro do Mestre.</em>
         </div>
 
         <div class="system-card">
@@ -17814,9 +17829,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="system-card">
                 <strong>Conceitos Fundamentais:</strong><br><br>
-                • <strong>HP</strong> — Vida física. Quando chega a 0, o personagem fica incapacitado e corre risco de morte.<br>
-                • <strong>STA (Stamina)</strong> — O principal combustível de combate e esforço físico. Representa fôlego, concentração e capacidade de continuar lutando.<br>
-                • <strong>PE (Pontos de Energia)</strong> — A reserva de poder da Alma, com fórmula própria. Cada PE custa <strong>(STA máxima ÷ 2) ÷ PE máximo</strong> de Stamina (arredondado para cima, mínimo 1) — gastar todos os PE consome exatamente 50% da STA.
+                • <strong>PV</strong> — Vida física. Quando chega a 0, o personagem fica incapacitado e corre risco de morte. Fórmula na seção Atributos.<br>
+                • <strong>STA (Stamina)</strong> — Fôlego, concentração e canalização; o principal combustível de combate e esforço físico. Fórmula na seção Atributos.<br>
+                • <strong>PE</strong> — A energia da Alma (o antigo "Núcleo" das Técnicas agora é o número <strong>PE</strong>), com <strong>fórmula própria</strong>. A reserva de energia equivale à <strong>metade da STA máxima</strong>; <strong>custo por PE = (STA máxima ÷ 2) ÷ PE máximo</strong> (arredondado para cima, mínimo 1). Gastar todo o PE consome exatamente 50% da STA — a ponte correta entre PE e STA.
             </div>
 
             <h2 id="testes-atributo">Testes de Atributo</h2>
@@ -17912,7 +17927,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td><strong>Destreza</strong></td><td>Efeitos de área, explosões, armadilhas, Névoa traiçoeira</td><td>Esquivar de uma onda de chamas ou atravessar um corredor instável</td></tr>
                         <tr><td><strong>Vigor</strong></td><td>Venenos, doenças, exaustão, sangramento, dano físico bruto</td><td>Resistir a gás tóxico ou infecção de monstro</td></tr>
                         <tr><td><strong>Intelecto</strong></td><td>Ilusões, manipulação mental, enigmas da Torre</td><td>Perceber uma ilusão ou resolver um paradoxo mental</td></tr>
-                        <tr><td><strong>Alma</strong></td><td>Corrupção, drenagem de Núcleo, possessão, ataques espirituais</td><td>Resistir a maldição de núcleo ou ser possuído por uma entidade</td></tr>
+                        <tr><td><strong>Alma</strong></td><td>Corrupção, drenagem de PE, possessão, ataques espirituais</td><td>Resistir a maldição de núcleo ou ser possuído por uma entidade</td></tr>
                         <tr><td><strong>Carisma</strong></td><td>Medo paralisante, dominação psíquica, influência sobrenatural</td><td>Resistir ao grito de uma Ruína ou ser dominado mentalmente</td></tr>
                     </tbody>
                 </table>
@@ -17998,7 +18013,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Magia/Feitiçaria (Alma):</strong> identificar rituais, maldições e técnicas inimigas — apenas quem estudou reconhece o que a Torre esculpiu.<br>
                 • <strong>Medicina (Intelecto):</strong> estabilizar um aliado à beira da morte (0 PV) — sem Maestria, o Mestre pode exigir desvantagem ou negar a tentativa.<br>
                 • <strong>Religião (Intelecto):</strong> conduzir ou quebrar rituais de invocação sem ser consumido por eles.<br><br>
-                <em>Exemplo:</em> Lyra, sem Maestria em Medicina, pode enfaixar um corte (teste comum de Intelecto), mas não consegue impedir que um aliado morrendo sangre até a morte. Apenas um aliado com Maestria em Medicina pode estabilizar — a Torre não perdoa meia medida.
+                <em>Exemplo:</em> Lira, sem Maestria em Medicina, pode enfaixar um corte (teste comum de Intelecto), mas não consegue impedir que um aliado morrendo sangre até a morte. Apenas um aliado com Maestria em Medicina pode estabilizar — a Torre não perdoa meia medida.
             </div>
 
             <h3>Visão Geral Rápida</h3>
@@ -18058,7 +18073,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 <strong>Perícias de Conhecimento e Percepção (Intelecto)</strong><br><br>
                 <strong>Intuição (Intelecto)</strong> — Ler o que não é dito, pressentir mentiras, captar o "humor" de um lugar ou criatura, sentir quando a Torre está prestes a agir. Excelente contra Barmans de qualidade duvidosa e para detectar quando um aliado está à beira de uma ruptura de Sanidade. Falha pode fazer você acreditar em ilusões confortáveis.<br><br>
-                <strong>Medicina (Intelecto)</strong> — Diagnosticar, tratar ferimentos de campo, extrair venenos, estabilizar ossos quebrados, impedir infecção de mordidas de monstro. Um sucesso permite estabilizar automaticamente um aliado a 0 HP (sem rolar o 1d20 normal) ou concede vantagem nos testes de morte/estabilização. Falha crítica pode piorar a ferida (+1 Exaustão ou risco de ganho de Corrupção via infecção).<br><br>
+                <strong>Medicina (Intelecto)</strong> — Diagnosticar, tratar ferimentos de campo, extrair venenos, estabilizar ossos quebrados, impedir infecção de mordidas de monstro. Um sucesso permite estabilizar automaticamente um aliado a 0 PV (sem rolar o 1d20 normal) ou concede vantagem nos testes de morte/estabilização. Falha crítica pode piorar a ferida (+1 Exaustão ou risco de ganho de Corrupção via infecção).<br><br>
                 <strong>Percepção (Intelecto)</strong> — Notar o que a maioria ignora: armadilhas sutis, movimentos na Névoa, sons abafados de monstros distantes, mudanças no padrão de runas, cheiro de sangue fresco ou corrupção. A perícia mais usada em exploração. Muitos traços e poderes defensivos interagem diretamente com ela.<br><br>
                 <strong>Astúcia (Intelecto)</strong> — Pensamento rápido e criativo sob pressão. Improvisar uma solução com materiais escassos ("essa runa quebrada + osso de rastejante = armadilha temporária"), resolver paradoxos mentais enviados pela Torre, deduzir a fraqueza conceitual de um monstro durante o combate.<br><br>
                 <strong>Investigação (Intelecto)</strong> — Busca metódica por pistas, análise forense de cenas de massacre, reconstrução de eventos a partir de fragmentos (pegadas, sangue seco, runas apagadas). Essencial depois de emboscadas ou para entender por que um andar inteiro foi "limpo".<br><br>
@@ -18069,7 +18084,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="system-card">
                 <strong>Perícias Sobrenaturais (Alma)</strong><br><br>
-                <strong>Magia (Alma)</strong> — Compreensão ampla e prática do poder da Alma e das energias cruas das Torres. Usada para identificar o "conceito" de uma técnica inimiga (o que ajuda a criar contra-poderes), ativar ou suprimir poderes complexos, canalizar Núcleo de forma mais eficiente (em sucesso, reduza o custo em 1 Núcleo ou 1 STA), ou analisar vestígios de uma Devoração recente. É a perícia "geral" do sobrenatural.<br><br>
+                <strong>Magia (Alma)</strong> — Compreensão ampla e prática do poder da Alma e das energias cruas das Torres. Usada para identificar o "conceito" de uma técnica inimiga (o que ajuda a criar contra-poderes), ativar ou suprimir poderes complexos, canalizar PE de forma mais eficiente (em sucesso, reduza o custo em 1 PE ou 1 STA), ou analisar vestígios de uma Devoração recente. É a perícia "geral" do sobrenatural.<br><br>
                 <strong>Feitiçaria (Alma)</strong> — Manipulação fina, ritualística e precisa de energias — diferente da Magia bruta. Foca em efeitos sutis de longa duração, maldições conceituais, criação de runas temporárias, possessão menor de objetos ou criaturas fracas, ou "costurar" essência de forma estável. Mais lenta que Magia em combate, mas muito mais versátil fora dele. Falhas aqui frequentemente geram Corrupção.<br><br>
                 <strong>Vontade (Alma)</strong> — A força interior que mantém sua Alma coesa contra a pressão da Torre. Resistir a corrupção ativa, manter controle sobre poderes que ameaçam escapar, suportar visões e vozes sem perder Sanidade, ou forçar um monstro a recuar conceitualmente. Quando treinada ou especializada, pode ser usada como salvaguarda de Alma (adicione o bônus da perícia). Falhas críticas em Vontade são das piores: ganho automático de Corrupção + possível Marca.
             </div>
@@ -18097,7 +18112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 • Toque corruptor: 1d10 + drenagem de STA
             </div>
 
-            <p>Todo uso significativo de poder consome <strong>STA e Núcleo</strong>. O custo exato deve ser definido no momento da criação ou evolução do poder, sempre buscando equilíbrio.</p>
+            <p>Todo uso significativo de poder consome <strong>STA e PE</strong>. O custo exato deve ser definido no momento da criação ou evolução do poder, sempre buscando equilíbrio.</p>
 
             <h2>Críticos e Falhas Críticas</h2>
             <p>O d20 carrega o peso do julgamento da Torre. Um resultado de <strong>20 natural</strong> é um momento de glória da Alma — além de <strong>dobrar o dano</strong>, role <strong>1d100</strong> na tabela de Acerto Crítico. Um resultado de <strong>1 natural</strong> é quando a Torre nota sua fraqueza — <strong>falha automática</strong> e rolagem de <strong>1d100</strong> na tabela de Falha Crítica.</p>
@@ -18145,11 +18160,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>23</td><td><strong>Área de Impacto</strong></td><td>O ataque atinge também 1 criatura adjacente ao alvo (dano reduzido pela metade).</td></tr>
                         <tr><td>24</td><td><strong>Desarme</strong></td><td>A arma/objeto do alvo cai no chão.</td></tr>
                         <tr><td>25</td><td><strong>Imobilização</strong></td><td>O alvo fica imobilizado até passar em uma Salvaguarda de Força.</td></tr>
-                        <tr><td>26</td><td><strong>Refluxo da Alma</strong></td><td>Você recupera 1d6 de Núcleo/PE.</td></tr>
+                        <tr><td>26</td><td><strong>Refluxo da Alma</strong></td><td>Você recupera 1d6 de PE.</td></tr>
                         <tr><td>27</td><td><strong>Fôlego Renovado</strong></td><td>Você recupera 1d6 de STA.</td></tr>
                         <tr><td>28</td><td><strong>Essência Roubada</strong></td><td>Você rouba 1 PE do alvo (se ele tiver).</td></tr>
                         <tr><td>29</td><td><strong>Canalização</strong></td><td>Seu próximo poder/Técnica custa metade do PE (mín. 1).</td></tr>
-                        <tr><td>30</td><td><strong>Resiliência</strong></td><td>Você recupera 1 ponto de Exaustão removido (se tiver).</td></tr>
+                        <tr><td>30</td><td><strong>Resiliência</strong></td><td>Você remove 1 nível de Exaustão (se tiver).</td></tr>
                         <tr><td>31</td><td><strong>Pavor Incutido</strong></td><td>O alvo deve passar em Salvaguarda de Carisma ou fica Amedrontado por 1 rodada.</td></tr>
                         <tr><td>32</td><td><strong>Lágrima na Alma</strong></td><td>O alvo perde 1d4 de Sanidade (se for um ser consciente).</td></tr>
                         <tr><td>33</td><td><strong>Visão da Queda</strong></td><td>O alvo tem uma visão aterrorizante: perde 1d6 de Sanidade ou fica abalado.</td></tr>
@@ -18213,7 +18228,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>91</td><td><strong>Julgamento da Alma</strong></td><td>O alvo deve passar em Salvaguarda de Alma ou é subjugado (perde a próxima ação).</td></tr>
                         <tr><td>92</td><td><strong>Corte do Destino</strong></td><td>O golpe fere o conceito do alvo: ele perde acesso a 1 Técnica/poder por 1d4 rodadas.</td></tr>
                         <tr><td>93</td><td><strong>Apocalipse Pessoal</strong></td><td>O alvo sofre dano de Alma igual ao seu mod de Alma (ignora RD) + fica abalado.</td></tr>
-                        <tr><td>94</td><td><strong>Transbordamento</strong></td><td>O dano é triplicado e você recupera 1d6 de Núcleo/PE.</td></tr>
+                        <tr><td>94</td><td><strong>Transbordamento</strong></td><td>O dano é triplicado e você recupera 1d6 de PE.</td></tr>
                         <tr><td>95</td><td><strong>Momento Épico</strong></td><td>O efeito do seu poder se repete no próximo turno sem custo.</td></tr>
                         <tr><td>96</td><td><strong>Imposição</strong></td><td>O alvo é forçado a fazer uma Salvaguarda de Alma contra medo paralisante ou fica imóvel 1 rodada.</td></tr>
                         <tr><td>97</td><td><strong>Ressonância</strong></td><td>Sua Alma ecoa: aliados recuperam 1d4 de STA, você perde 1 de Sanidade (o preço do êxtase).</td></tr>
@@ -18234,12 +18249,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </thead>
                     <tbody>
                         <tr><td>01</td><td><strong>Tropeço</strong></td><td>Você cai no chão (fica caído) e perde a Ação Bônus neste turno.</td></tr>
-                        <tr><td>02</td><td><strong>Gasto Inútil</strong></td><td>Você gasta o dobro de STA/Núcleo na tentativa falha.</td></tr>
+                        <tr><td>02</td><td><strong>Gasto Inútil</strong></td><td>Você gasta o dobro de STA/PE na tentativa falha.</td></tr>
                         <tr><td>03</td><td><strong>Foco Perdido</strong></td><td>Você perde a Concentração em todos os efeitos ativos.</td></tr>
                         <tr><td>04</td><td><strong>Nervos</strong></td><td>Você sofre Desvantagem no próximo teste até o fim do turno.</td></tr>
                         <tr><td>05</td><td><strong>Equívoco</strong></td><td>Você erra o alvo e atinge 1 criatura adjacente (aliado ou inimigo, Mestre escolhe).</td></tr>
                         <tr><td>06</td><td><strong>Fadiga</strong></td><td>Você ganha 1 nível de Exaustão.</td></tr>
-                        <tr><td>07</td><td><strong>Recuo da Alma</strong></td><td>Você perde 1d4 de Núcleo/PE.</td></tr>
+                        <tr><td>07</td><td><strong>Recuo da Alma</strong></td><td>Você perde 1d4 de PE.</td></tr>
                         <tr><td>08</td><td><strong>Dano Reverso</strong></td><td>Você sofre metade do dano que causaria.</td></tr>
                         <tr><td>09</td><td><strong>Ruptura Interna</strong></td><td>Você ganha 1 de Corrupção e perde 1d4 de Sanidade.</td></tr>
                         <tr><td>10</td><td><strong>Arma Instável</strong></td><td>Sua arma/poder falha: inutilizável por 1d4 rodadas (ou perde 1 dado de dano até reparo).</td></tr>
@@ -18248,7 +18263,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>13</td><td><strong>Golpe Defletido</strong></td><td>O alvo ganha +2 de CA contra você até o fim do combate.</td></tr>
                         <tr><td>14</td><td><strong>Postura Aberta</strong></td><td>Você sofre Desvantagem em Defesa até o início do seu próximo turno.</td></tr>
                         <tr><td>15</td><td><strong>Reação Alheia</strong></td><td>O alvo pode realizar 1 Ataque de Oportunidade contra você (sem gastar Reação).</td></tr>
-                        <tr><td>16</td><td><strong>Esforço Excessivo</strong></td><td>Você sofre 1d4 de dano de Sobrecarga (HP direto).</td></tr>
+                        <tr><td>16</td><td><strong>Esforço Excessivo</strong></td><td>Você sofre 1d4 de dano de Sobrecarga (PV direto).</td></tr>
                         <tr><td>17</td><td><strong>Puxão</strong></td><td>Uma criatura o agarra (Salvaguarda de Força para escapar).</td></tr>
                         <tr><td>18</td><td><strong>Voo</strong></td><td>Você é deslocado 1 zona na direção do golpe.</td></tr>
                         <tr><td>19</td><td><strong>Fratura Menor</strong></td><td>-1 em testes de Força ou Vigor até descanso completo.</td></tr>
@@ -18266,7 +18281,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>31</td><td><strong>Consumo Excessivo</strong></td><td>A tentativa drena você: perde 1d6 de STA extra.</td></tr>
                         <tr><td>32</td><td><strong>Dreno da Torre</strong></td><td>A Torre suga parte de você: perde 1 PE permanentemente até descanso completo.</td></tr>
                         <tr><td>33</td><td><strong>Instabilidade</strong></td><td>Seu poder fica instável: próximo uso tem Desvantagem.</td></tr>
-                        <tr><td>34</td><td><strong>Fenda no Núcleo</strong></td><td>Seu PE máximo é reduzido em 1 até um ritual de purificação.</td></tr>
+                        <tr><td>34</td><td><strong>Fenda no PE</strong></td><td>Seu PE máximo é reduzido em 1 até um ritual de purificação.</td></tr>
                         <tr><td>35</td><td><strong>Sobrecarga da Alma</strong></td><td>Você sofre 1d6 de dano psíquico (ignora RD).</td></tr>
                         <tr><td>36</td><td><strong>Fome da Essência</strong></td><td>Você sente um impulso de absorver um núcleo imediatamente (Salvaguarda de Alma).</td></tr>
                         <tr><td>37</td><td><strong>Vício de Poder</strong></td><td>Você ganha +1 de Corrupção (a tentação foi doce).</td></tr>
@@ -18305,11 +18320,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>70</td><td><strong>Silêncio</strong></td><td>Você fica sem palavras/rosto reconhecível por 1d4 rodadas (sem testes sociais).</td></tr>
                         <tr><td>71</td><td><strong>Exaustão Súbita</strong></td><td>Você ganha 2 níveis de Exaustão.</td></tr>
                         <tr><td>72</td><td><strong>Sobrecarga Total</strong></td><td>Você perde metade da STA restante.</td></tr>
-                        <tr><td>73</td><td><strong>Apagão de Núcleo</strong></td><td>Você perde metade do PE restante.</td></tr>
+                        <tr><td>73</td><td><strong>Apagão de PE</strong></td><td>Você perde metade do PE restante.</td></tr>
                         <tr><td>74</td><td><strong>Colapso da Alma</strong></td><td>Você fica à beira da Ruptura: perde 1d6 de Sanidade e 1 de Corrupção.</td></tr>
                         <tr><td>75</td><td><strong>Morte Branca</strong></td><td>Você desmaia por 1d4 rodadas (PV &gt; 0, mas inconsciente).</td></tr>
                         <tr><td>76</td><td><strong>Ferimento Grave</strong></td><td>Você sofre um ferimento que exige tratamento (perícia Medicina ou descanso longo).</td></tr>
-                        <tr><td>77</td><td><strong>Sangramento Interno</strong></td><td>Você perde 1d4 de HP no início de cada rodada até ser estabilizado.</td></tr>
+                        <tr><td>77</td><td><strong>Sangramento Interno</strong></td><td>Você perde 1d4 de PV no início de cada rodada até ser estabilizado.</td></tr>
                         <tr><td>78</td><td><strong>Deslocamento</strong></td><td>Você é arremessado para Longa distância e sofre 1d6 de dano.</td></tr>
                         <tr><td>79</td><td><strong>Fratura Exposta</strong></td><td>-1 permanente em um atributo físico até tratamento sério (Mestre decide qual).</td></tr>
                         <tr><td>80</td><td><strong>Perto da Morte</strong></td><td>Você cai a 0 PV em vez de falhar (se já estiver ferido, sofre 1 ferimento).</td></tr>
@@ -18351,7 +18366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p><strong>Exemplos comuns de Vantagem:</strong> Ataques contra alvos desprevenidos, uso de um poder extremamente coerente com a personalidade, ajuda de aliados competentes, traços como "Instinto de Sobrevivência".</p>
 
-            <p><strong>Exemplos comuns de Desvantagem:</strong> Lutar na Névoa densa, usar um poder enquanto exausto ou com Núcleo baixo, enfrentar algo que explora uma Fraqueza da Alma do personagem, a Torre "notando" o grupo.</p>
+            <p><strong>Exemplos comuns de Desvantagem:</strong> Lutar na Névoa densa, usar um poder enquanto exausto ou com PE baixo, enfrentar algo que explora uma Fraqueza da Alma do personagem, a Torre "notando" o grupo.</p>
 
             <h2>Ousadia com Custo — Push</h2>
             <p>Quando o destino vira as costas, ainda existe uma última moeda — e ela não é paga em ouro.</p>
@@ -18365,7 +18380,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2 id="exemplos-praticos">Exemplos Práticos de Combate e Resolução</h2>
             <p>Abaixo você vai ver como o sistema funciona na prática, explicado de forma clara e passo a passo. Cada exemplo mostra um tipo diferente de situação que um jogador pode enfrentar: combate direto, uso de poderes em ambiente hostil, e os riscos de poderes mentais quando a Sanidade está baixa.</p>
 
-            <p><strong>Como ler estes exemplos:</strong> Preste atenção não só no que é rolado, mas também no <strong>custo</strong> (STA e Núcleo), nas <strong>consequências</strong> de falha (Sanidade, Corrupção, Exaustão) e em como o ambiente da Torre influencia as rolagens.</p>
+            <p><strong>Como ler estes exemplos:</strong> Preste atenção não só no que é rolado, mas também no <strong>custo</strong> (STA e PE), nas <strong>consequências</strong> de falha (Sanidade, Corrupção, Exaustão) e em como o ambiente da Torre influencia as rolagens.</p>
 
             <div class="lore-box">
                 <strong>Hierarquia de Dificuldade das Torres (referência importante):</strong><br><br>
@@ -18392,7 +18407,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Resumo do Poder:</strong><br>
                 • <strong>Nome:</strong> Lâmina da Alma<br>
                 • <strong>Dano:</strong> 1d10 + Modificador de Alma<br>
-                • <strong>Custo por ataque:</strong> 3 STA + 2 Núcleo<br>
+                • <strong>Custo por ataque:</strong> 3 STA + 2 PE<br>
                 • <strong>Atributo principal:</strong> Alma
             </div>
 
@@ -18403,7 +18418,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><strong>Jogada de Ataque:</strong> d20 + Mod Alma (+3) + Maestria (+2) = d20 + 5.<br>
                     Ele rola 17 → 22 no total. Acerta fácil contra CA 16.</li>
                 <li><strong>Dano:</strong> 1d10 + 3. Rola 8 → causa <strong>11 de dano</strong>.</li>
-                <li><strong>Custo pago:</strong> -3 STA e -2 Núcleo.</li>
+                <li><strong>Custo pago:</strong> -3 STA e -2 PE.</li>
             </ol>
 
             <p><strong>No turno seguinte (complicação):</strong></p>
@@ -18424,7 +18439,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Resumo do Poder:</strong><br>
                 • <strong>Nome:</strong> Mãos Invisíveis<br>
                 • <strong>Dano:</strong> 1d8 + Modificador de Intelecto<br>
-                • <strong>Custo por turno de uso intenso:</strong> 4 STA + 3 Núcleo<br>
+                • <strong>Custo por turno de uso intenso:</strong> 4 STA + 3 PE<br>
                 • <strong>Atributo principal:</strong> Intelecto
             </div>
 
@@ -18435,7 +18450,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Ela tenta atacar os dois monstros ao mesmo tempo com lâminas flutuantes.</li>
                 <li>Por causa da Névoa, rola com <strong>Desvantagem</strong> (2d20, pega o menor).</li>
                 <li>Rola 7 e 14 → usa o 7 + Mod Intelecto (+2) + Maestria (+2) = <strong>11</strong>. Falha contra CA 14.</li>
-                <li>Mesmo falhando, ela gasta os recursos: <strong>-4 STA e -3 Núcleo</strong>.</li>
+                <li>Mesmo falhando, ela gasta os recursos: <strong>-4 STA e -3 PE</strong>.</li>
                 <li>Por ter falhado de forma ruim em ambiente hostil, o Mestre pede uma Salvaguarda de Intelecto (CD 16) para manter o controle mental.</li>
                 <li>Ela falha. Perde <strong>3 de Sanidade</strong> e fica com desvantagem em testes de Intelecto por 1 hora.</li>
             </ol>
@@ -18450,7 +18465,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Resumo do Poder:</strong><br>
                 • <strong>Nome:</strong> Sussurros do Vazio<br>
                 • <strong>Dano:</strong> 2d6 psíquico + perda de Sanidade no alvo<br>
-                • <strong>Custo:</strong> 5 STA + 4 Núcleo + risco alto de Sanidade/Corrupção para o usuário
+                • <strong>Custo:</strong> 5 STA + 4 PE + risco alto de Sanidade/Corrupção para o usuário
             </div>
 
             <p><strong>Cenário:</strong> Thorne está sozinho no 14º andar enfrentando um Profano. Sua Sanidade atual está em 28/60 (já no estágio "Abalado").</p>
@@ -18469,7 +18484,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="lore-box">
                 <strong>Lições importantes para jogadores:</strong><br><br>
-                • <strong>Todo poder tem preço.</strong> STA e Núcleo são seus recursos mais importantes. Gastar demais em um turno pode deixar você vulnerável depois.<br><br>
+                • <strong>Todo poder tem preço.</strong> STA e PE são seus recursos mais importantes. Gastar demais em um turno pode deixar você vulnerável depois.<br><br>
                 • <strong>O ambiente é seu inimigo.</strong> Névoa, andares profundos e a própria Torre frequentemente impõem Desvantagem. Nunca conte só com seus modificadores.<br><br>
                 • <strong>Sanidade e Corrupção são recursos reais.</strong> Falhar em Salvaguardas mentais (Alma, Intelecto, Carisma) é a forma mais comum de perder Sanidade e ganhar Corrupção.<br><br>
                 • <strong>Críticos mudam o jogo.</strong> Um 20 natural ou um 1 natural podem decidir o rumo de um combate inteiro. Respeite o d20.
@@ -18510,7 +18525,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <h4>Ações Principais Comuns</h4>
             <ul>
-                <li><strong>Atacar</strong>: Realizar um ataque com arma ou poder (consome o custo normal de STA/Núcleo do poder).</li>
+                <li><strong>Atacar</strong>: Realizar um ataque com arma ou poder (consome o custo normal de STA/PE do poder).</li>
                 <li><strong>Usar Poder Complexo</strong>: Ativar um efeito poderoso que exige concentração ou preparação.</li>
                 <li><strong>Defesa Total</strong>: Focar inteiramente em se proteger. Ganha +4 de CA até o início do seu próximo turno, mas não pode realizar Ação Principal.</li>
                 <li><strong>Ajudar</strong>: Auxiliar um aliado. O aliado escolhido ganha vantagem em seu próximo teste ou ataque contra um alvo específico.</li>
@@ -18576,8 +18591,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>A Torre não perdoa a fraqueza. Quando o corpo quebra, a morte deixa de ser um conceito e vira uma contagem regressiva.</p>
 
             <div class="system-card">
-                <strong>Ferimento Grave (Major Wound):</strong><br>
-                Um <strong>golpe único</strong> que cause dano <strong>≥ metade dos PV Máximos</strong> exige uma <strong>Salvaguarda de Corpo (Vigor)</strong>. <strong>Falha</strong> = fica <strong>incapacitado</strong> (mesmo com PV restantes). <strong>Sucesso</strong> = continua em pé, mas fica abalado (Desvantagem em testes até o fim do combate ou até tratamento).
+                <strong>Ferimento Grave:</strong><br>
+                Um <strong>golpe único</strong> que cause dano <strong>≥ metade dos PV Máximos</strong> exige uma <strong>Salvaguarda de Vigor</strong>. <strong>Falha</strong> = fica <strong>incapacitado</strong> (mesmo com PV restantes). <strong>Sucesso</strong> = continua em pé, mas fica abalado (Desvantagem em testes até o fim do combate ou até tratamento).
             </div>
 
             <div class="system-card">
@@ -18629,7 +18644,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <ul>
                 <li><strong>Disengage:</strong> gastar a Ação de Movimento inteira evita os Ataques de Oportunidade.</li>
                 <li>Se o grupo inteiro decidir fugir, o Mestre pode pedir um teste de Destreza ou Vigor coletivo, com penalidades pela diferença de velocidade e número de inimigos.</li>
-                <li><strong>Perseguição por zonas:</strong> cada zona atravessada exige 1 ação e uma <strong>Salvaguarda de Corpo ou Agilidade</strong>. Falha = condição <strong>Exausto</strong> ou <strong>+1 tick no Relógio de Atenção da Torre</strong>.</li>
+                <li><strong>Perseguição por zonas:</strong> cada zona atravessada exige 1 ação e uma <strong>Salvaguarda de Vigor ou Destreza</strong>. Falha = condição <strong>Exausto</strong> ou <strong>+1 tick no Relógio de Atenção da Torre</strong>.</li>
             </ul>
 
             <p>Inimigos também podem fugir se estiverem claramente perdendo (especialmente monstros inteligentes ou covardes).</p>
@@ -18659,14 +18674,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <ul>
                 <li><strong>Gastar tudo no primeiro turno.</strong> Usar os poderes mais fortes logo no início parece bom, mas costuma deixar o grupo sem recursos quando aparece o próximo problema.</li>
                 <li><strong>Não recuar nunca.</strong> Orgulho mata mais Despertos do que monstros. Se o combate está ruim, fugir é uma vitória.</li>
-                <li><strong>Ignorar a fadiga e a Sanidade.</strong> Muitos jogadores só olham para HP. Quando a Exaustão ou a Sanidade baixa aparecem, já é tarde demais.</li>
+                <li><strong>Ignorar a fadiga e a Sanidade.</strong> Muitos jogadores só olham para PV. Quando a Exaustão ou a Sanidade baixa aparecem, já é tarde demais.</li>
                 <li><strong>Lutar contra tudo que aparece.</strong> Nem todo monstro é uma ameaça que precisa ser eliminada. Às vezes o melhor é passar despercebido ou negociar.</li>
                 <li><strong>Esquecer das Reações.</strong> Guardar sua reação para um momento crítico costuma salvar mais vidas do que dar um ataque extra.</li>
             </ul>
 
             <div class="system-card">
                 <strong>Perguntas que você deve se fazer todo turno:</strong><br><br>
-                • "Quanto STA e Núcleo ainda me restam?"<br>
+                • "Quanto STA e PE ainda me restam?"<br>
                 • "Se eu gastar isso agora, ainda consigo lutar no próximo andar?"<br>
                 • "Este combate está valendo o preço que estou pagando?"<br>
                 • "Minha Sanidade está baixa o suficiente para eu evitar poderes mentais?"
@@ -18679,8 +18694,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p><strong>Turno 1 - Jogadores:</strong></p>
             <ul>
-                <li>Kael usa Ação Principal para atacar um Rastejante com a Lâmina da Alma (gasta 3 STA + 2 Núcleo). Acerta e mata um.</li>
-                <li>Lira usa Ação Principal + Bônus para erguer destroços e atacar os dois restantes com telecinese (gasta 4 STA + 3 Núcleo). Acerta um e feri o outro.</li>
+                <li>Kael usa Ação Principal para atacar um Rastejante com a Lâmina da Alma (gasta 3 STA + 2 PE). Acerta e mata um.</li>
+                <li>Lira usa Ação Principal + Bônus para erguer destroços e atacar os dois restantes com telecinese (gasta 4 STA + 3 PE). Acerta um e feri o outro.</li>
                 <li>Movimento: Ambos recuam para a zona Médio para evitar ataques corpo a corpo.</li>
             </ul>
 
@@ -18699,7 +18714,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p><strong>Resultado:</strong></p>
             <ul>
                 <li>Combate durou 2 rodadas (rápido e eficiente).</li>
-                <li>Custo total: Kael gastou 3 STA + 2 Núcleo. Lira gastou 4 STA + 3 Núcleo + sofreu dano reduzido.</li>
+                <li>Custo total: Kael gastou 3 STA + 2 PE. Lira gastou 4 STA + 3 PE + sofreu dano reduzido.</li>
                 <li>Nenhum dos dois precisou usar poderes caros ou arriscar Sanidade.</li>
                 <li>Eles ainda têm recursos para continuar explorando.</li>
             </ul>
@@ -18711,10 +18726,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2>Sobrecarga, Exaustão e Colapso</h2>
             <p>Quando um Desperto força sua Alma além do limite, o corpo e a mente pagam o preço.</p>
 
-            <p>Se o personagem tentar usar um poder sem Núcleo suficiente, ele pode:</p>
+            <p>Se o personagem tentar usar um poder sem PE suficiente, ele pode:</p>
             <ul>
                 <li>Realizar o teste/ataque com <strong>Desvantagem</strong>, ou</li>
-                <li>Sofrer <strong>Sobrecarga</strong> imediata, recebendo dano direto em HP igual ao excesso de Núcleo gasto.</li>
+                <li>Sofrer <strong>Sobrecarga</strong> imediata, recebendo dano direto em PV igual ao excesso de PE gasto.</li>
             </ul>
 
             <p>Acumular Exaustão (por uso prolongado de poderes ou falta de descanso) reduz gradualmente os modificadores de atributo e aumenta a chance de falhas críticas.</p>
@@ -18722,12 +18737,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <section id="recuperacao">
             <h2>Recuperação</h2>
-            <p>A recuperação é vital dentro das Torres, onde o tempo é inimigo.</p>
-            <ul>
-                <li><strong>Descanso Curto</strong> (10 minutos): Recupera parte da STA. Não recupera HP nem Núcleo.</li>
-                <li><strong>Descanso Completo</strong> (8 horas, preferencialmente em acampamento): Recupera todo o HP e STA. Núcleo se recupera mais lentamente (geralmente metade por descanso completo).</li>
-            </ul>
-            <p>O sistema de Acampamento (ver seção de Sobrevivência) oferece bônus significativos de recuperação dependendo da qualidade do abrigo.</p>
+            <p>A recuperação é vital dentro das Torres, onde o tempo é inimigo. Existe uma diferença fundamental entre descansar em segurança e descansar dentro da Torre.</p>
+
+            <div class="system-card">
+                <strong>Descanso FORA da torre</strong> (cidadela, acampamento seguro na superfície, local protegido):<br>
+                • Recupera <strong>todo o PV e STA</strong>.<br>
+                • Recupera <strong>todo o PE</strong> após um descanso completo de 8 horas (ou metade do PE após 4–6 horas de repouso em local seguro).
+            </div>
+
+            <div class="system-card">
+                <strong>Descanso DENTRO da torre (acampamento)</strong> — recuperação parcial por nível de abrigo:<br>
+                • <strong>Abrigo Nv 1 (Básico):</strong> recupera 1d6+2 de PV e STA. Não recupera PE.<br>
+                • <strong>Abrigo Nv 2 (Médio):</strong> recupera 2d6+4 de PV e STA. Recupera metade do PE.<br>
+                • <strong>Abrigo Nv 3 (Avançado):</strong> recupera 3d6+6 de PV e STA. Recupera todo o PE.<br><br>
+                <em>Alternativa:</em> a atividade <strong>Meditar / Ritual</strong> durante o acampamento (Alma, CD 15) permite recuperar PE mesmo em abrigos Nv 1, conforme descrito na seção de Sobrevivência.
+            </div>
+
+            <p>O sistema de Acampamento (ver seção de Sobrevivência) oferece bônus significativos de recuperação dependendo da qualidade do abrigo. Fora da Torre, o corpo e a Alma se refazem por inteiro — dentro dela, todo alívio tem um preço.</p>
         </section>
 
         <section id="surtos">
@@ -18818,10 +18844,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     <tr><td>75% ou mais</td><td><strong>Estável</strong></td><td>Você ainda consegue manter a cabeça no lugar. O horror existe, mas você consegue separá-lo da realidade.</td></tr>
                     <tr><td>50–74%</td><td><strong>Perturbado</strong></td><td>Você começa a ouvir coisas que talvez não existam. Pequenas alucinações, nomes esquecidos, rostos que parecem familiares demais. Você tem desvantagem em testes de percepção e resistência mental.</td></tr>
                     <tr><td>25–49%</td><td><strong>Abalado</strong></td><td>O mundo está errado. As sombras se movem quando você não está olhando. Você tem dificuldade de confiar até mesmo nos seus aliados. Desvantagem em todas as Salvaguardas de Intelecto e Carisma. -1 em todos os testes.</td></tr>
-                    <tr><td>1–24%</td><td><strong>À Beira do Abismo</strong></td><td>Você não sabe mais o que é real. A Torre fala com sua voz. Seus medos ganham forma. O Mestre pode forçar testes de Sanidade em momentos de tensão. Risco muito alto de Ruptura.</td></tr>
-                    <tr><td>0</td><td><strong>Estado de Ruptura</strong></td><td>Você quebrou. Role 1d6 para ver o que acontece: atacar aliados, fugir em pânico cego, tentar se entregar para os monstros, receber uma Marca permanente da Torre, ou ganhar uma quantidade significativa de Corrupção. A recuperação desse estado é longa e dolorosa.</td></tr>
+                    <tr><td>10–24%</td><td><strong>À Beira do Abismo</strong></td><td>Você não sabe mais o que é real. A Torre fala com sua voz. Seus medos ganham forma. O Mestre pode forçar testes de Sanidade em momentos de tensão. Risco muito alto de Ruptura.</td></tr>
+                    <tr><td>1–9%</td><td><strong>Ruptura Iminente</strong></td><td>Você está à beira do colapso total. Toda vez que sofrer dano ou perder Sanidade, role 1d20. Em 10 ou menos, entra em Estado de Ruptura imediatamente.</td></tr>
+                    <tr><td>0</td><td><strong>Estado de Ruptura</strong></td><td>Você quebrou. Role na <strong>Tabela de Ruptura (1d8)</strong> abaixo. A recuperação desse estado é longa e dolorosa.</td></tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="system-card">
+            <strong>Tabela de Ruptura (1d8):</strong><br><br>
+            <strong>1 – Fúria Cega:</strong> O personagem ataca indiscriminadamente (aliados incluídos) por 1d6 rodadas.<br>
+            <strong>2 – Pânico Total:</strong> Foge em terror absoluto, sem direção, por 1d4 horas.<br>
+            <strong>3 – Catatonia:</strong> Fica imóvel e não responde a estímulos por 1d6 horas.<br>
+            <strong>4 – Dissociação:</strong> Age como se nada estivesse acontecendo (pode ignorar ferimentos graves).<br>
+            <strong>5 – Paranoia Aguda:</strong> Acredita que todos ao redor querem matá-lo (pode durar dias).<br>
+            <strong>6 – Recebe uma Marca da Torre:</strong> Ganha 2d6 de Corrupção e uma mutação física ou mental permanente.<br>
+            <strong>7 – Tenta se render à Torre:</strong> Procura um lugar "seguro" dentro da Torre para se entregar.<br>
+            <strong>8 – Quebra Total:</strong> O personagem perde permanentemente 1d4 pontos de Sanidade máxima e ganha um transtorno grave (Mestre define).<br><br>
+            <em>Consistente com a tabela completa do Livro do Mestre.</em>
         </div>
 
         <h4>Como a Sanidade é perdida</h4>
@@ -18916,7 +18956,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <h4>Perda de um Ente Querido</h4>
         <p>Quando alguém que você ama morre ou é perdido de forma irreversível, o impacto é devastador:</p>
         <ul>
-            <li>Perca imediata de todos os bônus de HP e STA concedidos pelo relacionamento.</li>
+            <li>Perca imediata de todos os bônus de PV e STA concedidos pelo relacionamento.</li>
             <li>Perda de 2d10 de Sanidade (pode ser reduzida com uma Salvaguarda de Alma bem-sucedida).</li>
             <li>Possibilidade de ganhar 1d6 de Corrupção (a dor abre brechas na Alma).</li>
             <li>Por um tempo (definido pelo Mestre), o personagem sofre desvantagem em todos os testes de Sanidade e pode ter visões ou alucinações da pessoa perdida.</li>
