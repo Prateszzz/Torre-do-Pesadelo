@@ -3738,6 +3738,8 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.7; }       /* Combate (trackers) */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 4.8; }       /* Sessões e XP */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 4.9; }   /* Acampamento */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 5.1; }          /* Forja e Barmans */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 5.2; } /* Relacionamentos */
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 5; }            /* Atributos    */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
@@ -8471,7 +8473,7 @@ function resetarContadoresFicha() {
   numPets = 1;
   _armaCounter = 1;
   _slotsPericia = { maestrias: [], especializacoes: [] };
-  _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1, util: 1 };
+  _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1, util: 1, barman: 1, rel: 1 };
 }
 
 function addArmaRow() {
@@ -8596,7 +8598,7 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
+let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
@@ -9242,7 +9244,7 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
@@ -9353,7 +9355,7 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
+      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
       _aplicarEstadoFichaExpand();
     }
   }
@@ -10609,6 +10611,129 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div><!-- /area-acampamento -->
 </div>
 
+<!-- FORJA E BARMAN — tracker de forja e contatos barmans -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('forja')" id="toggle-forja">
+    <span class="ficha-expand-seta" id="seta-forja">▶</span> Forja e Barmans
+  </div>
+  <div class="ficha-expand-area" id="area-forja">
+  <div class="ficha-panel-body">
+
+    <!-- FORJA -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Forja</div>
+    <div class="field-row cols-3">
+      <div class="field-group">
+        <label>Rank do Item em Trabalho</label>
+        <select id="forja-rank" onchange="atualizarForjaResumo()" title="Ruim −2 · Comum 0 · Bom +1 · Épico +2 · Mítico +3 · Lendário +4" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Ruim (−2)">Ruim (−2)</option>
+          <option value="Comum (0)">Comum (0)</option>
+          <option value="Bom (+1)">Bom (+1)</option>
+          <option value="Épico (+2)">Épico (+2)</option>
+          <option value="Mítico (+3)">Mítico (+3)</option>
+          <option value="Lendário (+4)">Lendário (+4)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Classe da Arma/Equipamento</label>
+        <select id="forja-classe" onchange="atualizarForjaResumo()" title="F Comum (sem núcleo) · E Reforçada (núcleo D) · D Energizada (núcleo C, ferreiro IV) · C Rúnica (núcleo B, runa preservada) · B Relíquia (núcleo A, materiais raros) · A Mítica (núcleo A refinado, múltiplas runas) · S Lendária (núcleo S) · SS Ascendida (parcialmente viva) · SSS Singular (única)" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="F Comum">F Comum</option>
+          <option value="E Reforçada">E Reforçada</option>
+          <option value="D Energizada">D Energizada</option>
+          <option value="C Rúnica">C Rúnica</option>
+          <option value="B Relíquia">B Relíquia</option>
+          <option value="A Mítica">A Mítica</option>
+          <option value="S Lendária">S Lendária</option>
+          <option value="SS Ascendida">SS Ascendida</option>
+          <option value="SSS Singular">SSS Singular</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Nível do Ferreiro</label>
+        <select id="forja-ferreiro" onchange="atualizarForjaResumo()" title="I Ferreiro Comum (máx Bom) · II Artesão de Cidadela (máx Épico) · III Mestre Ferreiro (máx Mítico) · IV Artífice de Torre (máx Lendário) · V Forjador Lendário (máx Ascendida) · VI O Último dos Grandes (máx Singular)" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="I Ferreiro Comum">I Ferreiro Comum</option>
+          <option value="II Artesão de Cidadela">II Artesão de Cidadela</option>
+          <option value="III Mestre Ferreiro">III Mestre Ferreiro</option>
+          <option value="IV Artífice de Torre">IV Artífice de Torre</option>
+          <option value="V Forjador Lendário">V Forjador Lendário</option>
+          <option value="VI O Último dos Grandes">VI O Último dos Grandes</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Potencial do Material</label>
+        <input type="number" id="forja-potencial" min="0" max="150" value="50" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="atualizarForjaResumo()">
+        <span style="font-size:.64rem;color:var(--text-muted)">Abaixo de 40 → rank baixo · 50–80 → Épico/Mítico · acima de 90 → Lendário/Ascendido</span>
+      </div>
+      <div class="field-group">
+        <label>Materiais Secundários</label>
+        <input type="text" id="forja-materiais" placeholder="Nota livre (runas, materiais raros)..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+      </div>
+    </div>
+    <div style="margin-top:.5rem">
+      <label style="font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted)">Resumo</label>
+      <div id="forja-resumo" style="font-size:.8rem;color:var(--silver);padding:.5rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:1.2em">Bom (+1) · C Rúnica · III Mestre Ferreiro (máx Mítico)</div>
+    </div>
+
+    <!-- BARMAN (contatos) -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+        <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Barmans (contatos)</div>
+        <div style="display:flex;gap:.4rem">
+          <button onclick="addBarman()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Barman</button>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:.5rem">Risco de informação falsa: Comum 30% · Bom 15% · Excelente 5% · Lendário variável (pode ser venenosa).</p>
+      <div class="table-wrapper"><table>
+        <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:100px">Qualidade</th><th style="min-width:100px">Confiança</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
+        <tbody id="barmans-tbody">
+          <tr>
+            <td data-label="Nome"><input type="text" id="barman1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+            <td data-label="Qualidade"><select id="barman1-qualidade" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Comum">Comum</option><option value="Bom">Bom</option><option value="Excelente">Excelente</option><option value="Lendário">Lendário</option></select></td>
+            <td data-label="Confiança"><select id="barman1-confianca" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Neutro">Neutro</option><option value="Positivo">Positivo</option><option value="Confiança">Confiança</option><option value="Aliança">Aliança</option></select></td>
+            <td data-label="Cidade"><input type="text" id="barman1-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
+            <td data-label="Observação"><input type="text" id="barman1-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
+            <td><button onclick="removerBarmanEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+
+  </div>
+  </div><!-- /area-forja -->
+</div>
+
+<!-- RELACIONAMENTOS — laços, níveis e tipos -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('relacionamentos')" id="toggle-relacionamentos">
+    <span class="ficha-expand-seta" id="seta-relacionamentos">▶</span> Relacionamentos
+  </div>
+  <div class="ficha-expand-area" id="area-relacionamentos">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Laços do Personagem <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></div>
+      <div style="display:flex;gap:.4rem">
+        <button onclick="addRelacionamento()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Relacionamento</button>
+      </div>
+    </div>
+    <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:.5rem">Laços platônicos, de amizade profunda ou de "família encontrada" são tão poderosos quanto os românticos. A perda de um ente querido custa 2d10 de Sanidade (Salvaguarda de Alma reduz) e pode gerar 1d6 de Corrupção.</p>
+    <div class="table-wrapper"><table>
+      <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:150px">Nível <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></th><th style="min-width:100px">Tipo</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
+      <tbody id="rel-tbody">
+        <tr>
+          <td data-label="Nome"><input type="text" id="rel1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+          <td data-label="Nível"><select id="rel1-nivel" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="1 Amizade Sólida">1 Amizade Sólida</option><option value="2 Confiança Profunda">2 Confiança Profunda</option><option value="3 Intimidade">3 Intimidade</option><option value="4 Laço de Alma">4 Laço de Alma</option></select></td>
+          <td data-label="Tipo"><select id="rel1-tipo" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Aliado">Aliado</option><option value="Amigo">Amigo</option><option value="Íntimo">Íntimo</option><option value="Familiar">Familiar</option><option value="Rival">Rival</option></select></td>
+          <td data-label="Cidade"><input type="text" id="rel1-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
+          <td data-label="Observação"><input type="text" id="rel1-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
+          <td><button onclick="removerRelacionamentoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+  </div><!-- /area-relacionamentos -->
+</div>
+
 <!-- ATRIBUTOS — logo abaixo da ficha base, largura total -->
 <div class="ficha-full-row">
   <div class="ficha-panel" style="border-top:3px solid var(--accent)!important;margin-bottom:1rem">
@@ -11480,6 +11605,8 @@ function coletarDados() {
     'xp-atual','sess-tipo','sess-qualidade','sess-xp','sess-risco-xp','sess-obs','sess-historico',
     // acampamento
     'acamp-nivel','acamp-atividade','acamp-andar','acamp-mod','acamp-rolagem',
+    // forja e barmans
+    'forja-rank','forja-classe','forja-ferreiro','forja-potencial','forja-materiais',
     // registro
     'r-personalidade','r-mentalidade','r-comportamento',
     'r-tracos','r-defeitos','r-ideais','r-ligacoes','r-antecedentes','r-historia','r-eventos','r-npcs',
@@ -11550,8 +11677,10 @@ function coletarDados() {
   const matFields   = _scanLinhasInventario('inv-mat-tbody',   'mat',  ['nome','qtd']);
   const nucFields   = _scanLinhasInventario('inv-nuc-tbody',   'nuc',  ['nome','tipo','efei']);
   const utilFields  = _scanLinhasInventario('util-tbody', 'util', ['nome','categoria','caracteristica','custo','manut','desc']);
+  const barmanFields = _scanLinhasInventario('barmans-tbody', 'barman', ['nome','qualidade','confianca','cidade','obs']);
+  const relFields    = _scanLinhasInventario('rel-tbody', 'rel', ['nome','nivel','tipo','cidade','obs']);
 
-  const todos = [...campos,...armaFields,...passFields,...despFields,...itemFields,...consFields,...matFields,...nucFields,...petFields,...utilFields];
+  const todos = [...campos,...armaFields,...passFields,...despFields,...itemFields,...consFields,...matFields,...nucFields,...petFields,...utilFields,...barmanFields,...relFields];
   const d = {};
   todos.forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.value; });
   ['ms1','ms2','ms3','mf1','mf2','mf3'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
@@ -11898,7 +12027,7 @@ function removerPet(n) {
 }
 
 // ─── INVENTÁRIO DINÂMICO ───────────────────────────────────────
-let _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1, util: 1 };
+let _invCounters = { item: 1, cons: 1, mat: 1, nuc: 1, util: 1, barman: 1, rel: 1 };
 
 function addInvRow(tbodyId, prefix, fields, labels) {
   const tbody = document.getElementById(tbodyId);
@@ -12760,6 +12889,83 @@ function rolarAtencaoAcampamento() {
   salvarLocal();
 }
 
+// ─── C13 · FORJA (tracker) ───
+const _FORJA_FERREIRO_MAX = {
+  'I Ferreiro Comum': 'Bom (+1)',
+  'II Artesão de Cidadela': 'Épico (+2)',
+  'III Mestre Ferreiro': 'Mítico (+3)',
+  'IV Artífice de Torre': 'Lendário (+4)',
+  'V Forjador Lendário': 'Ascendida (SS)',
+  'VI O Último dos Grandes': 'Singular (SSS)'
+};
+
+function atualizarForjaResumo() {
+  const el = document.getElementById('forja-resumo');
+  if (!el) return;
+  const rank = document.getElementById('forja-rank')?.value || 'Comum (0)';
+  const classe = document.getElementById('forja-classe')?.value || 'F Comum';
+  const ferreiro = document.getElementById('forja-ferreiro')?.value || 'I Ferreiro Comum';
+  const potencial = parseInt(document.getElementById('forja-potencial')?.value, 10);
+  let txt = rank + ' · ' + classe + ' · ' + ferreiro + ' (máx ' + (_FORJA_FERREIRO_MAX[ferreiro] || '?') + ')';
+  if (!isNaN(potencial) && potencial > 0) {
+    const faixa = potencial < 40 ? 'rank baixo' : (potencial <= 80 ? 'potencial Épico/Mítico' : 'potencial Lendário/Ascendido');
+    txt += ' · material ' + potencial + ': ' + faixa;
+  }
+  el.textContent = txt;
+  salvarLocal();
+}
+
+// ─── C13 · BARMAN (linhas dinâmicas com selects) ───
+function _linhaBarman(n) {
+  return `
+    <td data-label="Nome"><input type="text" id="barman${n}-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+    <td data-label="Qualidade"><select id="barman${n}-qualidade" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Comum">Comum</option><option value="Bom">Bom</option><option value="Excelente">Excelente</option><option value="Lendário">Lendário</option></select></td>
+    <td data-label="Confiança"><select id="barman${n}-confianca" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Neutro">Neutro</option><option value="Positivo">Positivo</option><option value="Confiança">Confiança</option><option value="Aliança">Aliança</option></select></td>
+    <td data-label="Cidade"><input type="text" id="barman${n}-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
+    <td data-label="Observação"><input type="text" id="barman${n}-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
+    <td><button onclick="removerBarmanEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>`;
+}
+function addBarman() {
+  const tbody = document.getElementById('barmans-tbody');
+  if (!tbody) return;
+  _invCounters['barman'] = (_invCounters['barman'] || 0) + 1;
+  const tr = document.createElement('tr');
+  tr.innerHTML = _linhaBarman(_invCounters['barman']);
+  tbody.appendChild(tr);
+  salvarLocal();
+}
+function removerBarmanEl(btn) {
+  const tr = btn.closest('tr');
+  if (tr) { tr.remove(); salvarLocal(); }
+}
+
+// ─── C14 · RELACIONAMENTOS (linhas dinâmicas com selects) ───
+const _REL_NIVEL_OPCOES = '<option value="1 Amizade Sólida">1 Amizade Sólida</option><option value="2 Confiança Profunda">2 Confiança Profunda</option><option value="3 Intimidade">3 Intimidade</option><option value="4 Laço de Alma">4 Laço de Alma</option>';
+const _REL_TIPO_OPCOES = '<option value="Aliado">Aliado</option><option value="Amigo">Amigo</option><option value="Íntimo">Íntimo</option><option value="Familiar">Familiar</option><option value="Rival">Rival</option>';
+
+function _linhaRel(n) {
+  return `
+    <td data-label="Nome"><input type="text" id="rel${n}-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+    <td data-label="Nível"><select id="rel${n}-nivel" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%">${_REL_NIVEL_OPCOES}</select></td>
+    <td data-label="Tipo"><select id="rel${n}-tipo" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%">${_REL_TIPO_OPCOES}</select></td>
+    <td data-label="Cidade"><input type="text" id="rel${n}-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
+    <td data-label="Observação"><input type="text" id="rel${n}-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
+    <td><button onclick="removerRelacionamentoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>`;
+}
+function addRelacionamento() {
+  const tbody = document.getElementById('rel-tbody');
+  if (!tbody) return;
+  _invCounters['rel'] = (_invCounters['rel'] || 0) + 1;
+  const tr = document.createElement('tr');
+  tr.innerHTML = _linhaRel(_invCounters['rel']);
+  tbody.appendChild(tr);
+  salvarLocal();
+}
+function removerRelacionamentoEl(btn) {
+  const tr = btn.closest('tr');
+  if (tr) { tr.remove(); salvarLocal(); }
+}
+
 // ─── FOTO — botão de remover a foto principal ───────────────────
 async function removerFotoPrincipal() {
   // Mesmo padrão de segurança das outras funções de foto — ver comentário
@@ -12955,6 +13161,26 @@ function preencherCampos(d) {
     });
   });
 
+  // Restaura linhas extras de barmans e relacionamentos (com selects — mesmo padrão do inventário)
+  const contatoRestaurar = [
+    { prefix: 'barman', tbodyId: 'barmans-tbody', base: 1 },
+    { prefix: 'rel',    tbodyId: 'rel-tbody',     base: 1 },
+  ];
+  contatoRestaurar.forEach(({ prefix, tbodyId, base }) => {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    const keys = Object.keys(d).filter(k => k.match(new RegExp(`^${prefix}(\\d+)-nome$`)));
+    keys.forEach(k => {
+      const n = parseInt(k.match(/(\d+)/)[1]);
+      if (n > base && !document.getElementById(`${prefix}${n}-nome`)) {
+        _invCounters[prefix] = Math.max(_invCounters[prefix] || 0, n);
+        const tr = document.createElement('tr');
+        tr.innerHTML = (prefix === 'barman' ? _linhaBarman(n) : _linhaRel(n));
+        tbody.appendChild(tr);
+      }
+    });
+  });
+
   // AGORA preenche todos os campos (após criar os elementos dinâmicos)
   Object.entries(d).forEach(([id,val])=>{
     if(['pericias','tecnicas','numTecnicas','slotsPericia','numPassivas','numDespertares','numPets'].includes(id)) return;
@@ -12984,6 +13210,7 @@ function preencherCampos(d) {
     // Árvore da Alma (resumo gasto/saldo + progresso dos ramos) e Acampamento
     atualizarArvoreResumo();
     atualizarAcampamento();
+    atualizarForjaResumo();
   }, 50);
 }
 
@@ -13034,7 +13261,7 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
