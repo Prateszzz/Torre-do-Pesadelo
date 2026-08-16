@@ -3703,6 +3703,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 4; }  /* Poder        */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.7; }       /* Combate (trackers) */
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 5; }            /* Atributos    */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
@@ -8561,7 +8562,7 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
+let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
@@ -9207,7 +9208,7 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
@@ -9318,7 +9319,7 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
+      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
       _aplicarEstadoFichaExpand();
     }
   }
@@ -10268,6 +10269,141 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div><!-- /area-utilizacoes -->
 </div>
 
+<!-- COMBATE — trackers do combate lapidado (decisões C4, C8, C9) -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('combate')" id="toggle-combate">
+    <span class="ficha-expand-seta" id="seta-combate">▶</span> Combate
+  </div>
+  <div class="ficha-expand-area" id="area-combate">
+  <div class="ficha-panel-body">
+
+    <!-- CONDIÇÕES -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Condições</div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.75rem">Formato nome + valor + efeito. Marque a condição e, quando aplicável, o valor X.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.5rem">
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-avareado" oninput="salvarLocal()">
+        <label for="cond-avareado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Apavorado</label>
+        <input type="number" id="cond-avareado-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em testes e CA; cai 1 por turno</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-sangrando" oninput="salvarLocal()">
+        <label for="cond-sangrando" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Sangrando</label>
+        <input type="number" id="cond-sangrando-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">perde X de PV no início da rodada; Medicina estanca</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-envenenado" oninput="salvarLocal()">
+        <label for="cond-envenenado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Envenenado</label>
+        <input type="number" id="cond-envenenado-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Vigor; dano contínuo ou desvantagem</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-cegado" oninput="salvarLocal()">
+        <label for="cond-cegado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Cegado</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">desvantagem em ataques; Percepção falha</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-caido" oninput="salvarLocal()">
+        <label for="cond-caido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Caído</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">desvantagem em corpo a corpo; à distância tem vantagem contra você</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-agarrdo" oninput="salvarLocal()">
+        <label for="cond-agarrdo" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Agarrado</label>
+        <input type="number" id="cond-agarrdo-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">deslocamento 0; desvantagem em Destreza; escapar = Salvaguarda de Força/Destreza vs X</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-incapacitado" oninput="salvarLocal()">
+        <label for="cond-incapacitado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Incapacitado</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">não age nem reage; concentração quebrada</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-exausto" oninput="salvarLocal()">
+        <label for="cond-exausto" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Exausto</label>
+        <input type="number" id="cond-exausto-val" min="0" max="6" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−1 em tudo por nível (1–6; 6 = morte)</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-corrompido" oninput="salvarLocal()">
+        <label for="cond-corrompido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Corrompido</label>
+        <input type="number" id="cond-corrompido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em testes de Alma; Corrupção mais fácil de ganhar</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-enlouquecido" oninput="salvarLocal()">
+        <label for="cond-enlouquecido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Enlouquecido</label>
+        <input type="number" id="cond-enlouquecido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Intelecto/Carisma; risco de ação irracional</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-enfraquecido" oninput="salvarLocal()">
+        <label for="cond-enfraquecido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Enfraquecido</label>
+        <input type="number" id="cond-enfraquecido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Força/Vigor</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-concentracao" oninput="salvarLocal()">
+        <label for="cond-concentracao" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Concentração quebrada</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">efeito contínuo perdido</span></span>
+      </div>
+
+    </div>
+
+    <!-- FERIMENTO GRAVE & MORRENDO -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Ferimento Grave &amp; Morrendo</div>
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap">
+        <input type="checkbox" id="major-wound" oninput="salvarLocal()">
+        <label for="major-wound" style="font-size:.82rem;color:var(--text);cursor:pointer">Ferimento Grave</label>
+        <input type="text" id="major-wound-texto" placeholder="Observação..." style="flex:1;min-width:180px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.4rem .6rem;font-size:.8rem;outline:none" oninput="salvarLocal()">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Golpe único ≥ metade dos PV Máximos → Salvaguarda de Corpo; falha = incapacitado.</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <span style="font-size:.82rem;color:var(--text);flex:1;min-width:80px">Morrendo</span>
+        <button onclick="mudarMorrendo(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
+        <input type="number" id="morrendo" min="0" max="4" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampMorrendo()">
+        <button onclick="mudarMorrendo(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
+        <button onclick="resetMorrendo()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
+        <button onclick="rolarRecovery()" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Recovery Check</button>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">0 PV → Morrendo 1 (2 se golpe crítico). Recovery check: d20 ≥ 10 + Morrendo no início do turno (sucesso −1, falha +1, 20 natural = −2 e acorda com 1 PV, 1 natural = +2). Morrendo 4 = morte.</span></span>
+      </div>
+      <div id="recovery-result" style="margin-top:.5rem;font-size:.8rem;min-height:1.1em"></div>
+    </div>
+
+    <!-- ATENÇÃO DA TORRE -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Atenção da Torre</div>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <span style="font-size:.82rem;color:var(--text);flex:1;min-width:120px">Relógio de Atenção</span>
+        <button onclick="mudarTicks(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
+        <input type="number" id="torre-ticks" min="0" max="8" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampTicks()">
+        <button onclick="mudarTicks(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
+        <button onclick="mudarTicks(2)" title="fogo / magia / sangue" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+2</button>
+        <button onclick="resetTicks()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Cada rodada de combate além da 1ª = 1 tick (2 se fogo/magia/sangue). Ao encher (6–8): evento da Torre — reforço chega, ambiente piora, ou +1 de Corrupção/Atenção. Cada tick = +2 na Rolagem de Atenção do acampamento.</span></span>
+      </div>
+      <div id="torre-aviso" style="display:none;margin-top:.5rem;color:var(--accent-text);font-weight:bold;font-size:.82rem">A Torre nota vocês.</div>
+    </div>
+
+  </div>
+  </div><!-- /area-combate -->
+</div>
+
 <!-- ATRIBUTOS — logo abaixo da ficha base, largura total -->
 <div class="ficha-full-row">
   <div class="ficha-panel" style="border-top:3px solid var(--accent)!important;margin-bottom:1rem">
@@ -11131,6 +11267,10 @@ function coletarDados() {
     'aa-mobilidade-deslocamento','aa-mobilidade-instinto','aa-mobilidade-acrobacia',
     'aa-guardiao-resistencia','aa-guardiao-vitalidade','aa-guardiao-fortaleza',
     'aa-catalisador-fortalecimento','aa-catalisador-sustentacao','aa-catalisador-supressao',
+    // combate (trackers do combate lapidado)
+    'morrendo','torre-ticks','major-wound-texto',
+    'cond-avareado-val','cond-sangrando-val','cond-envenenado-val','cond-agarrdo-val',
+    'cond-exausto-val','cond-corrompido-val','cond-enlouquecido-val','cond-enfraquecido-val',
     // registro
     'r-personalidade','r-mentalidade','r-comportamento',
     'r-tracos','r-defeitos','r-ideais','r-ligacoes','r-antecedentes','r-historia','r-eventos','r-npcs',
@@ -11206,6 +11346,8 @@ function coletarDados() {
   const d = {};
   todos.forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.value; });
   ['ms1','ms2','ms3','mf1','mf2','mf3'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
+  // condições do combate (C8) + ferimento grave (C4) — salvos como boolean
+  ['cond-avareado','cond-sangrando','cond-envenenado','cond-cegado','cond-caido','cond-agarrdo','cond-incapacitado','cond-exausto','cond-corrompido','cond-enlouquecido','cond-enfraquecido','cond-concentracao','major-wound'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
   d.pericias = PERICIAS_DEF.map((_,i)=>({mt:document.getElementById(`pm-${i}`)?.checked||false,es:document.getElementById(`pe-${i}`)?.checked||false}));
   d.slotsPericia = JSON.parse(JSON.stringify(_slotsPericia));
   d.numPassivas = numPassivas;
@@ -11585,6 +11727,90 @@ function removerUtilizacaoEl(btn) {
   if (tr) { tr.remove(); salvarLocal(); }
 }
 
+// ─── COMBATE — TRACKERS DO COMBATE LAPIDADO (decisões C4, C8, C9) ───
+function _clampInput(id, min, max) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const v = parseInt(el.value, 10);
+  if (!isNaN(v)) el.value = Math.max(min, Math.min(max, v));
+}
+function _salvarClampMorrendo() {
+  _clampInput('morrendo', 0, 4);
+  salvarLocal();
+}
+function _salvarClampTicks() {
+  _clampInput('torre-ticks', 0, 8);
+  atualizarAvisoTorre();
+  salvarLocal();
+}
+function mudarMorrendo(delta) {
+  const el = document.getElementById('morrendo');
+  if (!el) return;
+  el.value = Math.max(0, Math.min(4, (parseInt(el.value, 10) || 0) + delta));
+  salvarLocal();
+}
+function resetMorrendo() {
+  const el = document.getElementById('morrendo');
+  if (el) el.value = 0;
+  const res = document.getElementById('recovery-result');
+  if (res) res.textContent = '';
+  salvarLocal();
+}
+function rolarRecovery() {
+  const inp = document.getElementById('morrendo');
+  if (!inp) return;
+  const atual = Math.max(0, Math.min(4, parseInt(inp.value, 10) || 0));
+  const rolagem = Math.floor(Math.random() * 20) + 1;
+  const dc = 10 + atual;
+  let novo = atual, msg = '', ok = false;
+  if (rolagem === 20) {
+    novo = Math.max(0, atual - 2);
+    msg = 'Sucesso crítico — Morrendo −2 e acorda com 1 PV';
+    ok = true;
+  } else if (rolagem === 1) {
+    novo = Math.min(4, atual + 2);
+    msg = 'Falha crítica — Morrendo +2';
+  } else if (rolagem >= dc) {
+    novo = Math.max(0, atual - 1);
+    msg = 'Sucesso — Morrendo −1';
+    ok = true;
+  } else {
+    novo = Math.min(4, atual + 1);
+    msg = 'Falha — Morrendo +1';
+  }
+  inp.value = novo;
+  const res = document.getElementById('recovery-result');
+  if (res) {
+    res.textContent = 'd20: ' + rolagem + ' (DC ' + dc + ') · ' + msg;
+    res.style.color = ok ? 'var(--accent-light)' : '#e0a040';
+    res.style.fontWeight = 'bold';
+  }
+  if (novo >= 4) {
+    const res2 = document.getElementById('recovery-result');
+    if (res2) res2.textContent += ' — Morrendo 4: morte.';
+  }
+  salvarLocal();
+}
+function mudarTicks(delta) {
+  const el = document.getElementById('torre-ticks');
+  if (!el) return;
+  el.value = Math.max(0, Math.min(8, (parseInt(el.value, 10) || 0) + delta));
+  atualizarAvisoTorre();
+  salvarLocal();
+}
+function resetTicks() {
+  const el = document.getElementById('torre-ticks');
+  if (el) el.value = 0;
+  atualizarAvisoTorre();
+  salvarLocal();
+}
+function atualizarAvisoTorre() {
+  const el = document.getElementById('torre-ticks');
+  const aviso = document.getElementById('torre-aviso');
+  if (!el || !aviso) return;
+  aviso.style.display = (parseInt(el.value, 10) || 0) >= 6 ? 'block' : 'none';
+}
+
 // ─── FOTO — botão de remover a foto principal ───────────────────
 async function removerFotoPrincipal() {
   // Mesmo padrão de segurança das outras funções de foto — ver comentário
@@ -11784,6 +12010,7 @@ function preencherCampos(d) {
   Object.entries(d).forEach(([id,val])=>{
     if(['pericias','tecnicas','numTecnicas','slotsPericia','numPassivas','numDespertares','numPets'].includes(id)) return;
     if(['ms1','ms2','ms3','mf1','mf2','mf3'].includes(id)){ const el=document.getElementById(id); if(el) el.checked=val; return; }
+    if(['cond-avareado','cond-sangrando','cond-envenenado','cond-cegado','cond-caido','cond-agarrdo','cond-incapacitado','cond-exausto','cond-corrompido','cond-enlouquecido','cond-enfraquecido','cond-concentracao','major-wound'].includes(id)){ const el=document.getElementById(id); if(el) el.checked=val; return; }
     const el=document.getElementById(id); if(el) el.value=val;
   });
 
@@ -11800,6 +12027,7 @@ function preencherCampos(d) {
     // Reconstrói slots de perícia com os atributos já carregados
     // para garantir que os bônus (+X) reflitam os valores reais do personagem
     buildPericias();
+    atualizarAvisoTorre();
   }, 50);
 }
 
@@ -11850,7 +12078,7 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
