@@ -9312,6 +9312,9 @@ function _wizardContinuarRascunho() {
     if (typeof _wizardEstado.metodoAtributo !== 'string') _wizardEstado.metodoAtributo = 'pontos';
     // Campos do modo rolagem (4d6) — rascunhos antigos podem não tê-los.
     if (!Array.isArray(_wizardEstado.rolagens)) _wizardEstado.rolagens = [];
+    // Sincroniza o contador de tentativas com a fonte real (rolagens.length) —
+    // o limite de 3 deve ser respeitado ao restaurar um rascunho.
+    _wizardEstado.rolagensFeitas = _wizardEstado.rolagens.length;
     if (typeof _wizardEstado.rolagemEscolhida !== 'number') _wizardEstado.rolagemEscolhida = null;
     if (!Array.isArray(_wizardEstado.atribRolagem) || _wizardEstado.atribRolagem.length !== 6) {
       _wizardEstado.atribRolagem = ['for','des','vig','int','alm','car'];
@@ -9542,15 +9545,21 @@ function _wizardCorpoHTML() {
     </div>
     ${w.metodoAtributo === 'pontos' ? `
       <div class="lore-box" style="margin-bottom:.8rem"><strong>Distribua 80 pontos</strong> (mín 8, máx 18). <span id="wz-pontos-restantes" style="color:${_wizardPontosRestantes() === 0 ? 'var(--gold-light)' : 'var(--accent-text)'}">Pontos restantes: ${_wizardPontosRestantes()}</span></div>
+      <div class="field-row cols-3">
+        ${['for','des','vig','int','alm','car'].map(sig => {
+          const nome = ({for:'Força',des:'Destreza',vig:'Vigor',int:'Intelecto',alm:'Alma',car:'Carisma'})[sig];
+          return `<div class="field-group"><label style="${labelStyle}">${nome}</label><input type="number" id="wz-a-${sig}" min="8" max="18" value="${w.atrib[sig]}" oninput="_wizardAtributoInput('${sig}', this.value)" style="${inputStyle}text-align:center"></div>`;
+        }).join('')}
+      </div>
     ` : `
-      ${!w.rolagens || w.rolagens.length === 0 ? `
+      ${(!w.rolagens || w.rolagens.length === 0) ? `
         <div class="lore-box" style="margin-bottom:.8rem">
-          <strong>Rolagem 4d6 (drop menor)</strong> — são geradas <strong>3 tentativas</strong> de uma vez; cada uma rola 6 valores (4d6 descartando o menor). Você escolhe qual usar depois.
-          <div style="margin-top:.5rem"><button onclick="wizardRolarAtributos()" style="background:var(--accent);border:none;color:#fff;padding:.5rem 1rem;font-family:inherit;font-size:.84rem;cursor:pointer">${icone('sword','ic-sm')} Rolar Atributos (4d6, drop menor)</button></div>
+          <strong>Rolagem 4d6 (drop menor)</strong> — cada clique gera <strong>1 tentativa</strong> (6 rolagens de 4d6 descartando o menor), até o limite de <strong>3 no total</strong>. Você escolhe qual usar depois.
+          <div style="margin-top:.5rem"><button onclick="wizardRolarAtributos()" style="background:var(--accent);border:none;color:#fff;padding:.5rem 1rem;font-family:inherit;font-size:.84rem;cursor:pointer">${icone('sword','ic-sm')} Rolar Atributos (tentativa 1/3)</button></div>
         </div>
       ` : `
         <div class="lore-box" style="margin-bottom:.8rem">
-          <strong>Escolha uma das 3 rolagens.</strong> A regra do livro só valida totais <strong>acima de 80</strong> — mas você decide qual usar. Após escolher, os valores ficam <strong>fixos</strong>: o que dá para ajustar é apenas a <strong>ordem</strong> (qual valor vai em cada atributo).
+          <strong>Escolha uma das rolagens.</strong> A regra do livro só valida totais <strong>acima de 80</strong> — mas você decide qual usar. Após escolher, os valores ficam <strong>fixos</strong>: o que dá para ajustar é apenas a <strong>ordem</strong> (qual valor vai em cada atributo).
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.8rem">
           ${w.rolagens.map((r, idx) => {
@@ -9570,7 +9579,13 @@ function _wizardCorpoHTML() {
             </div>`;
           }).join('')}
         </div>
-        <div style="text-align:center;margin-bottom:.8rem"><button onclick="wizardRolarAtributos()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.4rem .9rem;font-family:inherit;font-size:.78rem;cursor:pointer">Rolar de novo (3 novas tentativas)</button></div>
+        ${w.rolagens.length < 3 ? `
+          <div style="text-align:center;margin-bottom:.8rem"><button onclick="wizardRolarAtributos()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.4rem .9rem;font-family:inherit;font-size:.78rem;cursor:pointer">${icone('sword','ic-sm')} Rolar (tentativa ${w.rolagens.length + 1}/3)</button></div>
+        ` : `
+          <div class="lore-box" style="margin-bottom:.8rem;border-color:rgba(220,150,40,.45)">
+            <strong>Limite de 3 tentativas usado.</strong> Escolha uma das rolagens acima, ou troque para a opção de <strong>80 Pontos</strong>.
+          </div>
+        `}
       `}
       ${w.rolagemEscolhida != null ? `
         <div style="margin-top:.4rem">
@@ -9683,18 +9698,20 @@ function _wizardRolar4d6() {
   return dados[1] + dados[2] + dados[3]; // drop do menor
 }
 
-// Gera as 3 tentativas completas de rolagem de atributos (4d6 drop menor ×6
-// para cada tentativa). Cada tentativa guarda os 6 valores e o total.
+// Gera UMA tentativa de rolagem de atributos (4d6 drop menor ×6) por clique.
+// Limite estrito: máximo de 3 tentativas no TOTAL. O contador real é
+// rolagens.length (fonte única — rolagensFeitas é mantido em sincronia para
+// compatibilidade com rascunhos antigos). Após a 3ª, o botão desaparece e o
+// jogador escolhe uma rolagem ou usa os 80 Pontos.
 function wizardRolarAtributos() {
   if (!_wizardEstado) return;
   const w = _wizardEstado;
-  w.rolagens = [];
-  for (let t = 0; t < 3; t++) {
-    const valores = [1,2,3,4,5,6].map(() => _wizardRolar4d6());
-    w.rolagens.push({ valores: valores, total: valores.reduce((s, v) => s + v, 0) });
-  }
-  w.rolagemEscolhida = null; // obriga nova escolha após rolar
-  w.rolagensFeitas = 3;
+  if (!Array.isArray(w.rolagens)) w.rolagens = [];
+  if (w.rolagens.length >= 3) return; // limite estrito — nunca além de 3
+  const valores = [1,2,3,4,5,6].map(() => _wizardRolar4d6());
+  w.rolagens.push({ valores: valores, total: valores.reduce((s, v) => s + v, 0) });
+  w.rolagemEscolhida = null; // nova tentativa exige nova escolha
+  w.rolagensFeitas = w.rolagens.length;
   w.rolagemAceita = false;
   _wizardRender();
 }
@@ -9805,16 +9822,17 @@ function _wizardDestinoDaTorre() {
   const d = _WIZARD_DESPERTARES.find(x => x.n === w.despertar);
   w.sanidadeAjuste = d.sanidade || 0;
   w.corrupcaoAjuste = d.corrupcao || 0;
-  // Atributos: rolagem 4d6 — gera as 3 tentativas e escolhe a melhor (maior
-  // total; prefere a primeira válida > 80).
+  // Atributos: rolagem 4d6 — gera até 3 tentativas (respeita o limite: se o
+  // jogador já rolou algumas, completa o que falta; se já usou as 3, usa as
+  // existentes) e escolhe a melhor (maior total; prefere a primeira válida > 80).
   w.metodoAtributo = 'rolagem';
-  w.rolagens = [];
-  for (let t = 0; t < 3; t++) {
+  if (!Array.isArray(w.rolagens)) w.rolagens = [];
+  while (w.rolagens.length < 3) {
     const valores = [1,2,3,4,5,6].map(() => _wizardRolar4d6());
     w.rolagens.push({ valores: valores, total: valores.reduce((s, v) => s + v, 0) });
   }
   w.rolagemEscolhida = null;
-  w.rolagensFeitas = 3;
+  w.rolagensFeitas = w.rolagens.length;
   w.rolagemAceita = false;
   w.atribRolagem = ['for','des','vig','int','alm','car'];
   const melhorIdx = w.rolagens.reduce((best, r, idx) =>
