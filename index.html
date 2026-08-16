@@ -841,6 +841,38 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
 .pericias-dropdown-item-nome { flex:1; font-size:.88rem; color:var(--text); }
 .pericias-dropdown-item-bonus { font-family:'Playfair Display',serif; font-size:.95rem; color:var(--silver); font-weight:700; }
 
+/* modal de rolagem crítica d100 (tabelas aprovadas — O Julgamento Favorável / O Olhar da Torre) */
+.critico-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:9001;
+  display:flex; align-items:center; justify-content:center;
+}
+.critico-modal {
+  background:var(--bg-elevated); border:1px solid var(--border);
+  width:100%; max-width:540px; max-height:80vh; overflow-y:auto;
+  border-top:2px solid var(--accent-light);
+}
+.critico-header {
+  padding:1rem 1.25rem; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.critico-titulo { font-family:'Playfair Display',serif; font-size:1.05rem; color:#f0f0f5; }
+.critico-close { background:none; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer; }
+.critico-corpo { padding:1.25rem; }
+.critico-dado { font-size:.78rem; color:var(--text-muted); letter-spacing:1px; margin-bottom:.3rem; }
+.critico-dado strong { font-family:'Playfair Display',serif; font-size:2.3rem; color:var(--silver); line-height:1.1; }
+.critico-nome {
+  font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--accent-light);
+  margin-bottom:.6rem; border-bottom:1px solid var(--border); padding-bottom:.6rem;
+}
+.critico-efeito { font-size:.92rem; color:var(--text); line-height:1.5; }
+.critico-actions { padding:0 1.25rem 1.25rem; display:flex; gap:.6rem; justify-content:flex-end; flex-wrap:wrap; }
+.critico-btn {
+  background:none; border:1px solid var(--accent); color:var(--accent-light);
+  padding:.45rem 1rem; font-family:inherit; font-size:.82rem; cursor:pointer; transition:all .2s;
+}
+.critico-btn:hover { background:var(--deep-t12); }
+.critico-btn-fechar { border-color:var(--border); color:var(--text-muted); }
+
 /* SAVE BAR */
 .save-bar { position:sticky; bottom:0; background:rgba(12,12,15,.97); backdrop-filter:blur(10px); border-top:1px solid var(--border); padding:.8rem 1.2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; z-index:100; }
 .save-btn { background:var(--accent); border:none; color:#fff; padding:.6rem 1.8rem; font-family:'Playfair Display',serif; font-size:.95rem; cursor:pointer; letter-spacing:1px; transition:background .2s; }
@@ -10400,6 +10432,16 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       <div id="torre-aviso" style="display:none;margin-top:.5rem;color:var(--accent-text);font-weight:bold;font-size:.82rem">A Torre nota vocês.</div>
     </div>
 
+    <!-- ROLAGENS CRÍTICAS (d100) -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Rolagens Críticas (d100)</div>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.6rem">Um 20 natural dobra o dano e rola na tabela de Acerto Crítico (O Julgamento Favorável); um 1 natural rola na tabela de Falha Crítica (O Olhar da Torre).</p>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <button onclick="abrirRolagemCritico()" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Rolagem Crítica (d100)</button>
+        <button onclick="abrirRolagemFalha()" style="background:none;border:1px solid var(--gold);color:var(--gold-light);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Falha Crítica (d100)</button>
+      </div>
+    </div>
+
   </div>
   </div><!-- /area-combate -->
 </div>
@@ -11727,6 +11769,216 @@ function removerUtilizacaoEl(btn) {
   if (tr) { tr.remove(); salvarLocal(); }
 }
 
+// ─── TABELAS d100 DE CRÍTICO (aprovadas 15/08/2026 — docs/TABELAS_CRITICOS.md) ───
+// TABELA_CRITICO_ACERTO: 100 entradas de "O Julgamento Favorável" (20 natural → dobra o dano e rola 1d100).
+// TABELA_CRITICO_FALHA: 100 entradas de "O Olhar da Torre" (1 natural → falha automática e rola 1d100).
+// Índice 0–99 ↔ d100 1–100 (entrada.n = índice + 1).
+const TABELA_CRITICO_ACERTO = [
+  { n:1,  nome:'Corte Limpo', efeito:'O golpe acerta com precisão cirúrgica. +1 dado de dano (máx. 1d6).' },
+  { n:2,  nome:'Fenda Profunda', efeito:'O alvo sangra: sofre 1 de dano contínuo no início de cada rodada até ser tratado.' },
+  { n:3,  nome:'Impacto Brutal', efeito:'O alvo é empurrado 1 zona para trás.' },
+  { n:4,  nome:'Golpe Surdo', efeito:'O alvo fica atordoado até o fim do próximo turno (perde Ação Bônus).' },
+  { n:5,  nome:'Aproveitamento', efeito:'Você pode realizar imediatamente 1 Ataque de Oportunidade contra o alvo, sem gastar Reação.' },
+  { n:6,  nome:'Ponto Vital', efeito:'Ignora 50% da Redução de Dano do alvo neste ataque.' },
+  { n:7,  nome:'Ataque Combinado', efeito:'Um aliado em zona Curta ganha Vantagem no próximo ataque contra o mesmo alvo.' },
+  { n:8,  nome:'Ritmo de Caça', efeito:'Seu próximo ataque contra o mesmo alvo recebe +2 no teste de acerto.' },
+  { n:9,  nome:'Presa Fincada', efeito:'O alvo fica enredado/agarrado até passar em um teste de Força ou Destreza.' },
+  { n:10, nome:'Derrubada', efeito:'O alvo cai no chão (fica caído).' },
+  { n:11, nome:'Dois Golpes', efeito:'O dano é aplicado duas vezes (dobre os dados, não os modificadores).' },
+  { n:12, nome:'Arremesso', efeito:'O alvo é arremessado para a zona Longa e sofre 1d6 de dano de queda.' },
+  { n:13, nome:'Fúria da Alma', efeito:'Você causa +1d6 de dano de Alma (ignora RD).' },
+  { n:14, nome:'Lâmina Sôfrega', efeito:'O alvo perde 1d4 de STA (esforço/medo).' },
+  { n:15, nome:'Perfuração', efeito:'O ataque ignora toda a Redução de Dano do alvo.' },
+  { n:16, nome:'Golpe Fantasma', efeito:'O alvo fica cego (Desvantagem em ataques) por 1 rodada.' },
+  { n:17, nome:'Fratura', efeito:'O alvo sofre Desvantagem em testes de Força ou Destreza até o fim do combate.' },
+  { n:18, nome:'Dreno Rápido', efeito:'Você rouba 1d4 de STA do alvo e a adiciona à sua.' },
+  { n:19, nome:'Marca do Caçador', efeito:'O alvo fica marcado: seu próximo ataque contra ele tem Vantagem.' },
+  { n:20, nome:'Silêncio Mortal', efeito:'O alvo não pode falar nem emitir sons por 1d4 rodadas.' },
+  { n:21, nome:'Esmagamento', efeito:'O dano é dobrado e o alvo fica caído.' },
+  { n:22, nome:'Quebra de Guarda', efeito:'O alvo perde 2 de CA até o início do seu próximo turno.' },
+  { n:23, nome:'Área de Impacto', efeito:'O ataque atinge também 1 criatura adjacente ao alvo (dano reduzido pela metade).' },
+  { n:24, nome:'Desarme', efeito:'A arma/objeto do alvo cai no chão.' },
+  { n:25, nome:'Imobilização', efeito:'O alvo fica imobilizado até passar em uma Salvaguarda de Força.' },
+  { n:26, nome:'Refluxo da Alma', efeito:'Você recupera 1d6 de Núcleo/PE.' },
+  { n:27, nome:'Fôlego Renovado', efeito:'Você recupera 1d6 de STA.' },
+  { n:28, nome:'Essência Roubada', efeito:'Você rouba 1 PE do alvo (se ele tiver).' },
+  { n:29, nome:'Canalização', efeito:'Seu próximo poder/Técnica custa metade do PE (mín. 1).' },
+  { n:30, nome:'Resiliência', efeito:'Você recupera 1 ponto de Exaustão removido (se tiver).' },
+  { n:31, nome:'Pavor Incutido', efeito:'O alvo deve passar em Salvaguarda de Carisma ou fica Amedrontado por 1 rodada.' },
+  { n:32, nome:'Lágrima na Alma', efeito:'O alvo perde 1d4 de Sanidade (se for um ser consciente).' },
+  { n:33, nome:'Visão da Queda', efeito:'O alvo tem uma visão aterrorizante: perde 1d6 de Sanidade ou fica abalado.' },
+  { n:34, nome:'Grito da Torre', efeito:'O alvo ouve a Torre: Desvantagem em testes de Intelecto por 1 rodada.' },
+  { n:35, nome:'Trauma Reaberto', efeito:'O alvo revive um trauma: falha na Salvaguarda de Alma = fica imóvel 1 rodada.' },
+  { n:36, nome:'Onda de Medo', efeito:'Criaturas comuns próximas ao alvo fazem Salvaguarda de Carisma ou fogem.' },
+  { n:37, nome:'Quebra de Vontade', efeito:'O alvo sofre Desvantagem em Salvaguardas de Alma até o fim do combate.' },
+  { n:38, nome:'Mente Fraturada', efeito:'O alvo esquece 1 Técnica/poder até o fim do combate (ou 1d4 rodadas).' },
+  { n:39, nome:'Eco do Pesadelo', efeito:'O alvo confunde aliado com inimigo por 1 rodada (ataca aleatoriamente).' },
+  { n:40, nome:'Corrupção Rasgada', efeito:'Se o alvo for um monstro, ele perde 1 de Corrupção efetiva (enfraquece).' },
+  { n:41, nome:'Runa Desperta', efeito:'O dano do ataque recebe um elemento (gelo/fogo/trevas) escolhido por você.' },
+  { n:42, nome:'Presa Corrupta', efeito:'O alvo ganha 1 de Corrupção temporária (se suscetível) até o fim do combate.' },
+  { n:43, nome:'Peso da Alma', efeito:'O alvo perde metade da STA de manutenção de efeitos ativos por 1 rodada.' },
+  { n:44, nome:'Fome da Torre', efeito:'O ataque absorve parte da essência do alvo: você ganha +2 no próximo teste.' },
+  { n:45, nome:'Herança de Monstro', efeito:'Você percebe uma fraqueza do alvo: recebe uma dica do Mestre.' },
+  { n:46, nome:'Olhar do Abismo', efeito:'O alvo sente o vazio: falha na Salvaguarda de Alma = fica atordoado 1 rodada.' },
+  { n:47, nome:'Sentença', efeito:'Você "marca" o alvo com a essência do seu poder: seu próximo ataque contra ele é crítico em 19–20.' },
+  { n:48, nome:'Quebra de Runa', efeito:'O ataque enfraquece 1 efeito mágico/runa ativo no alvo.' },
+  { n:49, nome:'Apagão', efeito:'O alvo perde 1d4 de PE (se tiver).' },
+  { n:50, nome:'Chama da Alma', efeito:'O dano é convertido em dano de Alma (ignora armadura física).' },
+  { n:51, nome:'Visão Clara', efeito:'Você ganha Vantagem em todos os testes contra esse tipo de criatura até o fim da incursão.' },
+  { n:52, nome:'Revelação', efeito:'O Mestre revela uma fraqueza ou segredo útil do ambiente/alvo.' },
+  { n:53, nome:'Instinto', efeito:'Você percebe o próximo movimento do alvo: +2 de CA contra ele até seu próximo turno.' },
+  { n:54, nome:'Leitura do Fluxo', efeito:'Você sente a energia do local: +1 em testes de Alma até o fim da cena.' },
+  { n:55, nome:'Faro', efeito:'Você descobre 1 pista sobre o que está acontecendo no andar atual.' },
+  { n:56, nome:'Memória de Sangue', efeito:'Você "lembra" como combater esse tipo de alvo: +1 em ataques contra ele por 24h.' },
+  { n:57, nome:'Mapa Mental', efeito:'Você entende a disposição do ambiente: ignora terreno difícil por 1 rodada.' },
+  { n:58, nome:'Presságio', efeito:'Você prevê 1 perigo iminente: recebe uma dica do Mestre.' },
+  { n:59, nome:'Terceiro Olho', efeito:'Você detecta ilusões/mascaramentos na cena.' },
+  { n:60, nome:'Eco do Local', efeito:'Você ouve um eco do que aconteceu neste lugar (1 dica).' },
+  { n:61, nome:'Presença Imponente', efeito:'Criaturas próximas sofrem Desvantagem em testes de medo até o fim do combate.' },
+  { n:62, nome:'Voz de Comando', efeito:'Uma criatura com menos PV que você deve obedecer a 1 comando simples (Salvaguarda de Carisma).' },
+  { n:63, nome:'Aura de Liderança', efeito:'Aliados a até 9m ganham +1 em testes de ataque até o fim do combate.' },
+  { n:64, nome:'Grito de Guerra', efeito:'Aliados ganham Vantagem no próximo teste de medo/terror.' },
+  { n:65, nome:'Momento de Glória', efeito:'Você recupera metade da STA gasta neste ataque.' },
+  { n:66, nome:'Inspiração', efeito:'Um aliado recupera 1d4 de Sanidade ao ver seu feito.' },
+  { n:67, nome:'Fama nascente', efeito:'Você chama atenção positiva de uma facção/personagem (1 contato ou rumor).' },
+  { n:68, nome:'Presença do Herói', efeito:'NPCs comuns ficam dispostos a ajudá-lo nesta cena.' },
+  { n:69, nome:'Palavra de Poder', efeito:'Uma criatura falha automaticamente na próxima Salvaguarda de Carisma contra você.' },
+  { n:70, nome:'Símbolo de Esperança', efeito:'Aliados removem 1 condição de medo/pânico.' },
+  { n:71, nome:'Fluxo da Alma', efeito:'Você pode realizar 1 Ação Bônus adicional neste turno.' },
+  { n:72, nome:'Segundo Fôlego', efeito:'Você age antes na próxima rodada (Iniciativa +5).' },
+  { n:73, nome:'Reação em Cadeia', efeito:'Você pode usar sua Reação sem gastá-la uma vez antes do fim do combate.' },
+  { n:74, nome:'Dança da Batalha', efeito:'Você pode mover 1 zona gratuitamente.' },
+  { n:75, nome:'Tempestade', efeito:'O dano é triplicado (uma vez por cena).' },
+  { n:76, nome:'Sincronia', efeito:'Um aliado pode agir imediatamente após você (ganha sua Reação).' },
+  { n:77, nome:'Espelho', efeito:'Você copia o efeito do último poder usado contra você (se coerente).' },
+  { n:78, nome:'Passo do Vento', efeito:'Você surge em outra zona da cena sem provocar reações.' },
+  { n:79, nome:'Oportunidade', efeito:'Você causa um segundo ataque básico (sem custo) no mesmo turno.' },
+  { n:80, nome:'Mestre do Tempo', efeito:'Você age de novo no fim da rodada (uma ação simples).' },
+  { n:81, nome:'A Torre Nota (favor)', efeito:'Você recebe uma recompensa pequena da própria Torre: +1d4 de PE (mas ela registra seu nome…).' },
+  { n:82, nome:'Bênção Ambígua', efeito:'+1 permanente em um atributo secundário (máx. 1 por Ascensão) — mas ganha 1 de Corrupção.' },
+  { n:83, nome:'Olhar do Boss', efeito:'A atenção de algo grande se volta para você: Vantagem em testes sociais — e +1 de atenção da Torre.' },
+  { n:84, nome:'Fragmento de Runa', efeito:'O golpe arranca um fragmento de runa do alvo (material de forja valioso).' },
+  { n:85, nome:'Testamento de Essência', efeito:'Você absorve 1d4 de "energia da Alma" do alvo (progresso de Ascensão).' },
+  { n:86, nome:'Marca do Predador', efeito:'Você ganha +1 de dano contra esse tipo de criatura por 24h — e monstros desse tipo o reconhecem.' },
+  { n:87, nome:'Juramento', efeito:'Você jura derrubar o alvo: +2 no próximo teste contra ele, mas -1 de Sanidade se falhar.' },
+  { n:88, nome:'Herança da Forja', efeito:'Seu equipamento ganha uma pequena propriedade (runa despertada) até o fim da cena.' },
+  { n:89, nome:'Onda de Cinzas', efeito:'O ataque deixa o ambiente hostil: terreno difícil para inimigos por 1 rodada.' },
+  { n:90, nome:'Sussurro da Névoa', efeito:'A Névoa ao redor se agita: inimigos têm Desvantagem em Percepção por 1 rodada.' },
+  { n:91, nome:'Julgamento da Alma', efeito:'O alvo deve passar em Salvaguarda de Alma ou é subjugado (perde a próxima ação).' },
+  { n:92, nome:'Corte do Destino', efeito:'O golpe fere o conceito do alvo: ele perde acesso a 1 Técnica/poder por 1d4 rodadas.' },
+  { n:93, nome:'Apocalipse Pessoal', efeito:'O alvo sofre dano de Alma igual ao seu mod de Alma (ignora RD) + fica abalado.' },
+  { n:94, nome:'Transbordamento', efeito:'O dano é triplicado e você recupera 1d6 de Núcleo/PE.' },
+  { n:95, nome:'Momento Épico', efeito:'O efeito do seu poder se repete no próximo turno sem custo.' },
+  { n:96, nome:'Imposição', efeito:'O alvo é forçado a fazer uma Salvaguarda de Alma contra medo paralisante ou fica imóvel 1 rodada.' },
+  { n:97, nome:'Ressonância', efeito:'Sua Alma ecoa: aliados recuperam 1d4 de STA, você perde 1 de Sanidade (o preço do êxtase).' },
+  { n:98, nome:'Quebra da Realidade', efeito:'Um efeito menor do ambiente se distorce a seu favor (porta abre, armadilha falha, parede cede).' },
+  { n:99, nome:'Herança da Torre', efeito:'Você ganha um traço temporário poderoso por 24h — e 1 de Corrupção (a Torre cobra).' },
+  { n:100, nome:'Julgamento Favorável', efeito:'Efeito lendário: o poder deixa uma marca permanente — o Mestre escolhe (fraqueza permanente do tipo, traço, marcar o local). A Torre lembra do seu nome.' },
+];
+
+const TABELA_CRITICO_FALHA = [
+  { n:1,  nome:'Tropeço', efeito:'Você cai no chão (fica caído) e perde a Ação Bônus neste turno.' },
+  { n:2,  nome:'Gasto Inútil', efeito:'Você gasta o dobro de STA/Núcleo na tentativa falha.' },
+  { n:3,  nome:'Foco Perdido', efeito:'Você perde a Concentração em todos os efeitos ativos.' },
+  { n:4,  nome:'Nervos', efeito:'Você sofre Desvantagem no próximo teste até o fim do turno.' },
+  { n:5,  nome:'Equívoco', efeito:'Você erra o alvo e atinge 1 criatura adjacente (aliado ou inimigo, Mestre escolhe).' },
+  { n:6,  nome:'Fadiga', efeito:'Você ganha 1 nível de Exaustão.' },
+  { n:7,  nome:'Recuo da Alma', efeito:'Você perde 1d4 de Núcleo/PE.' },
+  { n:8,  nome:'Dano Reverso', efeito:'Você sofre metade do dano que causaria.' },
+  { n:9,  nome:'Ruptura Interna', efeito:'Você ganha 1 de Corrupção e perde 1d4 de Sanidade.' },
+  { n:10, nome:'Arma Instável', efeito:'Sua arma/poder falha: inutilizável por 1d4 rodadas (ou perde 1 dado de dano até reparo).' },
+  { n:11, nome:'Sangramento', efeito:'Você sangra: sofre 1 de dano por rodada até ser tratado.' },
+  { n:12, nome:'Entorse', efeito:'Desvantagem em testes de Destreza por 1d4 rodadas.' },
+  { n:13, nome:'Golpe Defletido', efeito:'O alvo ganha +2 de CA contra você até o fim do combate.' },
+  { n:14, nome:'Postura Aberta', efeito:'Você sofre Desvantagem em Defesa até o início do seu próximo turno.' },
+  { n:15, nome:'Reação Alheia', efeito:'O alvo pode realizar 1 Ataque de Oportunidade contra você (sem gastar Reação).' },
+  { n:16, nome:'Esforço Excessivo', efeito:'Você sofre 1d4 de dano de Sobrecarga (HP direto).' },
+  { n:17, nome:'Puxão', efeito:'Uma criatura o agarra (Salvaguarda de Força para escapar).' },
+  { n:18, nome:'Voo', efeito:'Você é deslocado 1 zona na direção do golpe.' },
+  { n:19, nome:'Fratura Menor', efeito:'-1 em testes de Força ou Vigor até descanso completo.' },
+  { n:20, nome:'Colapso Parcial', efeito:'Você cai e perde a próxima Ação Principal.' },
+  { n:21, nome:'Atenção da Torre', efeito:'A Torre nota você: +1 de atenção (eventos aleatórios pioram 1 nível por 1d4 horas).' },
+  { n:22, nome:'Sussurro da Névoa', efeito:'Você ouve vozes: Desvantagem em testes de Intelecto por 1 hora.' },
+  { n:23, nome:'Marca Visível', efeito:'Você ganha uma marca física temporária: -2 em testes sociais, +1 de atração de monstros.' },
+  { n:24, nome:'Eco Mental', efeito:'Você ouve um eco de um monstro que enfrentou: perde 1d4 de Sanidade.' },
+  { n:25, nome:'Visão da Queda', efeito:'Você vê um futuro horrível: perde 1d6 de Sanidade e fica abalado 1d4 rodadas.' },
+  { n:26, nome:'Trauma da Alma', efeito:'Você ganha 1 ponto de Trauma (penalidade leve até descanso seguro de 24h).' },
+  { n:27, nome:'Paranoia', efeito:'Você desconfia de um aliado por 1d4 rodadas (Desvantagem em trabalho em equipe).' },
+  { n:28, nome:'Ruptura de Vontade', efeito:'Você ganha 1 de Corrupção e sofre Desvantagem em Salvaguardas de Alma por 1 hora.' },
+  { n:29, nome:'Medo Súbito', efeito:'Falha na Salvaguarda de Carisma = você recua 1 zona ou congela.' },
+  { n:30, nome:'Pânico', efeito:'Você age irracionalmente por 1 rodada (Mestre decide: atacar, fugir, congelar).' },
+  { n:31, nome:'Consumo Excessivo', efeito:'A tentativa drena você: perde 1d6 de STA extra.' },
+  { n:32, nome:'Dreno da Torre', efeito:'A Torre suga parte de você: perde 1 PE permanentemente até descanso completo.' },
+  { n:33, nome:'Instabilidade', efeito:'Seu poder fica instável: próximo uso tem Desvantagem.' },
+  { n:34, nome:'Fenda no Núcleo', efeito:'Seu PE máximo é reduzido em 1 até um ritual de purificação.' },
+  { n:35, nome:'Sobrecarga da Alma', efeito:'Você sofre 1d6 de dano psíquico (ignora RD).' },
+  { n:36, nome:'Fome da Essência', efeito:'Você sente um impulso de absorver um núcleo imediatamente (Salvaguarda de Alma).' },
+  { n:37, nome:'Vício de Poder', efeito:'Você ganha +1 de Corrupção (a tentação foi doce).' },
+  { n:38, nome:'Marca do Predador', efeito:'Um monstro próximo percebe sua fraqueza: ele o prioriza neste combate.' },
+  { n:39, nome:'Rejeição', efeito:'Sua Alma recusa o poder: você não pode usar a mesma técnica por 1d4 rodadas.' },
+  { n:40, nome:'Cicatriz da Torre', efeito:'Você sente uma dor antiga: -1 em todos os testes por 1d4 rodadas.' },
+  { n:41, nome:'Amplificação do Inimigo', efeito:'O alvo (se monstro) se fortalece: +1 de dano e +1 de CA até o fim do combate.' },
+  { n:42, nome:'Ensinamento do Alvo', efeito:'O alvo aprende seu padrão: ganha +2 no próximo ataque contra você.' },
+  { n:43, nome:'Exposição', efeito:'Você revela uma fraqueza sua a todos os inimigos presentes.' },
+  { n:44, nome:'Grito de Alerta', efeito:'Um monstro próximo chama outros (1d4 criaturas menores chegam em 2 rodadas).' },
+  { n:45, nome:'Provocação', efeito:'O alvo fica enfurecido contra você: o foca até o fim do combate.' },
+  { n:46, nome:'Ensinar o Errado', efeito:'Você demonstra sua técnica a inimigos: eles resistem melhor a ela (-1 no próximo uso).' },
+  { n:47, nome:'Solo Escorregadio', efeito:'Terreno difícil ao seu redor por 1 rodada (você e aliados próximos).' },
+  { n:48, nome:'Armadilha do Ambiente', efeito:'Você aciona um perigo local (Mestre: runa, névoa, estrutura).' },
+  { n:49, nome:'Distração', efeito:'Você não percebe um perigo iminente (perde Vantagem de Defesa).' },
+  { n:50, nome:'Erro de Leitura', efeito:'Você interpreta mal a situação: o próximo plano do grupo tem Desvantagem.' },
+  { n:51, nome:'Equipamento Danificado', efeito:'Uma peça do seu equipamento (arma/armadura/ferramenta) sofre dano (-1 até reparo).' },
+  { n:52, nome:'Runa Apagada', efeito:'Uma runa/efeito seu é dissipado.' },
+  { n:53, nome:'Munição Perdida', efeito:'Você perde um item menor ou material (1d4 de material de forja).' },
+  { n:54, nome:'Forja Instável', efeito:'Seu item com memória de luta "reclama": -1 de dano até o fim do combate.' },
+  { n:55, nome:'Alquimia Vazada', efeito:'Um consumível seu estraga (1 dose/poção).' },
+  { n:56, nome:'Lâmina Cega', efeito:'Sua arma sofre Desvantagem no próximo ataque (fio/energia instável).' },
+  { n:57, nome:'Proteção Caída', efeito:'Um efeito defensivo seu (escudo/aura) falha e se dissipa.' },
+  { n:58, nome:'Ferramenta Quebrada', efeito:'Um item de perícia (kit, corda, foco) quebra/inutiliza até reparo.' },
+  { n:59, nome:'Peso Morto', efeito:'Você fica sobrecarregado: deslocamento reduzido pela metade por 1d4 rodadas.' },
+  { n:60, nome:'Vestígio', efeito:'Algo do seu poder vaza: uma pequena manifestação hostil surge ao seu lado.' },
+  { n:61, nome:'Revelação Involuntária', efeito:'Você fala em voz alta um segredo ou plano (todos ouvem).' },
+  { n:62, nome:'Confissão', efeito:'Você revela uma informação sensível a alguém (Barman/facção sabe).' },
+  { n:63, nome:'Fama Ruim', efeito:'Sua falha é testemunhada: -1 de reputação com um grupo/facção.' },
+  { n:64, nome:'Mal-entendido', efeito:'Um aliado interpreta sua ação como hostil (roleplay + teste social).' },
+  { n:65, nome:'Culpa', efeito:'Você ganha 1d4 de Sanidade a menos (peso da falha) — recuperável com descanso.' },
+  { n:66, nome:'Promessa Quebrada', efeito:'Um contato seu cobra um favor agora (o Mestre decide).' },
+  { n:67, nome:'Olhar de Julgamento', efeito:'Alguém importante presencia sua falha e anota seu nome.' },
+  { n:68, nome:'Rumor', efeito:'Uma história distorcida sobre você começa a circular.' },
+  { n:69, nome:'Dívida', efeito:'Você deve um favor a alguém (Mestre decide quem).' },
+  { n:70, nome:'Silêncio', efeito:'Você fica sem palavras/rosto reconhecível por 1d4 rodadas (sem testes sociais).' },
+  { n:71, nome:'Exaustão Súbita', efeito:'Você ganha 2 níveis de Exaustão.' },
+  { n:72, nome:'Sobrecarga Total', efeito:'Você perde metade da STA restante.' },
+  { n:73, nome:'Apagão de Núcleo', efeito:'Você perde metade do PE restante.' },
+  { n:74, nome:'Colapso da Alma', efeito:'Você fica à beira da Ruptura: perde 1d6 de Sanidade e 1 de Corrupção.' },
+  { n:75, nome:'Morte Branca', efeito:'Você desmaia por 1d4 rodadas (PV > 0, mas inconsciente).' },
+  { n:76, nome:'Ferimento Grave', efeito:'Você sofre um ferimento que exige tratamento (perícia Medicina ou descanso longo).' },
+  { n:77, nome:'Sangramento Interno', efeito:'Você perde 1d4 de HP no início de cada rodada até ser estabilizado.' },
+  { n:78, nome:'Deslocamento', efeito:'Você é arremessado para Longa distância e sofre 1d6 de dano.' },
+  { n:79, nome:'Fratura Exposta', efeito:'-1 permanente em um atributo físico até tratamento sério (Mestre decide qual).' },
+  { n:80, nome:'Perto da Morte', efeito:'Você cai a 0 PV em vez de falhar (se já estiver ferido, sofre 1 ferimento).' },
+  { n:81, nome:'A Torre Acorda', efeito:'Um evento de Risco da Torre é rolado imediatamente (com +2 de risco).' },
+  { n:82, nome:'Manifestação', efeito:'Uma entidade menor da Torre surge para investigar o barulho.' },
+  { n:83, nome:'Névoa Aproxima-se', efeito:'A Névoa avança sobre o grupo: perigo ambiental iminente.' },
+  { n:84, nome:'Surtos de Atividade', efeito:'O andar fica mais perigoso: +1 de dificuldade em eventos até o fim da incursão.' },
+  { n:85, nome:'O Andar Reage', efeito:'O ambiente se fecha: uma passagem se bloqueia, uma armadilha se arma.' },
+  { n:86, nome:'Presença Superior', efeito:'Um monstro mais forte (1 tier acima) nota o grupo.' },
+  { n:87, nome:'Chamado da Torre', efeito:'Você ouve seu nome: -1 de Sanidade e a Torre o marca (atenção +1 permanente nesta incursão).' },
+  { n:88, nome:'Corrupção em Cascata', efeito:'Você ganha 1d4 de Corrupção (o preço da falha).' },
+  { n:89, nome:'Marca Permanente', efeito:'Você ganha uma Marca da Torre (mecânica: -1 em testes sociais até purificação).' },
+  { n:90, nome:'Traição da Alma', efeito:'Seu poder o fere: sofre o dano que tentava causar (integral).' },
+  { n:91, nome:'Fragmento Perdido', efeito:'Você perde acesso a 1 Técnica/poder por 24h (a Alma "esquece").' },
+  { n:92, nome:'Cicatriz de Alma', efeito:'Você perde 1 ponto de Sanidade máxima até um evento narrativo de recuperação.' },
+  { n:93, nome:'Drenagem da Torre', efeito:'Você perde 1d6 de PE máximo até descanso completo fora da Torre.' },
+  { n:94, nome:'Vozes', efeito:'Você passa a ouvir sussurros constantes por 1d4 horas (Desvantagem em testes de Alma).' },
+  { n:95, nome:'Possessão Menor', efeito:'Algo antigo pisca dentro de você por 1 rodada (age por você; 1 de Corrupção).' },
+  { n:96, nome:'Ruptura da Alma', efeito:'Você ganha 1 Trauma permanente leve (fobia/mania — Mestre define).' },
+  { n:97, nome:'Oferenda', efeito:'A Torre aceita sua falha como oferenda: você perde 1d4 de Sanidade máxima até purificação.' },
+  { n:98, nome:'Despertar do Predador', efeito:'Algo na Torre das Disputas sente sua falha: um rival/gladiador passa a te procurar.' },
+  { n:99, nome:'Espiral', efeito:'Você perde o controle: Mestre assume seu personagem por 1d4 rodadas (age segundo seus medos).' },
+  { n:100, nome:'Ira da Torre', efeito:'Catástrofe: o Mestre escolhe o pior — perda de traço, Corrupção permanente, a Torre envia algo atrás de você, ou uma Marca que nunca some.' },
+];
+
 // ─── COMBATE — TRACKERS DO COMBATE LAPIDADO (decisões C4, C8, C9) ───
 function _clampInput(id, min, max) {
   const el = document.getElementById(id);
@@ -11809,6 +12061,55 @@ function atualizarAvisoTorre() {
   const aviso = document.getElementById('torre-aviso');
   if (!el || !aviso) return;
   aviso.style.display = (parseInt(el.value, 10) || 0) >= 6 ? 'block' : 'none';
+}
+
+// ─── ROLAGEM AUTOMÁTICA DAS TABELAS d100 DE CRÍTICO ───
+// (O Julgamento Favorável — 20 natural / O Olhar da Torre — 1 natural)
+let _criticoTipoAtual = 'acerto'; // 'acerto' | 'falha'
+
+function abrirRolagemCritico() { _abrirRolagemCritico('acerto'); }
+function abrirRolagemFalha()   { _abrirRolagemCritico('falha'); }
+
+function _abrirRolagemCritico(tipo) {
+  _criticoTipoAtual = tipo;
+  document.getElementById('critico-overlay')?.remove();
+  const tabela = tipo === 'acerto' ? TABELA_CRITICO_ACERTO : TABELA_CRITICO_FALHA;
+  const titulo = tipo === 'acerto' ? 'Acerto Crítico — O Julgamento Favorável' : 'Falha Crítica — O Olhar da Torre';
+  const cor = tipo === 'acerto' ? 'var(--accent-light)' : 'var(--gold-light)';
+  const rolagem = Math.floor(Math.random() * 100) + 1; // 1d100
+  const entrada = tabela[rolagem - 1] || null;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'critico-overlay';
+  overlay.id = 'critico-overlay';
+
+  overlay.innerHTML = `
+    <div class="critico-modal" style="border-top-color:${cor}">
+      <div class="critico-header">
+        <span class="critico-titulo">${titulo}</span>
+        <button class="critico-close" onclick="fecharRolagem()"><svg class="ic"><use href="#ic-close"/></svg></button>
+      </div>
+      <div class="critico-corpo">
+        <div class="critico-dado">d100: <strong>${rolagem}</strong></div>
+        <div class="critico-nome" style="color:${cor}">${entrada ? entrada.nome : '—'}</div>
+        <div class="critico-efeito">${entrada ? entrada.efeito : ''}</div>
+      </div>
+      <div class="critico-actions">
+        <button class="critico-btn" onclick="rolarNovamente()">Rolar novamente</button>
+        <button class="critico-btn critico-btn-fechar" onclick="fecharRolagem()">Fechar</button>
+      </div>
+    </div>`;
+
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function rolarNovamente() {
+  _abrirRolagemCritico(_criticoTipoAtual);
+}
+
+function fecharRolagem() {
+  document.getElementById('critico-overlay')?.remove();
 }
 
 // ─── FOTO — botão de remover a foto principal ───────────────────
