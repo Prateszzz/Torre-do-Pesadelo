@@ -4343,6 +4343,138 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
   .lenda-card, .login-btn, .hero-cta, .tabbar-btn { will-change: transform; }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE FINISH — correção das brechas de usabilidade touch
+   Regras aditivas ou dentro de media queries; desktop intacto.
+═══════════════════════════════════════════════════════════════════ */
+
+/* B1 · Painel GM: abas quebram confortavelmente em telas estreitas */
+@media (max-width:640px) {
+  .gm-tabs { flex-wrap: wrap; gap: .35rem; border-bottom: none; }
+  .gm-tab {
+    flex: 1 1 auto;
+    min-height: 44px;
+    padding: .55rem .65rem;
+    font-size: .82rem;
+    border: 1px solid var(--border);
+    border-bottom: 2px solid transparent;
+    text-align: center;
+  }
+  .gm-tab.active { border-bottom-color: var(--gold-light); }
+  #painel-adm .gm-tab.active { border-bottom-color: var(--accent-light); }
+}
+
+/* B2 · Wizard de criação: inputs e cards otimizados para touch */
+@media (max-width:640px) {
+  #wizard-criacao-overlay .critico-modal {
+    max-width: 100% !important;
+    margin: 0;
+    max-height: 100vh !important;
+    border-radius: 0;
+    border-top-width: 3px;
+  }
+  #wizard-criacao-overlay .critico-corpo {
+    max-height: calc(100vh - 178px) !important;
+    padding: 1rem;
+  }
+  #wizard-criacao-overlay .critico-actions {
+    flex-direction: column-reverse !important;
+    gap: .5rem !important;
+    padding: .9rem 1rem 1rem !important;
+  }
+  #wizard-criacao-overlay .critico-actions .critico-btn {
+    width: 100% !important;
+    min-height: 44px;
+    justify-content: center;
+    font-size: .9rem;
+  }
+  #wizard-criacao-overlay .field-group input,
+  #wizard-criacao-overlay .field-group select,
+  #wizard-criacao-overlay .field-group textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+  #wizard-criacao-overlay .field-group textarea { min-height: 90px; }
+  /* Cards de Antecedente / Despertar em 1 coluna */
+  #wizard-criacao-overlay .critico-corpo > div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* B3 · Save-bar: não fica atrás da bottom tab bar */
+@media (max-width:1024px) {
+  .save-bar { bottom: calc(var(--tabbar-h) + var(--safe-bottom)); }
+}
+
+/* B4 · Tooltips: acessíveis por toque e foco */
+.info-btn { -webkit-tap-highlight-color: transparent; }
+.info-btn .tooltip { transition: opacity .2s; }
+@media (hover: none), (max-width:640px) {
+  .info-btn { cursor: pointer; }
+  .info-btn.show .tooltip,
+  .info-btn:active .tooltip { opacity: 1; pointer-events: auto; }
+}
+@media (hover: hover) {
+  .info-btn:hover .tooltip { opacity: 1; pointer-events: auto; }
+}
+
+/* B5 · Reordenamento de atributos: botões ▲/▼ em touch */
+.attr-ordem-btns {
+  position: absolute; top: .35rem; right: 2.1rem;
+  display: none; flex-direction: column; gap: .1rem;
+}
+.attr-ordem-btn {
+  background: rgba(255,255,255,.06); border: 1px solid var(--border);
+  color: var(--text-muted); width: 26px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .6rem; padding: 0; cursor: pointer; border-radius: 2px;
+}
+.attr-ordem-btn:active { background: var(--accent-t25); color: var(--text); }
+@media (hover: none), (max-width:1024px) {
+  .attr-ordem-btns { display: flex; }
+}
+@media (max-width:640px) {
+  .attr-ordem-btns { right: 2.1rem; top: .2rem; }
+  .attr-ordem-btn { width: 24px; height: 20px; font-size: .55rem; }
+}
+
+/* B6 · Sidebar do livro: drawer único, botão de abrir ≥44px */
+@media (max-width:1024px) {
+  #livro-sidebar-arrow-btn {
+    width: 44px;
+    height: 72px;
+    border-radius: 0 14px 14px 0;
+  }
+}
+@media (max-width:1023px) {
+  #livro-content { padding: 1.25rem 1rem calc(1.5rem + var(--safe-bottom)); }
+}
+@media (max-width:640px) {
+  #livro-content { padding: 1rem .85rem calc(1.25rem + var(--safe-bottom)); }
+}
+
+/* Overlays críticos: usáveis em telas pequenas */
+@media (max-width:640px) {
+  .critico-overlay { padding: .5rem; align-items: center; }
+  #wizard-criacao-overlay.critico-overlay { padding: 0; }
+  .critico-modal {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 6px;
+    border-top-width: 3px;
+  }
+  .critico-header { padding: .9rem 1rem; }
+  .critico-corpo { padding: 1rem; max-height: calc(100vh - 150px); }
+  .critico-actions { padding: .8rem 1rem 1rem; }
+  .critico-close { width: 44px; height: 44px; font-size: 1.25rem; }
+
+  /* Login/landing: não estoura em telas estreitas */
+  #login-screen { padding: 1rem; }
+  .login-box { padding: 1.5rem 1.25rem; }
+  .login-title { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+  .landing-title { font-size: clamp(1.7rem, 8vw, 2.6rem); }
+}
+
 
 </style>
 <style>
@@ -4360,9 +4492,8 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
     #livro-content a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
     #livro-content a:visited { color: var(--accent-light); }
     @media (max-width:1024px) {
-      #livro-layout { flex-direction:column; }
-      #livro-sidebar { width:100%; max-height:none; position:static; border-right:none; border-bottom:1px solid var(--border); }
-      #livro-content { padding:1.5rem 1.25rem 4rem; }
+      /* Drawer flutuante é a única estratégia mobile; regra estática removida. */
+      #livro-sidebar { position: fixed !important; }
     }
   </style></head>
 <body>
@@ -8781,11 +8912,15 @@ function _renderizarGridAtributos() {
     const el = document.getElementById('a-' + sigla);
     if (el) valores[sigla] = el.value;
   });
-  grid.innerHTML = ATRIBUTOS_DEF.map(({sigla, nome}) => `
+  grid.innerHTML = ATRIBUTOS_DEF.map(({sigla, nome}, idx) => `
     <div class="atributo-box" id="attr-box-${sigla}" draggable="true"
       ondragstart="_attrDragStart(event,'${sigla}')" ondragover="_attrDragOver(event)"
       ondrop="_attrDrop(event,'${sigla}')" ondragend="_attrDragEnd(event)">
       <button class="atributo-fav-btn" id="fav-${sigla}" onclick="toggleFavoritoAtributo('${sigla}',event)" title="Favoritar ${nome}">${icone('star','ic-sm')}</button>
+      <div class="attr-ordem-btns">
+        <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',-1,event)" title="Mover para cima" ${idx === 0 ? 'style="visibility:hidden"' : ''}>▲</button>
+        <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',1,event)" title="Mover para baixo" ${idx === ATRIBUTOS_DEF.length - 1 ? 'style="visibility:hidden"' : ''}>▼</button>
+      </div>
       <label style="letter-spacing:2px" title="${nome}">${nome}</label>
       <input type="number" id="a-${sigla}" min="1" max="30" value="${valores[sigla] ?? 10}" oninput="calcTudoDebounced()">
       <div class="atributo-mod" id="m-${sigla}">+0</div>
@@ -8866,6 +9001,26 @@ function _attrDragEnd(ev) {
     el.classList.remove('arrastando', 'drag-over');
   });
   _attrArrastando = null;
+}
+
+/* Fallback touch para reordenar atributos: move uma posição para cima/baixo */
+function _attrMover(sigla, dir, ev) {
+  if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+  const prefs = _carregarAttrPrefs();
+  const ordem = ATRIBUTOS_DEF.map(a => a.sigla);
+  const idx = ordem.indexOf(sigla);
+  if (idx === -1) return;
+  const novoIdx = idx + dir;
+  if (novoIdx < 0 || novoIdx >= ordem.length) return;
+  ordem.splice(idx, 1);
+  ordem.splice(novoIdx, 0, sigla);
+  prefs.ordem = ordem;
+  _salvarAttrPrefs(prefs);
+  const porSigla = Object.fromEntries(ATRIBUTOS_BASE.map(a => [a.sigla, a]));
+  ATRIBUTOS_DEF = ordem.map(s => porSigla[s]);
+  _renderizarGridAtributos();
+  _aplicarFavoritosVisual(prefs.favoritos || []);
+  calcTudo();
 }
 
 let usuarioAtual = null;
@@ -11378,11 +11533,15 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div id="area-atributos">
     <div class="ficha-panel-body" style="padding:1.75rem 1.5rem 1.5rem">
       <div class="atributos-grid" id="atributos-grid" style="gap:.85rem">
-        ${ATRIBUTOS_DEF.map(({sigla, nome}) => `
+        ${ATRIBUTOS_DEF.map(({sigla, nome}, idx) => `
         <div class="atributo-box" id="attr-box-${sigla}" draggable="true"
           ondragstart="_attrDragStart(event,'${sigla}')" ondragover="_attrDragOver(event)"
           ondrop="_attrDrop(event,'${sigla}')" ondragend="_attrDragEnd(event)">
           <button class="atributo-fav-btn" id="fav-${sigla}" onclick="toggleFavoritoAtributo('${sigla}',event)" title="Favoritar ${nome}">${icone('star','ic-sm')}</button>
+          <div class="attr-ordem-btns">
+            <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',-1,event)" title="Mover para cima" ${idx === 0 ? 'style="visibility:hidden"' : ''}>▲</button>
+            <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',1,event)" title="Mover para baixo" ${idx === ATRIBUTOS_DEF.length - 1 ? 'style="visibility:hidden"' : ''}>▼</button>
+          </div>
           <label style="letter-spacing:2px" title="${nome}">${nome}</label>
           <input type="number" id="a-${sigla}" min="1" max="30" value="10" oninput="calcTudoDebounced()">
           <div class="atributo-mod" id="m-${sigla}">+0</div>
@@ -15473,12 +15632,26 @@ document.addEventListener('DOMContentLoaded', () => {
     #livro-content a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
     #livro-content a:visited { color: var(--accent-light); }
     @media (max-width:1024px) {
-      #livro-layout { flex-direction:column; }
-      #livro-sidebar { width:100%; max-height:none; position:static; border-right:none; border-bottom:1px solid var(--border); }
-      #livro-content { padding:1.5rem 1.25rem 4rem; }
+      /* Drawer flutuante é a única estratégia mobile; regra estática removida. */
+      #livro-sidebar { position: fixed !important; }
     }
   `;
   document.head.appendChild(style);
+
+  // B4 · Tooltips touch: toggles .show no toque/clique
+  document.querySelectorAll('.info-btn').forEach(btn => {
+    if (!btn.hasAttribute('tabindex')) btn.setAttribute('tabindex', '0');
+    if (!btn.hasAttribute('role')) btn.setAttribute('role', 'button');
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const wasShown = btn.classList.contains('show');
+      document.querySelectorAll('.info-btn.show').forEach(b => b.classList.remove('show'));
+      if (!wasShown) btn.classList.add('show');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.info-btn.show').forEach(b => b.classList.remove('show'));
+  });
 });
 
 </script>
