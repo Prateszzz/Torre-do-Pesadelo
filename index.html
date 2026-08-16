@@ -3737,6 +3737,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.7; }       /* Combate (trackers) */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 4.8; }       /* Sessões e XP */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 4.9; }   /* Acampamento */
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 5; }            /* Atributos    */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
@@ -8595,7 +8596,7 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
+let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
@@ -9241,7 +9242,7 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
@@ -9352,7 +9353,7 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
+      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
       _aplicarEstadoFichaExpand();
     }
   }
@@ -10214,17 +10215,19 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   <div class="ficha-panel-body">
     <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap">
       <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Pontos da Alma disponíveis</span>
-      <input type="number" id="aa-pontos" min="0" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100px" oninput="salvarLocal()">
+      <input type="number" id="aa-pontos" min="0" value="0" title="6 Pontos da Alma por nível (1–20) · máx: 3 Aspectos completos + 1 parcial · Missão de Maestria = +1 Ramo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100px" oninput="atualizarArvoreResumo()">
+      <span style="font-size:.78rem;color:var(--text-muted)">Gasto: <strong id="aa-total-gasto" style="color:var(--silver)">0</strong></span>
+      <span style="font-size:.78rem;color:var(--text-muted)">Saldo: <strong id="aa-saldo" style="color:var(--accent-light)">0</strong></span>
     </div>
-    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">6 pontos por nível · máx. 3 Aspectos completos + 1 parcial</p>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">6 pontos por nível (1–20) · máx. 3 Aspectos completos + 1 parcial · Missão de Maestria = +1 Ramo · clique em ⓘ para ver os níveis de cada Ramo</p>
 
     <!-- ARCANO -->
     <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Arcano</div>
       <div class="field-row cols-3">
-        <div class="field-group"><label>Controle</label><input type="number" id="aa-arcano-controle" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Expansão</label><input type="number" id="aa-arcano-expansao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Versatilidade</label><input type="number" id="aa-arcano-versatilidade" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Controle <span id="aa-prog-arcano-controle" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','controle')" title="Ver os 10 níveis do Ramo Controle" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-controle" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Expansão <span id="aa-prog-arcano-expansao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','expansao')" title="Ver os 10 níveis do Ramo Expansão" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-expansao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Versatilidade <span id="aa-prog-arcano-versatilidade" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','versatilidade')" title="Ver os 10 níveis do Ramo Versatilidade" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-versatilidade" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
       </div>
     </div>
 
@@ -10232,9 +10235,9 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Bélico</div>
       <div class="field-row cols-3">
-        <div class="field-group"><label>Impacto</label><input type="number" id="aa-belico-impacto" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Perfuração</label><input type="number" id="aa-belico-perfuracao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Execução</label><input type="number" id="aa-belico-execucao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Impacto <span id="aa-prog-belico-impacto" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','impacto')" title="Ver os 10 níveis do Ramo Impacto" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-impacto" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Perfuração <span id="aa-prog-belico-perfuracao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','perfuracao')" title="Ver os 10 níveis do Ramo Perfuração" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-perfuracao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Execução <span id="aa-prog-belico-execucao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','execucao')" title="Ver os 10 níveis do Ramo Execução" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-execucao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
       </div>
     </div>
 
@@ -10242,9 +10245,9 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Mobilidade</div>
       <div class="field-row cols-3">
-        <div class="field-group"><label>Deslocamento</label><input type="number" id="aa-mobilidade-deslocamento" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Instinto</label><input type="number" id="aa-mobilidade-instinto" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Acrobacia</label><input type="number" id="aa-mobilidade-acrobacia" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Deslocamento <span id="aa-prog-mobilidade-deslocamento" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','deslocamento')" title="Ver os 10 níveis do Ramo Deslocamento" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-deslocamento" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Instinto <span id="aa-prog-mobilidade-instinto" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','instinto')" title="Ver os 10 níveis do Ramo Instinto" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-instinto" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Acrobacia <span id="aa-prog-mobilidade-acrobacia" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','acrobacia')" title="Ver os 10 níveis do Ramo Acrobacia" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-acrobacia" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
       </div>
     </div>
 
@@ -10252,9 +10255,9 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Guardião</div>
       <div class="field-row cols-3">
-        <div class="field-group"><label>Resistência</label><input type="number" id="aa-guardiao-resistencia" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Vitalidade</label><input type="number" id="aa-guardiao-vitalidade" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Fortaleza</label><input type="number" id="aa-guardiao-fortaleza" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Resistência <span id="aa-prog-guardiao-resistencia" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','resistencia')" title="Ver os 10 níveis do Ramo Resistência" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-resistencia" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Vitalidade <span id="aa-prog-guardiao-vitalidade" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','vitalidade')" title="Ver os 10 níveis do Ramo Vitalidade" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-vitalidade" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Fortaleza <span id="aa-prog-guardiao-fortaleza" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','fortaleza')" title="Ver os 10 níveis do Ramo Fortaleza" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-fortaleza" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
       </div>
     </div>
 
@@ -10262,9 +10265,9 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div>
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Catalisador</div>
       <div class="field-row cols-3">
-        <div class="field-group"><label>Fortalecimento</label><input type="number" id="aa-catalisador-fortalecimento" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Sustentação</label><input type="number" id="aa-catalisador-sustentacao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
-        <div class="field-group"><label>Supressão</label><input type="number" id="aa-catalisador-supressao" min="0" max="10" value="0" oninput="salvarLocal()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Fortalecimento <span id="aa-prog-catalisador-fortalecimento" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','fortalecimento')" title="Ver os 10 níveis do Ramo Fortalecimento" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-fortalecimento" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Sustentação <span id="aa-prog-catalisador-sustentacao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','sustentacao')" title="Ver os 10 níveis do Ramo Sustentação" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-sustentacao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Supressão <span id="aa-prog-catalisador-supressao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','supressao')" title="Ver os 10 níveis do Ramo Supressão" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-supressao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
       </div>
     </div>
   </div>
@@ -10537,6 +10540,73 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
 
   </div>
   </div><!-- /area-sessoes -->
+</div>
+
+<!-- ACAMPAMENTO — abrigo, atividade e rolagem de atenção da Torre -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('acampamento')" id="toggle-acampamento">
+    <span class="ficha-expand-seta" id="seta-acampamento">▶</span> Acampamento
+  </div>
+  <div class="ficha-expand-area" id="area-acampamento">
+  <div class="ficha-panel-body">
+
+    <!-- ABRIGO & ATIVIDADE -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Abrigo &amp; Atividade</div>
+    <div class="field-row cols-3">
+      <div class="field-group">
+        <label>Nível do Abrigo</label>
+        <select id="acamp-nivel" oninput="atualizarAcampamento()" title="Nv1 Básico: 1d6+2 PV/STA · +1 Sanidade · −1 Corrupção · risco Alto | Nv2 Médio: 2d6+4 PV/STA · +1d4 Sanidade · −1d4 Corrupção · risco Médio | Nv3 Avançado: 3d6+6 PV/STA · +2 Sanidade · −1d6+1 Corrupção · risco Baixo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="1">Básico (Nv1)</option>
+          <option value="2">Médio (Nv2)</option>
+          <option value="3">Avançado (Nv3)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Atividade Principal</label>
+        <select id="acamp-atividade" oninput="atualizarAcampamento()" title="CDs: Vigiar 15/13/11 (por nível do abrigo) · Cozinhar 14 · Meditar 15 + Corrupção · Explorar Arredores 16" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Descansar">Descansar</option>
+          <option value="Vigiar">Vigiar</option>
+          <option value="Cozinhar">Cozinhar</option>
+          <option value="Meditar-Ritual">Meditar / Ritual</option>
+          <option value="Explorar Arredores">Explorar Arredores</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Recuperação do Abrigo</label>
+        <input type="text" id="acamp-recuperacao" readonly value="1d6+2 PV/STA · +1 Sanidade · −1 Corrupção · risco Alto" style="background:var(--bg-input);border:1px solid var(--border);color:var(--silver);padding:.55rem .7rem;font-family:inherit;font-size:.85rem;outline:none;width:100%">
+      </div>
+    </div>
+
+    <!-- ROLAGEM DE ATENÇÃO DA TORRE -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Rolagem de Atenção da Torre</div>
+      <div class="field-row cols-4">
+        <div class="field-group">
+          <label>Andar Atual</label>
+          <input type="number" id="acamp-andar" min="1" value="1" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+        </div>
+        <div class="field-group">
+          <label>Modificador</label>
+          <input type="number" id="acamp-mod" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+        </div>
+        <div class="field-group">
+          <label>Rolagem (d20 + andar÷2 − abrigo×2 + ticks + mod)</label>
+          <input type="text" id="acamp-rolagem" readonly value="—" style="background:var(--bg-input);border:1px solid var(--border);color:var(--gold-light);padding:.55rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100%">
+        </div>
+        <div class="field-group">
+          <label>Ação</label>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+            <button onclick="rolarAtencaoAcampamento()" style="background:var(--accent);border:none;color:#fff;padding:.5rem .9rem;font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Rolar Atenção</button>
+            <button onclick="resetTicks()" title="Zera o Relógio de Atenção do combate" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.5rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Zerar ticks do combate</button>
+          </div>
+        </div>
+      </div>
+      <div id="acamp-resultado" style="margin-top:.5rem;font-size:.85rem;min-height:1.2em;font-weight:bold"></div>
+      <p style="font-size:.68rem;color:var(--text-muted);margin:.5rem 0 0">Ponte com o combate: cada <strong>tick do Relógio de Atenção</strong> (painel Combate) soma <strong>+2 na rolagem</strong>; o nível do abrigo reduz os ticks acumulados (−2 por nível). Resultados: ≤10 Silêncio · 11–15 Presença Leve · 16–20 Atenção Crescente · 21–25 Interferência Ativa · 26+ Ira da Torre.</p>
+    </div>
+
+  </div>
+  </div><!-- /area-acampamento -->
 </div>
 
 <!-- ATRIBUTOS — logo abaixo da ficha base, largura total -->
@@ -11408,6 +11478,8 @@ function coletarDados() {
     'cond-exausto-val','cond-corrompido-val','cond-enlouquecido-val','cond-enfraquecido-val',
     // sessões e XP
     'xp-atual','sess-tipo','sess-qualidade','sess-xp','sess-risco-xp','sess-obs','sess-historico',
+    // acampamento
+    'acamp-nivel','acamp-atividade','acamp-andar','acamp-mod','acamp-rolagem',
     // registro
     'r-personalidade','r-mentalidade','r-comportamento',
     'r-tracos','r-defeitos','r-ideais','r-ligacoes','r-antecedentes','r-historia','r-eventos','r-npcs',
@@ -12359,6 +12431,335 @@ function registrarSessao() {
   salvarLocal();
 }
 
+// ─── C11 · ÁRVORE DA ALMA COMPLETA — 15 Ramos × 10 níveis (livro #arvore-alma) ───
+const ARVORE_DADOS = {
+  arcano: {
+    controle: [
+      { nv:1, nome:'Refinamento', efeito:'Seus Usos Comuns custam <strong>50% menos Stamina</strong> (mínimo 1). Só isso. É um bônus gigante.' },
+      { nv:2, nome:'Mão Firme', efeito:'Utilizações de Controle que exigiriam testes ganham <strong>Vantagem</strong>, e falhas menores nunca desperdiçam o uso.' },
+      { nv:3, nome:'Fruto da Eficiência', efeito:'Utilizações de Controle que exijam manutenção custam <strong>metade da manutenção</strong>.' },
+      { nv:4, nome:'Domínio', efeito:'Sua Manifestação responde instantaneamente: você pode utilizá-la como <strong>Reação</strong>, mesmo que normalmente exigisse uma ação.' },
+      { nv:5, nome:'Fruto da Perfeição', efeito:'Utilizações de Controle nunca produzem efeito colateral indesejado — o poder faz exatamente o que você quer.' },
+      { nv:6, nome:'Economia Absoluta', efeito:'Todas as suas Técnicas custam <strong>1 PE a menos</strong> (mínimo 1).' },
+      { nv:7, nome:'Harmonia', efeito:'Sua Manifestação passa a agir sozinha, realizando automaticamente pequenas correções coerentes em suas Utilizações.' },
+      { nv:8, nome:'Fruto do Domínio', efeito:'Uma vez por rodada, você pode executar uma Utilização de Controle <strong>sem gastar sua ação</strong>.' },
+      { nv:9, nome:'Domínio Absoluto', efeito:'A categoria de suas Utilizações passa a ser determinada muito mais pela <strong>coerência</strong> do que pela dificuldade técnica.' },
+      { nv:10, nome:'Flor do Controle', efeito:'Você mantém simultaneamente <strong>duas Utilizações de Controle contínuas</strong> sem custo de manutenção adicional.' }
+    ],
+    expansao: [
+      { nv:1, nome:'Ampliação', efeito:'Utilizações de Expansão ganham <strong>+1 Escala gratuita</strong> (Área, Alcance, Quantidade ou Duração).' },
+      { nv:2, nome:'Expansão', efeito:'Uma vez por rodada, qualquer Utilização pode aumentar <strong>duas Escalas</strong> sem aumentar sua categoria.' },
+      { nv:3, nome:'Fruto do Alcance', efeito:'Utilizações de Expansão podem afetar <strong>+1 alvo ou área</strong> dentro do alcance.' },
+      { nv:4, nome:'Duração Prolongada', efeito:'Utilizações contínuas de Expansão duram <strong>+1 rodada</strong> antes de exigirem nova manutenção.' },
+      { nv:5, nome:'Fruto da Escala Colossal', efeito:'Toda Utilização passa a ser tratada como uma <strong>categoria inferior apenas para Escala</strong>.' },
+      { nv:6, nome:'Presença Ampla', efeito:'Área e alcance de Utilizações de Expansão aumentam em <strong>50%</strong>.' },
+      { nv:7, nome:'Fluxo Expandido', efeito:'Duas vezes por rodada, você pode aumentar <strong>uma Escala gratuitamente</strong>.' },
+      { nv:8, nome:'Fruto da Presença', efeito:'Uma vez por combate, você pode preparar uma Utilização de Expansão e ativá-la como <strong>Reação</strong>.' },
+      { nv:9, nome:'Domínio da Extensão', efeito:'Suas Utilizações de Expansão podem cobrir a <strong>cena inteira</strong> em vez de áreas limitadas.' },
+      { nv:10, nome:'Flor da Expansão', efeito:'Suas Utilizações de Expansão <strong>contínuas não exigem manutenção</strong>.' }
+    ],
+    versatilidade: [
+      { nv:1, nome:'Adaptação', efeito:'Uma Passiva da sua Manifestação ganha <strong>+1 aplicação coerente</strong>.' },
+      { nv:2, nome:'Ressignificação', efeito:'Uma vez por descanso, adapte uma Utilização a uma nova aplicação da mesma Característica.' },
+      { nv:3, nome:'Fruto da Evolução', efeito:'Escolha uma Técnica: ela recebe uma <strong>evolução permanente</strong> (novo efeito, aplicação, duração, área ou comportamento). É praticamente um mini despertar.' },
+      { nv:4, nome:'Eficiência Versátil', efeito:'Técnicas custam <strong>1 PE a menos</strong> (mínimo 1).' },
+      { nv:5, nome:'Fruto da Adaptação', efeito:'Uma vez por rodada, você pode <strong>modificar uma Utilização ativa</strong> sem recriá-la.' },
+      { nv:6, nome:'Sinergia', efeito:'Duas de suas Técnicas podem compartilhar um <strong>efeito secundário</strong> entre si.' },
+      { nv:7, nome:'Evolução Dupla', efeito:'Mais uma Técnica (ou o aprofundamento de uma já evoluída) recebe uma evolução permanente.' },
+      { nv:8, nome:'Fruto da Evolução Suprema', efeito:'Escolha: <strong>uma Técnica Suprema</strong> ou <strong>duas Técnicas</strong>. Todas recebem evolução permanente.' },
+      { nv:9, nome:'Versatilidade Absoluta', efeito:'Uma vez por combate, adicione uma pequena propriedade coerente a uma Utilização ativa, sem aumentar sua categoria.' },
+      { nv:10, nome:'Flor da Versatilidade', efeito:'Suas Técnicas e Passivas podem ser <strong>combinadas entre si em efeitos compostos</strong> inéditos (Mestre aprova a interação).' }
+    ]
+  },
+  belico: {
+    impacto: [
+      { nv:1, nome:'Golpe Devastador', efeito:'Toda Técnica ou Utilização cujo objetivo principal seja causar dano causa <strong>+50% de dano final</strong>.' },
+      { nv:2, nome:'Força Bruta', efeito:'Utilizações de Impacto causam <strong>+1 dado de dano</strong>.' },
+      { nv:3, nome:'Fruto do Impacto', efeito:'O dano de suas Utilizações de Impacto ignora <strong>25% da Redução de Dano</strong> do alvo.' },
+      { nv:4, nome:'Impacto Contínuo', efeito:'Ataques de Impacto causam <strong>+2 de dano</strong> por acerto.' },
+      { nv:5, nome:'Fruto da Devastação', efeito:'Uma vez por rodada, uma Utilização de Impacto em área causa <strong>dano completo</strong> em vez de metade.' },
+      { nv:6, nome:'Domínio Bélico', efeito:'Sempre que causar dano, recupere <strong>25% da STA</strong> gasta naquela Técnica (arredondado para cima).' },
+      { nv:7, nome:'Fúria Crescente', efeito:'Seus ataques causam <strong>+50% de dano</strong> contra alvos já feridos.' },
+      { nv:8, nome:'Fruto do Esmagamento', efeito:'Uma vez por combate, uma Utilização de Impacto derruba ou empurra o alvo e causa dano extra.' },
+      { nv:9, nome:'Arte da Destruição', efeito:'Uma vez por combate, transforme qualquer ataque que acertar em um <strong>Golpe Perfeito</strong>: todos os dados de dano são considerados no valor máximo.' },
+      { nv:10, nome:'Flor do Impacto', efeito:'Uma vez por rodada, um ataque seu pode atingir <strong>um alvo adicional adjacente</strong> ao primeiro, com dano completo.' }
+    ],
+    perfuracao: [
+      { nv:1, nome:'Fio da Lâmina', efeito:'Seus ataques ignoram <strong>10%</strong> de toda Redução de Dano.' },
+      { nv:2, nome:'Perfuração', efeito:'Seus ataques ignoram <strong>50%</strong> de toda Redução de Dano, armadura, barreiras físicas e defesas semelhantes (arredondando para baixo).' },
+      { nv:3, nome:'Fruto da Perfuração', efeito:'Seus ataques ignoram <strong>cobertura parcial</strong> do alvo.' },
+      { nv:4, nome:'Contra Armaduras', efeito:'Você tem <strong>Vantagem</strong> em ataques contra alvos com armadura pesada ou defesas reforçadas.' },
+      { nv:5, nome:'Fruto da Penetração', efeito:'Uma vez por rodada, um ataque seu ignora <strong>100% da Redução de Dano</strong> do alvo.' },
+      { nv:6, nome:'Fenda nas Barreiras', efeito:'Barreiras e proteções criadas por poderes têm a Redução de Dano <strong>reduzida pela metade</strong> contra você.' },
+      { nv:7, nome:'Marca da Fenda', efeito:'Ataques de Perfuração marcam o alvo: ele sofre <strong>-1 de CA</strong> contra você até o fim do combate (acumula).' },
+      { nv:8, nome:'Fruto da Quebra', efeito:'Uma vez por combate, seu ataque <strong>quebra um efeito defensivo ativo</strong> do alvo (escudo, aura, proteção).' },
+      { nv:9, nome:'Perfuração Absoluta', efeito:'A Redução de Dano do alvo conta como <strong>25% do valor</strong> contra seus ataques.' },
+      { nv:10, nome:'Flor da Perfuração', efeito:'Seus ataques ignoram <strong>toda a Redução de Dano</strong> (mínimo 0).' }
+    ],
+    execucao: [
+      { nv:1, nome:'Olho Crítico', efeito:'Sua margem de crítico passa para <strong>19–20</strong>.' },
+      { nv:2, nome:'Fenda Precisa', efeito:'Seus acertos críticos causam <strong>+1d4 de dano</strong>.' },
+      { nv:3, nome:'Fruto do Executor', efeito:'Sua margem de crítico passa para <strong>18–20</strong>.' },
+      { nv:4, nome:'Pressão Ofensiva', efeito:'Cada golpe torna o próximo mais perigoso: ao acertar um ataque ofensivo, seu próximo ataque contra o mesmo alvo recebe <strong>Vantagem</strong>.' },
+      { nv:5, nome:'Fruto do Destruidor', efeito:'Todos os acertos críticos causam <strong>+3d4 de dano adicional</strong>, e todos esses dados possuem resultado mínimo 3.' },
+      { nv:6, nome:'Ritmo de Caça', efeito:'Cada acerto consecutivo no mesmo alvo concede <strong>+1 de dano</strong> acumulativo.' },
+      { nv:7, nome:'Instinto Assassino', efeito:'Uma vez por combate, um ataque pode ser declarado <strong>inevitável</strong>: o alvo não recebe bônus de cobertura, terreno ou efeitos semelhantes na Defesa.' },
+      { nv:8, nome:'Fruto da Máquina de Guerra', efeito:'Sempre que derrotar um inimigo, você pode realizar imediatamente <strong>outro ataque ofensivo</strong> contra um alvo diferente (máximo uma vez por rodada).' },
+      { nv:9, nome:'Executor Supremo', efeito:'Sua margem de crítico passa para <strong>17–20</strong>.' },
+      { nv:10, nome:'Flor da Execução', efeito:'Seus acertos críticos causam <strong>+50% de dano final</strong>.' }
+    ]
+  },
+  mobilidade: {
+    deslocamento: [
+      { nv:1, nome:'Velocidade Sobrehumana', efeito:'Seu deslocamento base é <strong>dobrado</strong> e movimentar-se deixa de provocar Ataques de Oportunidade.' },
+      { nv:2, nome:'Passo Leve', efeito:'Mover-se custa <strong>metade da Ação de Movimento</strong>.' },
+      { nv:3, nome:'Fruto do Passo Fantasma', efeito:'Uma vez por rodada, reposicione-se para qualquer ponto dentro do seu deslocamento <strong>sem provocar reações</strong>, como parte de outra ação.' },
+      { nv:4, nome:'Sprint', efeito:'Você pode mover <strong>duas zonas</strong> com uma única Ação de Movimento.' },
+      { nv:5, nome:'Fruto do Movimento Implacável', efeito:'Você atravessa livremente espaços ocupados por criaturas menores ou do mesmo tamanho, e seu deslocamento nunca é reduzido por terreno difícil.' },
+      { nv:6, nome:'Vento Constante', efeito:'Você pode usar sua <strong>Ação Bônus para mover-se</strong> uma zona adicional.' },
+      { nv:7, nome:'Leitura de Combate', efeito:'Uma vez por rodada, após qualquer criatura finalizar seu turno, você pode mover até <strong>metade do seu deslocamento</strong>.' },
+      { nv:8, nome:'Fruto da Velocidade Relâmpago', efeito:'Uma vez por rodada, realize um <strong>deslocamento completo adicional</strong> sem consumir sua ação nem sua movimentação normal.' },
+      { nv:9, nome:'Presença Inalcançável', efeito:'Enquanto permanecer em movimento durante seu turno, todos os ataques contra você recebem <strong>Desvantagem</strong> até o início do seu próximo turno.' },
+      { nv:10, nome:'Flor do Deslocamento', efeito:'Uma vez por rodada, você pode surgir instantaneamente em qualquer ponto da cena alcançável de forma coerente, <strong>ignorando obstáculos e terreno difícil</strong>, sem consumir Movimento nem Ações.' }
+    ],
+    instinto: [
+      { nv:1, nome:'Reflexos Afiados', efeito:'<strong>+2</strong> em Iniciativa e em testes de Reflexos.' },
+      { nv:2, nome:'Instinto Absoluto', efeito:'Você recebe <strong>Vantagem permanente</strong> em todos os testes de Iniciativa, Percepção e Reflexos.' },
+      { nv:3, nome:'Fruto da Antecipação', efeito:'Uma vez por rodada, você pode <strong>agir fora de ordem</strong> (antes do turno de uma criatura) gastando sua Reação.' },
+      { nv:4, nome:'Sentido de Perigo', efeito:'Você nunca é <strong>surpreendido</strong>: percebe emboscadas e ataques inesperados antes que aconteçam.' },
+      { nv:5, nome:'Fruto da Esquiva Perfeita', efeito:'<strong>Duas vezes por combate</strong>, quando um ataque acertar você, obrigue o atacante a <strong>rerrolar</strong> o teste de acerto e usar o novo resultado.' },
+      { nv:6, nome:'Leitura Corporal', efeito:'Você prevê o próximo movimento de criaturas próximas: <strong>+2 de CA</strong> contra ataques corpo a corpo.' },
+      { nv:7, nome:'Reação em Cadeia', efeito:'Você pode usar sua Reação <strong>duas vezes por rodada</strong> para esquivas e defesas.' },
+      { nv:8, nome:'Fruto do Olhar', efeito:'Uma vez por rodada, você pode fazer com que um aliado próximo ganhe <strong>Vantagem</strong> em uma Salvaguarda de Reflexos.' },
+      { nv:9, nome:'Pressentimento', efeito:'Você age primeiro em qualquer combate, <strong>independentemente da Iniciativa</strong> (uma vez por combate).' },
+      { nv:10, nome:'Flor do Instinto', efeito:'Uma vez por rodada, quando um ataque falhar contra você, mova-se até <strong>metade do seu deslocamento</strong> imediatamente, sem gastar Reação.' }
+    ],
+    acrobacia: [
+      { nv:1, nome:'Corpo Leve', efeito:'<strong>+2</strong> em testes de Acrobacia e equilíbrio.' },
+      { nv:2, nome:'Salto Fluido', efeito:'Seus saltos e escaladas usam <strong>metade do deslocamento</strong>.' },
+      { nv:3, nome:'Fruto do Corpo Perfeito', efeito:'Escalar, nadar, saltar, se equilibrar ou atravessar obstáculos deixa de exigir testes, <strong>salvo em situações extraordinárias</strong> definidas pelo Mestre.' },
+      { nv:4, nome:'Esquiva Ágil', efeito:'Você pode usar sua Reação para <strong>Desviar</strong> com Vantagem.' },
+      { nv:5, nome:'Fruto da Queda Segura', efeito:'Você <strong>ignora dano de queda</strong> e aterrissa sempre de pé.' },
+      { nv:6, nome:'Combate em Movimento', efeito:'Você não sofre penalidades por atacar <strong>após se mover</strong>, e pode usar Manobras Acrobáticas como parte do ataque.' },
+      { nv:7, nome:'Zona Livre', efeito:'Terreno difícil e obstáculos <strong>não custam movimento extra</strong> para você.' },
+      { nv:8, nome:'Fruto do Domínio Tridimensional', efeito:'Você pode se mover <strong>verticalmente</strong> (paredes, tetos) sem testes, e posições elevadas não limitam seus ataques.' },
+      { nv:9, nome:'Dança da Batalha', efeito:'Após uma esquiva bem-sucedida, você pode <strong>reposicionar uma zona</strong> gratuitamente.' },
+      { nv:10, nome:'Flor da Acrobacia', efeito:'Ataques corpo a corpo contra você têm <strong>Desvantagem</strong> permanente, e você nunca é atingido por <strong>efeitos de área</strong> que exijam Reflexos (sucesso automático).' }
+    ]
+  },
+  guardiao: {
+    resistencia: [
+      { nv:1, nome:'Corpo Temperado', efeito:'Você recebe <strong>+5 de Redução de Dano (RD)</strong> contra qualquer fonte de dano.' },
+      { nv:2, nome:'Pele Densa', efeito:'Você recebe <strong>+2 de CA</strong> natural.' },
+      { nv:3, nome:'Fruto do Inabalável', efeito:'Vantagem em qualquer teste para resistir a empurrões, quedas, agarrões, atordoamentos, deslocamentos forçados ou efeitos que prejudiquem sua estabilidade física.' },
+      { nv:4, nome:'Mitigação', efeito:'Toda RD que você possui é <strong>+50% mais eficaz</strong> contra ataques físicos.' },
+      { nv:5, nome:'Fruto da Fortaleza Viva', efeito:'Uma vez por rodada, quando sofrer dano de uma única fonte superior a <strong>25% dos seus PV Máximos</strong>, reduza esse dano em 50%.' },
+      { nv:6, nome:'Resistência Absoluta', efeito:'Vantagem em <strong>todos os testes de resistência</strong> contra Técnicas, poderes e efeitos negativos.' },
+      { nv:7, nome:'Adaptação ao Impacto', efeito:'Ao sofrer dano de um tipo pela primeira vez no combate, você ganha <strong>resistência permanente a ele</strong> até o fim do combate (RD +5).' },
+      { nv:8, nome:'Fruto da Muralha Viva', efeito:'Sempre que sofrer dano, receba <strong>+10 de RD</strong> até o início do seu próximo turno. Quanto mais batem, mais difícil fica.' },
+      { nv:9, nome:'Núcleo de Pedra', efeito:'Efeitos que reduziriam seus atributos, PV máximos ou RD <strong>falham automaticamente</strong> contra você.' },
+      { nv:10, nome:'Flor da Resistência', efeito:'Você recebe <strong>+15 de RD</strong> permanente contra qualquer fonte de dano.' }
+    ],
+    vitalidade: [
+      { nv:1, nome:'Constituição Forte', efeito:'<strong>+10</strong> de PV Máximos.' },
+      { nv:2, nome:'Vitalidade Superior', efeito:'Seus PV Máximos aumentam em <strong>25%</strong>.' },
+      { nv:3, nome:'Fruto da Recuperação Contínua', efeito:'No início de cada rodada, recupere PV iguais a <strong>5% dos seus PV Máximos</strong> (não funciona se sofreu dano crítico desde seu último turno).' },
+      { nv:4, nome:'Cura Acelerada', efeito:'Toda Cura, Regeneração ou Recuperação de PV que você recebe é <strong>+25% mais eficaz</strong>.' },
+      { nv:5, nome:'Fruto do Vigor', efeito:'Ao cair a 0 PV, você pode se <strong>estabilizar automaticamente</strong> com 1 PV uma vez por combate.' },
+      { nv:6, nome:'Fôlego Profundo', efeito:'Durante um descanso curto, recupere <strong>PV adicionais</strong> iguais aos seus PV Máximos.' },
+      { nv:7, nome:'Último Fôlego', efeito:'A primeira vez em cada combate que seus PV chegarem a 0, você permanece com <strong>1 PV</strong>. Clássico de tanque.' },
+      { nv:8, nome:'Fruto do Renascimento', efeito:'Uma vez por combate, ao sofrer dano que o reduziria a 0 PV, você recupera <strong>50% dos seus PV Máximos</strong> no lugar.' },
+      { nv:9, nome:'Fonte de Vida', efeito:'No início de cada rodada, recupere PV iguais a <strong>10% dos seus PV Máximos</strong>, mesmo após dano crítico.' },
+      { nv:10, nome:'Flor da Vitalidade', efeito:'Seus PV Máximos aumentam em <strong>+50%</strong> (cumulativo com Vitalidade Superior).' }
+    ],
+    fortaleza: [
+      { nv:1, nome:'Postura de Muralha', efeito:'Enquanto não se mover, você recebe <strong>+3 de CA</strong>.' },
+      { nv:2, nome:'Pés Fincados', efeito:'Você <strong>ignora empurrões e deslocamentos forçados</strong> de criaturas do seu tamanho ou menores.' },
+      { nv:3, nome:'Fruto da Estabilidade', efeito:'Você não pode ser <strong>derrubado, agarrado ou imobilizado</strong> por efeitos de nível igual ou inferior ao seu.' },
+      { nv:4, nome:'Proteção de Aliados', efeito:'Uma vez por rodada, você pode <strong>sofrer o ataque no lugar de um aliado</strong> próximo (Reação).' },
+      { nv:5, nome:'Fruto da Escolta', efeito:'Aliados a até 9 metros de você recebem <strong>+2 de CA</strong> contra ataques que você possa interceptar.' },
+      { nv:6, nome:'Mente Inabalável', efeito:'Você tem <strong>Vantagem</strong> contra efeitos de controle mental, medo e possessão.' },
+      { nv:7, nome:'Bastião', efeito:'Barreiras e escudos que você cria têm <strong>+50% de durabilidade</strong>.' },
+      { nv:8, nome:'Fruto do Guardião Supremo', efeito:'Uma vez por rodada, quando uma criatura a até metade do seu deslocamento sofrer um ataque, use sua Reação para <strong>mover-se até ela e tornar-se o novo alvo</strong> — ou conceder Vantagem na Defesa/Esquiva dela.' },
+      { nv:9, nome:'Fortaleza de Alma', efeito:'Efeitos que tentem <strong>remover ou anular suas proteções</strong> falham contra você.' },
+      { nv:10, nome:'Flor da Fortaleza', efeito:'Uma vez por combate, você pode se colocar na frente de um ataque que atingiria um aliado, <strong>mesmo sem Reação disponível</strong>, e sofrer o dano no lugar dele.' }
+    ]
+  },
+  catalisador: {
+    fortalecimento: [
+      { nv:1, nome:'Amplificação', efeito:'Todos os <strong>Buffs</strong> aplicados por você tornam-se <strong>50% mais eficientes</strong> (também funciona quando o alvo é você mesmo).' },
+      { nv:2, nome:'Toque Inspirador', efeito:'Buffs aplicados por você duram <strong>+1 rodada</strong>.' },
+      { nv:3, nome:'Fruto da Propagação', efeito:'Uma vez por rodada, um Buff aplicado por você pode afetar gratuitamente um <strong>segundo alvo válido</strong> dentro do alcance.' },
+      { nv:4, nome:'Potencial Oculto', efeito:'Uma vez por combate, escolha uma criatura sob um Buff seu: até o fim do combate, <strong>todas as Técnicas dela custam 50% menos PE</strong> (mínimo 1).' },
+      { nv:5, nome:'Fruto do Domínio do Fluxo', efeito:'Sempre que uma criatura sob um Buff seu derrotar um inimigo, <strong>todos os Buffs ativos nela têm a duração renovada</strong>.' },
+      { nv:6, nome:'Fortalecimento Coletivo', efeito:'Buffs aplicados por você afetam <strong>+1 aliado</strong> gratuitamente.' },
+      { nv:7, nome:'Essência Ampliada', efeito:'Buffs que concedem bônus numéricos concedem <strong>+50% do bônus</strong> adicional.' },
+      { nv:8, nome:'Fruto da Imunidade', efeito:'Uma vez por combate, conceda a uma criatura <strong>imunidade temporária</strong> a um tipo de efeito ou dano por 1 rodada.' },
+      { nv:9, nome:'Maestro', efeito:'Uma vez por rodada, você pode aplicar gratuitamente um Buff já conhecido <strong>sem consumir sua Ação principal</strong>.' },
+      { nv:10, nome:'Flor do Fortalecimento', efeito:'Buffs que você aplica <strong>persistem mesmo se você cair a 0 PV</strong>.' }
+    ],
+    sustentacao: [
+      { nv:1, nome:'Cura Reforçada', efeito:'Toda Cura, Regeneração ou Recuperação de PV, STA ou PE concedida por você recupera <strong>25% a mais</strong>.' },
+      { nv:2, nome:'Sustentação Absoluta', efeito:'Toda Cura, Regeneração ou Recuperação de PV, STA ou PE concedida por você recupera <strong>50% a mais</strong>.' },
+      { nv:3, nome:'Fruto do Fluxo Contínuo', efeito:'Você pode manter simultaneamente <strong>duas Técnicas que exijam Concentração</strong>, desde que ambas pertençam ao Aspecto Catalisador.' },
+      { nv:4, nome:'Manutenção Leve', efeito:'Técnicas de sustentação do Catalisador custam <strong>metade da manutenção</strong>.' },
+      { nv:5, nome:'Fruto da Vida Renovada', efeito:'Uma vez por combate, ao conceder Cura a uma criatura, ela também remove <strong>uma condição negativa</strong> comum.' },
+      { nv:6, nome:'Regeneração Ativa', efeito:'Uma vez por rodada, uma criatura sob sua sustentação recupera <strong>1d6 de PV</strong>.' },
+      { nv:7, nome:'Estabilização', efeito:'Aliados a até 9 metros de você <strong>não sangram</strong> e se estabilizam automaticamente a 0 PV.' },
+      { nv:8, nome:'Fruto da Recuperação em Massa', efeito:'Uma vez por combate, conceda Cura a <strong>todas as criaturas aliadas</strong> no alcance simultaneamente.' },
+      { nv:9, nome:'Fonte Inesgotável', efeito:'Uma vez por descanso, recupere <strong>50% da STA e do PE</strong> de uma criatura aliada (ou de você).' },
+      { nv:10, nome:'Flor da Sustentação', efeito:'Curas que você concede são <strong>maximizadas</strong> uma vez por rodada (todos os dados no valor máximo).' }
+    ],
+    supressao: [
+      { nv:1, nome:'Toque Corrosivo', efeito:'Todos os <strong>Debuffs</strong> aplicados por você tornam-se <strong>25% mais eficientes</strong>.' },
+      { nv:2, nome:'Duração Perversa', efeito:'Debuffs aplicados por você duram <strong>+1 rodada</strong>.' },
+      { nv:3, nome:'Fruto da Supressão', efeito:'Todos os <strong>Debuffs</strong> aplicados por você tornam-se <strong>50% mais eficientes</strong> e têm duração aumentada em +1 rodada.' },
+      { nv:4, nome:'Enfraquecimento', efeito:'Debuffs que reduzem atributos ou recursos reduzem <strong>+1 ponto</strong> adicional.' },
+      { nv:5, nome:'Fruto do Domínio da Supressão', efeito:'Você pode <strong>suprimir um Buff ativo</strong> de uma criatura por 1 rodada (uma vez por combate).' },
+      { nv:6, nome:'Marca do Alvo', efeito:'Debuffs aplicados por você <strong>reduzem a CA</strong> do alvo em -1 (acumula).' },
+      { nv:7, nome:'Ruína Progressiva', efeito:'Debuffs aplicados por você <strong>intensificam-se</strong> a cada rodada (efeito +1 estágio até o limite).' },
+      { nv:8, nome:'Fruto da Contaminação', efeito:'Sempre que uma criatura sob um Debuff seu morrer ou for derrotada, o Debuff é <strong>transferido</strong> para outra criatura válida, mantendo a duração restante.' },
+      { nv:9, nome:'Supressor Mestre', efeito:'Efeitos de Debuff aplicados por você <strong>não podem ser removidos</strong> por habilidades comuns.' },
+      { nv:10, nome:'Flor da Supressão', efeito:'Debuffs aplicados por você <strong>permanecem ativos mesmo se você perder a Concentração</strong>.' }
+    ]
+  }
+};
+
+const _ARVORE_ASPECTO_NOME = { arcano:'Arcano', belico:'Bélico', mobilidade:'Mobilidade', guardiao:'Guardião', catalisador:'Catalisador' };
+const _ARVORE_RAMO_NOME = {
+  arcano: { controle:'Controle', expansao:'Expansão', versatilidade:'Versatilidade' },
+  belico: { impacto:'Impacto', perfuracao:'Perfuração', execucao:'Execução' },
+  mobilidade: { deslocamento:'Deslocamento', instinto:'Instinto', acrobacia:'Acrobacia' },
+  guardiao: { resistencia:'Resistência', vitalidade:'Vitalidade', fortaleza:'Fortaleza' },
+  catalisador: { fortalecimento:'Fortalecimento', sustentacao:'Sustentação', supressao:'Supressão' }
+};
+const _ARVORE_RAMOS = [
+  ['arcano','controle'], ['arcano','expansao'], ['arcano','versatilidade'],
+  ['belico','impacto'], ['belico','perfuracao'], ['belico','execucao'],
+  ['mobilidade','deslocamento'], ['mobilidade','instinto'], ['mobilidade','acrobacia'],
+  ['guardiao','resistencia'], ['guardiao','vitalidade'], ['guardiao','fortaleza'],
+  ['catalisador','fortalecimento'], ['catalisador','sustentacao'], ['catalisador','supressao']
+];
+
+// Total gasto + saldo + progresso dos ramos (marcos: Frutos 3/5/8 · Flor 10)
+function atualizarArvoreResumo() {
+  let total = 0;
+  _ARVORE_RAMOS.forEach(([a, r]) => {
+    const inp = document.getElementById(`aa-${a}-${r}`);
+    const prog = document.getElementById(`aa-prog-${a}-${r}`);
+    const v = inp ? (parseInt(inp.value, 10) || 0) : 0;
+    total += v;
+    if (prog) {
+      let txt = `(${v}/10)`;
+      if (v >= 3) txt += ' · Fruto 3';
+      if (v >= 5) txt += '/5';
+      if (v >= 8) txt += '/8';
+      if (v >= 10) txt += ' · Flor 10';
+      prog.textContent = txt;
+    }
+  });
+  const pontos = parseInt(document.getElementById('aa-pontos')?.value, 10) || 0;
+  const gastoEl = document.getElementById('aa-total-gasto');
+  const saldoEl = document.getElementById('aa-saldo');
+  if (gastoEl) gastoEl.textContent = total;
+  if (saldoEl) {
+    const saldo = pontos - total;
+    saldoEl.textContent = saldo;
+    saldoEl.style.color = saldo < 0 ? 'var(--accent-text)' : 'var(--accent-light)';
+  }
+  salvarLocal();
+}
+
+// Modal com a tabela dos 10 níveis do Ramo (linha atual destacada)
+function abrirArvoreRamo(aspecto, ramo) {
+  document.getElementById('arvore-overlay')?.remove();
+  const dados = ARVORE_DADOS[aspecto] && ARVORE_DADOS[aspecto][ramo];
+  if (!dados) return;
+  const atual = parseInt(document.getElementById(`aa-${aspecto}-${ramo}`)?.value, 10) || 0;
+  const titulo = `${_ARVORE_ASPECTO_NOME[aspecto] || aspecto} — Ramo ${(_ARVORE_RAMO_NOME[aspecto] || {})[ramo] || ramo}`;
+
+  const rows = dados.map(e => {
+    let tipo = 'Nível Comum', marker = '';
+    if (e.nv === 10) { tipo = 'Flor da Alma'; marker = '<span style="color:var(--gold-light)"> 🌸</span>'; }
+    else if (e.nv === 3 || e.nv === 5 || e.nv === 8) { tipo = 'Fruto da Alma'; marker = '<span style="color:var(--accent-light)"> 🍎</span>'; }
+    const destaque = e.nv === atual ? ' style="outline:1px solid var(--accent);outline-offset:-1px;background:var(--deep-t12)"' : '';
+    return `<tr${destaque}><td style="text-align:center"><strong>${e.nv}</strong>${marker}</td><td><strong>${e.nome}</strong><br><span style="font-size:.62rem;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase">${tipo}</span></td><td style="font-size:.85rem">${e.efeito}</td></tr>`;
+  }).join('');
+
+  const overlay = document.createElement('div');
+  overlay.className = 'critico-overlay';
+  overlay.id = 'arvore-overlay';
+  overlay.innerHTML = `
+    <div class="critico-modal" style="max-width:660px">
+      <div class="critico-header">
+        <span class="critico-titulo">${titulo}</span>
+        <button class="critico-close" onclick="fecharArvoreRamo()"><svg class="ic"><use href="#ic-close"/></svg></button>
+      </div>
+      <div class="critico-corpo" style="padding:.75rem 1.25rem 1rem">
+        <p style="font-size:.75rem;color:var(--text-muted);margin-bottom:.6rem">Nível atual no personagem: <strong style="color:var(--accent-light)">${atual}/10</strong> (linha destacada). <span style="color:var(--accent-light)">🍎 Fruto</span> (3/5/8) · <span style="color:var(--gold-light)">🌸 Flor</span> (10).</p>
+        <div class="table-wrapper"><table>
+          <thead><tr><th style="width:70px">Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table></div>
+      </div>
+    </div>`;
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function fecharArvoreRamo() {
+  document.getElementById('arvore-overlay')?.remove();
+}
+
+// ─── C12 · ACAMPAMENTO NO APP ───
+const _ACAMP_RECUPERACAO = {
+  '1': '1d6+2 PV/STA · +1 Sanidade · −1 Corrupção · risco Alto',
+  '2': '2d6+4 PV/STA · +1d4 Sanidade · −1d4 Corrupção · risco Médio',
+  '3': '3d6+6 PV/STA · +2 Sanidade · −1d6+1 Corrupção · risco Baixo'
+};
+const _ACAMP_CD = {
+  'Descansar': '—',
+  'Vigiar': 'CD 15 / 13 / 11 (Nv1/Nv2/Nv3)',
+  'Cozinhar': 'CD 14',
+  'Meditar-Ritual': 'CD 15 + Corrupção',
+  'Explorar Arredores': 'CD 16'
+};
+
+function atualizarAcampamento() {
+  const nivelEl = document.getElementById('acamp-nivel');
+  const recEl = document.getElementById('acamp-recuperacao');
+  const ativEl = document.getElementById('acamp-atividade');
+  if (nivelEl && recEl) recEl.value = _ACAMP_RECUPERACAO[nivelEl.value] || _ACAMP_RECUPERACAO['1'];
+  if (ativEl) ativEl.title = 'CDs: Vigiar 15/13/11 · Cozinhar 14 · Meditar 15 + Corrupção · Explorar 16 · Atividade atual: ' + (_ACAMP_CD[ativEl.value] || '');
+  salvarLocal();
+}
+
+// d20 + ⌊andar÷2⌋ − (nível do abrigo × 2) + (ticks do combate × 2) + modificador
+function rolarAtencaoAcampamento() {
+  const rolagemEl = document.getElementById('acamp-rolagem');
+  const resultadoEl = document.getElementById('acamp-resultado');
+  if (!rolagemEl || !resultadoEl) return;
+  const andar = parseInt(document.getElementById('acamp-andar')?.value, 10) || 1;
+  const nivelAbrigo = parseInt(document.getElementById('acamp-nivel')?.value, 10) || 1;
+  const ticks = parseInt(document.getElementById('torre-ticks')?.value, 10) || 0;
+  const mod = parseInt(document.getElementById('acamp-mod')?.value, 10) || 0;
+  const d20 = Math.floor(Math.random() * 20) + 1;
+  const termoAndar = Math.floor(andar / 2);
+  const termoAbrigo = nivelAbrigo * 2;
+  const termoTicks = ticks * 2;
+  const total = d20 + termoAndar - termoAbrigo + termoTicks + mod;
+  rolagemEl.value = d20 + ' + ' + termoAndar + ' − ' + termoAbrigo + ' + ' + termoTicks + ' + ' + mod + ' = ' + total;
+  let cor = 'var(--text-muted)', conseq = '';
+  if (total <= 10)      { cor = '#5cad7a';          conseq = 'Silêncio — a Torre não percebeu nada.'; }
+  else if (total <= 15) { cor = 'var(--gold-light)'; conseq = 'Presença Leve — algo se move nos arredores, mas segue longe.'; }
+  else if (total <= 20) { cor = '#e0a040';           conseq = 'Atenção Crescente — a Torre começa a notar o grupo.'; }
+  else if (total <= 25) { cor = 'var(--accent-text)'; conseq = 'Interferência Ativa — o ambiente reage contra vocês.'; }
+  else                  { cor = 'var(--accent-text)'; conseq = 'Ira da Torre — algo grande e hostil sabe exatamente onde vocês estão.'; }
+  resultadoEl.textContent = 'Resultado ' + total + ': ' + conseq;
+  resultadoEl.style.color = cor;
+  salvarLocal();
+}
+
 // ─── FOTO — botão de remover a foto principal ───────────────────
 async function removerFotoPrincipal() {
   // Mesmo padrão de segurança das outras funções de foto — ver comentário
@@ -12580,6 +12981,9 @@ function preencherCampos(d) {
     _restaurarSessHistorico();
     atualizarProgressoXP();
     atualizarSugestaoXP();
+    // Árvore da Alma (resumo gasto/saldo + progresso dos ramos) e Acampamento
+    atualizarArvoreResumo();
+    atualizarAcampamento();
   }, 50);
 }
 
@@ -12630,7 +13034,7 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
