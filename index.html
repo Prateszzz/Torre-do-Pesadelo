@@ -10073,6 +10073,74 @@ function calcRecursoAtual(tipo) {
   }
 }
 
+// ─── ANTECEDENTES — seletor da ficha (20 opções) ───
+// Mesma ordem do livro (seção "Aparência e Antecedentes"). O valor salvo é o
+// nome do antecedente (f-antecedente já é coletado/persistido). O resumo é
+// exibido abaixo do select; dados antigos de texto livre são preservados via
+// opção "Personalizado: <valor>".
+const ANTECEDENTES_INFO = {
+  'Sobrevivente de Surto': 'Treinado em <strong>Percepção</strong> (grátis) + Vantagem contra 1 tipo de monstro. Começa com arma simples herdada. <em>Gancho:</em> monstros do tipo escolhido focam em você. <em>Relacionamento Nv1:</em> parente corrompido.',
+  'Mensageiro da Névoa': 'Treinado em <strong>Navegação</strong> (grátis) + Vantagem na tabela de encontros da Névoa. +1 provisão inicial e contato com Barman. <em>Gancho:</em> algo na Névoa pode estar te caçando. <em>Relacionamento Nv1:</em> Barman da Rede.',
+  'Aprendiz de Ferreiro das Espirais': 'Treinado em <strong>Ofícios</strong> (grátis) + Vantagem em identificar materiais de forja. Item de forja inicial e 10% de desconto. <em>Gancho:</em> o mestre pode cobrar favores. <em>Relacionamento Nv1:</em> mestre ferreiro.',
+  'Catador de Fragmentos': 'Treinado em <strong>Sobrevivência</strong> (grátis) + Vantagem em avaliar núcleos. 3d6×10 Esp em material bruto e ponto de coleta. <em>Gancho:</em> essência residual e concorrentes. <em>Relacionamento Nv1:</em> fornecedor do ponto de coleta.',
+  'Guarda de Muralha': 'Treinado em <strong>Percepção</strong> (grátis) + +1 CA com armaduras leves/médias. Armadura de Couro e contatos na patrulha. <em>Gancho:</em> registros da guarda. <em>Relacionamento Nv1:</em> ex-companheiro de muralha.',
+  'Fugitivo do Culto do Olho': 'Treinado em <strong>Vontade</strong> (grátis) + Percepção CD 12 identifica Corrupção 3+. 1×/cena lê área corrompida. <em>Custo:</em> −2 Sanidade; o Culto não esquece. <em>Relacionamento Nv1:</em> algoz do Culto.',
+  'Filho da Rede (Barman)': 'Treinado em <strong>Persuasão</strong> (grátis) + Vantagem em ambientes urbanos. 1×/sessão rumor grátis e "ler sala" (Intelecto CD 13). <em>Gancho:</em> dívida com a Rede. <em>Relacionamento Nv1:</em> Barman da Rede.',
+  'Predador de Baixo Nível': 'Treinado em <strong>Sobrevivência</strong> (grátis) + Vantagem para rastrear criaturas Tier 1–2. 1d4 materiais de forja. <em>Gancho:</em> marca de predador. <em>Relacionamento Nv1:</em> parceiro de caça morto.',
+  'Estudioso de Ruínas': 'Treinado em <strong>História</strong> (grátis) + Vantagem em História/decifração sobre as Torres. Diário de ruínas (1×/incursão). <em>Gancho:</em> a Torre nota estudiosos. <em>Relacionamento Nv1:</em> antigo mentor.',
+  'Curandeiro de Feridas da Torre': 'Treinado em <strong>Medicina</strong> (grátis) + +2 em Medicina. Kit de Medicina e estabiliza 1×/cena. <em>Gancho:</em> o peso dos que não salvou. <em>Relacionamento Nv1:</em> paciente que não conseguiu salvar.',
+  'Desertor das Guerras Humanas': 'Treinado em <strong>Ofícios</strong> ou <strong>Astúcia</strong> (grátis) + +1 Iniciativa em conflito armado. 1×/incursão improvisa barricada. <em>Gancho:</em> inimigos em facções. <em>Relacionamento Nv1:</em> antigo oficial.',
+  'Marcado pelo Primeiro Toque': '<strong>PE máxima +2</strong> + sensor de energia da Torre. Primeira técnica ganha efeito extra a partir do Nv 3. <em>Custo:</em> +1 Corrupção e +1 Atenção da Torre. <em>Relacionamento Nv1:</em> o toque que o marcou.',
+  'Gladiador das Torres da Disputa': 'Treinado em <strong>Performance</strong> (grátis) + Vantagem em Performance/Intimidação pública. "Sangue Temperado" (+1 Rank na próxima forja ou Vantagem 1×/combate). <em>Gancho:</em> a Disputa ainda te vê. <em>Relacionamento Nv1:</em> rival nas Disputas.',
+  'Testemunha da Devoração': 'Treinado em <strong>Intuição</strong> (grátis) + Vantagem em Vontade contra leitura de mente. Fragmento relacionado + conhecimento proibido. <em>Custo:</em> −1 a −2 Sanidade. <em>Relacionamento Nv1:</em> quem quer o segredo enterrado.',
+  'Filho de Ascendido': 'Treinado em <strong>História</strong> (grátis) + Vantagem em conhecimento de Ascensão. Item herdado e 1 segredo sobre o parente. <em>Gancho:</em> herança perigosa. <em>Relacionamento Nv1:</em> memória/fantasma do parente.',
+  'Alquimista de Essências': 'Treinado em <strong>Ofícios</strong> (alquimia, grátis) + Vantagem com itens alquímicos. 2d4 doses iniciais e 1 dose/incursão (Ofícios CD 14). <em>Gancho:</em> produtos ilegais. <em>Relacionamento Nv1:</em> fornecedor.',
+  'Cativo da Torre': 'Treinado em <strong>Furtividade</strong> (grátis) + Vantagem em "etiqueta de monstro". Lembrança física/segredo. <em>Custo:</em> +1 Atenção da Torre. <em>Relacionamento Nv1:</em> carcereiro ou companheiro de cela.',
+  'Espião de Cidadela': 'Treinado em <strong>Enganação</strong> (grátis) + Vantagem em Enganação/Intuição urbana. 1 identidade falsa e leitura do mapa político. <em>Gancho:</em> contratos em aberto. <em>Relacionamento Nv1:</em> contato de fachada.',
+  'Construtor de Defesas': 'Treinado em <strong>Ofícios</strong> (grátis) + +2 em Ofícios/Percepção com defesas. 1×/incursão acampamento Nv2 ou +1 CA de barricada. <em>Gancho:</em> segredos das defesas. <em>Relacionamento Nv1:</em> engenheiro veterano.',
+  'Colecionador de Últimas Palavras': 'Treinado em <strong>Performance</strong> (grátis) + Vantagem em situações de morte iminente. Livro de ecos (1×/incursão = 1 pista). <em>Gancho:</em> coleção cobiçada. <em>Relacionamento Nv1:</em> fantasma/eco que o acompanha.'
+};
+
+// Gera as <option> do select — usado no template da ficha.
+function _opcoesAntecedentes() {
+  return Object.keys(ANTECEDENTES_INFO).map(n => `<option value="${n}">${n}</option>`).join('');
+}
+
+// Atualiza o resumo abaixo do select com base no valor escolhido.
+function atualizarResumoAntecedente() {
+  const sel = document.getElementById('f-antecedente');
+  const box = document.getElementById('antecedente-resumo');
+  if (!sel || !box) return;
+  const v = sel.value;
+  if (!v) { box.innerHTML = ''; return; }
+  const info = ANTECEDENTES_INFO[v];
+  if (info) {
+    box.innerHTML = info;
+  } else if (v.startsWith('Personalizado: ')) {
+    box.innerHTML = '<span style="color:var(--accent-text)">Antecedente personalizado (não está na lista oficial).</span> ' + v.slice('Personalizado: '.length);
+  }
+}
+
+// Restaura o select ao carregar a ficha. Dados antigos (texto livre) que não
+// casam com nenhuma das 20 opções ganham uma opção "Personalizado: <valor>"
+// para nunca perderem o dado salvo.
+function restaurarAntecedente(valor) {
+  const sel = document.getElementById('f-antecedente');
+  if (!sel) return;
+  const v = String(valor || '').trim();
+  if (!v) { sel.value = ''; atualizarResumoAntecedente(); return; }
+  if (ANTECEDENTES_INFO[v]) {
+    sel.value = v;
+  } else {
+    const opt = document.createElement('option');
+    opt.value = 'Personalizado: ' + v;
+    opt.textContent = 'Personalizado: ' + v;
+    sel.appendChild(opt);
+    sel.value = opt.value;
+  }
+  atualizarResumoAntecedente();
+}
+
 // ─── GERAR FICHA HTML ───
 function gerarFichaHTML(targetUser, modoVisualizacao) {
   // modoVisualizacao: 'player'(própria) | 'gm'(acesso total) | 'adm'(só mecânico) | 'observador'(leitura total)
@@ -10131,7 +10199,14 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       ${fieldGroup('Nome do Personagem','f-nome')}
       ${fieldGroup('Alcunha / Epíteto','f-alcunha')}
       ${fieldGroup('Poder','f-poder-nome')}
-      ${fieldGroup('Antecedente','f-antecedente')}
+      <div class="field-group">
+        <label>Antecedente</label>
+        <select id="f-antecedente" ${isObs ? 'disabled style="cursor:default;opacity:.85"' : ''} onchange="atualizarResumoAntecedente();salvarLocal()" title="Seletor dos 20 Antecedentes — o resumo dos benefícios aparece abaixo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;transition:border-color .2s;width:100%${isAdm ? ';border-color:rgba(180,140,30,.3)' : ''}">
+          <option value="">Escolher…</option>
+          ${_opcoesAntecedentes()}
+        </select>
+        <div id="antecedente-resumo" style="margin-top:.35rem;font-size:.72rem;color:var(--text-muted);line-height:1.5"></div>
+      </div>
     </div>
     <div class="field-row cols-4">
       ${fieldGroup('Raça','f-raca')}
@@ -13267,6 +13342,10 @@ function preencherCampos(d) {
     const el=document.getElementById(id); if(el) el.value=val;
   });
 
+  // Restaura o seletor de Antecedentes e seu resumo — dados antigos de texto
+  // livre que não casam com as 20 opções viram "Personalizado: <valor>".
+  restaurarAntecedente(d['f-antecedente']);
+
   // Preenche técnicas (após addTecnica ter criado os elementos)
   if(d.tecnicas) {
     d.tecnicas.forEach((t,i)=>{ const n=i+1; ['tn','tc','td','te'].forEach((p,j)=>{ const el=document.getElementById(`${p}-${n}`); if(el) el.value=[t.nome,t.custo,t.desc,t.efei][j]; }); });
@@ -15008,6 +15087,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="toc-label">II. Criação de Personagem</span>
         <ul>
             <li><a href="#criacao">Guia de Criação</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-voce-despertou">Como Você Despertou?</a></li>
             <li><a href="#personalidade-poder">Personalidade e Poder Principal</a></li>
             <li><a href="#atributos">Sistema de Atributos</a></li>
             <li><a href="#tracos-alma">Traços da Alma</a></li>
@@ -15129,6 +15209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">II. Criação de Personagem</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#criacao">Guia de Criação</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-voce-despertou">Como Você Despertou?</a></li>
                             <li><a href="#personalidade-poder">Personalidade e Poder Principal</a></li>
                             <li><a href="#atributos">Sistema de Atributos</a></li>
                             <li><a href="#tracos-alma">Traços da Alma</a></li>
@@ -15530,6 +15611,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Não otimize demais:</strong> Personagens com conceitos muito “quebrados” costumam ser menos interessantes de interpretar do que aqueles com falhas claras.<br>
                 • <strong>Pense no longo prazo:</strong> Como esse poder pode se tornar alguém completamente diferente (mas ainda reconhecível) no Nível 7 ou 8 de Ascensão? Seu Antecedente inicial pode se tornar irrelevante... ou a coisa que mais te define.
             </div>
+
+            <div id="como-voce-despertou">
+                <h4>Como Você Despertou?</h4>
+                <p>O Núcleo da Alma não acorda por acaso — e a forma como ele despertou molda quem você é (e o que a Torre vê em você). Role 1d6 ou escolha, e conecte o resultado ao seu Antecedente e ao conceito do seu Poder Principal.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>1d6</th><th>Como Você Despertou</th><th>Gancho</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td><strong>Perda traumática.</strong> Alguém que você amava morreu num Surto (ou dentro de uma Torre), e seu Núcleo acordou no luto.</td><td>Vingança ou vazio. Começa com <strong>−1 de Sanidade inicial</strong>.</td></tr>
+                            <tr><td>2</td><td><strong>Toque da Torre.</strong> Algo na Torre tocou sua Alma e ela respondeu — sem aviso, sem escolha.</td><td>Começa com <strong>+1 de Corrupção OU uma Marca</strong> (o Mestre escolhe a forma).</td></tr>
+                            <tr><td>3</td><td><strong>Salvar alguém.</strong> Você se jogou na frente do perigo para proteger outra pessoa, e a Alma acordou no momento do impacto.</td><td><strong>Relacionamento Nível 1</strong> com a pessoa salva (aliado leal).</td></tr>
+                            <tr><td>4</td><td><strong>Sobreviver a um Surto.</strong> Você atravessou um Surto e saiu Desperto — entre os sobreviventes, alguns não te perdoam por ter saído inteiro.</td><td><strong>Inimigo</strong> entre os sobreviventes (o Mestre define quem e por quê).</td></tr>
+                            <tr><td>5</td><td><strong>Experimento de facção.</strong> Uma facção fez algo em você (um ritual, uma droga, um núcleo forçado).</td><td><strong>Dívida ou contato</strong> com a facção — eles sabem o que você é.</td></tr>
+                            <tr><td>6</td><td><strong>Nascido na borda.</strong> Você cresceu na Névoa (ou em um assentamento exposto) e despertou cedo demais.</td><td><strong>+1 provisão inicial</strong> OU <strong>Treinado em Sobrevivência</strong> (se ainda não tiver).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="lore-box">
+                    <strong>Conectando ao Poder Principal:</strong> a forma do seu despertar é o "porquê" do seu poder. Uma perda traumática tende a gerar poderes de luto (ecos, lâminas, névoa). Um toque da Torre gera poderes que a Torre reconhece. Um experimento de facção gera poderes "impuros" — e uma dívida que pode ser cobrada.
+                </div>
+            </div>
         </section>
 
         <!-- ATRIBUTOS (atualizado com sistema completo) -->
@@ -15723,220 +15825,201 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 <strong>1. Sobrevivente de Surto</strong><br><br>
                 <strong>Vida Anterior:</strong> Você viu sua família, sua rua, seu bairro ou sua vila inteira ser consumida por uma onda de monstros. Talvez tenha sido o Surto Carmesim. Talvez tenha sido algo menor, mas suficiente para acabar com tudo o que você amava. Você sobreviveu escondido, correndo, ou porque os monstros simplesmente não o encontraram. Muitos sobreviventes carregam um ódio frio e paciente.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Escolha um tipo comum de monstro (carnívoros, insetoides, humanoides distorcidos, etc.). Você ganha +2 em testes de ataque, percepção e sobrevivência contra criaturas desse tipo.<br>
-                • Começa com uma arma simples de qualidade decente (herdada ou tirada de um cadáver) ou um item de valor sentimental que ainda funciona como foco.<br>
-                • Uma vez por sessão, quando lutar contra o tipo escolhido de monstro, você pode rolar com vantagem o primeiro teste de ataque ou de resistência.<br><br>
-                <strong>Gancho / Complicação:</strong> A Torre parece "lembrar" do seu ódio. Monstros do tipo escolhido têm maior tendência a focar em você primeiro. Além disso, você pode ter um parente ou amigo que ainda está vivo... mas corrompido, ou preso em algum lugar dentro de uma Torre.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Percepção</strong> (grátis, sem consumir slots). Escolha um tipo comum de monstro (carnívoros, insetoides, humanoides distorcidos, espectrais — o Mestre escolhe 1 com você). Você tem <strong>Vantagem em ataques e testes de Percepção contra criaturas desse tipo</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com uma <strong>arma simples</strong> do Catálogo (ex.: Espada Curta, 30 Esp) herdada ou tirada de um cadáver.<br><br>
+                <strong>Custo / Gancho:</strong> A Torre parece "lembrar" do seu ódio — monstros do tipo escolhido focam em você primeiro.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> um <strong>parente corrompido</strong> — alguém da sua família sobreviveu ao Surto, mas foi absorvido pela Torre e agora vaga como monstro. Vocês se encontraram uma vez; ele tentou matá-lo (ou você o deixou escapar). Esse vínculo é o seu gancho mais pessoal.<br><br>
                 <strong>Traços Sugeridos:</strong> Ira Acumulada, Instinto de Sobrevivência, Fome da Alma, Predador Silencioso, Trauma Psíquico, Cicatriz da Torre.
             </div>
 
             <div class="system-card">
                 <strong>2. Mensageiro da Névoa</strong><br><br>
                 <strong>Vida Anterior:</strong> Você era (ou ainda é) um dos loucos que cruzam a Névoa carregando cartas, pessoas desesperadas, medicamentos ou informações entre as cidadelas. A maioria dos mensageiros morre jovem. Os que sobrevivem desenvolvem um sexto sentido para o que se move na bruma.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em todos os testes de navegação, orientação e sobrevivência dentro da Névoa ou em áreas de visibilidade reduzida.<br>
-                • A chance de eventos aleatórios hostis durante viagens na Névoa é reduzida em 1 nível (Mestre aplica).<br>
-                • Você tem pelo menos um contato fixo com um Barman de baixo ou médio nível em uma cidadela importante. Ele costuma lhe dar trabalho (e às vezes proteção) em troca de favores.<br><br>
-                <strong>Gancho / Complicação:</strong> Você sabe coisas que não deveria. Às vezes carrega mensagens que ainda não foram entregues porque o destinatário morreu. Alguém (ou algo) na Névoa pode estar te caçando especificamente por causa de uma entrega que nunca chegou. Barmans de alto nível podem te reconhecer como "útil e descartável".<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Navegação</strong> (grátis). <strong>Vantagem na tabela de encontros da Névoa</strong> (role 2× e escolha o melhor) e em testes de Navegação dentro da bruma.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com <strong>+1 provisão inicial</strong> (além do normal) e um contato fixo com um Barman de nível baixo ou médio que lhe dá trabalho e proteção em troca de favores.<br><br>
+                <strong>Custo / Gancho:</strong> Você sabe coisas que não deveria. Às vezes carrega mensagens que nunca foram entregues porque o destinatário morreu. Alguém (ou algo) na Névoa pode estar te caçando por causa de uma entrega que nunca chegou.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> um <strong>Barman da Rede</strong> — o contato que lhe dá trabalho. Nível 1 de Relacionamento: confiança inicial, mas a Rede sempre cobra.<br><br>
                 <strong>Traços Sugeridos:</strong> Explorador da Névoa, Olhar Penetrante, Noção do Perigo, Andarilho das Ruínas, Visão da Torre, Olhos da Névoa.
             </div>
 
             <div class="system-card">
                 <strong>3. Aprendiz de Ferreiro das Espirais</strong><br><br>
-                <strong>Vida Anterior:</strong> Você trabalhou (ou ainda trabalha informalmente) sob um ferreiro que usa partes de monstros, núcleos fragmentados e materiais "proibidos" para criar armas e armaduras. Você aprendeu o cheiro de carne fundida com metal e o som que um núcleo faz quando é forçado a se tornar lâmina.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Você recebe 10% de desconto em todos os serviços de forja (contratação de ferreiros) durante o jogo. Uma vez por "nível de blacksmith" relevante, pode pedir um pequeno favor extra (qualidade melhorada ou material secundário incluso).<br>
-                • Começa com um item simples de forja de qualidade acima da média (adaga, bracelete de proteção, ferramenta de escalada, etc.) que você mesmo ajudou a fazer ou "herdou".<br>
-                • Vantagem em testes para identificar materiais de forja, qualidade de núcleos ou para improvisar reparos em equipamentos.<br><br>
-                <strong>Gancho / Complicação:</strong> Seu mestre (ou o ferreiro para quem você trabalhava) ainda existe e pode cobrar favores, oferecer trabalho perigoso ou se tornar um aliado poderoso. Muitos ferreiros têm dívidas com Barmans ou facções. Além disso, você pode ter visto coisas dentro de forjas que nunca deveriam ter sido vistas.<br><br>
+                <strong>Vida Anterior:</strong> Você trabalhou (ou ainda trabalha informalmente) sob um <strong>ferreiro</strong> que usa partes de monstros, núcleos fragmentados e materiais "proibidos" para criar armas e armaduras. Você aprendeu o cheiro de carne fundida com metal e o som que um núcleo faz quando é forçado a se tornar lâmina.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Ofícios</strong> (grátis). <strong>Vantagem em testes para identificar materiais de forja, qualidade de núcleos e improvisar reparos</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com um <strong>item de forja</strong> do Catálogo (ex.: Adaga reforçada, 20 Esp, ou Kit de Ferreiro de Campo, 80 Esp). Mantém <strong>10% de desconto</strong> em serviços de forja e, <strong>1× por comissão com ferreiro de nível I–III, um pequeno favor</strong> (qualidade melhorada ou material secundário incluso).<br><br>
+                <strong>Custo / Gancho:</strong> Seu mestre (ou o ferreiro para quem você trabalhou) ainda existe e pode cobrar favores ou oferecer trabalho perigoso. Você pode ter visto coisas dentro de forjas que nunca deveriam ter sido vistas.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>mestre ferreiro</strong> — um contato vivo que conhece seu trabalho e pode ser aliado ou dívida ambulante.<br><br>
                 <strong>Traços Sugeridos:</strong> Afinidade com Metal, Inventor da Alma, Corpo de Gigante, Resistência Sobrenatural, Marca Visível, Consumidor de Essência.
             </div>
 
             <div class="system-card">
                 <strong>4. Catador de Fragmentos</strong><br><br>
                 <strong>Vida Anterior:</strong> Você catava o que restava depois das lutas: núcleos rachados, essência que vazava de cadáveres, pedaços de armadura, ossos com runas naturais. Era perigoso, sujo e mal pago — mas era o que tinha. Muitos catadores acabam despertando... ou sendo consumidos antes disso.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes para avaliar a qualidade, pureza e valor aproximado de núcleos e materiais de forja.<br>
-                • Começa com 3d6 × 10 Esp em "material bruto" ou um item menor de forja (Runa Fraturada comum ou equivalente).<br>
-                • Você conhece pelo menos um ponto de coleta relativamente "seguro" (Mestre define) onde ainda pode encontrar coisas úteis de vez em quando.<br><br>
-                <strong>Gancho / Complicação:</strong> Você foi exposto a muita essência residual antes de despertar. Role 1d6 no início do jogo: em 1-2, você começa com 1 ponto de Corrupção. Em 5-6, você tem um "achado" particularmente perigoso guardado (um núcleo de qualidade alta que você nunca teve coragem de absorver). Além disso, outros catadores ou grupos podem te ver como concorrente ou como alguém que "sabe demais".<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Sobrevivência</strong> (grátis). <strong>Vantagem em testes para avaliar a qualidade, pureza e valor aproximado de núcleos e materiais de forja</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com <strong>3d6 × 10 Esp em material bruto</strong> (núcleos quebrados, peles, ossos). Role na tabela do "achado perigoso" (1d6): 1 — núcleo de qualidade boa; 2 — runa comum; 3 — peça de forja; 4 — veneno raro; 5 — provisão extra; 6 — segredo. O achado tem risco: <strong>1d4 de Corrupção</strong> por manuseio imprudente (Salvaguarda de Alma CD 13 reduz).<br><br>
+                <strong>Benefício de Mundo (ponto de coleta):</strong> você conhece um ponto de coleta relativamente "seguro" (Mestre define) onde ainda encontra coisas úteis.<br><br>
+                <strong>Custo / Gancho:</strong> Você foi exposto a muita essência residual antes de despertar. Outros catadores ou grupos podem te ver como concorrente ou como alguém que "sabe demais".<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> o <strong>fornecedor do ponto de coleta</strong> — um comerciante que compra seus achados e sabe mais sobre os campos de batalha do que admite.<br><br>
                 <strong>Traços Sugeridos:</strong> Explorador da Névoa, Andarilho das Ruínas, Consumidor de Essência, Olhar Penetrante, Fome Insaciável, Cicatriz da Torre.
             </div>
 
             <div class="system-card">
                 <strong>5. Guarda de Muralha</strong><br><br>
                 <strong>Vida Anterior:</strong> Você passava noites em cima das muralhas das cidadelas, olhando para a Névoa e para as Torres distantes, esperando o momento em que algo sairia de lá. Você viu companheiros serem puxados para o nada, ouviu vozes que não eram humanas chamando pelo nome de pessoas que já estavam mortas.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • +1 de CA quando estiver usando qualquer armadura leve ou média (você aprendeu a usar o equipamento de forma eficiente).<br>
-                • Vantagem em testes de percepção e iniciativa quando em posições elevadas ou defendendo um ponto fixo.<br>
-                • Você mantém contatos na patrulha ou na guarda de pelo menos uma cidadela. Pode conseguir abrigo, informações básicas sobre movimentos de monstros ou um aviso sobre problemas locais.<br><br>
-                <strong>Gancho / Complicação:</strong> A guarda ainda tem registros sobre você. Se você desertou, foi dispensado de forma desonrosa ou simplesmente "sumiu" depois de ver algo que não deveria, eles podem te caçar ou te usar como bode expiatório. Muitos guardas carregam o peso de terem fechado os portões sabendo que deixavam pessoas do lado de fora.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Percepção</strong> (grátis). Mantém <strong>+1 de CA</strong> com armaduras leves ou médias (Catálogo: Couro +1, Cota de Malha +3) e <strong>Vantagem em Iniciativa em posição elevada ou defendendo um ponto fixo</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com uma <strong>armadura de Couro</strong> (40 Esp) e contatos na patrulha de pelo menos uma cidadela — abrigo, informações sobre movimentos de monstros ou avisos locais.<br><br>
+                <strong>Custo / Gancho:</strong> A guarda ainda tem registros sobre você. Se você desertou, foi dispensado de forma desonrosa ou "sumiu" depois de ver algo, podem te caçar ou te usar como bode expiatório. Muitos guardas carregam o peso de terem fechado os portões sabendo que deixavam pessoas do lado de fora.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> um <strong>ex-companheiro de muralha</strong> — o único que sabe por que você saiu (e pode te ajudar ou te entregar).<br><br>
                 <strong>Traços Sugeridos:</strong> Instinto de Sobrevivência, Noção do Perigo, Imponência da Alma, Mente Focada, Lealdade Cega, Trauma Psíquico.
             </div>
 
             <div class="system-card">
                 <strong>6. Fugitivo do Culto do Olho</strong><br><br>
                 <strong>Vida Anterior:</strong> Você nasceu dentro (ou foi recrutado por) um dos muitos cultos que acreditam que a Torre do Pesadelo (ou uma das Guardiãs) é uma divindade que deve ser servida, aplacada ou compreendida através de sacrifício e submissão. Você viu rituais, viu pessoas se entregarem voluntariamente, viu o que acontece quando a Torre "aceita" a oferta. Você fugiu. A maioria não consegue.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes para reconhecer sinais de corrupção avançada, comportamento de monstros "inteligentes", símbolos de culto e armadilhas conceituais criadas por seres da Torre.<br>
-                • Você tem conhecimento profundo (flavor) sobre como a Corrupção funciona em humanos e pode reconhecer os estágios iniciais em outras pessoas.<br>
-                • Uma vez por cena, você pode fazer um teste de Intelecto ou Alma CD 14 para "ler" o ambiente de uma área fortemente corrompida e receber uma dica curta do Mestre sobre o que a Torre quer dali.<br><br>
-                <strong>Gancho / Complicação:</strong> O Culto não esquece. Eles podem enviar agentes, ou piores, podem ter deixado algo dentro de você (uma marca, um fragmento, uma profecia). Você começa com 2 pontos de Sanidade a menos que o normal (o peso do que viu). Muitos cultistas ainda te consideram "escolhido" e querem te trazer de volta — vivo ou como oferenda.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Vontade</strong> (grátis). <strong>Percepção CD 12 identifica o estágio 3+ de Corrupção em humanos</strong> — você reconhece o que o Culto ensinou a ver. Vantagem em reconhecer símbolos de culto, armadilhas conceituais e comportamento de monstros "inteligentes".<br><br>
+                <strong>Benefício de Mundo:</strong> 1× por cena, teste de <strong>Intelecto ou Alma CD 14</strong> para "ler" uma área fortemente corrompida e receber uma dica curta do Mestre sobre o que a Torre quer dali.<br><br>
+                <strong>Custo / Gancho:</strong> Você começa com <strong>2 pontos de Sanidade a menos</strong> (o peso do que viu). O Culto não esquece — agentes, marcas ou fragmentos podem te encontrar. Muitos cultistas ainda te consideram "escolhido" e querem te trazer de volta — vivo ou como oferenda.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>algoz do Culto</strong> — o executor que te recrutou (ou te marcou). Ele sabe que você fugiu e não desistiu.<br><br>
                 <strong>Traços Sugeridos:</strong> Visão da Torre, Alma Instável, Fragmento de Outro, Visões da Queda, Marca do Olho, Eco Mental, Alma de Aço (com o custo adicional).
             </div>
 
             <div class="system-card">
                 <strong>7. Filho da Rede (Barman)</strong><br><br>
                 <strong>Vida Anterior:</strong> Você cresceu ouvindo conversas em porões úmidos, atrás de cortinas, em becos onde a luz da Torre não chega. Seu pai, sua mãe, seu tio ou alguém que te criou era (ou é) um Barman. Você aprendeu cedo que informação é mais valiosa que ouro e que a maioria das pessoas não quer saber a verdade — elas querem apenas a versão que as mantém vivas mais um dia.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Você tem um contato fixo de confiança dentro da Rede dos Barmans (pode ser um parente distante ou um velho conhecido da família). Uma vez por sessão, pode pedir um rumor ou informação de baixo/médio risco sem pagar o preço normal.<br>
-                • Vantagem em testes de Persuasão, Intimidação ou Enganação em ambientes urbanos, tavernas, mercados negros e com pessoas desesperadas.<br>
-                • Você sabe como "ler" uma sala: uma vez por cena, pode fazer um teste de Intelecto CD 13 para identificar quem na área atual é mais provável de ter informação útil ou de ser um risco.<br><br>
-                <strong>Gancho / Complicação:</strong> A Rede sempre cobra. Você pode ter uma dívida pendente (informação, serviço ou silêncio). Barmans de alto nível podem te ver como "herdeiro" ou como ameaça. Além disso, você sabe segredos sobre pessoas importantes — e elas sabem que você sabe.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Persuasão</strong> (grátis). <strong>Vantagem em testes de Persuasão, Intimidação ou Enganação em ambientes urbanos, tavernas, mercados negros e com pessoas desesperadas</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> 1× por sessão, você pede um <strong>rumor ou informação de baixo/médio risco sem pagar o preço normal</strong>. 1× por cena, <strong>Intelecto CD 13</strong> para "ler uma sala" — identificar quem tem informação útil ou quem é risco.<br><br>
+                <strong>Custo / Gancho:</strong> A Rede sempre cobra. Você tem uma dívida pendente (informação, serviço ou silêncio) e sabe segredos sobre pessoas importantes — e elas sabem que você sabe.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> um <strong>Barman da Rede</strong> — o Mestre gera 1 Barman (sistema do Livro do Mestre) com lealdade própria; ele conhece sua família e sua dívida.<br><br>
                 <strong>Traços Sugeridos:</strong> Rede de Contatos, Olhar Penetrante, Voz da Alma, Laços de Sangue, Dependência Emocional, Lealdade Cega, Sorte da Alma.
             </div>
 
             <div class="system-card">
                 <strong>8. Predador de Baixo Nível</strong><br><br>
                 <strong>Vida Anterior:</strong> Antes mesmo de seu Núcleo despertar completamente, você já caçava. Monstros menores, aberrantes isolados, coisas que saíam da Névoa e atacavam rebanhos ou viajantes. Você fazia isso por comida, por partes para vender, por ódio ou porque alguém pagava. A maioria dos caçadores solitários acaba morta ou pior. Os que sobrevivem desenvolvem instintos afiados — e às vezes, um gosto pelo perigo.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes para rastrear, emboscar e estudar o comportamento de criaturas de Tier 1 e 2.<br>
-                • Começa com 1d4 materiais secundários de forja de qualidade comum (dentes, ossos, peles, etc.) ou o equivalente em Esp de um "caçador experiente".<br>
-                • Seu primeiro ataque contra uma criatura que ainda não o detectou causa +1d4 de dano (uma vez por combate).<br><br>
-                <strong>Gancho / Complicação:</strong> Você tem uma "marca de predador". Alguns monstros (especialmente os de Qualidade mais alta ou que caçam caçadores) parecem te reconhecer como ameaça. Além disso, você pode ter deixado para trás um parceiro de caça que morreu — ou que se tornou algo que agora te caça.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Sobrevivência</strong> (grátis). <strong>Vantagem em testes para rastrear, emboscar e estudar criaturas de Tier 1–2</strong> — para o Jogador: criaturas fracas e comuns, como <strong>Larva e Rastejante</strong> (veja o Bestiário do Mestre).<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com <strong>1d4 materiais secundários de forja</strong> (dentes, ossos, peles — âncoras do Catálogo e da Forja) ou o equivalente em Esp de um caçador experiente.<br><br>
+                <strong>Custo / Gancho:</strong> Você tem uma "marca de predador". Monstros de Qualidade mais alta parecem te reconhecer como ameaça. Você pode ter deixado para trás um parceiro de caça que morreu — ou que se tornou algo que agora te caça.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>parceiro de caça morto</strong> — a memória dele guia suas decisões, e o monstro que o matou ainda vive (inimigo em potencial).<br><br>
                 <strong>Traços Sugeridos:</strong> Predador Silencioso, Instinto de Sobrevivência, Fome da Alma, Memória de Sangue, Olhos da Névoa, Sede de Poder, Marca do Olho.
             </div>
 
             <div class="system-card">
                 <strong>9. Estudioso de Ruínas</strong><br><br>
                 <strong>Vida Anterior:</strong> Você passou anos estudando o que restou: fragmentos de torres antigas, diários de expedicionários mortos, símbolos em paredes que ninguém mais ousa olhar por muito tempo. Você acredita (ou acreditava) que existe um padrão, uma lógica, uma fraqueza nas Torres. A maioria dos estudiosos acaba desaparecendo em "pesquisas de campo".<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes de conhecimento, história e decifração relacionados às Torres, às Quatro Guardiãs, a facções antigas e a símbolos de corrupção.<br>
-                • Começa com um "diário de ruínas" ou conjunto de anotações que o Mestre pode usar para dar dicas úteis (mas perigosas) sobre andares ou tipos de torre específicos.<br>
-                • Você sabe reconhecer quando uma área foi "afetada" pela Torre de forma não óbvia (armadilhas conceituais, distorções de espaço, etc.).<br><br>
-                <strong>Gancho / Complicação:</strong> A Torre nota estudiosos. Você pode ter atraído atenção de algo que não gosta de ser estudado. Além disso, você pode ter descoberto algo que "não deveria" — uma verdade parcial sobre a Ascensão, sobre a Devoração, ou sobre o que realmente acontece com quem sobe demais.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>História</strong> (grátis). <strong>Vantagem em testes de História e decifração</strong> relacionados às Torres, às Quatro Guardiãs, a facções antigas e a símbolos de corrupção.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com um <strong>"diário de ruínas"</strong> (anotações). <strong>1×/incursão</strong>, você pode usá-lo para ter <strong>Vantagem num teste de conhecimento OU receber 1 dica do Mestre</strong> sobre o andar atual.<br><br>
+                <strong>Custo / Gancho:</strong> A Torre nota estudiosos. Você pode ter atraído a atenção de algo que não gosta de ser estudado — e pode ter descoberto uma verdade parcial sobre a Ascensão ou a Devoração que "não deveria" saber.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>antigo mentor</strong> — o estudioso que te ensinou o ofício e desapareceu em uma expedição (contato vivo ou dívida de pesquisa).<br><br>
                 <strong>Traços Sugeridos:</strong> Visão da Torre, Mente Focada, Herança Ancestral, Sentido do Fluxo, Visões da Queda, Marca do Olho, Equilíbrio Interno.
             </div>
 
             <div class="system-card">
                 <strong>10. Curandeiro de Feridas da Torre</strong><br><br>
                 <strong>Vida Anterior:</strong> Você costurava, queimava, amputava e consolava os que voltavam das Torres. Você viu o que o poder faz com o corpo e com a mente. Viu pessoas perderem mais do que sangue. Viu o que sobra quando alguém absorve um núcleo forte demais. Muitos curandeiros acabam precisando de cura eles mesmos — e não encontram.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • +2 em todos os testes de medicina, estabilização, tratamento de venenos e cuidados com ferimentos graves.<br>
-                • Começa com um kit de curativos e ervas de qualidade superior (pode ser usado 3-4 vezes antes de precisar de reposição).<br>
-                • Uma vez por cena, você pode estabilizar automaticamente um aliado que esteja a 0 PV (sem teste), mas sofre 1d4 de Sanidade se a pessoa morrer nas próximas 24 horas mesmo assim.<br><br>
-                <strong>Gancho / Complicação:</strong> Você carrega o peso de todos os que não conseguiu salvar. Sempre que um aliado próximo cair a 0 PV ou sofrer trauma grave, você deve fazer uma Salvaguarda de Carisma CD 14 ou perder 1d4 de Sanidade. Além disso, você pode ter "pacientes" que voltaram diferentes — e que agora te procuram por razões que não são gratidão.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Medicina</strong> (grátis — resolve o Gate da Maestria: estabilizar exige Medicina e o antecedente concede o treinamento). <strong>+2 em testes de Medicina, estabilização e tratamento de venenos</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com um <strong>Kit de Medicina</strong> do Catálogo (60 Esp, 5 usos). <strong>1×/cena</strong>, estabiliza automaticamente um aliado a 0 PV sem teste — mas sofre <strong>1d4 de Sanidade</strong> se a pessoa morrer nas próximas 24 horas.<br><br>
+                <strong>Custo / Gancho:</strong> Você carrega o peso de todos os que não conseguiu salvar. Sempre que um aliado próximo cair a 0 PV ou sofrer trauma grave, Salvaguarda de Carisma CD 14 ou perde 1d4 de Sanidade. Alguns "pacientes" voltaram diferentes — e agora te procuram por razões que não são gratidão.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> um <strong>paciente que você não conseguiu salvar</strong> — alguém que morreu nas suas mãos (culpa) ou que voltou corrompido e te culpa (inimigo).<br><br>
                 <strong>Traços Sugeridos:</strong> Empatia Excessiva, Aura de Calma, Toque da Alma, Trauma Psíquico, Mente Focada, Calor Humano, Desejo de Morte.
             </div>
 
             <div class="system-card">
                 <strong>11. Desertor das Guerras Humanas</strong><br><br>
                 <strong>Vida Anterior:</strong> Você lutou em uma das muitas guerras pequenas entre cidadelas — por água limpa, por território fora da Névoa, por "pureza de sangue", por vingança antiga. Você aprendeu que a humanidade não precisa de Torres para ser cruel. Muitos desertores carregam cicatrizes de ambos os lados: as que os monstros fizeram e as que outros humanos fizeram.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Experiência tática: você rola com vantagem em testes para avaliar um campo de batalha, identificar emboscadas preparadas por humanos ou posicionar aliados em combate.<br>
-                • +1 em iniciativa em situações de conflito armado (monstros ou humanos).<br>
-                • Você sabe como improvisar armadilhas simples e barricadas eficazes com materiais disponíveis.<br><br>
-                <strong>Gancho / Complicação:</strong> Guerras humanas não terminam só porque você parou de lutar. Você pode ter inimigos em uma ou mais facções/cidadelas, ou uma dívida de sangue que ainda não foi paga. Muitos desertores são caçados tanto por seu antigo lado quanto pelo lado contra o qual desertaram. Confiar em grupos grandes é difícil para você.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Ofícios</strong> (engenheiro de campo, grátis) ou <strong>Astúcia</strong> — escolha um. Mantém <strong>+1 em Iniciativa em conflito armado</strong> (monstros ou humanos).<br><br>
+                <strong>Benefício de Mundo:</strong> <strong>1×/incursão</strong>, improvisa uma barricada ou armadilha simples que concede <strong>+1 de CA ou cobertura</strong> (metade do dano de ataques à distância) em uma zona. Conhece cidadelas e facções em guerra.<br><br>
+                <strong>Custo / Gancho:</strong> Guerras humanas não terminam só porque você parou de lutar. Você pode ter inimigos em uma ou mais facções/cidadelas, ou uma dívida de sangue ainda não paga. Desertores são caçados tanto pelo antigo lado quanto pelo lado contra o qual desertaram.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>antigo oficial</strong> — o comandante que te treinou (e que te vê como traidor ou como recurso).<br><br>
                 <strong>Traços Sugeridos:</strong> Código de Honra Rígido, Lealdade Cega, Ira Acumulada, Olhar Penetrante, Mente Focada, Dependência Emocional, Alma Fragmentada.
             </div>
 
             <div class="system-card">
                 <strong>12. Marcado pelo Primeiro Toque</strong><br><br>
                 <strong>Vida Anterior:</strong> Você não despertou de forma "natural". Você teve um encontro direto com algo da Torre — um núcleo exposto, uma distorção de espaço, uma "voz" que falou sem som, uma onda de energia durante um surto. A maioria das pessoas morre ou enlouquece. Você acordou com o Núcleo queimando dentro de você. Alguns dizem que a Torre te escolheu. Outros dizem que você roubou algo dela.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Sua reserva máxima de PE começa com +2 (acima do normal para o seu nível inicial).<br>
-                • Quando você cria sua primeira técnica (Nível 0 ou 1), ela pode ter um efeito adicional menor gratuito escolhido da tabela de Efeitos Ofensivos (ou equivalente temático para outros tipos).<br>
-                • Você sente a presença de fontes fortes de energia da Torre com mais clareza que a maioria.<br><br>
-                <strong>Gancho / Complicação:</strong> A Torre já te "vê". Você começa com 1 ponto de Corrupção (ou role: em alguns casos o "toque" foi limpo, mas deixou uma marca que monstros de alta Qualidade reconhecem). Eventos aleatórios dentro de Torres podem te afetar com mais frequência ou intensidade. Alguns Despertos mais velhos podem te olhar com inveja, medo ou desejo de estudar você.<br><br>
+                <strong>Benefício de Competência:</strong> Sua reserva máxima de <strong>PE começa com +2</strong>. Você sente a presença de fontes fortes de energia da Torre com mais clareza que a maioria.<br><br>
+                <strong>Benefício de Mundo:</strong> Quando você cria sua primeira técnica, ela pode ter um efeito adicional menor gratuito escolhido da tabela "Exemplos de Efeitos e Poderes Acompanhantes para Técnicas" — <strong>mas apenas a partir do Nível 3</strong>. Antes disso, você só tem o "sensor" do toque.<br><br>
+                <strong>Custo / Gancho (Nerf):</strong> Você começa com <strong>+1 de Corrupção</strong>. Além disso, <strong>+1 Atenção da Torre inicial</strong>: o Relógio de Atenção começa 1 tick acima do normal — <em>a Torre já te vê</em>. Monstros de alta Qualidade reconhecem sua marca.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> o <strong>toque que o marcou</strong> — um mistério: algo da Torre se comunicou com você e ainda pode voltar (contato com o desconhecido).<br><br>
                 <strong>Traços Sugeridos:</strong> Sentido do Fluxo, Visão da Torre, Fome da Alma, Alma Instável, Marca do Olho, Renascimento Parcial, Fragmento de Outro, Alma de Aço.
             </div>
 
             <div class="system-card">
                 <strong>13. Gladiador das Torres da Disputa</strong><br><br>
                 <strong>Vida Anterior:</strong> Você lutou (ou foi arrastado para lutar) nas arenas da Torre das Disputas para o entretenimento do Boss e da plateia. Seja por dívida, por promessa de poder, por sobrevivência ou por vício na adrenalina do combate público. O sangue, as apostas, os olhares da Torre — tudo isso marca uma pessoa para sempre. Muitos "vencedores" saem com mais cicatrizes internas do que externas.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Você carrega um traço de "Sangue Temperado" (pode usar como material inicial de forja ou obter um pequeno bônus temático em combates contra outros humanos ou Despertos).<br>
-                • Vantagem em testes de performance, intimidação ou leitura de plateia em situações de combate público, apostas ou multidões hostis.<br>
-                • Tem pelo menos um contato (ou rival) ligado à organização das Disputas — alguém que pode oferecer "oportunidades" (boas ou ruins) ou informações sobre eventos futuros nas arenas.<br><br>
-                <strong>Gancho / Complicação:</strong> A Torre das Disputas (e o Boss) ainda te "vê". Você pode receber convites, ter apostas feitas sobre sua vida atual, ou ser reconhecido por antigos espectadores e gladiadores. Muitos desenvolvem um vício pela atenção ou pela violência performática — recuar de um desafio público pode custar Sanidade ou reputação.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Performance</strong> (grátis). <strong>Vantagem em testes de Performance ou Intimidação em combate público, apostas ou multidões hostis</strong>.<br><br>
+                <strong>Benefício de Mundo — "Sangue Temperado":</strong> carrega um material de forja inicial que concede <strong>+1 Rank na próxima forja</strong> OU a "memória de luta": <strong>1×/combate, Vantagem numa Intimidação ou Performance</strong>.<br><br>
+                <strong>Custo / Gancho:</strong> A Torre das Disputas (e o Boss) ainda te "vê". Convites, apostas sobre sua vida atual, reconhecimento de antigos espectadores. Recuar de um desafio público pode custar Sanidade ou reputação. Consulte o estágio 1 do Despertar do Predador (árvore da Alma).<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>rival nas Disputas</strong> — o gladiador que te odeia (ou que você odeia) e que pode reaparecer a qualquer momento.<br><br>
                 <strong>Traços Sugeridos:</strong> Predador Silencioso, Ira Acumulada, Presença Inspiradora, Sorte da Alma, Marca Visível, Sede de Poder, Mente Focada.
             </div>
 
             <div class="system-card">
                 <strong>14. Testemunha da Devoração</strong><br><br>
                 <strong>Vida Anterior:</strong> Você viu — ou foi forçado a ver ou participar — quando um Desperto absorveu o núcleo de outro ser humano. O ritual, o grito que não era apenas dor física, a forma como a vítima se desfez, o que sobrou no rosto do algoz. Isso não é conhecimento que se esquece. A maioria das pessoas que testemunham isso ou enlouquecem ou se tornam parte do ciclo.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes para reconhecer os sinais de uma Devoração iminente ou recente, e para avaliar o "risco" de um núcleo humano ou de um Desperto que já absorveu um.<br>
-                • Conhecimento profundo (flavor + mecânico) sobre as condições e consequências da absorção de núcleos humanos — você pode dar conselhos úteis (ou perigosos) ao grupo.<br>
-                • Começa com um "fragmento" ou segredo relacionado (um pedaço de núcleo rachado, uma marca que você esconde, ou o nome de alguém que participou de uma).<br><br>
-                <strong>Gancho / Complicação:</strong> Quem participa ou testemunha isso costuma ser caçado por aqueles que querem o segredo enterrado. Você começa com 1-2 pontos de Sanidade a menos (o peso do que viu). A Torre parece prestar atenção especial em quem sabe desse "segredo proibido". Alguns Despertos podem querer te usar como testemunha ou como próxima vítima.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Intuição</strong> (grátis). <strong>Vantagem em Vontade contra quem tenta ler sua mente ou essência</strong> + mantém o reconhecimento de sinais de Devoração iminente ou recente.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com um <strong>"fragmento"</strong> relacionado (pedaço de núcleo rachado, marca escondida, ou o nome de alguém que participou de uma Devoração). Conhecimento profundo (flavor + mecânico) sobre as condições da absorção de núcleos humanos.<br><br>
+                <strong>Custo / Gancho:</strong> Você começa com <strong>1–2 pontos de Sanidade a menos</strong> (o peso do que viu). Quem participa ou testemunha isso costuma ser caçado por aqueles que querem o segredo enterrado.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> <strong>quem quer o segredo enterrado</strong> — o algoz da Devoração (ou um cúmplice) que sabe que você viu e prefere te silenciar.<br><br>
                 <strong>Traços Sugeridos:</strong> Trauma Psíquico, Eco Mental, Visões da Queda, Alma Instável, Fome Insaciável (ou aversão forte a núcleos humanos), Marca do Olho, Fragmento de Outro.
             </div>
 
             <div class="system-card">
                 <strong>15. Filho de Ascendido</strong><br><br>
                 <strong>Vida Anterior:</strong> Um dos seus pais (ou uma figura parental) era um Desperto que subiu alto na Escala de Ascensão. Eles partiram "para alcançar o topo", foram chamados pelas Torres, ou simplesmente desapareceram em andares altos. Você cresceu ouvindo lendas sobre eles, caçando pistas, ou fugindo da sombra/reputação que deixaram para trás.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • +1 (ou vantagem em situações específicas) em testes de conhecimento sobre Ascensão, Despertares de alto nível, lendas das Torres e o que acontece com quem sobe demais.<br>
-                • Um item herdado menor ligado ao conceito de poder do seu parente (pode servir como foco, material de forja ou gatilho emocional para seu próprio poder).<br>
-                • Despertos mais velhos ou de alto nível tendem a te reconhecer ou se interessar por você (às vezes como aliado em potencial, às vezes como ameaça ou ferramenta).<br><br>
-                <strong>Gancho / Complicação:</strong> Muitos querem saber o que realmente aconteceu com seu parente — ou se você "herdou" algo perigoso. A Torre pode te ver como continuação de uma linhagem interessante. Você pode carregar uma missão pessoal (encontrar o que sobrou dele/dela, acabar com o que sobrou, ou provar que é melhor do que eles).<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>História</strong> (grátis) sobre Ascensão e lendas das Torres. <strong>Vantagem em testes de conhecimento sobre Ascensão, Despertares de alto nível e o que acontece com quem sobe demais</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com um <strong>item herdado com propriedade concreta</strong> — ex.: um foco que dá +1 num tipo de teste OU material de forja Rank C (ex.: núcleo de qualidade B). <strong>Conhece 1 segredo sobre o paradeiro ou o fim do parente</strong> (gancho de campanha).<br><br>
+                <strong>Custo / Gancho:</strong> Muitos querem saber o que aconteceu com seu parente — ou se você "herdou" algo perigoso. A Torre pode te ver como continuação de uma linhagem interessante.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> a <strong>memória/fantasma do parente</strong> — guia ou pressão constante, dependendo de como você interpreta o legado.<br><br>
                 <strong>Traços Sugeridos:</strong> Herança Ancestral, Visão da Torre, Equilíbrio Interno, Sentido do Fluxo, ou fraquezas como Dependência Emocional, Sede de Poder, Alma Fragmentada.
             </div>
 
             <div class="system-card">
                 <strong>16. Alquimista de Essências</strong><br><br>
                 <strong>Vida Anterior:</strong> Você aprendeu (sozinho, com um mestre louco ou em um mercado negro perigoso) a extrair, destilar e combinar sangue de monstros, fragmentos de núcleos, tecidos corrompidos e materiais "impróprios" em tônicos, óleos, venenos e poções que concedem efeitos temporários. É um ofício que mata o alquimista quase tão rápido quanto os clientes.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Começa com 2d4 doses de tônicos/poções simples de qualidade (exemplos: +2 STA temporário por cena, antídoto menor, poção de cura 1d6+1, óleo que dá resistência temporária a um tipo de dano). O Mestre e você definem o tema.<br>
-                • Vantagem em testes para criar, identificar, usar ou improvisar itens alquímicos baseados em monstros e núcleos (em campo, com materiais coletados).<br>
-                • Conhece pelo menos um fornecedor ou comprador regular (pode ser um Barman ou um ferreiro que usa seus produtos).<br><br>
-                <strong>Gancho / Complicação:</strong> Seus produtos são frequentemente ilegais, instáveis ou altamente regulados. Clientes que sofreram efeitos colaterais (mutação temporária, vício, corrupção acelerada, "ressaca de essência") ou familiares de vítimas podem vir atrás de você. Barmans e ferreiros podem te ver como recurso valioso ou concorrente incômodo.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Ofícios</strong> (alquimia, grátis). <strong>Vantagem em testes para criar, identificar, usar ou improvisar itens alquímicos</strong> baseados em monstros e núcleos.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com <strong>2d4 doses</strong> ancoradas no Catálogo: <strong>Poção de Cura Menor</strong> (40 Esp, 1d6+1 PV), <strong>Tônico de STA</strong> (30 Esp, 1d6 STA) e <strong>Antídoto</strong> (50 Esp). <strong>Regra nova:</strong> 1 dose nova por incursão com materiais coletados (teste de <strong>Ofícios CD 14</strong>). Conhece um fornecedor ou comprador regular (Barman ou ferreiro).<br><br>
+                <strong>Custo / Gancho:</strong> Seus produtos são ilegais, instáveis ou altamente regulados. Clientes que sofreram efeitos colaterais (mutação temporária, vício, corrupção acelerada) ou familiares de vítimas podem vir atrás de você.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>fornecedor</strong> — o contato que vende matérias-primas (e que sabe demais sobre o que você destila).<br><br>
                 <strong>Traços Sugeridos:</strong> Inventor da Alma, Resistência Sobrenatural, Consumidor de Essência, Olhar Penetrante, ou fraquezas como Fome Insaciável, Marca Visível, Corpo Desarmonizado, Azar da Torre.
             </div>
 
             <div class="system-card">
                 <strong>17. Cativo da Torre</strong><br><br>
                 <strong>Vida Anterior:</strong> Você foi capturado vivo por uma entidade inteligente ou monstro de alto tier e mantido dentro de uma Torre (ou em um "curral" dela) por semanas, meses ou mais tempo como escravo, experimento, fonte de alimento ou brinquedo. Você aprendeu a "língua" deles, a hierarquia interna, como eles veem os humanos — e o que eles fazem com quem sobra. Escapou por astúcia, sorte ou porque algo maior decidiu te soltar.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes de sobrevivência, navegação, furtividade e "etiqueta de monstro" dentro de Torres (especialmente andares médios e altos).<br>
-                • Conhecimento prático do comportamento de monstros inteligentes (pode prever táticas, fraquezas conceituais ou como evitar atenção desnecessária).<br>
-                • Carrega uma "lembrança" física, uma marca ou um segredo (informação, nome, objeto) que pode ser usado como chantagem, informação valiosa ou fonte de trauma.<br><br>
-                <strong>Gancho / Complicação:</strong> A entidade que te capturou (ou seus "irmãos"/aliados) ainda pode te reconhecer e querer te recuperar — "você escapou, mas ainda nos pertence". Você sofre triggers de Sanidade em ambientes de torre, com certos sons, cheiros ou situações de confinamento. Outros ex-cativos (ou coisas que se lembram de você) podem aparecer.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Furtividade</strong> (grátis). <strong>Vantagem em testes de Furtividade e "etiqueta de monstro" dentro de Torres</strong> (especialmente andares médios e altos). <strong>Intelecto CD 13</strong> para antecipar 1 movimento ou armadilha de monstros 1×/cena.<br><br>
+                <strong>Benefício de Mundo:</strong> Carrega uma <strong>"lembrança" física, uma marca ou um segredo</strong> (informação, nome, objeto) que pode ser usado como chantagem, informação valiosa ou fonte de trauma.<br><br>
+                <strong>Custo / Gancho (marca com efeito duplo):</strong> Você tem <strong>Vantagem contra 1 tipo de monstro da torre em que foi cativo</strong> + <strong>+1 Atenção da Torre</strong> — a Torre o reconhece. Você sofre triggers de Sanidade em ambientes de torre, com certos sons, cheiros ou situações de confinamento.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>carcereiro ou companheiro de cela</strong> — a criatura que te prendeu (inimigo) ou o outro cativo que escapou com você (aliado).<br><br>
                 <strong>Traços Sugeridos:</strong> Andarilho das Ruínas, Noção do Perigo, Trauma Psíquico, Pavor do Vazio, Fragmento de Outro, Instinto de Sobrevivência, Alma Instável.
             </div>
 
             <div class="system-card">
                 <strong>18. Espião de Cidadela</strong><br><br>
                 <strong>Vida Anterior:</strong> Você foi treinado, contratado ou coagido a atuar como infiltrado entre facções humanas, cidadelas rivais, guildas ou grupos perigosos. Mentiras, disfarces, roubo de documentos, assassinatos "políticos", manipulação de informações. Você aprendeu que a maior ameaça à humanidade muitas vezes não vem da Névoa ou das Torres — vem de dentro.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes de Enganação, Furtividade social, leitura de intenções e percepção de mentiras em ambientes urbanos, políticos e de facções.<br>
-                • Começa com pelo menos uma identidade falsa bem construída (documentos, contatos, história) em uma cidadela ou facção diferente da sua atual.<br>
-                • Excelente em "ler o mapa político": uma vez por sessão, pode fazer um teste de Intelecto para identificar quem realmente manda em uma situação social ou quem tem uma fraqueza explorável.<br><br>
-                <strong>Gancho / Complicação:</strong> Facções rivais ainda podem ter contratos abertos sobre você ou querer te recrutar de volta (às vezes com "ofertas que não se recusam"). Você carrega segredos que podem destruir aliados ou colocar o grupo inteiro em perigo se vazarem. Confiança genuína é quase impossível para você — você tende a suspeitar até dos mais próximos.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Enganação</strong> (grátis). <strong>Vantagem em testes de Enganação (incluindo disfarces e infiltração social), leitura de intenções (Intuição) e percepção de mentiras em ambientes urbanos, políticos e de facções</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com <strong>1 identidade falsa bem construída</strong>: 2 documentos + 1 contato de fachada em uma cidadela ou facção diferente da sua atual. 1×/sessão, <strong>Intelecto CD 14</strong> para "ler o mapa político" — identificar quem realmente manda.<br><br>
+                <strong>Custo / Gancho:</strong> Facções rivais ainda podem ter contratos abertos sobre você ou querer te recrutar de volta. Você carrega segredos que podem destruir aliados. Confiança genuína é quase impossível para você.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>contato de fachada</strong> — a pessoa que "confirma" sua identidade falsa, com lealdade duvidosa.<br><br>
                 <strong>Traços Sugeridos:</strong> Olhar Penetrante, Rede de Contatos, Voz da Alma, Honestidade Compulsiva (como fraqueza irônica), Lealdade Cega, Azar da Torre, Dependência Emocional.
             </div>
 
             <div class="system-card">
                 <strong>19. Construtor de Defesas</strong><br><br>
                 <strong>Vida Anterior:</strong> Você trabalhou (muitas vezes por necessidade ou sobrevivência) na construção, reforço ou manutenção das defesas de uma cidadela ou posto avançado — muralhas físicas, runas de proteção, fossos com essência, sistemas de alarme contra distorções da Névoa, abrigos anti-surto, barreiras "espirituais". Você sabe exatamente onde as coisas falham e o que a Torre realmente testa.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes para avaliar, improvisar, reforçar ou sabotar defesas, barricadas, armadilhas e proteções em qualquer ambiente (especialmente contra incursões e Névoa).<br>
-                • Conhece os pontos fracos estruturais e conceituais de muitas cidadelas e postos (pode identificar quando uma "proteção" está falhando ou foi comprometida pela Torre).<br>
-                • Pode improvisar proteções de campo eficazes com materiais locais (Mestre concede bônus quando você dedica tempo a isso).<br><br>
-                <strong>Gancho / Complicação:</strong> Muitos construtores sabem onde os "segredos" das defesas estão enterrados (passagens de emergência, caches de suprimentos, pontos cegos). Isso atrai atenção de Barmans, facções rivais ou monstros que querem explorar vulnerabilidades. Você pode ter ajudado a construir algo que agora está sendo usado contra inocentes, ou pode carregar a culpa por uma defesa que falhou.<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Ofícios</strong> (grátis). <strong>+2 em testes de Ofícios e Percepção ao avaliar, improvisar, reforçar ou sabotar defesas, barricadas e armadilhas</strong>.<br><br>
+                <strong>Benefício de Mundo:</strong> <strong>1×/incursão</strong>, melhora o acampamento de <strong>Nv1 → Nv2</strong> (ver sistema de Acampamento) OU concede <strong>+1 de CA de barricada</strong> em uma zona. Conhece os pontos fracos estruturais de muitas cidadelas e postos.<br><br>
+                <strong>Custo / Gancho:</strong> Muitos construtores sabem onde os "segredos" das defesas estão enterrados (passagens de emergência, caches, pontos cegos). Isso atrai atenção de Barmans, facções rivais ou monstros que querem explorar vulnerabilidades.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> um <strong>engenheiro veterano</strong> — o mestre que te ensinou (e que ainda constrói, ou que abandonou o ofício).<br><br>
                 <strong>Traços Sugeridos:</strong> Inventor da Alma, Imponência da Alma, Explorador da Névoa, Noção do Perigo, ou fraquezas como Azar da Torre, Rejeição da Torre, Trauma Psíquico.
             </div>
 
             <div class="system-card">
                 <strong>20. Colecionador de Últimas Palavras</strong><br><br>
                 <strong>Vida Anterior:</strong> Você se especializou em estar presente (ou fazer questão de estar) nos momentos finais de vítimas das Torres — registrando confissões, últimas mensagens para famílias, "testamentos de essência", ou simplesmente ouvindo o que as pessoas dizem quando sabem que vão morrer. Alguns fazem isso por piedade ou dever. Outros por lucro (Barmans pagam bem por "memórias puras" e ecos limpos). É um trabalho que consome a alma.<br><br>
-                <strong>Benefícios Iniciais:</strong><br>
-                • Vantagem em testes de Carisma, Empatia e estabilização emocional em situações de morte iminente, trauma grave ou desespero (pode acalmar moribundos, extrair informação final ou dar algum conforto).<br>
-                • Começa com um "livro de ecos", diário de últimas palavras ou coleção de anotações/objetos que o Mestre pode usar para seedar pistas, rumores ou ganchos pessoais (muito útil com Barmans ou poderes de eco).<br>
-                • Facilidade em detectar quando alguém está mentindo sobre sua "última vontade" ou escondendo algo importante no momento da morte.<br><br>
-                <strong>Gancho / Complicação:</strong> Muitos Barmans, estudiosos e colecionadores rivais querem sua coleção (ou querem que você pare de colecionar). Famílias de vítimas podem te procurar (às vezes com gratidão profunda, às vezes com raiva por você ter "roubado" ou comercializado as últimas palavras). A Torre parece gostar de quem coleciona esses momentos — pode atrair atenção específica ou eventos relacionados a "ecos não resolvidos".<br><br>
+                <strong>Benefício de Competência:</strong> Treinado em <strong>Performance</strong> (grátis). <strong>Vantagem em testes de Performance ou Intuição em situações de morte iminente, trauma grave ou desespero</strong> (acalmar moribundos, extrair informação final).<br><br>
+                <strong>Benefício de Mundo:</strong> Começa com um <strong>"livro de ecos"</strong> (diário de últimas palavras). <strong>Regra nova:</strong> 1×/incursão, a "última palavra" de um morto rende <strong>1 pista concreta</strong>. Vínculo com Barmans ("ecos limpos") e poderes de Eco.<br><br>
+                <strong>Custo / Gancho:</strong> Barmans, estudiosos e colecionadores rivais querem sua coleção (ou querem que você pare de colecionar). Famílias de vítimas podem te procurar com gratidão ou raiva. A Torre parece gostar de quem coleciona esses momentos.<br><br>
+                <strong>Relacionamento Inicial (Nv 1):</strong> um <strong>fantasma/eco que o acompanha</strong> — a primeira "última palavra" que você coletou nunca se foi de verdade.<br><br>
                 <strong>Traços Sugeridos:</strong> Empatia Excessiva, Voz da Alma, Eco Mental, Calor Humano, Trauma Psíquico, Visões da Queda, Aura de Calma.
             </div>
 
@@ -18326,6 +18409,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>Reflexos</td><td>Destreza</td><td>Reações rápidas, esquiva de surpresas; pode treinar salvaguardas de Des</td></tr>
                         <tr><td>Fortitude</td><td>Vigor</td><td>Resistir veneno, doença, dor, exaustão física; treina salvaguardas de Vig</td></tr>
                         <tr><td>Integridade</td><td>Vigor</td><td>Manter o corpo coeso sob estresse extremo, mutação, tortura</td></tr>
+                        <tr><td>Sobrevivência</td><td>Vigor/Intelecto</td><td>Caçar, forragear, rastrear, resistir ao ambiente (frio, Névoa, fome)</td></tr>
                         <tr><td>Intuição</td><td>Intelecto</td><td>Ler pessoas, pressentimentos, detectar mentiras, presságios</td></tr>
                         <tr><td>Medicina</td><td>Intelecto</td><td>Tratar ferimentos, estabilizar, diagnosticar, curar venenos</td></tr>
                         <tr><td>Percepção</td><td>Intelecto</td><td>Notar detalhes, armadilhas, sons, rastros, anomalias na Névoa</td></tr>
@@ -18333,6 +18417,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>Investigação</td><td>Intelecto</td><td>Procurar pistas, analisar cenas, decifrar evidências</td></tr>
                         <tr><td>História</td><td>Intelecto</td><td>Lendas, Surtos passados, simbolismo de torres e facções</td></tr>
                         <tr><td>Ofícios</td><td>Intelecto</td><td>Profissão específica (ferreiro, alquimista, cartógrafo...); craft, reparo e análise de materiais</td></tr>
+                        <tr><td>Navegação</td><td>Intelecto/Alma</td><td>Orientação, mapas, rotas pela Névoa, leitura de padrões da Torre</td></tr>
                         <tr><td>Religião</td><td>Intelecto</td><td>Cultos, rituais, heresias, entidades das Torres</td></tr>
                         <tr><td>Magia</td><td>Alma</td><td>Conhecimento amplo de poderes, identificar técnicas, canalizar eficiente</td></tr>
                         <tr><td>Feitiçaria</td><td>Alma</td><td>Manipulação fina, rituais, maldições sutis, runas temporárias</td></tr>
@@ -18361,7 +18446,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 <strong>Perícias de Resistência (Vigor)</strong><br><br>
                 <strong>Fortitude (Vigor)</strong> — Resistência do corpo contra venenos, doenças de monstro, dor aguda, exaustão física acumulada e ambientes hostis (gases tóxicos, temperaturas extremas, gravidade instável). Quando treinada, pode ser usada diretamente como salvaguarda de Vigor. Sucessos repetidos em Fortitude durante longas incursões reduzem o ganho de Exaustão.<br><br>
-                <strong>Integridade (Vigor)</strong> — Manter a coesão física e "forma humana" sob estresse extremo: tortura, exposição prolongada a energias corruptoras, ferimentos múltiplos sem tratamento, ou resistir a mutações incipientes. Ajuda a evitar perda permanente de atributo ou ganhar Marcas visíveis cedo demais. Falhas aqui frequentemente vêm com custo de Sanidade.
+                <strong>Integridade (Vigor)</strong> — Manter a coesão física e "forma humana" sob estresse extremo: tortura, exposição prolongada a energias corruptoras, ferimentos múltiplos sem tratamento, ou resistir a mutações incipientes. Ajuda a evitar perda permanente de atributo ou ganhar Marcas visíveis cedo demais. Falhas aqui frequentemente vêm com custo de Sanidade.<br><br>
+                <strong>Sobrevivência (Vigor/Intelecto)</strong> — Caçar, forragear, rastrear e resistir ao ambiente hostil: frio extremo, Névoa densa, fome e sede. Também cobre saber onde acampar com segurança e ler rastros de criaturas. Uma das perícias mais importantes para quem passa dias dentro das Torres ou cruzando a Névoa. O Mestre pode permitir usar Vigor (resistir ao ambiente) ou Intelecto (conhecer o terreno e os recursos).
             </div>
 
             <div class="system-card">
@@ -18373,7 +18459,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Investigação (Intelecto)</strong> — Busca metódica por pistas, análise forense de cenas de massacre, reconstrução de eventos a partir de fragmentos (pegadas, sangue seco, runas apagadas). Essencial depois de emboscadas ou para entender por que um andar inteiro foi "limpo".<br><br>
                 <strong>História (Intelecto)</strong> — Conhecimento acumulado de Surtos passados, lendas das Torres, facções antigas, simbolismo de Bosses e padrões recorrentes de corrupção. Permite reconhecer "eu já vi isso antes" e evitar repetir erros fatais de expedicionários mortos.<br><br>
                 <strong>Ofícios (Intelecto)</strong> — Habilidade profissional aplicada (ferreiro de campo, alquimista, cartógrafo, engenheiro de armadilhas, cozinheiro de Torre, entre outras). Usado para craft improvisado com materiais locais, reparos de emergência em equipamentos, criação de itens de baixo custo ou análise de materiais de forja sem precisar de ferreiro. O personagem escolhe livremente em qual ofício a perícia se aplica em cada uso, conforme a história e o contexto — não exige declarar uma especialidade fixa.<br><br>
-                <strong>Religião (Intelecto)</strong> — Conhecimento de cultos, rituais, crenças sobre as Torres e as entidades que as governam (incluindo heresias perigosas como o Culto do Olho). Útil para negociar ou manipular fanáticos, reconhecer quando um ritual está prestes a dar errado, ou usar (com grande risco) fragmentos de rituais de purificação ou invocação.
+                <strong>Religião (Intelecto)</strong> — Conhecimento de cultos, rituais, crenças sobre as Torres e as entidades que as governam (incluindo heresias perigosas como o Culto do Olho). Útil para negociar ou manipular fanáticos, reconhecer quando um ritual está prestes a dar errado, ou usar (com grande risco) fragmentos de rituais de purificação ou invocação.<br><br>
+                <strong>Navegação (Intelecto/Alma)</strong> — Orientação em mapas, rotas pela Névoa e leitura de padrões da Torre. Saber para onde ir (e o que evitar) dentro de um andar, cruzar a Névoa sem se perder ou reconhecer quando a Torre "mudou os caminhos". O Mestre pode permitir usar Intelecto (ler mapas e padrões) ou Alma (sentir a direção certa através da ressonância da Névoa).
             </div>
 
             <div class="system-card">
