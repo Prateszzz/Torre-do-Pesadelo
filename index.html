@@ -8963,6 +8963,518 @@ function cancelarNovoPersonagem() {
   if (w) w.remove();
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// WIZARD DE CRIAÇÃO DE PERSONAGEM GUIADA (7 passos)
+// Overlay criado como div no body (mesmo padrão de abrirPerfilPublico).
+// Ao finalizar, usa o MESMO caminho de confirmarNovoPersonagem (lista →
+// ativarPersonagem → localStorage + Firestore + ranking) e abre a ficha.
+// ═══════════════════════════════════════════════════════════════════════
+let _wizardEstado = null;
+
+const _WIZARD_DESPERTARES = [
+  { n:1, titulo:'Perda traumática', texto:'Alguém que você amava morreu num Surto (ou dentro de uma Torre), e seu Núcleo acordou no luto.', gancho:'Sanidade −1 inicial.', sanidade:-1, corrupcao:0 },
+  { n:2, titulo:'Toque da Torre', texto:'Algo na Torre tocou sua Alma e ela respondeu — sem aviso, sem escolha.', gancho:'Corrupção +1 inicial (ou uma Marca, a escolher com o Mestre).', sanidade:0, corrupcao:1 },
+  { n:3, titulo:'Salvar alguém', texto:'Você se jogou na frente do perigo para proteger outra pessoa, e a Alma acordou no momento do impacto.', gancho:'Relacionamento Nível 1 com a pessoa salva (aliado leal).', rel:{ nome:'A pessoa que você salvou', tipo:'Aliado', obs:'Você se jogou na frente do perigo para protegê-la — a Alma acordou no impacto.' } },
+  { n:4, titulo:'Sobreviver a um Surto', texto:'Você atravessou um Surto e saiu Desperto — entre os sobreviventes, alguns não te perdoam por ter saído inteiro.', gancho:'Inimigo entre os sobreviventes (o Mestre define quem e por quê).' },
+  { n:5, titulo:'Experimento de facção', texto:'Uma facção fez algo em você (um ritual, uma droga, um núcleo forçado).', gancho:'Dívida ou contato com a facção — eles sabem o que você é.' },
+  { n:6, titulo:'Nascido na borda', texto:'Você cresceu na Névoa (ou em um assentamento exposto) e despertou cedo demais.', gancho:'+1 provisão inicial OU Treinado em Sobrevivência (se ainda não tiver).' }
+];
+
+// Perícia Treinada (grátis) de cada Antecedente — fonte: ANTECEDENTES_INFO.
+const _WIZARD_ANTECEDENTES_PER = {
+  'Sobrevivente de Surto':'Percepção','Mensageiro da Névoa':'Navegação',
+  'Aprendiz de Ferreiro das Espirais':'Ofícios','Catador de Fragmentos':'Sobrevivência',
+  'Guarda de Muralha':'Percepção','Fugitivo do Culto do Olho':'Vontade',
+  'Filho da Rede (Barman)':'Persuasão','Predador de Baixo Nível':'Sobrevivência',
+  'Estudioso de Ruínas':'História','Curandeiro de Feridas da Torre':'Medicina',
+  'Desertor das Guerras Humanas':'Ofícios ou Astúcia','Marcado pelo Primeiro Toque':'',
+  'Gladiador das Torres da Disputa':'Performance','Testemunha da Devoração':'Intuição',
+  'Filho de Ascendido':'História','Alquimista de Essências':'Ofícios (alquimia)',
+  'Cativo da Torre':'Furtividade','Espião de Cidadela':'Enganação',
+  'Construtor de Defesas':'Ofícios','Colecionador de Últimas Palavras':'Performance'
+};
+
+// Relacionamento Inicial (Nv 1) de cada Antecedente — para pré-preencher rel1-*.
+const _WIZARD_ANTECEDENTES_REL = {
+  'Sobrevivente de Surto':{ nome:'Parente corrompido', tipo:'Familiar', obs:'Sobreviveu ao Surto, mas foi absorvido pela Torre e agora vaga como monstro.' },
+  'Mensageiro da Névoa':{ nome:'Barman da Rede', tipo:'Aliado', obs:'Contato que lhe dá trabalho e proteção — a Rede sempre cobra.' },
+  'Aprendiz de Ferreiro das Espirais':{ nome:'Mestre ferreiro', tipo:'Aliado', obs:'Contato vivo que conhece seu trabalho; aliado ou dívida ambulante.' },
+  'Catador de Fragmentos':{ nome:'Fornecedor do ponto de coleta', tipo:'Aliado', obs:'Comerciante que compra seus achados e sabe mais do que admite.' },
+  'Guarda de Muralha':{ nome:'Ex-companheiro de muralha', tipo:'Amigo', obs:'O único que sabe por que você saiu — pode ajudar ou entregar.' },
+  'Fugitivo do Culto do Olho':{ nome:'Algoz do Culto', tipo:'Rival', obs:'O executor que te recrutou (ou te marcou) — não desistiu.' },
+  'Filho da Rede (Barman)':{ nome:'Barman da Rede', tipo:'Aliado', obs:'Conhece sua família e sua dívida pendente.' },
+  'Predador de Baixo Nível':{ nome:'Parceiro de caça morto', tipo:'Rival', obs:'A memória dele guia suas decisões; o monstro que o matou ainda vive.' },
+  'Estudioso de Ruínas':{ nome:'Antigo mentor', tipo:'Aliado', obs:'O estudioso que te ensinou o ofício e desapareceu em uma expedição.' },
+  'Curandeiro de Feridas da Torre':{ nome:'Paciente que não salvou', tipo:'Rival', obs:'Morreu nas suas mãos (culpa) ou voltou corrompido e te culpa.' },
+  'Desertor das Guerras Humanas':{ nome:'Antigo oficial', tipo:'Rival', obs:'O comandante que te treinou — te vê como traidor ou como recurso.' },
+  'Marcado pelo Primeiro Toque':{ nome:'O toque que o marcou', tipo:'Aliado', obs:'Um mistério: algo da Torre se comunicou com você e ainda pode voltar.' },
+  'Gladiador das Torres da Disputa':{ nome:'Rival nas Disputas', tipo:'Rival', obs:'O gladiador que te odeia (ou que você odeia) e pode reaparecer.' },
+  'Testemunha da Devoração':{ nome:'Quem quer o segredo enterrado', tipo:'Rival', obs:'O algoz da Devoração (ou um cúmplice) prefere te silenciar.' },
+  'Filho de Ascendido':{ nome:'Memória do parente', tipo:'Familiar', obs:'Guia ou pressão constante, dependendo de como você interpreta o legado.' },
+  'Alquimista de Essências':{ nome:'Fornecedor', tipo:'Aliado', obs:'Vende matérias-primas e sabe demais sobre o que você destila.' },
+  'Cativo da Torre':{ nome:'Carcereiro ou companheiro de cela', tipo:'Rival', obs:'A criatura que te prendeu (inimigo) ou o outro cativo que escapou com você (aliado).' },
+  'Espião de Cidadela':{ nome:'Contato de fachada', tipo:'Aliado', obs:'Confirma sua identidade falsa — lealdade duvidosa.' },
+  'Construtor de Defesas':{ nome:'Engenheiro veterano', tipo:'Aliado', obs:'O mestre que te ensinou o ofício — ainda constrói, ou abandonou.' },
+  'Colecionador de Últimas Palavras':{ nome:'Fantasma/eco que o acompanha', tipo:'Aliado', obs:'A primeira "última palavra" que você coletou nunca se foi de verdade.' }
+};
+
+// Técnicas para o botão "Aleatório (destino da Torre)" — geração rápida.
+const _WIZARD_TECNICAS_ALEATORIAS = [
+  { nome:'Golpe Concentrado', custo:'2', desc:'Canaliza energia da Alma em um golpe único e preciso.', efei:'Dano +1d4 de Alma; ignora 1 ponto de RD.' },
+  { nome:'Barreira de Essência', custo:'3', desc:'Condensa energia da Alma em uma barreira protetora temporária.', efei:'+2 CA por 1 rodada; bloqueia 1 ataque.' },
+  { nome:'Passo Fantasma', custo:'2', desc:'Desloca o corpo por um instante, atravessando o espaço como sombra.', efei:'Move 1 zona extra ou escapa de um agarrado.' },
+  { nome:'Toque Devorador', custo:'4', desc:'Suga energia vital do alvo ao toque.', efei:'Causa 2d6 de dano e recupera metade como PV.' }
+];
+
+function abrirWizardCriacao() {
+  document.getElementById('wizard-criacao-overlay')?.remove();
+  _wizardEstado = {
+    passo: 0,
+    nome:'', alcunha:'', idade:'', cidade:'', genero:'',
+    poder:'', pAttr:'', pDescricao:'', pConceito:'',
+    despertar: null,
+    metodoAtributo: 'pontos',
+    atrib: { for:10, des:10, vig:10, int:10, alm:10, car:10 },
+    rolagensFeitas: 0, rolagemAceita: false,
+    antecedente: null,
+    tracos:'', defeitos:'',
+    tecnicaNome:'', tecnicaCusto:'', tecnicaDesc:'', tecnicaEfei:''
+  };
+  _wizardRender();
+}
+
+function _wizardFechar() {
+  document.getElementById('wizard-criacao-overlay')?.remove();
+  _wizardEstado = null;
+}
+
+function _wizardRender() {
+  let overlay = document.getElementById('wizard-criacao-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'critico-overlay';
+    overlay.id = 'wizard-criacao-overlay';
+    overlay.addEventListener('click', e => { if (e.target === overlay) _wizardFechar(); });
+    document.body.appendChild(overlay);
+  }
+  const w = _wizardEstado;
+  if (!w) return;
+  const passos = ['Identidade','Poder Principal','Como Você Despertou','Atributos','Antecedente','Traços da Alma','Técnica Inicial'];
+  const pct = Math.round(((w.passo + 1) / 7) * 100);
+  overlay.innerHTML = `
+    <div class="critico-modal" style="max-width:820px;max-height:92vh;border-top-color:var(--accent-light)">
+      <div class="critico-header">
+        <span class="critico-titulo">${icone('sword','ic-sm')} Criação Guiada de Personagem</span>
+        <button class="critico-close" onclick="_wizardFechar()" title="Fechar">✕</button>
+      </div>
+      <div style="padding:.7rem 1.25rem .2rem">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.35rem">
+          <span style="font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted)">Passo ${w.passo + 1} de 7 — ${passos[w.passo]}</span>
+          <span style="font-size:.7rem;color:var(--text-muted)">${pct}%</span>
+        </div>
+        <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:var(--accent);transition:width .25s"></div>
+        </div>
+      </div>
+      <div class="critico-corpo" style="max-height:calc(92vh - 190px);overflow-y:auto">
+        ${_wizardCorpoHTML()}
+      </div>
+      <div class="critico-actions" style="border-top:1px solid var(--border)">
+        ${w.passo > 0 ? `<button class="critico-btn critico-btn-fechar" onclick="_wizardVoltar()">‹ Voltar</button>` : ''}
+        ${w.passo === 0 ? `<button class="critico-btn" onclick="_wizardDestinoDaTorre()" title="Gera despertar, atributos, antecedente e técnica aleatoriamente">${icone('moon','ic-sm')} Destino da Torre</button>` : ''}
+        ${w.passo < 6
+          ? `<button class="critico-btn" onclick="_wizardAvancar()">Avançar ›</button>`
+          : `<button class="critico-btn" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="_wizardFinalizar()">${icone('check','ic-sm')} Criar Personagem</button>`}
+      </div>
+    </div>`;
+}
+
+function _wizardCorpoHTML() {
+  const w = _wizardEstado;
+  if (!w) return '';
+  const inputStyle = 'background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .65rem;font-family:inherit;font-size:.88rem;outline:none;width:100%;';
+  const labelStyle = 'display:block;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:.25rem;';
+
+  if (w.passo === 0) return `
+    <div class="lore-box" style="margin-bottom:.8rem">
+      <strong>Bem-vindo, Desperto.</strong> Este assistente guia você pelos passos do livro: identidade, poder, despertar, atributos, antecedente, traços e técnica inicial. Você sempre pode ajustar tudo depois, na ficha. O personagem começa no <strong>Nível 1</strong>.
+    </div>
+    <div class="field-row cols-2">
+      <div class="field-group"><label style="${labelStyle}">Nome do Personagem *</label><input type="text" id="wz-nome" value="${_escHtml(w.nome)}" oninput="_wizardSet('nome', this.value)" placeholder="Obrigatório" style="${inputStyle}"></div>
+      <div class="field-group"><label style="${labelStyle}">Alcunha / Epíteto</label><input type="text" id="wz-alcunha" value="${_escHtml(w.alcunha)}" oninput="_wizardSet('alcunha', this.value)" style="${inputStyle}"></div>
+    </div>
+    <div class="field-row cols-3">
+      <div class="field-group"><label style="${labelStyle}">Idade</label><input type="text" id="wz-idade" value="${_escHtml(w.idade)}" oninput="_wizardSet('idade', this.value)" style="${inputStyle}"></div>
+      <div class="field-group"><label style="${labelStyle}">Cidade</label><input type="text" id="wz-cidade" value="${_escHtml(w.cidade)}" oninput="_wizardSet('cidade', this.value)" style="${inputStyle}"></div>
+      <div class="field-group"><label style="${labelStyle}">Gênero</label><input type="text" id="wz-genero" value="${_escHtml(w.genero)}" oninput="_wizardSet('genero', this.value)" style="${inputStyle}"></div>
+    </div>
+    <div class="field-row cols-2" style="margin-top:.5rem">
+      <div class="field-group"><label style="${labelStyle}">Nível</label><input type="text" value="1" readonly style="${inputStyle}opacity:.6;cursor:default"></div>
+      <div class="field-group"><label style="${labelStyle}">Despertar</label><input type="text" value="Desperto" readonly style="${inputStyle}opacity:.6;cursor:default"></div>
+    </div>`;
+
+  if (w.passo === 1) return `
+    <div class="lore-box" style="margin-bottom:.8rem">
+      <strong>Poder Principal:</strong> o conceito central da sua Alma. Ele nasce da sua personalidade e da ferida que o despertou. Ex.: "Manifestação de lâminas de energia", "Controle de chamas", "Ecos do passado".
+    </div>
+    <div class="field-row cols-2">
+      <div class="field-group"><label style="${labelStyle}">Nome do Poder *</label><input type="text" id="wz-poder" value="${_escHtml(w.poder)}" oninput="_wizardSet('poder', this.value)" placeholder="Ex.: Lâmina da Alma" style="${inputStyle}"></div>
+      <div class="field-group"><label style="${labelStyle}">Atributo Principal</label>
+        <select id="wz-pattr" onchange="_wizardSet('pAttr', this.value)" style="${inputStyle}">
+          ${['Força','Destreza','Vigor','Intelecto','Alma','Carisma'].map(a => `<option value="${a}" ${w.pAttr === a ? 'selected' : ''}>${a}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:.5rem"><label style="${labelStyle}">Descrição do Poder</label><textarea id="wz-pdesc" oninput="_wizardSet('pDescricao', this.value)" placeholder="Como ele se manifesta? O que ele faz?" style="${inputStyle}min-height:70px;resize:vertical">${_escHtml(w.pDescricao)}</textarea></div>
+    <div class="field-group" style="margin-top:.5rem"><label style="${labelStyle}">Conceito — por que você tem esse poder?</label><textarea id="wz-pconceito" oninput="_wizardSet('pConceito', this.value)" placeholder="A ferida, a história, a razão..." style="${inputStyle}min-height:70px;resize:vertical">${_escHtml(w.pConceito)}</textarea></div>`;
+
+  if (w.passo === 2) return `
+    <div class="lore-box" style="margin-bottom:.8rem">
+      <strong>Como Você Despertou?</strong> O Núcleo da Alma não acorda por acaso. Role 1d6 ou escolha — o resultado molda quem você é e o que a Torre vê em você.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+      ${_WIZARD_DESPERTARES.map(d => `
+        <div onclick="wizardSelecionarDespertar(${d.n})" style="border:1px solid ${w.despertar === d.n ? 'var(--accent-light)' : 'var(--border)'};background:${w.despertar === d.n ? 'rgba(180,140,30,.08)' : 'rgba(255,255,255,.02)'};padding:.7rem .8rem;cursor:pointer;border-radius:4px;transition:all .15s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='${w.despertar === d.n ? 'var(--accent-light)' : 'var(--border)'}'">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.25rem">
+            <strong style="color:var(--accent-light);font-size:.9rem">${d.n}. ${d.titulo}</strong>
+            ${w.despertar === d.n ? '<span style="color:var(--gold-light);font-size:.75rem">✓ escolhido</span>' : ''}
+          </div>
+          <div style="font-size:.8rem;color:var(--text-muted);line-height:1.45">${d.texto}</div>
+          <div style="font-size:.75rem;color:var(--gold-light);margin-top:.35rem;line-height:1.4">Gancho: ${d.gancho}</div>
+        </div>`).join('')}
+    </div>`;
+
+  if (w.passo === 3) return `
+    <div style="display:flex;gap:.4rem;margin-bottom:.8rem">
+      <button onclick="wizardMetodoAtributo('pontos')" style="flex:1;background:${w.metodoAtributo === 'pontos' ? 'var(--accent)' : 'none'};border:1px solid ${w.metodoAtributo === 'pontos' ? 'var(--accent)' : 'var(--border)'};color:${w.metodoAtributo === 'pontos' ? '#fff' : 'var(--text-muted)'};padding:.55rem .7rem;font-family:inherit;font-size:.82rem;cursor:pointer">80 Pontos</button>
+      <button onclick="wizardMetodoAtributo('rolagem')" style="flex:1;background:${w.metodoAtributo === 'rolagem' ? 'var(--accent)' : 'none'};border:1px solid ${w.metodoAtributo === 'rolagem' ? 'var(--accent)' : 'var(--border)'};color:${w.metodoAtributo === 'rolagem' ? '#fff' : 'var(--text-muted)'};padding:.55rem .7rem;font-family:inherit;font-size:.82rem;cursor:pointer">Rolar 4d6</button>
+    </div>
+    ${w.metodoAtributo === 'pontos' ? `
+      <div class="lore-box" style="margin-bottom:.8rem"><strong>Distribua 80 pontos</strong> (mín 8, máx 18). <span id="wz-pontos-restantes" style="color:${_wizardPontosRestantes() === 0 ? 'var(--gold-light)' : 'var(--accent-text)'}">Pontos restantes: ${_wizardPontosRestantes()}</span></div>
+    ` : `
+      <div class="lore-box" style="margin-bottom:.8rem">
+        <strong>Rolagem 4d6 (drop menor)</strong> — role 6 vezes, uma por atributo. Só vale se o total for <strong>maior que 80</strong>. Tentativas: <span style="color:var(--gold-light)">${w.rolagensFeitas}/3</span>.
+        <div style="margin-top:.5rem"><button onclick="wizardRolarAtributos()" style="background:var(--accent);border:none;color:#fff;padding:.45rem .9rem;font-family:inherit;font-size:.82rem;cursor:pointer;${w.rolagensFeitas >= 3 ? 'opacity:.45;pointer-events:none' : ''}">Rolar Atributos</button>
+        ${w.rolagemAceita ? ' <span style="color:var(--gold-light);font-size:.78rem">✓ Rolagem válida (total > 80)</span>' : ''}
+        ${!w.rolagemAceita && w.rolagensFeitas > 0 ? ' <span style="color:var(--accent-text);font-size:.78rem">Total ≤ 80 — role de novo (ou edite manualmente).</span>' : ''}</div>
+      </div>
+    `}
+    <div class="field-row cols-3">
+      ${['for','des','vig','int','alm','car'].map(sig => {
+        const nome = ({for:'Força',des:'Destreza',vig:'Vigor',int:'Intelecto',alm:'Alma',car:'Carisma'})[sig];
+        return `<div class="field-group"><label style="${labelStyle}">${nome}</label><input type="number" id="wz-a-${sig}" min="8" max="18" value="${w.atrib[sig]}" oninput="_wizardAtributoInput('${sig}', this.value)" style="${inputStyle}text-align:center"></div>`;
+      }).join('')}
+    </div>`;
+
+  if (w.passo === 4) return `
+    <div class="lore-box" style="margin-bottom:.8rem">
+      <strong>Escolha seu Antecedente.</strong> Sua vida pregressa — complementa (não substitui) os Traços da Alma. O relacionamento inicial é criado automaticamente.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;max-height:52vh;overflow-y:auto;padding-right:.25rem">
+      ${Object.keys(ANTECEDENTES_INFO).map(nome => {
+        const ativo = w.antecedente === nome;
+        return `<div onclick="wizardSelecionarAntecedente('${_escJsAttr(nome)}')" style="border:1px solid ${ativo ? 'var(--accent-light)' : 'var(--border)'};background:${ativo ? 'rgba(180,140,30,.08)' : 'rgba(255,255,255,.02)'};padding:.6rem .7rem;cursor:pointer;border-radius:4px;transition:all .15s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='${ativo ? 'var(--accent-light)' : 'var(--border)'}'">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.2rem">
+            <strong style="color:var(--accent-light);font-size:.82rem">${nome}</strong>
+            ${ativo ? '<span style="color:var(--gold-light);font-size:.72rem">✓</span>' : ''}
+          </div>
+          <div style="font-size:.72rem;color:var(--text-muted);line-height:1.4">${ANTECEDENTES_INFO[nome].replace(/<strong>|<\/strong>/g, '')}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  if (w.passo === 5) return `
+    <div class="lore-box" style="margin-bottom:.8rem">
+      <strong>Regra dos Traços:</strong> todo Desperto começa com 1 Traço Positivo Básico gratuito (até 2 pontos). Para cada Traço Positivo adicional, escolha Fraquezas que somem pelo menos o mesmo valor em pontos. Use este campo livre ou edite depois no painel Registro da ficha.
+    </div>
+    <div class="field-row cols-2">
+      <div class="field-group"><label style="${labelStyle}">Traços Positivos</label><textarea id="wz-tracos" oninput="_wizardSet('tracos', this.value)" placeholder="Ex.: Instinto de Sobrevivência (3 pts), Mente Focada (2 pts), Olhar Penetrante (2 pts)..." style="${inputStyle}min-height:110px;resize:vertical">${_escHtml(w.tracos)}</textarea></div>
+      <div class="field-group"><label style="${labelStyle}">Fraquezas</label><textarea id="wz-defeitos" oninput="_wizardSet('defeitos', this.value)" placeholder="Ex.: Trauma Psíquico (3 pts), Marca Visível (2 pts), Fome da Alma (2 pts)..." style="${inputStyle}min-height:110px;resize:vertical">${_escHtml(w.defeitos)}</textarea></div>
+    </div>`;
+
+  if (w.passo === 6) return `
+    <div class="lore-box" style="margin-bottom:.8rem">
+      <strong>Técnica Inicial (opcional):</strong> a primeira expressão refinada do seu poder, com custo em PE. Deixe em branco se preferir criar depois na ficha.
+    </div>
+    <div class="field-row cols-3">
+      <div class="field-group" style="grid-column:span 2"><label style="${labelStyle}">Nome da Técnica</label><input type="text" id="wz-tecnome" value="${_escHtml(w.tecnicaNome)}" oninput="_wizardSet('tecnicaNome', this.value)" placeholder="Ex.: Lâmina Fantasma" style="${inputStyle}"></div>
+      <div class="field-group"><label style="${labelStyle}">Custo (PE)</label><input type="number" id="wz-teccusto" min="0" value="${_escHtml(w.tecnicaCusto)}" oninput="_wizardSet('tecnicaCusto', this.value)" style="${inputStyle}text-align:center"></div>
+    </div>
+    <div class="field-group" style="margin-top:.5rem"><label style="${labelStyle}">Descrição</label><textarea id="wz-tecdesc" oninput="_wizardSet('tecnicaDesc', this.value)" placeholder="O que a técnica faz?" style="${inputStyle}min-height:70px;resize:vertical">${_escHtml(w.tecnicaDesc)}</textarea></div>
+    <div class="field-group" style="margin-top:.5rem"><label style="${labelStyle}">Efeito / Alcance</label><textarea id="wz-tecefei" oninput="_wizardSet('tecnicaEfei', this.value)" placeholder="Dano, efeitos, alcance..." style="${inputStyle}min-height:70px;resize:vertical">${_escHtml(w.tecnicaEfei)}</textarea></div>`;
+
+  return '';
+}
+
+// Coletores do wizard
+function _wizardSet(campo, valor) {
+  if (!_wizardEstado) return;
+  _wizardEstado[campo] = valor;
+}
+
+function wizardSelecionarDespertar(n) {
+  if (!_wizardEstado) return;
+  _wizardEstado.despertar = n;
+  // Aplica ganchos numéricos nos campos novos
+  const d = _WIZARD_DESPERTARES.find(x => x.n === n);
+  _wizardEstado.sanidadeAjuste = d.sanidade || 0;
+  _wizardEstado.corrupcaoAjuste = d.corrupcao || 0;
+  _wizardRender();
+}
+
+function wizardMetodoAtributo(metodo) {
+  if (!_wizardEstado) return;
+  _wizardEstado.metodoAtributo = metodo;
+  _wizardRender();
+}
+
+function _wizardAtributoInput(sigla, valor) {
+  if (!_wizardEstado) return;
+  let v = parseInt(valor, 10);
+  if (isNaN(v)) v = 0;
+  v = Math.max(0, Math.min(18, v));
+  _wizardEstado.atrib[sigla] = v;
+  if (_wizardEstado.metodoAtributo === 'rolagem') _wizardEstado.rolagemAceita = true; // edição manual assume o controle
+}
+
+function _wizardPontosRestantes() {
+  if (!_wizardEstado) return 0;
+  const soma = Object.values(_wizardEstado.atrib).reduce((s, v) => s + v, 0);
+  return 80 - soma;
+}
+
+function _wizardRolar4d6() {
+  const dados = [1,2,3,4].map(() => 1 + Math.floor(Math.random() * 6));
+  dados.sort((a,b) => a - b);
+  return dados[1] + dados[2] + dados[3]; // drop do menor
+}
+
+function wizardRolarAtributos() {
+  if (!_wizardEstado) return;
+  if (_wizardEstado.rolagensFeitas >= 3) return;
+  _wizardEstado.rolagensFeitas++;
+  const novo = {};
+  ['for','des','vig','int','alm','car'].forEach(sig => { novo[sig] = _wizardRolar4d6(); });
+  _wizardEstado.atrib = novo;
+  const total = Object.values(novo).reduce((s, v) => s + v, 0);
+  _wizardEstado.rolagemAceita = total > 80;
+  _wizardRender();
+}
+
+function wizardSelecionarAntecedente(nome) {
+  if (!_wizardEstado) return;
+  _wizardEstado.antecedente = nome;
+  _wizardRender();
+}
+
+function _wizardAvancar() {
+  if (!_wizardEstado) return;
+  const w = _wizardEstado;
+  if (w.passo === 0 && !w.nome.trim()) {
+    alert('Informe o nome do personagem para continuar.');
+    document.getElementById('wz-nome')?.focus();
+    return;
+  }
+  if (w.passo === 1 && !w.poder.trim()) {
+    alert('Informe o nome do Poder Principal para continuar.');
+    document.getElementById('wz-poder')?.focus();
+    return;
+  }
+  if (w.passo === 2 && !w.despertar) {
+    alert('Escolha um resultado de "Como Você Despertou".');
+    return;
+  }
+  if (w.passo === 3) {
+    if (w.metodoAtributo === 'pontos') {
+      const soma = Object.values(w.atrib).reduce((s, v) => s + v, 0);
+      const fora = Object.values(w.atrib).some(v => v < 8 || v > 18);
+      if (soma !== 80) { alert('A soma dos atributos precisa ser exatamente 80. Pontos restantes: ' + (80 - soma) + '.'); return; }
+      if (fora) { alert('Cada atributo deve estar entre 8 e 18.'); return; }
+    } else {
+      if (!w.rolagemAceita) { alert('Role os atributos (4d6) e use um total maior que 80, ou edite manualmente.'); return; }
+    }
+  }
+  if (w.passo === 4 && !w.antecedente) {
+    alert('Escolha um Antecedente para continuar (ou edite depois na ficha).');
+    return;
+  }
+  w.passo++;
+  _wizardRender();
+}
+
+function _wizardVoltar() {
+  if (!_wizardEstado) return;
+  _wizardEstado.passo = Math.max(0, _wizardEstado.passo - 1);
+  _wizardRender();
+}
+
+// Botão "Destino da Torre" — gera despertar, atributos, antecedente e técnica
+function _wizardDestinoDaTorre() {
+  if (!_wizardEstado) return;
+  const w = _wizardEstado;
+  if (!w.nome.trim()) {
+    alert('Informe o nome do personagem antes de deixar o destino decidir o resto.');
+    document.getElementById('wz-nome')?.focus();
+    return;
+  }
+  w.despertar = 1 + Math.floor(Math.random() * 6);
+  const d = _WIZARD_DESPERTARES.find(x => x.n === w.despertar);
+  w.sanidadeAjuste = d.sanidade || 0;
+  w.corrupcaoAjuste = d.corrupcao || 0;
+  // Atributos: rolagem 4d6 até total > 80 (máx 3 tentativas)
+  w.metodoAtributo = 'rolagem';
+  w.rolagensFeitas = 0;
+  w.rolagemAceita = false;
+  for (let t = 0; t < 3; t++) {
+    w.rolagensFeitas++;
+    const novo = {};
+    ['for','des','vig','int','alm','car'].forEach(sig => { novo[sig] = _wizardRolar4d6(); });
+    w.atrib = novo;
+    if (Object.values(novo).reduce((s, v) => s + v, 0) > 80) { w.rolagemAceita = true; break; }
+  }
+  // Antecedente aleatório
+  const nomes = Object.keys(ANTECEDENTES_INFO);
+  w.antecedente = nomes[Math.floor(Math.random() * nomes.length)];
+  // Técnica aleatória
+  const t = _WIZARD_TECNICAS_ALEATORIAS[Math.floor(Math.random() * _WIZARD_TECNICAS_ALEATORIAS.length)];
+  w.tecnicaNome = t.nome; w.tecnicaCusto = t.custo; w.tecnicaDesc = t.desc; w.tecnicaEfei = t.efei;
+  // Poder genérico se ainda vazio
+  if (!w.poder.trim()) {
+    w.poder = 'Manifestação da Alma';
+    w.pAttr = 'Alma';
+    w.pDescricao = 'Expressão crua da Alma do personagem, moldada pela forma como ele despertou.';
+    w.pConceito = 'O destino da Torre escolheu este caminho.';
+  }
+  w.passo = 6; // pula para a revisão final
+  _wizardRender();
+}
+
+// Monta o objeto completo de dados da ficha com TODOS os defaults + valores do wizard
+function _wizardMontarDados() {
+  const w = _wizardEstado;
+  if (!w) return null;
+  const relInfo = w.antecedente ? (_WIZARD_ANTECEDENTES_REL[w.antecedente] || null) : null;
+  const relDespertar = w.despertar === 3 ? (_WIZARD_DESPERTARES.find(x => x.n === 3).rel || null) : null;
+  const rel = relDespertar || relInfo;
+  const tecnicas = (w.tecnicaNome && w.tecnicaNome.trim()) ? [{ nome:w.tecnicaNome.trim(), custo:w.tecnicaCusto || '', desc:w.tecnicaDesc || '', efei:w.tecnicaEfei || '' }] : [];
+  return {
+    // identidade
+    'f-nome': w.nome.trim(),
+    'f-nivel': '1',
+    'f-despertar': 'Desperto',
+    'f-antecedente': w.antecedente || '',
+    'f-raca': '',
+    'f-genero': w.genero || '',
+    'f-idade': w.idade || '',
+    'f-cidade': w.cidade || '',
+    'f-alcunha': w.alcunha || '',
+    // atributos
+    'a-for': String(w.atrib.for),
+    'a-des': String(w.atrib.des),
+    'a-vig': String(w.atrib.vig),
+    'a-int': String(w.atrib.int),
+    'a-alm': String(w.atrib.alm),
+    'a-car': String(w.atrib.car),
+    // recursos (defaults 0; calcTudo recalcula automaticamente)
+    'b-pv':'0','b-sta':'0','b-pe':'0','b-ca':'0',
+    'pv-extra':'0','pv-gasto':'0','sta-extra':'0','sta-gasto':'0','pe-gasto':'0','pe-custo':'0',
+    'f-mov':'','f-mov-voo':'','f-mov-nado':'','f-mt':'5','f-es':'3',
+    'f-nucleo':'0/0','f-nucleo-prog':'',
+    // poder
+    'p-principal': w.poder || '',
+    'p-attr': w.pAttr || '',
+    'p-max': '0',
+    'p-descricao': w.pDescricao || '',
+    'p-suprema': '',
+    'p-conceito': w.pConceito || '',
+    // novos campos (aprovados)
+    'f-como-despertou': w.despertar ? (_WIZARD_DESPERTARES.find(x => x.n === w.despertar)?.titulo + ' — ' + _WIZARD_DESPERTARES.find(x => x.n === w.despertar)?.gancho) : '',
+    'f-sanidade': String(w.sanidadeAjuste || 0),
+    'f-corrupcao': String(w.corrupcaoAjuste || 0),
+    'f-pericia-antecedente': (w.antecedente && _WIZARD_ANTECEDENTES_PER[w.antecedente]) ? _WIZARD_ANTECEDENTES_PER[w.antecedente] : '',
+    // árvore da alma (defaults 0)
+    'aa-pontos':'0',
+    'aa-arcano-controle':'0','aa-arcano-expansao':'0','aa-arcano-versatilidade':'0',
+    'aa-belico-impacto':'0','aa-belico-perfuracao':'0','aa-belico-execucao':'0',
+    'aa-mobilidade-deslocamento':'0','aa-mobilidade-instinto':'0','aa-mobilidade-acrobacia':'0',
+    'aa-guardiao-resistencia':'0','aa-guardiao-vitalidade':'0','aa-guardiao-fortaleza':'0',
+    'aa-catalisador-fortalecimento':'0','aa-catalisador-sustentacao':'0','aa-catalisador-supressao':'0',
+    // combate (trackers)
+    'morrendo':'','torre-ticks':'','major-wound-texto':'',
+    'cond-avareado-val':'0','cond-sangrando-val':'0','cond-envenenado-val':'0','cond-agarrdo-val':'0',
+    'cond-exausto-val':'0','cond-corrompido-val':'0','cond-enlouquecido-val':'0','cond-enfraquecido-val':'0',
+    // sessões e XP
+    'xp-atual':'0','sess-tipo':'','sess-qualidade':'','sess-xp':'300','sess-risco-xp':'25','sess-obs':'','sess-historico':'[]',
+    // acampamento
+    'acamp-nivel':'1','acamp-atividade':'','acamp-andar':'1','acamp-mod':'0','acamp-rolagem':'',
+    // forja e barmans
+    'forja-rank':'','forja-classe':'','forja-ferreiro':'','forja-potencial':'','forja-materiais':'',
+    // registro
+    'r-personalidade':'','r-mentalidade':'','r-comportamento':'',
+    'r-tracos': w.tracos || '',
+    'r-defeitos': w.defeitos || '',
+    'r-ideais':'','r-ligacoes':'','r-antecedentes':'','r-historia':'','r-eventos':'','r-npcs':'',
+    // inventário
+    'inv-espiritos':'50',
+    // pets (1 slot padrão)
+    'pet-nome':'','pet-especie':'','pet-tipo':'','pet-for':'','pet-des':'','pet-vig':'','pet-int':'','pet-esp':'','pet-car':'',
+    'pet-pv':'','pet-ca':'','pet-mov':'','pet-hab':'','pet-evo':'',
+    // social (grimório)
+    'soc-historia':'','soc-objetivos':'','soc-filosofia':'','soc-feitos':'','soc-conquistas':'','soc-titulos':'','soc-aliados':'','soc-rivais':'','soc-pactos':'','soc-mentores':'','soc-timeline':'',
+    // relacionamento inicial (do Antecedente ou do Despertar)
+    'rel1-nome': rel ? rel.nome : '',
+    'rel1-nivel': '1 Amizade Sólida',
+    'rel1-tipo': rel ? rel.tipo : '',
+    'rel1-cidade': '',
+    'rel1-obs': rel ? (rel.obs || '') : '',
+    // contadores e estrutura
+    numPassivas: 1,
+    numDespertares: 1,
+    numPets: 1,
+    slotsPericia: { maestrias: [], especializacoes: [] },
+    tecnicas: tecnicas,
+    numTecnicas: tecnicas.length,
+    attrPrefs: { ordem: ['for','des','vig','int','alm','car'], favoritos: [] }
+  };
+}
+
+function _wizardFinalizar() {
+  if (!_wizardEstado) return;
+  const w = _wizardEstado;
+  if (!w.nome.trim()) { alert('Informe o nome do personagem.'); document.getElementById('wz-nome')?.focus(); return; }
+  const lista = getListaPersonagens();
+  const nome = w.nome.trim();
+  if (lista.includes(nome)) {
+    alert('Já existe um personagem com esse nome. Escolha outro.');
+    document.getElementById('wz-nome')?.focus();
+    return;
+  }
+  const d = _wizardMontarDados();
+  if (!d) return;
+
+  lista.push(nome);
+  salvarListaPersonagens(lista);
+  document.getElementById('wizard-criacao-overlay')?.remove();
+  _wizardEstado = null;
+
+  // Mesmo caminho de confirmarNovoPersonagem: ativa (ficha vazia no DOM),
+  // depois preenche com os dados do wizard e salva (local + nuvem + ranking).
+  ativarPersonagem(nome).then(() => {
+    localStorage.setItem('ficha_' + usuarioAtual + '_' + nome, JSON.stringify(d));
+    preencherCampos(d);
+    calcTudo();
+    atualizarFichaHero();
+    salvarFichaFirestore(usuarioAtual, d).then(() => {
+      console.log('[Firestore] Ficha criada pelo wizard:', nome);
+      updateRankingEntry(usuarioAtual, nome, d, null)
+        .then(() => {
+          if (document.getElementById('ranking-grid')) carregarRanking();
+        })
+        .catch(e => console.warn('[Ranking] Erro ao indexar personagem do wizard:', e));
+    });
+  });
+}
+
 function renderizarPersonagensAccordion() {
   const accordion = document.getElementById('personagens-accordion');
   if (!accordion) return;
@@ -9469,11 +9981,11 @@ async function irParaMinhaFicha() {
   }, 150);
 }
 
-// criarNovoPersonagem (chamado pelo submenu sidebar) — abre o painel e dispara adicionarPersonagemNovo
+// criarNovoPersonagem (chamado pelo submenu sidebar) — abre o painel e dispara o wizard guiado
 function criarNovoPersonagem() {
   navTo('ficha');
   document.getElementById('sidebar').classList.remove('open');
-  setTimeout(() => adicionarPersonagemNovo(), 300);
+  setTimeout(() => abrirWizardCriacao(), 300);
 }
 
 // Nota: as antigas funções de compatibilidade retroativa (adicionarPersonagem,
@@ -10166,7 +10678,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   <div class="ficha-panel-title">◆ Personagens</div>
   <div class="ficha-panel-body">
     <div id="personagens-accordion"></div>
-    <button onclick="adicionarPersonagemNovo()" style="
+    <button onclick="abrirWizardCriacao()" style="
       margin-top:.75rem;
       width:100%;
       padding:.65rem;
@@ -10263,6 +10775,14 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
         <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem;letter-spacing:.3px;line-height:1.45">Botões +/− ajustam os núcleos absorvidos — alimentam o ranking (Lendas das Torres).</small>
       </div>
       ${fieldGroup('Progressão do Núcleo','f-nucleo-prog')}
+    </div>
+    <div class="field-row cols-2">
+      ${fieldGroup('Como Você Despertou','f-como-despertou')}
+      ${fieldGroup('Perícia do Antecedente','f-pericia-antecedente')}
+    </div>
+    <div class="field-row cols-2">
+      ${fieldGroup('Sanidade (inicial, opcional)','f-sanidade','number',{default:0})}
+      ${fieldGroup('Corrupção (inicial, opcional)','f-corrupcao','number',{default:0})}
     </div>
     <div class="field-row cols-2">
       ${fieldGroup('Descrição do Poder','p-descricao','textarea')}
@@ -11717,6 +12237,7 @@ function coletarDados() {
     'f-mov','f-mov-voo','f-mov-nado','f-mt','f-es','f-nucleo',
     // poder
     'p-principal','p-attr','p-max','p-descricao','p-suprema','p-conceito',
+    'f-como-despertou','f-sanidade','f-corrupcao','f-pericia-antecedente',
     // árvore da alma
     'aa-pontos',
     'aa-arcano-controle','aa-arcano-expansao','aa-arcano-versatilidade',
