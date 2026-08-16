@@ -9162,7 +9162,8 @@ function _wizardCarregarRascunho() {
       !!(d.nome || d.alcunha || d.idade || d.cidade || d.genero ||
          d.poder || d.pAttr || d.pDescricao || d.pConceito ||
          d.despertar || d.antecedente || d.tracos || d.defeitos ||
-         d.tecnicaNome || d.tecnicaCusto || d.tecnicaDesc || d.tecnicaEfei);
+         d.tecnicaNome || d.tecnicaCusto || d.tecnicaDesc || d.tecnicaEfei ||
+         (Array.isArray(d.rolagens) && d.rolagens.length > 0));
     if (!temConteudo) return null;
     return d;
   } catch(e) {
@@ -9185,6 +9186,11 @@ function _wizardEstadoNovo() {
     despertar: null,
     metodoAtributo: 'pontos',
     atrib: { for:10, des:10, vig:10, int:10, alm:10, car:10 },
+    // Modo rolagem (4d6 drop menor): 3 tentativas completas, escolha livre entre
+    // elas e reordenação dos valores fixos entre os atributos.
+    rolagens: [],              // até 3 tentativas: [{ valores:[6 números], total:Number }]
+    rolagemEscolhida: null,    // índice (0-2) da tentativa selecionada, ou null
+    atribRolagem: ['for','des','vig','int','alm','car'], // ordem de distribuição dos valores rolados
     rolagensFeitas: 0, rolagemAceita: false,
     antecedente: null,
     tracos:'', defeitos:'',
@@ -9212,6 +9218,16 @@ function _wizardContinuarRascunho() {
     if (typeof _wizardEstado.sanidadeAjuste !== 'number') _wizardEstado.sanidadeAjuste = 0;
     if (typeof _wizardEstado.corrupcaoAjuste !== 'number') _wizardEstado.corrupcaoAjuste = 0;
     if (typeof _wizardEstado.metodoAtributo !== 'string') _wizardEstado.metodoAtributo = 'pontos';
+    // Campos do modo rolagem (4d6) — rascunhos antigos podem não tê-los.
+    if (!Array.isArray(_wizardEstado.rolagens)) _wizardEstado.rolagens = [];
+    if (typeof _wizardEstado.rolagemEscolhida !== 'number') _wizardEstado.rolagemEscolhida = null;
+    if (!Array.isArray(_wizardEstado.atribRolagem) || _wizardEstado.atribRolagem.length !== 6) {
+      _wizardEstado.atribRolagem = ['for','des','vig','int','alm','car'];
+    }
+    // Reaplica a distribuição da rolagem escolhida (garante atrib coerente).
+    if (_wizardEstado.metodoAtributo === 'rolagem' && _wizardEstado.rolagemEscolhida != null) {
+      _wizardAplicarRolagem();
+    }
   } else {
     _wizardEstado = _wizardEstadoNovo();
   }
@@ -9435,19 +9451,59 @@ function _wizardCorpoHTML() {
     ${w.metodoAtributo === 'pontos' ? `
       <div class="lore-box" style="margin-bottom:.8rem"><strong>Distribua 80 pontos</strong> (mín 8, máx 18). <span id="wz-pontos-restantes" style="color:${_wizardPontosRestantes() === 0 ? 'var(--gold-light)' : 'var(--accent-text)'}">Pontos restantes: ${_wizardPontosRestantes()}</span></div>
     ` : `
-      <div class="lore-box" style="margin-bottom:.8rem">
-        <strong>Rolagem 4d6 (drop menor)</strong> — role 6 vezes, uma por atributo. Só vale se o total for <strong>maior que 80</strong>. Tentativas: <span style="color:var(--gold-light)">${w.rolagensFeitas}/3</span>.
-        <div style="margin-top:.5rem"><button onclick="wizardRolarAtributos()" style="background:var(--accent);border:none;color:#fff;padding:.45rem .9rem;font-family:inherit;font-size:.82rem;cursor:pointer;${w.rolagensFeitas >= 3 ? 'opacity:.45;pointer-events:none' : ''}">Rolar Atributos</button>
-        ${w.rolagemAceita ? ' <span style="color:var(--gold-light);font-size:.78rem">✓ Rolagem válida (total > 80)</span>' : ''}
-        ${!w.rolagemAceita && w.rolagensFeitas > 0 ? ' <span style="color:var(--accent-text);font-size:.78rem">Total ≤ 80 — role de novo (ou edite manualmente).</span>' : ''}</div>
-      </div>
+      ${!w.rolagens || w.rolagens.length === 0 ? `
+        <div class="lore-box" style="margin-bottom:.8rem">
+          <strong>Rolagem 4d6 (drop menor)</strong> — são geradas <strong>3 tentativas</strong> de uma vez; cada uma rola 6 valores (4d6 descartando o menor). Você escolhe qual usar depois.
+          <div style="margin-top:.5rem"><button onclick="wizardRolarAtributos()" style="background:var(--accent);border:none;color:#fff;padding:.5rem 1rem;font-family:inherit;font-size:.84rem;cursor:pointer">${icone('sword','ic-sm')} Rolar Atributos (4d6, drop menor)</button></div>
+        </div>
+      ` : `
+        <div class="lore-box" style="margin-bottom:.8rem">
+          <strong>Escolha uma das 3 rolagens.</strong> A regra do livro só valida totais <strong>acima de 80</strong> — mas você decide qual usar. Após escolher, os valores ficam <strong>fixos</strong>: o que dá para ajustar é apenas a <strong>ordem</strong> (qual valor vai em cada atributo).
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.8rem">
+          ${w.rolagens.map((r, idx) => {
+            const valida = r.total > 80;
+            const escolhida = w.rolagemEscolhida === idx;
+            return `
+            <div onclick="wizardEscolherRolagem(${idx})" style="border:2px solid ${escolhida ? 'var(--accent-light)' : 'var(--border)'};background:${escolhida ? 'rgba(180,140,30,.1)' : 'rgba(255,255,255,.02)'};padding:.6rem .7rem;cursor:pointer;border-radius:6px;transition:all .15s;text-align:center" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='${escolhida ? 'var(--accent-light)' : 'var(--border)'}'">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem">
+                <strong style="color:var(--accent-light);font-size:.78rem;letter-spacing:1px;text-transform:uppercase">Tentativa ${idx + 1}</strong>
+                ${escolhida ? '<span style="color:var(--gold-light);font-size:.72rem">✓ usada</span>' : ''}
+              </div>
+              <div style="display:flex;justify-content:center;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem">
+                ${r.valores.map(v => `<span style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.15rem .45rem;font-size:.85rem;border-radius:4px;min-width:26px;text-align:center">${v}</span>`).join('')}
+              </div>
+              <div style="font-size:1.15rem;font-weight:700;color:var(--silver)">Total: ${r.total}</div>
+              <div style="font-size:.72rem;margin-top:.25rem;${valida ? 'color:var(--gold-light)' : 'color:var(--accent-text)'}">${valida ? '✓ Válida (acima de 80)' : '⚠️ Abaixo de 80 (regra: só vale acima)'}</div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="text-align:center;margin-bottom:.8rem"><button onclick="wizardRolarAtributos()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.4rem .9rem;font-family:inherit;font-size:.78rem;cursor:pointer">Rolar de novo (3 novas tentativas)</button></div>
+      `}
+      ${w.rolagemEscolhida != null ? `
+        <div style="margin-top:.4rem">
+          <div class="lore-box" style="margin-bottom:.6rem">
+            <strong>Distribuição dos valores rolados.</strong> Os números são fixos — não é possível transferir pontos entre atributos. Use as setas <strong>▲/▼</strong> para mover <strong>qual valor</strong> fica em cada atributo (a posição na lista define o atributo).
+          </div>
+          <div class="field-row cols-3">
+            ${w.atribRolagem.map((sigla, pos) => {
+              const nome = ({for:'Força',des:'Destreza',vig:'Vigor',int:'Intelecto',alm:'Alma',car:'Carisma'})[sigla];
+              const valor = (w.atrib && w.atrib[sigla] != null) ? w.atrib[sigla] : '';
+              const btnStyle = 'background:none;border:1px solid var(--border);color:var(--text-muted);width:26px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.62rem;padding:0;cursor:pointer;border-radius:3px';
+              return `<div class="field-group" style="text-align:center">
+                <label style="${labelStyle}text-align:center">${nome}</label>
+                <input type="number" id="wz-a-${sigla}" readonly value="${valor}" style="${inputStyle}text-align:center;background:rgba(255,255,255,.05);cursor:default">
+                <div style="display:flex;justify-content:center;gap:.3rem;margin-top:.3rem">
+                  <button onclick="_wizardMoverValor(${pos},-1)" title="Mover valor para cima" style="${btnStyle}${pos === 0 ? ';visibility:hidden' : ''}">▲</button>
+                  <button onclick="_wizardMoverValor(${pos},1)" title="Mover valor para baixo" style="${btnStyle}${pos === 5 ? ';visibility:hidden' : ''}">▼</button>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      ` : ''}
     `}
-    <div class="field-row cols-3">
-      ${['for','des','vig','int','alm','car'].map(sig => {
-        const nome = ({for:'Força',des:'Destreza',vig:'Vigor',int:'Intelecto',alm:'Alma',car:'Carisma'})[sig];
-        return `<div class="field-group"><label style="${labelStyle}">${nome}</label><input type="number" id="wz-a-${sig}" min="8" max="18" value="${w.atrib[sig]}" oninput="_wizardAtributoInput('${sig}', this.value)" style="${inputStyle}text-align:center"></div>`;
-      }).join('')}
-    </div>`;
+  `;
 
   if (w.passo === 4) return `
     <div class="lore-box" style="margin-bottom:.8rem">
@@ -9514,11 +9570,12 @@ function wizardMetodoAtributo(metodo) {
 
 function _wizardAtributoInput(sigla, valor) {
   if (!_wizardEstado) return;
+  // No modo rolagem os valores são FIXOS — nunca são editados por digitação.
+  if (_wizardEstado.metodoAtributo === 'rolagem') return;
   let v = parseInt(valor, 10);
   if (isNaN(v)) v = 0;
   v = Math.max(0, Math.min(18, v));
   _wizardEstado.atrib[sigla] = v;
-  if (_wizardEstado.metodoAtributo === 'rolagem') _wizardEstado.rolagemAceita = true; // edição manual assume o controle
   _wizardSalvarRascunho(); // input em tempo real
 }
 
@@ -9534,15 +9591,65 @@ function _wizardRolar4d6() {
   return dados[1] + dados[2] + dados[3]; // drop do menor
 }
 
+// Gera as 3 tentativas completas de rolagem de atributos (4d6 drop menor ×6
+// para cada tentativa). Cada tentativa guarda os 6 valores e o total.
 function wizardRolarAtributos() {
   if (!_wizardEstado) return;
-  if (_wizardEstado.rolagensFeitas >= 3) return;
-  _wizardEstado.rolagensFeitas++;
+  const w = _wizardEstado;
+  w.rolagens = [];
+  for (let t = 0; t < 3; t++) {
+    const valores = [1,2,3,4,5,6].map(() => _wizardRolar4d6());
+    w.rolagens.push({ valores: valores, total: valores.reduce((s, v) => s + v, 0) });
+  }
+  w.rolagemEscolhida = null; // obriga nova escolha após rolar
+  w.rolagensFeitas = 3;
+  w.rolagemAceita = false;
+  _wizardRender();
+}
+
+// Seleciona uma das 3 tentativas como a rolagem usada. Os valores ficam FIXOS;
+// o que o jogador pode mudar depois é a ORDEM de distribuição (atribRolagem).
+function wizardEscolherRolagem(idx) {
+  if (!_wizardEstado) return;
+  const w = _wizardEstado;
+  if (!w.rolagens || !w.rolagens[idx]) return;
+  w.rolagemEscolhida = idx;
+  w.rolagemAceita = true;
+  // Aplica a distribuição atual da ordem nos atributos.
+  _wizardAplicarRolagem();
+  _wizardRender();
+}
+
+// Distribui os valores da rolagem escolhida nos atributos segundo a ordem
+// atual (atribRolagem). Só para o modo rolagem com tentativa escolhida.
+function _wizardAplicarRolagem() {
+  if (!_wizardEstado) return;
+  const w = _wizardEstado;
+  if (w.metodoAtributo !== 'rolagem' || w.rolagemEscolhida == null) return;
+  const r = w.rolagens[w.rolagemEscolhida];
+  if (!r || !Array.isArray(w.atribRolagem) || w.atribRolagem.length !== 6) return;
+  const ordem = w.atribRolagem;
   const novo = {};
-  ['for','des','vig','int','alm','car'].forEach(sig => { novo[sig] = _wizardRolar4d6(); });
-  _wizardEstado.atrib = novo;
-  const total = Object.values(novo).reduce((s, v) => s + v, 0);
-  _wizardEstado.rolagemAceita = total > 80;
+  ordem.forEach((sigla, i) => { novo[sigla] = r.valores[i]; });
+  w.atrib = novo;
+}
+
+// Reordena a distribuição dos valores rolados: troca o valor da posição `pos`
+// com o da posição adjacente (dir = -1 acima / +1 abaixo). Os valores em si
+// nunca mudam — só para qual atributo cada valor vai.
+function _wizardMoverValor(pos, dir) {
+  if (!_wizardEstado) return;
+  const w = _wizardEstado;
+  if (w.metodoAtributo !== 'rolagem' || w.rolagemEscolhida == null) return;
+  if (!Array.isArray(w.atribRolagem) || w.atribRolagem.length !== 6) return;
+  const novaPos = pos + dir;
+  if (novaPos < 0 || novaPos > 5) return;
+  const ordem = w.atribRolagem.slice();
+  const tmp = ordem[pos];
+  ordem[pos] = ordem[novaPos];
+  ordem[novaPos] = tmp;
+  w.atribRolagem = ordem;
+  _wizardAplicarRolagem();
   _wizardRender();
 }
 
@@ -9576,7 +9683,7 @@ function _wizardAvancar() {
       if (soma !== 80) { alert('A soma dos atributos precisa ser exatamente 80. Pontos restantes: ' + (80 - soma) + '.'); return; }
       if (fora) { alert('Cada atributo deve estar entre 8 e 18.'); return; }
     } else {
-      if (!w.rolagemAceita) { alert('Role os atributos (4d6) e use um total maior que 80, ou edite manualmente.'); return; }
+      if (w.rolagemEscolhida == null) { alert('Escolha uma das 3 rolagens (clique no card) para continuar.'); return; }
     }
   }
   if (w.passo === 4 && !w.antecedente) {
@@ -9606,17 +9713,24 @@ function _wizardDestinoDaTorre() {
   const d = _WIZARD_DESPERTARES.find(x => x.n === w.despertar);
   w.sanidadeAjuste = d.sanidade || 0;
   w.corrupcaoAjuste = d.corrupcao || 0;
-  // Atributos: rolagem 4d6 até total > 80 (máx 3 tentativas)
+  // Atributos: rolagem 4d6 — gera as 3 tentativas e escolhe a melhor (maior
+  // total; prefere a primeira válida > 80).
   w.metodoAtributo = 'rolagem';
-  w.rolagensFeitas = 0;
-  w.rolagemAceita = false;
+  w.rolagens = [];
   for (let t = 0; t < 3; t++) {
-    w.rolagensFeitas++;
-    const novo = {};
-    ['for','des','vig','int','alm','car'].forEach(sig => { novo[sig] = _wizardRolar4d6(); });
-    w.atrib = novo;
-    if (Object.values(novo).reduce((s, v) => s + v, 0) > 80) { w.rolagemAceita = true; break; }
+    const valores = [1,2,3,4,5,6].map(() => _wizardRolar4d6());
+    w.rolagens.push({ valores: valores, total: valores.reduce((s, v) => s + v, 0) });
   }
+  w.rolagemEscolhida = null;
+  w.rolagensFeitas = 3;
+  w.rolagemAceita = false;
+  w.atribRolagem = ['for','des','vig','int','alm','car'];
+  const melhorIdx = w.rolagens.reduce((best, r, idx) =>
+    (r.total > (best == null ? -1 : w.rolagens[best].total)) ? idx : best, null);
+  const primeiraValida = w.rolagens.findIndex(r => r.total > 80);
+  w.rolagemEscolhida = (primeiraValida !== -1) ? primeiraValida : melhorIdx;
+  w.rolagemAceita = true;
+  _wizardAplicarRolagem();
   // Antecedente aleatório
   const nomes = Object.keys(ANTECEDENTES_INFO);
   w.antecedente = nomes[Math.floor(Math.random() * nomes.length)];
