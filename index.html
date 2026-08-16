@@ -9631,12 +9631,33 @@ function _wizardCorpoHTML() {
 
   if (w.passo === 5) return `
     <div class="lore-box" style="margin-bottom:.8rem">
-      <strong>Regra dos Traços:</strong> todo Desperto começa com 1 Traço Positivo Básico gratuito (até 2 pontos). Para cada Traço Positivo adicional, escolha Fraquezas que somem pelo menos o mesmo valor em pontos. Use este campo livre ou edite depois no painel Registro da ficha.
+      <strong>Regra dos Traços:</strong> todo Desperto começa com 1 Traço Positivo Básico gratuito (até 2 pontos). Para cada Traço Positivo adicional, escolha Fraquezas que somem pelo menos o mesmo valor em pontos. <strong>Teto no nível 1: 1 grátis + no máximo 4 pagos</strong>. Use as listas abaixo ou edite livremente depois na ficha.
     </div>
     <div class="field-row cols-2">
-      <div class="field-group"><label style="${labelStyle}">Traços Positivos</label><textarea id="wz-tracos" oninput="_wizardSet('tracos', this.value)" placeholder="Ex.: Instinto de Sobrevivência (3 pts), Mente Focada (2 pts), Olhar Penetrante (2 pts)..." style="${inputStyle}min-height:110px;resize:vertical">${_escHtml(w.tracos)}</textarea></div>
-      <div class="field-group"><label style="${labelStyle}">Fraquezas</label><textarea id="wz-defeitos" oninput="_wizardSet('defeitos', this.value)" placeholder="Ex.: Trauma Psíquico (3 pts), Marca Visível (2 pts), Fome da Alma (2 pts)..." style="${inputStyle}min-height:110px;resize:vertical">${_escHtml(w.defeitos)}</textarea></div>
-    </div>`;
+      <div class="field-group">
+        <label style="${labelStyle}">Traços Positivos</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="wz-select-traco" onchange="wizardAdicionarTracoTexto('traco')" style="${inputStyle}">
+            <option value="">Escolher traço positivo...</option>
+            ${_opcoesTracos(true)}
+          </select>
+          <button type="button" onclick="wizardAdicionarTracoTexto('traco')" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.82rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <textarea id="wz-tracos" oninput="_wizardSet('tracos', this.value)" placeholder="Ex.: Instinto de Sobrevivência (3 pts), Mente Focada (3 pts), Olhar Penetrante (2 pts)..." style="${inputStyle}min-height:110px;resize:vertical">${_escHtml(w.tracos)}</textarea>
+      </div>
+      <div class="field-group">
+        <label style="${labelStyle}">Fraquezas</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="wz-select-fraqueza" onchange="wizardAdicionarTracoTexto('fraqueza')" style="${inputStyle}">
+            <option value="">Escolher fraqueza...</option>
+            ${_opcoesTracos(false)}
+          </select>
+          <button type="button" onclick="wizardAdicionarTracoTexto('fraqueza')" style="background:none;border:1px solid var(--gold-light);color:var(--gold-light);padding:.5rem .8rem;font-family:inherit;font-size:.82rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <textarea id="wz-defeitos" oninput="_wizardSet('defeitos', this.value)" placeholder="Ex.: Trauma Psíquico (3 pts), Marca Visível (2 pts), Fragmento de Outro (2 pts)..." style="${inputStyle}min-height:110px;resize:vertical">${_escHtml(w.defeitos)}</textarea>
+      </div>
+    </div>
+    <div style="font-size:.72rem;color:var(--text-muted);margin-top:.4rem;text-align:center">As listas adicionam o traço com o custo ao campo de texto — os valores alimentam o Balance na ficha.</div>`;
 
   if (w.passo === 6) return `
     <div class="lore-box" style="margin-bottom:.8rem">
@@ -11125,6 +11146,353 @@ const ANTECEDENTES_INFO = {
   'Colecionador de Últimas Palavras': 'Treinado em <strong>Performance</strong> (grátis) + Vantagem em situações de morte iminente. Livro de ecos (1×/incursão = 1 pista). <em>Gancho:</em> coleção cobiçada. <em>Relacionamento Nv1:</em> fantasma/eco que o acompanha.'
 };
 
+// ═══ TRAÇOS DA ALMA — catálogo oficial (livro, seção #tracos-alma) ═══
+// Categorias: 1 Combate · 2 Sobrevivência & Exploração · 3 Mental & Sanidade ·
+// 4 Social & Mundo · 5 Alma & Poder. `custo` aceita faixas ("2~4", "+3~5").
+const TRACOS_ALMA = {
+  positivos: [
+    // ── 1 · Combate ──
+    { nome:'Corpo de Gigante', custo:5, cat:1, desc:'+2 em testes de Força e Vigor de tamanho/carga/resistência; +4 PV máx; +1 dano corpo a corpo com armas pesadas.' },
+    { nome:'Ambidestria da Alma', custo:'2~4', cat:1, desc:'Duas armas leves ou ações com as duas mãos sem penalidade; nível 4: ataque extra com a mão secundária sem ação bônus.' },
+    { nome:'Resistência Sobrenatural', custo:'2~4', cat:1, desc:'Vantagem em Salvaguardas contra venenos, doenças e corrupção; nível 4: metade do dano de veneno/corrupção.' },
+    { nome:'Flexibilidade Sobrenatural', custo:'2~4', cat:1, desc:'Se espreme em espaços apertados; +2 em Destreza para escapar; nível 4: se contorce para evitar 1 ataque/combate.' },
+    { nome:'Noção do Perigo', custo:4, cat:1, desc:'1×/cena, vantagem para detectar emboscadas ou armadilhas antes de ativarem.' },
+    { nome:'Instinto de Sobrevivência', custo:3, cat:1, desc:'Ao cair a 0 PV por queda/armadilha/surpresa: 1d20, 12+ cai com 1 PV; +2 para evitar quedas.' },
+    { nome:'Sangue Resistente', custo:3, cat:1, desc:'+3 contra sangramento e infecções; metade do dano contínuo de venenos ou ferimentos sangrentos.' },
+    { nome:'Pele Endurecida', custo:4, cat:1, desc:'+2 CA natural; reduz 2 de dano cortante/perfurante de armas mundanas.' },
+    { nome:'Renascimento Parcial', custo:4, cat:1, desc:'1×/incursão ao cair a 0 PV: regeneração 2d6 + mod. Alma, levanta com esse valor.' },
+    { nome:'Afinidade com Metal', custo:3, cat:1, desc:'+1 dano com armas de metal, +1 CA com armadura de metal; improvisa armas de metal.' },
+    { nome:'Passo da Sombra', custo:4, cat:1, desc:'Vantagem em Furtividade em baixa luz/Névoa; criaturas sem sentidos especiais têm desvantagem para detectá-lo.' },
+    { nome:'Irmão de Armas', custo:2, cat:1, desc:'Vínculo tático: lado a lado (zona Curto) ambos +1 CA e +1 ataque contra o mesmo inimigo.' },
+    { nome:'Predador Silencioso', custo:3, cat:1, desc:'Emboscada: primeiro ataque/poder +1d6; criaturas não alertadas têm desvantagem para detectá-lo.' },
+    // ── 2 · Sobrevivência & Exploração ──
+    { nome:'Explorador da Névoa', custo:2, cat:2, desc:'Vantagem em Navegação na Névoa/desorientação; eventos aleatórios hostis reduzidos em 1 nível.' },
+    { nome:'Afinidade com uma Torre Guardiã', custo:4, cat:2, desc:'Escolha uma Guardiã: −2 CD em Sobrevivência/Navegação + vantagem numa Salvaguarda do tema.' },
+    { nome:'Caçador de Anomalias', custo:2, cat:2, desc:'Vantagem para rastrear, identificar ou prever criaturas corrompidas ou anômalas.' },
+    { nome:'Fôlego da Alma', custo:2, cat:2, desc:'Prende a respiração 10 min sem testes; na Névoa densa sofre metade da penalidade em Vigor.' },
+    { nome:'Sentidos Aguçados', custo:1, cat:2, desc:'Escolha um sentido: vantagem em Percepção que o use.' },
+    { nome:'Visão no Escuro', custo:2, cat:2, desc:'Enxerga perfeitamente em escuridão total dentro de Torres.' },
+    { nome:'Andarilho das Ruínas', custo:3, cat:2, desc:'+2 em Sobrevivência/Navegação/Furtividade em áreas arruinadas; monstros têm mais dificuldade para rastreá-lo.' },
+    { nome:'Olhos da Névoa', custo:3, cat:2, desc:'Enxerga através de névoa leve e ilusões menores; Percepção na Névoa com vantagem; metade da desorientação.' },
+    { nome:'Rastreador da Névoa', custo:3, cat:2, desc:'Vantagem em Sobrevivência/Navegação na Névoa; 1×/incursão segue um rastro sem teste.' },
+    // ── 3 · Mental & Sanidade ──
+    { nome:'Mente Focada', custo:3, cat:3, desc:'Concentração em 2 efeitos simultâneos; +2 contra distrações mentais.' },
+    { nome:'Presença Inspiradora', custo:3, cat:3, desc:'Aliados a 9 m: +1 contra medo/exaustão; 1×/cena vantagem num teste de Sanidade de um aliado.' },
+    { nome:'Olhar Penetrante', custo:2, cat:3, desc:'Vantagem para perceber mentiras, intenções hostis ou disfarces superficiais.' },
+    { nome:'Equilíbrio Interno', custo:3, cat:3, desc:'Penalidades de Exaustão/Sobrecarga/dano Poder-Mente-Corpo reduzidas em 1 (mínimo 0).' },
+    { nome:'Voz da Alma', custo:3, cat:3, desc:'+2 em intimidação/persuasão/comando; 1×/cena, Salvaguarda de Carisma CD 14 ou obedece a comando simples.' },
+    { nome:'Mente de Aço', custo:3, cat:3, desc:'Vantagem contra medo/ilusão/manipulação mental; 1×/cena, Intelecto CD 16 ignora efeito mental de baixo nível.' },
+    { nome:'Guardião Interno', custo:5, cat:3, desc:'Vantagem contra possessão/ilusões/controle mental; 1×/incursão passa automaticamente numa Salvaguarda de Alma.' },
+    { nome:'Aura de Calma', custo:3, cat:3, desc:'Aliados a 6 m: +2 contra medo/desorientação; estabiliza um caído 1×/cena (texto canônico de Medicina).' },
+    { nome:'Calor Humano', custo:2, cat:3, desc:'Aliados próximos +1 em Sanidade quando você está consciente; sente o peso emocional deles.' },
+    // ── 4 · Social & Mundo ──
+    { nome:'Aliados Fiéis', custo:1, cat:4, desc:'1–2 contatos leais numa cidadela; 1×/sessão ajuda com informação, abrigo ou favor menor.' },
+    { nome:'Rede de Contatos', custo:'1~2', cat:4, desc:'Em cidadela/posto, 1d20; 12+ conhece alguém útil no local.' },
+    { nome:'Ligação com Organização', custo:3, cat:4, desc:'Influência moderada numa facção; 1×/incursão favor menor (informação, abrigo, suprimentos).' },
+    { nome:'Laços de Sangue', custo:2, cat:4, desc:'Vínculo com pessoa específica: a 30 m ambos +1 em Vigor e contra medo; estabiliza com vantagem 1×/cena.' },
+    { nome:'Imponência da Alma', custo:3, cat:4, desc:'+2 em intimidação/liderança; criaturas comuns têm desvantagem em moral contra você.' },
+    { nome:'Marca do Consórcio', custo:3, cat:4, desc:'Acesso a laboratórios/agentes do Consórcio (1 favor menor/incursão). Custo: +1 Corrupção inicial.' },
+    { nome:'Protetor', custo:2, cat:4, desc:'Escolha 1 aliado: enquanto o protege, ambos +1 CA; se ele morrer, ganha a fraqueza "Cicatriz da Perda" (+3).' },
+    { nome:'Mãos de Ofício', custo:2, cat:4, desc:'Vantagem em Ofícios; começa com 1 ferramenta de ofício do Catálogo.' },
+    // ── 5 · Alma & Poder ──
+    { nome:'Inventor da Alma', custo:1, cat:5, desc:'Funde 2 itens mundanos num objeto improvisado funcional (Mestre aprova a utilidade).' },
+    { nome:'Empatia com Criaturas', custo:1, cat:5, desc:'Vantagem para acalmar, entender ou prever criaturas corrompidas.' },
+    { nome:'Tempo de Vida Estendido', custo:3, cat:5, desc:'Envelhece 50% mais devagar; +2 em Salvaguardas de Vigor contra doenças/venenos prolongados; resiste 1 Exaustão por fome/sede 1×/dia.' },
+    { nome:'Aura Reforçada', custo:5, cat:5, desc:'PE máximo +3; 1×/descanso longo recupera 1d6 de PE.' },
+    { nome:'Sorte da Alma', custo:3, cat:5, desc:'1×/incursão, re-rola um teste/ataque falho e fica com o segundo resultado.' },
+    { nome:'Fome da Alma', custo:4, cat:5, desc:'Absorve núcleo de monstro ≥ seu nível: recupera 1d6 PE ou 1d4 Sanidade (1×/monstro; núcleos humanos não ativam).' },
+    { nome:'Regeneração Leve da Alma', custo:4, cat:5, desc:'Descanso curto: +1d6+2 PV/STA; 1×/dia ao cair a 0 PV, 1d20 15+ estabiliza com 1 PV.' },
+    { nome:'Sentido do Fluxo', custo:4, cat:5, desc:'1×/cena detecta poder ativo, armadilha mágica ou direção de energia próxima.' },
+    { nome:'Herança Ancestral', custo:3, cat:5, desc:'Escolha 1 perícia de Intelecto: vantagem nela.' },
+    { nome:'Memória Muscular', custo:2, cat:5, desc:'Técnica nova: usável 1× com vantagem na primeira sessão após aprendida.' },
+    { nome:'Presença Etérea', custo:4, cat:5, desc:'1×/cena, 1 rodada intangível: ataques físicos têm desvantagem contra você.' },
+    { nome:'Eco de Poder', custo:4, cat:5, desc:'1×/cena replica efeito de poder visto por metade do custo (mín. 1 PE; Mestre aprova).' },
+    { nome:'Visão da Torre', custo:2, cat:5, desc:'1×/cena visão breve sobre perigo iminente ou caminho seguro (dica do Mestre).' },
+    { nome:'Consumidor de Essência', custo:4, cat:5, desc:'Derrota + absorve núcleo: recupera 1d8 PV ou 1d4 PE (1×/combate).' },
+    { nome:'Toque da Alma', custo:4, cat:5, desc:'1×/cena toca aliado e transfere vitalidade: role 1d8, você perde esse valor e ele recupera.' },
+    { nome:'Memória de Sangue', custo:3, cat:5, desc:'Fere um inimigo: +1 em ataques/testes contra aquele tipo de monstro por 24 h.' },
+    { nome:'Alma de Aço', custo:5, cat:5, desc:'+2 em Salvaguardas de Alma; porém, ganha +1 de Corrupção a mais ao ganhar.' },
+    { nome:'Pacto de Sangue', custo:5, cat:5, desc:'+2 em Força e Vigor (máx. de atributo). Custo: −2 de Sanidade máxima permanente.' },
+    { nome:'Desperto na Morte', custo:4, cat:5, desc:'1×/campanha ao cair a 0 PV: Manifestação selvagem por 1 rodada. Custo: −1d4 de Sanidade máxima permanente.' }
+  ],
+  fraquezas: [
+    // ── 1 · Combate ──
+    { nome:'Covardia Instintiva', custo:4, cat:1, desc:'Aliado cai a 0 PV ou sofre > metade do PV num ataque: Carisma CD 15 ou foge/retira-se no próximo turno.' },
+    { nome:'Aleijado / Lesão Permanente', custo:3, cat:1, desc:'Limitação permanente (manca, braço fraco, pulmão danificado): −2 em testes relacionados; −1,5 m de deslocamento se for na perna.' },
+    { nome:'Problema Visual', custo:2, cat:1, desc:'Desvantagem em percepção visual a longa distância e em baixa luz.' },
+    { nome:'Cegueira Parcial', custo:'3~5', cat:1, desc:'Desvantagem em ataques à distância e percepção visual; nível 5 = cego em combate à distância.' },
+    { nome:'Medo de um Tipo de Monstro', custo:2, cat:1, desc:'Pavor de tipo específico: desvantagem em todos os testes/ataques contra ele; Carisma ou foge/congela.' },
+    { nome:'Corpo Desarmonizado', custo:3, cat:1, desc:'Poder de 3+ PE: 1 nível de Exaustão adicional.' },
+    { nome:'Desejo de Morte', custo:3, cat:1, desc:'Menos de 25% do PV: Carisma CD 16 ou age temerariamente sem se defender.' },
+    { nome:'Indecisão da Alma', custo:5, cat:1, desc:'Alta pressão: 1d6, 1–2 hesita e tem desvantagem na primeira ação do turno.' },
+    // ── 2 · Sobrevivência & Exploração ──
+    { nome:'Azar da Torre', custo:2, cat:2, desc:'Eventos aleatórios/risco da Torre com desvantagem; falhas críticas em Torres um nível mais grave.' },
+    { nome:'Rejeição da Torre', custo:4, cat:2, desc:'Desvantagem em rolagens de Risco/eventos dentro de Torres; monstros o notam mais facilmente.' },
+    { nome:'Cicatriz da Torre', custo:4, cat:2, desc:'Perto de corrupção: −1 em todos os testes e −1 Sanidade a cada 4 h.' },
+    { nome:'Pavor do Vazio', custo:3, cat:2, desc:'Espaços abertos/alturas: desvantagem em todos os testes; Salvaguarda contra pânico se ficar sozinho.' },
+    { nome:'Marca do Olho', custo:3, cat:2, desc:'Torre do Pesadelo acima do 20º: eventos aleatórios com +2 risco; monstros inteligentes o reconhecem.' },
+    { nome:'Sono Instável', custo:2, cat:2, desc:'Descanso completo: 1d6, 1–3 recupera metade do PV/STA e não recupera Sanidade.' },
+    // ── 3 · Mental & Sanidade ──
+    { nome:'Trauma Psíquico', custo:3, cat:3, desc:'Situação que lembra trauma: Intelecto/Carisma CD 15 ou −1d4 Sanidade + abalado 1d4 rodadas.' },
+    { nome:'Eco Mental', custo:3, cat:3, desc:'1×/cena o Mestre força Sanidade CD 14; falha: −1d4 Sanidade + distraído 1 rodada.' },
+    { nome:'Visões da Queda', custo:4, cat:3, desc:'1×/cena visão aterrorizante: Sanidade CD 15 ou −1d6 Sanidade + abalado 1d4 rodadas.' },
+    { nome:'Empatia Excessiva', custo:3, cat:3, desc:'Aliado sofre dano grave/trauma: Carisma CD 14 ou −1d4 Sanidade.' },
+    { nome:'Esquecido', custo:1, cat:3, desc:'Desvantagem para lembrar nomes, rostos, conversas ou informações recentes.' },
+    { nome:'Desatento', custo:1, cat:3, desc:'Desvantagem para perceber mentiras, manipulação ou armadilhas sociais.' },
+    { nome:'Alma Fragmentada', custo:5, cat:3, desc:'Desvantagem em Alma/Intelecto contra manipulação da Torre; técnicas novas +1 PE na primeira semana; falhas críticas de Alma = dobro de Corrupção.' },
+    // ── 4 · Social & Mundo ──
+    { nome:'Avareza', custo:2, cat:4, desc:'Gastar mais de 10 Esp: Carisma CD 14 ou recusa/barganha humilhante.' },
+    { nome:'Honestidade Compulsiva', custo:2, cat:4, desc:'Mentir: Carisma CD 16 ou revela a verdade/fica visivelmente desconfortável.' },
+    { nome:'Dívida Sangrenta', custo:3, cat:4, desc:'1×/incursão alguém perigoso cobra um favor inconveniente ou perigoso.' },
+    { nome:'Inimigo Marcado', custo:3, cat:4, desc:'Entidade poderosa o caça; o Mestre a introduz em momentos inoportunos.' },
+    { nome:'Dependência de um Item', custo:2, cat:4, desc:'Sem o item por 24 h: −2 em todos os testes e perde acesso a 1 poder principal.' },
+    { nome:'Marca Visível', custo:2, cat:4, desc:'−2 em testes sociais com desconhecidos; +1 risco de atenção hostil.' },
+    { nome:'Dependência Emocional', custo:2, cat:4, desc:'Aliado/item amado ameaçado: −2 em todos os testes até resolver ou Sanidade CD 15.' },
+    { nome:'Código de Honra Rígido', custo:'1~3', cat:4, desc:'Conflito com o código: desvantagem em todos os testes até resolver de acordo com ele.' },
+    { nome:'Ira Acumulada', custo:3, cat:4, desc:'Provocado/injustiça ligada ao trauma: Carisma CD 14 ou fúria imprudente/violenta 1d4 rodadas.' },
+    { nome:'Fome Insaciável', custo:3, cat:4, desc:'Vê núcleo/item valioso: Carisma CD 15 ou tenta tomá-lo imediatamente.' },
+    { nome:'Sede de Poder', custo:4, cat:4, desc:'Oportunidade de absorver núcleo poderoso: Alma CD 16 ou age pelo impulso, mesmo perigoso.' },
+    { nome:'Lealdade Cega', custo:2, cat:4, desc:'Grupo/ideal em perigo: desvantagem em raciocínio estratégico nessas situações.' },
+    { nome:'Fragmento de Outro', custo:2, cat:4, desc:'1×/cena o Mestre assume controle por 1 rodada (age de forma alienígena, não hostil).' },
+    // ── 5 · Alma & Poder ──
+    { nome:'Alma Instável', custo:4, cat:5, desc:'Gasta 5+ PE num turno: Alma CD 15 ou +1 Corrupção e 1d6 de dano psíquico.' },
+    { nome:'Maldição de Sangue', custo:3, cat:5, desc:'Criaturas que se alimentam de sangue têm vantagem para rastreá-lo e preferem atacá-lo.' },
+    { nome:'Repulsa por Núcleos', custo:2, cat:5, desc:'Absorve núcleo de qualidade B+: Vigor CD 14 ou −1d4 Sanidade por náusea/rejeição.' }
+  ]
+};
+const _TRACOS_CAT_NOMES = ['', 'Combate', 'Sobrevivência & Exploração', 'Mental & Sanidade', 'Social & Mundo', 'Alma & Poder'];
+
+// Nome de traço → custo numérico de referência (para o Balance; faixas usam o primeiro valor).
+function _custoTracoNum(custo) {
+  const m = String(custo).match(/(\d+)/);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
+// <option> de um grupo de traços, agrupado por categoria (<optgroup>).
+function _opcoesTracos(positivo) {
+  const lista = positivo ? TRACOS_ALMA.positivos : TRACOS_ALMA.fraquezas;
+  const grupos = {};
+  lista.forEach(t => {
+    if (!grupos[t.cat]) grupos[t.cat] = [];
+    grupos[t.cat].push(t);
+  });
+  return [1,2,3,4,5].filter(c => grupos[c]).map(c => `
+    <optgroup label="${_TRACOS_CAT_NOMES[c]}">
+      ${grupos[c].map(t => `<option value="${_escJsAttr(t.nome)}" data-custo="${t.custo}" data-cat="${t.cat}">${t.nome} (${t.custo} pts)</option>`).join('')}
+    </optgroup>`).join('');
+}
+
+// Formata custo com sinal para fraquezas (ex.: "+3").
+function _fmtCustoTraco(custo, positivo) {
+  if (positivo) return String(custo) + ' pts';
+  const m = String(custo).match(/^\+?([\d~]+)/);
+  return '+' + (m ? m[1] : custo) + ' pts';
+}
+
+// ─── CHIPS DE TRAÇOS DA FICHA ───
+// Contadores por painel (Traços Positivos / Fraquezas). As chaves dinâmicas
+// tracoN-nome/custo/cat e fraquezaN-nome/custo/cat são escaneadas em
+// coletarDados (como relN-*); r-tracos/r-defeitos são sincronizados como texto.
+let _tracoCounter = 1;
+let _fraquezaCounter = 1;
+
+// Adiciona um traço escolhido no dropdown ao painel de chips.
+function adicionarTracoChip(tipo, selectId, listaId) {
+  const sel = document.getElementById(selectId);
+  const lista = document.getElementById(listaId);
+  if (!sel || !lista || !sel.value) return;
+  const opt = sel.selectedOptions[0];
+  const nome = sel.value;
+  const custo = opt.getAttribute('data-custo') || '1';
+  const cat = parseInt(opt.getAttribute('data-cat')) || 1;
+  const positivo = tipo === 'traco';
+  const n = positivo ? ++_tracoCounter : ++_fraquezaCounter;
+  const prefix = positivo ? 'traco' : 'fraqueza';
+  const chip = document.createElement('div');
+  chip.className = 'traco-chip';
+  chip.id = prefix + '-chip-' + n;
+  chip.style.cssText = 'display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.3rem .5rem;font-size:.78rem';
+  chip.innerHTML = `
+    <input type="hidden" id="${prefix}${n}-nome" value="${_escHtml(nome)}">
+    <input type="hidden" id="${prefix}${n}-custo" value="${_escHtml(String(custo))}">
+    <input type="hidden" id="${prefix}${n}-cat" value="${cat}">
+    <span style="flex:1">${_escHtml(nome)}</span>
+    <span style="color:${positivo ? 'var(--accent-light)' : 'var(--gold-light)'};font-size:.72rem;white-space:nowrap">${_fmtCustoTraco(custo, positivo)}</span>
+    <button type="button" onclick="removerTracoChip(this)" title="Remover" style="background:none;border:none;color:#777;cursor:pointer;font-size:.8rem;padding:0 .15rem;line-height:1">✕</button>
+  `;
+  lista.appendChild(chip);
+  sel.value = '';
+  _sincronizarTracosTexto();
+  atualizarBalanceTracos();
+  salvarLocal();
+}
+
+// Remove o chip do traço clicado.
+function removerTracoChip(btn) {
+  const chip = btn.closest('.traco-chip');
+  if (chip) chip.remove();
+  _sincronizarTracosTexto();
+  atualizarBalanceTracos();
+  salvarLocal();
+}
+
+// Reconstroi o texto de r-tracos/r-defeitos (nomes separados por ", ") a partir
+// dos chips — compatibilidade com qualquer leitor dos campos antigos.
+function _sincronizarTracosTexto() {
+  const nomesPos = Array.from(document.querySelectorAll('#tracos-lista .traco-chip input[id$="-nome"]')).map(i => i.value);
+  const nomesNeg = Array.from(document.querySelectorAll('#fraquezas-lista .traco-chip input[id$="-nome"]')).map(i => i.value);
+  const posEl = document.getElementById('r-tracos');
+  const negEl = document.getElementById('r-defeitos');
+  if (posEl) posEl.value = nomesPos.join(', ');
+  if (negEl) negEl.value = nomesNeg.join(', ');
+}
+
+// Balance de Traços: soma dos positivos escolhidos vs fraquezas. Regra do livro:
+// o 1º positivo de até 2 pts é grátis; cada positivo adicional exige fraquezas
+// de valor ≥ (somaPositivos − bônusGrátis). Se não houver positivos, está ok.
+function _calcularBalanceTracos() {
+  const posEls = Array.from(document.querySelectorAll('#tracos-lista .traco-chip'));
+  const negEls = Array.from(document.querySelectorAll('#fraquezas-lista .traco-chip'));
+  const posCustos = posEls.map(c => _custoTracoNum(c.querySelector('input[id$="-custo"]').value)).sort((a, b) => b - a);
+  const negCustos = negEls.map(c => _custoTracoNum(c.querySelector('input[id$="-custo"]').value));
+  const somaPos = posCustos.reduce((s, v) => s + v, 0);
+  const somaNeg = negCustos.reduce((s, v) => s + v, 0);
+  // Bônus grátis: o 1º positivo escolhido de custo ≤ 2 vale 0; se o 1º custar
+  // mais que 2, o excedente conta. Faixas usam o primeiro valor (conservador).
+  let gratis = 0;
+  if (posCustos.length > 0) {
+    const primeiro = posCustos[0];
+    gratis = Math.min(primeiro, 2);
+  }
+  const posPagos = somaPos - gratis;
+  const falta = Math.max(0, posPagos - somaNeg);
+  return { somaPos, somaNeg, gratis, posPagos, falta, ok: falta === 0, temPos: posCustos.length > 0 };
+}
+
+// Atualiza o bloco de status do Balance de Traços na tela.
+function atualizarBalanceTracos() {
+  const box = document.getElementById('traco-balance-status');
+  if (!box) return;
+  const b = _calcularBalanceTracos();
+  const txtPos = b.somaPos + ' pts';
+  const txtNeg = b.somaNeg + ' pts';
+  if (!b.temPos) {
+    box.innerHTML = `<span style="color:var(--text-muted)">Sem traços positivos ainda — adicione pela lista acima.</span>`;
+    box.style.borderColor = 'var(--border)';
+    return;
+  }
+  if (b.ok) {
+    box.innerHTML = `<span style="color:var(--gold-light)"><strong>Equilibrado ✓</strong></span> <span style="color:var(--text-muted)">— positivos ${txtPos} (${b.gratis} grátis) × fraquezas ${txtNeg}.</span>`;
+    box.style.borderColor = 'rgba(220,180,60,.5)';
+  } else {
+    box.innerHTML = `<span style="color:var(--accent-text)"><strong>Faltam ${b.falta} ponto(s) de fraqueza</strong></span> <span style="color:var(--text-muted)">— positivos pagos ${b.posPagos} pts × fraquezas ${txtNeg}. Adicione fraquezas equivalentes.</span>`;
+    box.style.borderColor = 'rgba(220,90,60,.55)';
+  }
+}
+
+// Adiciona um traço do dropdown do WIZARD (Passo 5) ao campo de texto do
+// estado (w.tracos/w.defeitos) — formato "Nome (X pts)", sem duplicar.
+function wizardAdicionarTracoTexto(tipo) {
+  if (!_wizardEstado) return;
+  const positivo = tipo === 'traco';
+  const selId = positivo ? 'wz-select-traco' : 'wz-select-fraqueza';
+  const campo = positivo ? 'tracos' : 'defeitos';
+  const sel = document.getElementById(selId);
+  if (!sel || !sel.value) return;
+  const opt = sel.selectedOptions[0];
+  const nome = sel.value;
+  const custo = opt.getAttribute('data-custo') || '1';
+  const label = nome + ' (' + _fmtCustoTraco(custo, positivo) + ')';
+  const atual = String(_wizardEstado[campo] || '');
+  const itens = atual.split(',').map(s => s.trim()).filter(Boolean);
+  if (itens.some(i => i.split('(')[0].trim() === nome)) return; // já adicionado
+  itens.push(label);
+  _wizardEstado[campo] = itens.join(', ');
+  sel.value = '';
+  _wizardSalvarRascunho();
+  _wizardRender();
+}
+
+// Reconstrói os chips de Traços da Alma a partir dos dados salvos. Lê as chaves
+// dinâmicas tracoN-nome/custo/cat e fraquezaN-nome/custo/cat; se não existirem,
+// faz fallback para o texto antigo de r-tracos/r-defeitos (nomes separados por
+// vírgula) — dados de personagens pré-lapidação não são perdidos.
+function restaurarTracosChips(d) {
+  if (!d) return;
+  const posLista = document.getElementById('tracos-lista');
+  const negLista = document.getElementById('fraquezas-lista');
+  if (!posLista || !negLista) return;
+  posLista.innerHTML = '';
+  negLista.innerHTML = '';
+
+  const temChips = Object.keys(d).some(k => /^(traco|fraqueza)\d+-nome$/.test(k));
+
+  // Busca o custo/categoria de um traço no catálogo pelo nome.
+  const infoPorNome = (nome, positivo) => {
+    const lista = positivo ? TRACOS_ALMA.positivos : TRACOS_ALMA.fraquezas;
+    const t = lista.find(x => x.nome === nome);
+    return t || null;
+  };
+
+  const criaChip = (nome, custo, cat, positivo, lista) => {
+    const n = positivo ? ++_tracoCounter : ++_fraquezaCounter;
+    const prefix = positivo ? 'traco' : 'fraqueza';
+    const chip = document.createElement('div');
+    chip.className = 'traco-chip';
+    chip.id = prefix + '-chip-' + n;
+    chip.style.cssText = 'display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.3rem .5rem;font-size:.78rem';
+    chip.innerHTML = `
+      <input type="hidden" id="${prefix}${n}-nome" value="${_escHtml(nome)}">
+      <input type="hidden" id="${prefix}${n}-custo" value="${_escHtml(String(custo))}">
+      <input type="hidden" id="${prefix}${n}-cat" value="${cat}">
+      <span style="flex:1">${_escHtml(nome)}</span>
+      <span style="color:${positivo ? 'var(--accent-light)' : 'var(--gold-light)'};font-size:.72rem;white-space:nowrap">${_fmtCustoTraco(custo, positivo)}</span>
+      <button type="button" onclick="removerTracoChip(this)" title="Remover" style="background:none;border:none;color:#777;cursor:pointer;font-size:.8rem;padding:0 .15rem;line-height:1">✕</button>
+    `;
+    lista.appendChild(chip);
+  };
+
+  if (temChips) {
+    // Ordem estável: percorre as chaves em sequência numérica.
+    const ordem = (prefix) => Object.keys(d)
+      .filter(k => new RegExp('^' + prefix + '(\\d+)-nome$').test(k))
+      .sort((a, b) => parseInt(a.match(/\d+/)[0]) - parseInt(b.match(/\d+/)[0]));
+    ordem('traco').forEach(k => {
+      const n = k.match(/^traco(\d+)-nome$/)[1];
+      const nome = d[k] || '';
+      const custo = d['traco' + n + '-custo'] != null ? d['traco' + n + '-custo'] : (infoPorNome(nome, true)?.custo || 1);
+      const cat = d['traco' + n + '-cat'] != null ? parseInt(d['traco' + n + '-cat']) : (infoPorNome(nome, true)?.cat || 1);
+      if (nome) criaChip(nome, custo, cat, true, posLista);
+    });
+    ordem('fraqueza').forEach(k => {
+      const n = k.match(/^fraqueza(\d+)-nome$/)[1];
+      const nome = d[k] || '';
+      const custo = d['fraqueza' + n + '-custo'] != null ? d['fraqueza' + n + '-custo'] : (infoPorNome(nome, false)?.custo || 1);
+      const cat = d['fraqueza' + n + '-cat'] != null ? parseInt(d['fraqueza' + n + '-cat']) : (infoPorNome(nome, false)?.cat || 1);
+      if (nome) criaChip(nome, custo, cat, false, negLista);
+    });
+  } else {
+    // Fallback: texto antigo separado por vírgula/"; ".
+    const parseTexto = (texto) => String(texto || '').split(',').map(s => s.trim()).filter(Boolean);
+    const posNomes = parseTexto(d['r-tracos']);
+    const negNomes = parseTexto(d['r-defeitos']);
+    posNomes.forEach(nome => {
+      const info = infoPorNome(nome, true);
+      criaChip(nome, info ? info.custo : 1, info ? info.cat : 1, true, posLista);
+    });
+    negNomes.forEach(nome => {
+      const info = infoPorNome(nome, false);
+      criaChip(nome, info ? info.custo : 1, info ? info.cat : 1, false, negLista);
+    });
+  }
+
+  _sincronizarTracosTexto();
+  atualizarBalanceTracos();
+}
+
+
+
+
 // Gera as <option> do select — usado no template da ficha.
 function _opcoesAntecedentes() {
   return Object.keys(ANTECEDENTES_INFO).map(n => `<option value="${n}">${n}</option>`).join('');
@@ -12289,9 +12657,35 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     </div>
     <!-- TRAÇOS -->
     <div class="field-row cols-2">
-      ${fieldGroup('Traços da Alma — Positivos','r-tracos','textarea')}
-      ${fieldGroup('Traços da Alma — Negativos','r-defeitos','textarea')}
+      <div class="field-group">
+        <label>Traços da Alma — Positivos</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="select-traco-positivo" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
+            <option value="">Escolher traço positivo...</option>
+            ${_opcoesTracos(true)}
+          </select>
+          <button type="button" onclick="adicionarTracoChip('traco','select-traco-positivo','tracos-lista')" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <div id="tracos-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
+        <textarea id="r-tracos" style="display:none"></textarea>
+        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Escolha os traços pela lista. O 1º positivo de até 2 pts é grátis; os demais exigem fraquezas equivalentes.</small>
+      </div>
+      <div class="field-group">
+        <label>Fraquezas / Traumas</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="select-fraqueza" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
+            <option value="">Escolher fraqueza...</option>
+            ${_opcoesTracos(false)}
+          </select>
+          <button type="button" onclick="adicionarTracoChip('fraqueza','select-fraqueza','fraquezas-lista')" style="background:none;border:1px solid var(--gold-light);color:var(--gold-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <div id="fraquezas-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
+        <textarea id="r-defeitos" style="display:none"></textarea>
+        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Fraquezas equilibram os traços pagos — somam pontos contra eles.</small>
+      </div>
     </div>
+    <!-- Balance de Traços (promessa do livro) -->
+    <div id="traco-balance-status" style="margin-top:.15rem;margin-bottom:.5rem;border:1px solid var(--border);border-radius:4px;padding:.55rem .7rem;font-size:.78rem;background:rgba(255,255,255,.02)"></div>
     <div class="field-row cols-2">
       ${fieldGroup('Ideais','r-ideais','textarea')}
       ${fieldGroup('Ligações','r-ligacoes','textarea')}
@@ -12843,8 +13237,23 @@ function coletarDados() {
   const utilFields  = _scanLinhasInventario('util-tbody', 'util', ['nome','categoria','caracteristica','custo','manut','desc']);
   const barmanFields = _scanLinhasInventario('barmans-tbody', 'barman', ['nome','qualidade','confianca','cidade','obs']);
   const relFields    = _scanLinhasInventario('rel-tbody', 'rel', ['nome','nivel','tipo','cidade','obs']);
+  // Chips de Traços da Alma (divs com inputs hidden) — escaneia o DOM real
+  // (mesmo padrão dos chips de passivas/armas), garantindo coleta fiel.
+  const tracoFields = [];
+  [['traco','tracos-lista'],['fraqueza','fraquezas-lista']].forEach(([prefix, listaId]) => {
+    const lista = document.getElementById(listaId);
+    if (lista) {
+      lista.querySelectorAll('.traco-chip').forEach(chip => {
+        const m = chip.id.match(/^([a-z]+)-chip-(\d+)$/);
+        if (m && m[1] === prefix) {
+          const n = m[2];
+          ['nome','custo','cat'].forEach(f => tracoFields.push(prefix + n + '-' + f));
+        }
+      });
+    }
+  });
 
-  const todos = [...campos,...armaFields,...passFields,...despFields,...itemFields,...consFields,...matFields,...nucFields,...petFields,...utilFields,...barmanFields,...relFields];
+  const todos = [...campos,...armaFields,...passFields,...despFields,...itemFields,...consFields,...matFields,...nucFields,...petFields,...utilFields,...barmanFields,...relFields,...tracoFields];
   const d = {};
   todos.forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.value; });
   ['ms1','ms2','ms3','mf1','mf2','mf3'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
@@ -14382,6 +14791,11 @@ function preencherCampos(d) {
   // Restaura o seletor de Antecedentes e seu resumo — dados antigos de texto
   // livre que não casam com as 20 opções viram "Personalizado: <valor>".
   restaurarAntecedente(d['f-antecedente']);
+
+  // Restaura os chips de Traços da Alma (tracoN-*/fraquezaN-*). Fallback para
+  // o texto antigo de r-tracos/r-defeitos (nomes separados por vírgula) quando
+  // ainda não há chips salvos — dados antigos não se perdem.
+  restaurarTracosChips(d);
 
   // Preenche técnicas (após addTecnica ter criado os elementos)
   if(d.tecnicas) {
@@ -17092,87 +17506,231 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>Regras Gerais</h3>
             <ul>
                 <li>Todo Desperto começa com <strong>1 Traço Positivo Básico gratuito</strong> (até 2 pontos).</li>
-                <li>Para cada Traço Positivo adicional, deve-se escolher Fraquezas que somem pelo menos o mesmo valor em pontos, mantendo o equilíbrio da Alma.</li>
-                <li>Todos os traços devem ser coerentes com o conceito do Poder Principal e com a personalidade do personagem. A Alma não aceita contradições.</li>
+                <li>Para cada Traço Positivo adicional, deve-se escolher Fraquezas que somem pelo menos o mesmo valor em pontos. <strong>Teto no nível 1: 1 grátis + no máximo 4 pagos</strong> (5 positivos no total — sugerido; o Mestre pode flexibilizar).</li>
+                <li>Todos os traços devem ser coerentes com o conceito do Poder Principal e com a personalidade do personagem.</li>
+                <li>Traços graduados (marcados com "~", ex.: 2~4) podem ser <strong>upgraded</strong> nos marcos de progressão — veja "A Alma cresce com cicatrizes" abaixo.</li>
             </ul>
+
+            <h3>Progressão — "A Alma cresce com cicatrizes"</h3>
+            <p>A Alma de um Desperto não fica parada. Nos marcos de poder, ela se expande — e cada expansão cobra um preço.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Marco</th><th>Ganho</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Nível 5</strong></td><td>1 traço positivo novo (ou upgrade de um traço graduado para o nível seguinte)</td></tr>
+                        <tr><td><strong>Nível 10</strong></td><td>1 traço positivo novo (ou upgrade)</td></tr>
+                        <tr><td><strong>Nível 15</strong></td><td>1 traço positivo novo (ou upgrade)</td></tr>
+                        <tr><td><strong>Nível 20</strong></td><td>1 traço positivo novo (ou upgrade)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>A Torre sempre cobra:</strong> cada novo traço nos marcos é pago com <strong>fraquezas equivalentes</strong> (regra atual) <strong>OU</strong> com um <strong>custo temático</strong>, à escolha do jogador e aprovado pelo Mestre:<br><br>
+                • <strong>−2 Sanidade máxima permanente</strong> — a Alma rachou para caber o novo dom.<br>
+                • <strong>+1 Corrupção</strong> — o poder veio de um lugar sujo.<br>
+                • <strong>Um Relacionamento vira "complicado"</strong> (perde 1 nível) — o poder afastou alguém.<br>
+                • <strong>Uma dívida/gancho narrativo com a Torre</strong> — ela anotou seu nome.<br><br>
+                <em>Progressão é evolução com cicatriz. Quem sobe sem pagar, desce em pedaços.</em>
+            </div>
 
             <h3>Como Escolher Seus Traços</h3>
-            <p>Traços não são apenas bônus mecânicos — eles são cicatrizes e dons da sua Alma. Escolha pensando na história do seu personagem:</p>
+            <p>Traços não são apenas bônus mecânicos — eles são cicatrizes e dons da sua Alma. Escolha pensando na história: cada traço deve refletir quem você é (ou o que a Torre fez de você).</p>
             <ul>
                 <li><strong>Traços Positivos</strong> representam o que sua Alma faz de melhor (ou o que ela aprendeu a fazer para sobreviver).</li>
-                <li><strong>Fraquezas</strong> representam o preço pago — traumas, vícios, marcas deixadas pelas Torres ou pela vida antes delas.</li>
+                <li><strong>Fraquezas</strong> representam o preço pago — traumas, vícios, marcas deixadas pelas Torres ou pelas suas próprias escolhas.</li>
             </ul>
-            <p>Um bom Traço cria oportunidades de roleplay e conflito. Um Traço excelente cria momentos dramáticos quando interage com Sanidade, Corrupção ou com o próprio Poder Principal.</p>
+            <p>Um bom Traço cria oportunidades de roleplay e conflito. Um Traço excelente cria momentos dramáticos quando ele entra em ação — ou quando custa caro demais.</p>
+
+            <h3>Categorias de Traços</h3>
+            <p>Os traços são organizados em <strong>5 categorias</strong> temáticas. As fraquezas seguem a mesma organização, para facilitar o balanceamento e a coerência do personagem.</p>
+            <ul>
+                <li><strong>Combate</strong> — CA, dano, iniciativa, armas, sobrevivência em luta.</li>
+                <li><strong>Sobrevivência &amp; Exploração</strong> — Névoa, torres, viagem, caça.</li>
+                <li><strong>Mental &amp; Sanidade</strong> — medo, ilusão, manipulação, Sanidade.</li>
+                <li><strong>Social &amp; Mundo</strong> — contatos, facções, relacionamentos, liderança.</li>
+                <li><strong>Alma &amp; Poder</strong> — PE, núcleo, Despertares, técnicas.</li>
+            </ul>
+
+            <div class="system-card">
+                <strong>Estabilizar um aliado caído (texto canônico):</strong> estabilizar um aliado caído (0 PV) normalmente exige <strong>Maestria em Medicina</strong> (Gate da Maestria). Traços e Antecedentes que concedem estabilização automática funcionam <strong>"como se você tivesse Maestria em Medicina"</strong>, 1×/cena.
+            </div>
 
             <h3>Traços Positivos</h3>
-            
+
+            <h4>Combate</h4>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr><th>Pontos</th><th>Traço</th><th>Benefício Mecânico</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>1</td><td>Aliados Fiéis</td><td>Você possui 1–2 contatos leais em uma cidadela importante. Uma vez por sessão, pode pedir um favor menor (informação, abrigo por uma noite ou suprimentos básicos) sem custo em Espíritos.</td></tr>
-                        <tr><td>1~2</td><td>Rede de Contatos</td><td>Em qualquer cidadela ou posto avançado, role 1d20. Em 12+, você conhece alguém que pode fornecer informação relevante sobre a região ou uma torre próxima.</td></tr>
-                        <tr><td>3</td><td>Ligação com Organização</td><td>Você tem influência moderada em uma facção. Uma vez por incursão, pode pedir um favor de valor médio (até 50 Esp em equipamentos, informações privilegiadas ou reforços menores).</td></tr>
                         <tr><td>5</td><td>Corpo de Gigante</td><td>+2 em testes de Força e Vigor relacionados a tamanho, carga ou resistência física. Seu PV máximo aumenta em +4. Você causa +1 de dano em ataques corpo a corpo com armas pesadas.</td></tr>
-                        <tr><td>2</td><td>Fôlego da Alma</td><td>Você pode prender a respiração por até 10 minutos sem testes. Em áreas de Névoa densa, você sofre apenas metade da penalidade normal em testes de Constituição/Vigor.</td></tr>
-                        <tr><td>1</td><td>Sentidos Aguçados</td><td>Escolha um sentido (visão, audição ou olfato). Você ganha vantagem em testes de percepção relacionados a esse sentido.</td></tr>
-                        <tr><td>2</td><td>Visão no Escuro</td><td>Você enxerga perfeitamente em escuridão total dentro de Torres (sem desvantagem em combate ou testes de percepção no escuro).</td></tr>
-                        <tr><td>3</td><td>Sorte da Alma</td><td>Uma vez por incursão, você pode re-rolar um teste ou ataque que tenha falhado. Se o novo resultado for 20 natural, recupere 1d4 de Sanidade.</td></tr>
-                        <tr><td>1</td><td>Inventor da Alma</td><td>Você pode fundir temporariamente dois itens mundanos em um objeto improvisado funcional (ex: uma corda + gancho = equipamento de escalada). O objeto dura até o fim da cena ou até ser destruído.</td></tr>
-                        <tr><td>1</td><td>Empatia com Criaturas</td><td>Vantagem em testes para acalmar, entender ou prever o comportamento de animais e criaturas não-inteligentes.</td></tr>
-                        <tr><td>3</td><td>Tempo de Vida Estendido</td><td>Você envelhece 50% mais devagar. Além disso, testes de Vigor contra doenças e venenos de longa duração recebem +2.</td></tr>
                         <tr><td>2~4</td><td>Ambidestria da Alma</td><td>Você pode usar duas armas leves ou realizar ações com as duas mãos sem penalidade. No nível 4, você pode atacar com a mão secundária uma vez por turno sem usar sua ação bônus.</td></tr>
-                        <tr><td>6</td><td>Aura Reforçada</td><td>Sua reserva máxima de PE aumenta em +4. Além disso, uma vez por descanso longo, você recupera 2d6 de PE durante um descanso curto.</td></tr>
                         <tr><td>2~4</td><td>Resistência Sobrenatural</td><td>Vantagem em Salvaguardas contra venenos, doenças e efeitos de corrupção. No nível 4, você reduz pela metade qualquer dano de veneno ou corrupção que sofrer.</td></tr>
                         <tr><td>2~4</td><td>Flexibilidade Sobrenatural</td><td>Você pode se espremer por espaços extremamente apertados e ganha +2 em testes de Destreza para escapar de agarrões ou restrições. No nível 4, você pode se contorcer para evitar um ataque uma vez por combate (sem usar reação).</td></tr>
-                        <tr><td>2</td><td>Explorador da Névoa</td><td>Vantagem em testes para navegar ou resistir a desorientação causada pela Névoa. Além disso, a chance de eventos aleatórios hostis enquanto viaja na Névoa é reduzida em 1 nível.</td></tr>
                         <tr><td>4</td><td>Noção do Perigo</td><td>Você sente perigo iminente. Uma vez por cena, você pode rolar com vantagem um teste para detectar emboscadas ou armadilhas antes que elas sejam ativadas.</td></tr>
-                        <tr><td>3</td><td>Imponência da Alma</td><td>Você causa impressão forte. Ganha +2 em testes de intimidação e liderança. Criaturas comuns sentem desconforto perto de você (desvantagem em testes de moral contra você).</td></tr>
                         <tr><td>3</td><td>Instinto de Sobrevivência</td><td>Quando você seria reduzido a 0 PV por queda, armadilha ou ataque surpresa, role 1d20. Em 12+, você cai com 1 PV em vez de 0. Além disso, +2 em testes para evitar quedas.</td></tr>
-                        <tr><td>3</td><td>Mente Focada</td><td>Você pode manter concentração em até dois efeitos simultaneamente (em vez de um). Além disso, testes para resistir a distrações mentais recebem +2.</td></tr>
-                        <tr><td>4</td><td>Regeneração Leve da Alma</td><td>Durante um descanso curto, recupere 1d6+2 de PV e STA adicionais. Uma vez por dia, quando você cai a 0 PV, role 1d20. Em 15+, você se estabiliza com 1 PV.</td></tr>
-                        <tr><td>4</td><td>Afinidade com uma Torre Guardiã</td><td>Escolha uma das quatro Guardiãs. Dentro dela, você reduz em 2 o nível de dificuldade de todos os testes de sobrevivência e navegação, e recebe vantagem em uma Salvaguarda específica relacionada ao tema da torre.</td></tr>
-                        <tr><td>2</td><td>Caçador de Anomalias</td><td>Você tem vantagem em testes para rastrear, identificar ou prever o comportamento de criaturas corrompidas ou anômalas.</td></tr>
-                        <tr><td>3</td><td>Presença Inspiradora</td><td>Aliados a até 9 metros de você recebem +1 em testes contra medo e exaustão. Uma vez por cena, você pode dar vantagem a um aliado em um teste de Sanidade.</td></tr>
                         <tr><td>3</td><td>Sangue Resistente</td><td>Você tem resistência a sangramento e infecções de monstros. Testes contra esses efeitos recebem +3, e você reduz pela metade o dano contínuo causado por venenos ou ferimentos sangrentos.</td></tr>
-                        <tr><td>3</td><td>Voz da Alma</td><td>Sua voz carrega peso sobrenatural. Ganha +2 em testes de intimidação, persuasão ou comando. Uma vez por cena, você pode forçar uma criatura a fazer uma Salvaguarda de Carisma CD 14 ou obedecer a um comando simples por um turno.</td></tr>
-                        <tr><td>2</td><td>Olhar Penetrante</td><td>Você é extremamente perceptivo com intenções. Vantagem em testes para perceber mentiras, intenções hostis ou disfarces superficiais.</td></tr>
-                        <tr><td>4</td><td>Passo da Sombra</td><td>Você se move com silêncio sobrenatural. Ganha vantagem em testes de Furtividade em qualquer condição de baixa luz ou Névoa. Criaturas sem sentidos especiais têm desvantagem para detectá-lo.</td></tr>
-                        <tr><td>4</td><td>Fome da Alma</td><td>Quando você absorve o núcleo de um <strong>monstro</strong> de nível igual ou superior ao seu, recupere 1d6 de PE ou 1d4 de Sanidade (escolha uma). Essa recuperação só pode ocorrer uma vez por monstro. <em>Núcleos humanos não ativam este traço — e tentar absorvê-los costuma ser muito pior do que qualquer benefício.</em></td></tr>
-                        <tr><td>3</td><td>Equilíbrio Interno</td><td>Quando você está com penalidades por Exaustão, Sobrecarga ou dano em Poder/Mente/Corpo, essas penalidades são reduzidas em 1 (mínimo 0).</td></tr>
-                        <tr><td>3</td><td>Herança Ancestral</td><td>Você possui conhecimento ou instinto de um ancestral. Escolha uma perícia ou tipo de conhecimento. Você tem vantagem em testes relacionados a esse campo de conhecimento.</td></tr>
-                        <tr><td>3</td><td>Aura de Calma</td><td>Aliados a até 6 metros de você recebem +2 em testes contra medo e desorientação. Uma vez por cena, você pode automaticamente estabilizar um aliado que esteja em pânico ou com Sanidade muito baixa.</td></tr>
                         <tr><td>4</td><td>Pele Endurecida</td><td>Sua pele é naturalmente resistente. Você ganha +2 de CA natural. Além disso, reduz em 2 o dano de ataques cortantes ou perfurantes de armas mundanas.</td></tr>
-                        <tr><td>4</td><td>Sentido do Fluxo</td><td>Você sente o fluxo de energia das Torres e de poderes. Uma vez por cena, você pode automaticamente detectar a presença de um poder ativo, uma armadilha mágica ou a direção de uma fonte de energia próxima.</td></tr>
-                        <tr><td>5</td><td>Renascimento Parcial</td><td>Uma vez por incursão, quando você seria reduzido a 0 PV, você pode ativar uma explosão de regeneração. Role 2d6 + seu modificador de Alma. Você recupera essa quantidade de PV e se levanta com ela.</td></tr>
+                        <tr><td>4</td><td>Renascimento Parcial</td><td>Uma vez por incursão, quando você seria reduzido a 0 PV, você pode ativar uma explosão de regeneração. Role 2d6 + seu modificador de Alma. Você recupera essa quantidade de PV e se levanta com ela.</td></tr>
                         <tr><td>3</td><td>Afinidade com Metal</td><td>Você tem facilidade com armas e armaduras. Ganha +1 de dano com armas de metal e +1 de CA quando usa armadura de metal. Pode improvisar armas de metal com qualidade surpreendente.</td></tr>
-                        <tr><td>2</td><td>Memória Muscular</td><td>Você aprende técnicas físicas rapidamente. Quando aprende uma nova manobra ou estilo de combate, você a domina em metade do tempo normal. +2 em testes para copiar ou adaptar movimentos observados.</td></tr>
-                        <tr><td>4</td><td>Presença Etérea</td><td>Uma vez por cena, você pode se tornar parcialmente intangível por 1 rodada. Durante esse tempo, você pode atravessar objetos sólidos finos e ataques físicos normais têm 50% de chance de falhar contra você.</td></tr>
-                        <tr><td>5</td><td>Guardião Interno</td><td>Você possui uma proteção interna poderosa. Vantagem em Salvaguardas contra possessão, ilusões mentais e efeitos de controle mental. Uma vez por incursão, você pode automaticamente passar em uma Salvaguarda de Alma que teria falhado.</td></tr>
+                        <tr><td>4</td><td>Passo da Sombra</td><td>Você se move com silêncio sobrenatural. Ganha vantagem em testes de Furtividade em qualquer condição de baixa luz ou Névoa. Criaturas sem sentidos especiais têm desvantagem para detectá-lo.</td></tr>
+                        <tr><td>2</td><td>Irmão de Armas</td><td>Você tem um vínculo tático forte com um aliado específico. Quando lutam lado a lado (zona Curto), ambos ganham +1 de CA e +1 em testes de ataque contra o mesmo inimigo. <em>(Difere de Laços de Sangue: este é um bônus de combate em zona Curto; Laços de Sangue dá bônus de sobrevivência/Vigor com uma pessoa específica.)</em></td></tr>
+                        <tr><td>3</td><td>Predador Silencioso</td><td>Em emboscadas ou quando você ataca primeiro, seu primeiro ataque ou poder causa +1d6 de dano extra. Além disso, criaturas não alertadas têm desvantagem para detectá-lo antes do primeiro ataque. <em>(Difere do antecedente Predador de Baixo Nível: o antecedente dá Vantagem de rastreio/emboscada e materiais; o traço dá o dano extra no primeiro ataque.)</em></td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-                        <!-- NOVOS TRAÇOS POSITIVOS ADICIONADOS -->
-                        <tr><td>2</td><td>Laços de Sangue</td><td>Você compartilha um vínculo profundo com uma pessoa específica (aliado ou familiar). Quando estiver a até 30 metros dessa pessoa, ambos ganham +1 em testes de Vigor e Salvaguardas contra medo. Se um de vocês cair a 0 PV, o outro pode rolar com vantagem para estabilizá-lo uma vez por cena.</td></tr>
-                        <tr><td>3</td><td>Visão da Torre</td><td>Uma vez por cena, você pode fechar os olhos e receber uma breve visão sobre um perigo iminente ou caminho seguro nos próximos minutos (Mestre fornece uma dica curta e útil). Não funciona se a Torre estiver deliberadamente ocultando algo.</td></tr>
-                        <tr><td>4</td><td>Consumidor de Essência</td><td>Quando você derrota um inimigo e absorve seu núcleo, recupere 1d8 de PV ou 1d4 de PE (escolha). Esse benefício só pode ser usado uma vez por combate.</td></tr>
-                        <tr><td>3</td><td>Mente de Aço</td><td>Vantagem em Salvaguardas contra efeitos de medo, ilusão e manipulação mental. Além disso, você pode rolar um teste de Intelecto CD 16 para ignorar completamente um efeito mental de baixo nível uma vez por cena.</td></tr>
-                        <tr><td>3</td><td>Andarilho das Ruínas</td><td>Em áreas arruinadas, corrompidas ou abandonadas (incluindo andares altos de torres), você ganha +2 em testes de sobrevivência, navegação e furtividade. Monstros nessas áreas têm mais dificuldade para rastreá-lo.</td></tr>
-                        <tr><td>4</td><td>Toque da Alma</td><td>Uma vez por cena, você pode tocar um aliado e transferir parte de sua vitalidade: role 1d8. Você perde essa quantidade de PV (mínimo 1) e o aliado recupera o mesmo valor. Não pode ser usado em si mesmo.</td></tr>
+            <h4>Sobrevivência &amp; Exploração</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Traço</th><th>Benefício Mecânico</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2</td><td>Explorador da Névoa</td><td>Vantagem em testes de <strong>Navegação</strong> (perícia) para cruzar a Névoa ou resistir a desorientação. Além disso, a chance de eventos aleatórios hostis enquanto viaja na Névoa é reduzida em 1 nível. <em>(Difere do antecedente Mensageiro da Névoa: o traço reduz eventos hostis; o antecedente dá Vantagem em encontros e +1 provisão inicial.)</em></td></tr>
+                        <tr><td>4</td><td>Afinidade com uma Torre Guardiã</td><td>Escolha uma das quatro Guardiãs. Dentro dela, você reduz em 2 o nível de dificuldade de todos os testes de <strong>Sobrevivência e Navegação</strong> (perícias), e recebe vantagem em uma Salvaguarda específica relacionada ao tema da torre.</td></tr>
+                        <tr><td>2</td><td>Caçador de Anomalias</td><td>Você tem vantagem em testes para rastrear, identificar ou prever o comportamento de criaturas corrompidas ou anômalas.</td></tr>
+                        <tr><td>2</td><td>Fôlego da Alma</td><td>Você pode prender a respiração por até 10 minutos sem testes. Em áreas de Névoa densa, você sofre apenas metade da penalidade normal em testes de <strong>Vigor</strong>.</td></tr>
+                        <tr><td>1</td><td>Sentidos Aguçados</td><td>Escolha um sentido (visão, audição ou olfato). Você ganha vantagem em testes de Percepção que usem esse sentido.</td></tr>
+                        <tr><td>2</td><td>Visão no Escuro</td><td>Você enxerga perfeitamente em escuridão total dentro de Torres (sem luz, você ainda percebe contornos e formas).</td></tr>
+                        <tr><td>3</td><td>Andarilho das Ruínas</td><td>Em áreas arruinadas, corrompidas ou abandonadas (incluindo andares altos de torres, <strong>fora</strong> de estruturas vivas), você ganha +2 em testes de <strong>Sobrevivência, Navegação e Furtividade</strong> (perícias). Monstros nessas áreas têm mais dificuldade para rastreá-lo. <em>(Escopo: fora de torres vivas — o antecedente Cativo da Torre cobre o interior das torres.)</em></td></tr>
                         <tr><td>3</td><td>Olhos da Névoa</td><td>Você enxerga através de névoa leve e ilusões menores criadas por criaturas da Torre. Testes de percepção dentro da Névoa são feitos com vantagem, e você reduz pela metade a chance de ser afetado por desorientação causada por ela.</td></tr>
-                        <tr><td>2</td><td>Irmão de Armas</td><td>Você tem um vínculo tático forte com um aliado específico. Quando lutam lado a lado, ambos ganham +1 de CA e +1 em testes de ataque contra o mesmo inimigo.</td></tr>
-                        <tr><td>5</td><td>Alma de Aço</td><td>Você resiste melhor à corrupção em troca de um preço. Ganha +2 em todas as Salvaguardas de Alma. No entanto, quando você ganha Corrupção, ganha 1 ponto a mais do que o normal.</td></tr>
-                        <tr><td>3</td><td>Predador Silencioso</td><td>Em emboscadas ou quando você ataca primeiro, seu primeiro ataque ou poder causa +1d6 de dano extra. Além disso, criaturas não alertadas têm desvantagem para detectá-lo antes do primeiro ataque.</td></tr>
+                        <tr><td>3</td><td>Rastreador da Névoa</td><td>Vantagem em testes de <strong>Sobrevivência e Navegação</strong> (perícias) na Névoa. 1×/incursão, segue um rastro na Névoa sem teste (o Mestre define o destino).</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-                        <!-- NOVOS TRAÇOS POSITIVOS -->
-                        <tr><td>3</td><td>Memória de Sangue</td><td>Quando você fere um inimigo, você "lembra" fraquezas dele em combates futuros contra o mesmo tipo de criatura. Ganha +1 em ataques e testes contra aquele tipo específico de monstro por 24 horas após o primeiro combate.</td></tr>
-                        <tr><td>4</td><td>Eco de Poder</td><td>Uma vez por cena, quando você vê um poder sendo usado (aliado ou inimigo), pode tentar replicar um efeito menor dele no seu próximo turno (Mestre aprova o efeito e custo).</td></tr>
+            <h4>Mental &amp; Sanidade</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Traço</th><th>Benefício Mecânico</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3</td><td>Mente Focada</td><td>Você pode manter concentração em até dois efeitos simultaneamente (em vez de um). Além disso, testes para resistir a distrações mentais recebem +2.</td></tr>
+                        <tr><td>3</td><td>Presença Inspiradora</td><td>Aliados a até 9 metros de você recebem +1 em testes contra medo e exaustão. Uma vez por cena, você pode dar vantagem a um aliado em um teste de Sanidade.</td></tr>
+                        <tr><td>2</td><td>Olhar Penetrante</td><td>Você é extremamente perceptivo com intenções. Vantagem em testes para perceber mentiras, intenções hostis ou disfarces superficiais.</td></tr>
+                        <tr><td>3</td><td>Equilíbrio Interno</td><td>Quando você está com penalidades por Exaustão, Sobrecarga ou dano em Poder/Mente/Corpo, essas penalidades são reduzidas em 1 (mínimo 0).</td></tr>
+                        <tr><td>3</td><td>Voz da Alma</td><td>Sua voz carrega peso sobrenatural. Ganha +2 em testes de intimidação, persuasão ou comando. Uma vez por cena, você pode forçar uma criatura a fazer uma Salvaguarda de Carisma CD 14 ou obedecer a um comando simples por um turno.</td></tr>
+                        <tr><td>3</td><td>Mente de Aço</td><td>Vantagem em Salvaguardas contra efeitos de medo, ilusão e manipulação mental. Além disso, você pode rolar um teste de Intelecto CD 16 para ignorar completamente um efeito mental de baixo nível uma vez por cena. <em>(Nicho: proteção contra medo/ilusão/manipulação mental via Intelecto. O Guardião Interno cobre possessão e controle de Alma.)</em></td></tr>
+                        <tr><td>5</td><td>Guardião Interno</td><td>Você possui uma proteção interna poderosa. Vantagem em Salvaguardas contra possessão, ilusões mentais e efeitos de controle mental. Uma vez por incursão, você pode automaticamente passar em uma Salvaguarda de Alma que teria falhado. <em>(Nicho: proteção contra possessão e controle de Alma. O Mente de Aço cobre medo/ilusão/manipulação via Intelecto.)</em></td></tr>
+                        <tr><td>3</td><td>Aura de Calma</td><td>Aliados a até 6 metros de você recebem +2 em testes contra medo e desorientação. <em>Estabilização:</em> veja o texto canônico — 1×/cena, você estabiliza um aliado caído "como se tivesse Maestria em Medicina".</td></tr>
                         <tr><td>2</td><td>Calor Humano</td><td>Sua presença transmite segurança. Aliados próximos ganham +1 em testes de Sanidade quando você está consciente e ao lado deles. Você, no entanto, sente o peso emocional deles (pode sofrer penalidades se muitos aliados estiverem em crise).</td></tr>
                     </tbody>
                 </table>
             </div>
 
+            <h4>Social &amp; Mundo</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Traço</th><th>Benefício Mecânico</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>Aliados Fiéis</td><td>Você possui 1-2 contatos leais em uma cidadela importante. Uma vez por sessão, eles podem te ajudar com informação, abrigo ou um pequeno favor.</td></tr>
+                        <tr><td>1~2</td><td>Rede de Contatos</td><td>Em qualquer cidadela ou posto avançado, role 1d20. Em 12+, você conhece alguém útil no local.</td></tr>
+                        <tr><td>3</td><td>Ligação com Organização</td><td>Você tem influência moderada em uma facção. Uma vez por incursão, pode pedir um favor menor (informação, abrigo, suprimentos).</td></tr>
+                        <tr><td>2</td><td>Laços de Sangue</td><td>Você compartilha um vínculo profundo com uma pessoa específica (aliado ou familiar). Quando estiver a até 30 metros dessa pessoa, ambos ganham +1 em testes de Vigor e Salvaguardas contra medo. Se um de vocês cair a 0 PV, o outro pode rolar com vantagem para estabilizá-lo uma vez por cena. <em>(Difere de Irmão de Armas: este é um bônus de sobrevivência/Vigor com pessoa específica; Irmão de Armas dá bônus de combate em zona Curto.)</em></td></tr>
+                        <tr><td>3</td><td>Imponência da Alma</td><td>Você causa impressão forte. Ganha +2 em testes de intimidação e liderança. Criaturas comuns sentem desconforto perto de você (desvantagem em testes de moral contra você).</td></tr>
+                        <tr><td>3</td><td>Marca do Consórcio</td><td>Acesso a laboratórios e agentes do Consórcio em cidadelas (1 favor menor/incursão). Custo: <strong>+1 Corrupção inicial</strong> — a porta se abriu, mas a dívida já nasceu.</td></tr>
+                        <tr><td>2</td><td>Protetor</td><td>Escolha 1 aliado específico: enquanto você o protege (adjacente/na linha de visão), ambos ganham +1 CA. Se ele morrer, você ganha o Trauma "Cicatriz da Perda" (equivalente a uma fraqueza +3, aprovado pelo Mestre).</td></tr>
+                        <tr><td>2</td><td>Mãos de Ofício</td><td>Vantagem em testes de <strong>Ofícios</strong> (perícia). Começa com 1 ferramenta de ofício do Catálogo (Kit de Escalada, Kit de Medicina, Kit de Ferreiro de Campo etc.).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Alma &amp; Poder</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Traço</th><th>Benefício Mecânico</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2</td><td>Fôlego da Alma</td><td>Você pode prender a respiração por até 10 minutos sem testes. Em áreas de Névoa densa, você sofre apenas metade da penalidade normal em testes de Vigor.</td></tr>
+                        <tr><td>1</td><td>Inventor da Alma</td><td>Você pode fundir temporariamente dois itens mundanos em um objeto improvisado funcional (Mestre aprova a utilidade).</td></tr>
+                        <tr><td>1</td><td>Empatia com Criaturas</td><td>Vantagem em testes para acalmar, entender ou prever o comportamento de criaturas corrompidas.</td></tr>
+                        <tr><td>3</td><td>Tempo de Vida Estendido</td><td>Você envelhece 50% mais devagar. <strong>+2 em Salvaguardas de Vigor contra doenças e venenos prolongados</strong>; <strong>resiste a 1 nível de Exaustão por fome/sede uma vez por dia</strong>.</td></tr>
+                        <tr><td>5</td><td>Aura Reforçada</td><td>Sua reserva máxima de PE aumenta em <strong>+3</strong>. 1×/descanso longo, recupera <strong>1d6 de PE</strong>.</td></tr>
+                        <tr><td>3</td><td>Sorte da Alma</td><td>Uma vez por incursão, você pode re-rolar um teste ou ataque que tenha falhado e ficar com o segundo resultado.</td></tr>
+                        <tr><td>4</td><td>Fome da Alma</td><td>Quando você absorve o núcleo de um <strong>monstro</strong> de nível igual ou superior ao seu, recupere 1d6 de PE ou 1d4 de Sanidade (escolha uma). Essa recuperação só pode ocorrer uma vez por monstro. <em>Núcleos humanos não ativam este traço.</em></td></tr>
+                        <tr><td>4</td><td>Regeneração Leve da Alma</td><td>Durante um descanso curto, recupere 1d6+2 de PV e STA adicionais. <em>Estabilização:</em> 1×/dia, ao cair a 0 PV, role 1d20 — em 15+, você se estabiliza com 1 PV (texto canônico: como se tivesse Maestria em Medicina).</td></tr>
+                        <tr><td>4</td><td>Sentido do Fluxo</td><td>Você sente o fluxo de energia das Torres e de poderes. Uma vez por cena, você pode automaticamente detectar a presença de um poder ativo, uma armadilha mágica ou a direção de uma fonte de energia próxima.</td></tr>
+                        <tr><td>3</td><td>Herança Ancestral</td><td>Escolha <strong>1 perícia de Intelecto</strong> (História, Religião, Ofícios, Investigação, etc.). Você tem <strong>Vantagem</strong> nela.</td></tr>
+                        <tr><td>2</td><td>Memória Muscular</td><td>Ao aprender uma <strong>Técnica nova</strong>, você pode usá-la <strong>uma vez com Vantagem na primeira sessão</strong> após aprendê-la.</td></tr>
+                        <tr><td>4</td><td>Presença Etérea</td><td>1×/cena, por 1 rodada, você fica <strong>intangível</strong>: ataques físicos contra você têm <strong>Desvantagem</strong> (efeitos mágicos/conceituais não são afetados).</td></tr>
+                        <tr><td>4</td><td>Eco de Poder</td><td>1×/cena, replica um efeito de poder que viu: custa <strong>metade do custo do poder copiado</strong> (mín. 1 PE); o Mestre aprova a fidelidade do efeito.</td></tr>
+                        <tr><td>2</td><td>Visão da Torre</td><td>Uma vez por cena, você pode fechar os olhos e receber uma breve visão sobre um perigo iminente ou caminho seguro nos próximos minutos (Mestre fornece uma dica curta e útil). Não funciona se a Torre estiver deliberadamente ocultando algo.</td></tr>
+                        <tr><td>4</td><td>Consumidor de Essência</td><td>Quando você derrota um inimigo e absorve seu núcleo, recupere 1d8 de PV ou 1d4 de PE (escolha). Esse benefício só pode ser usado uma vez por combate.</td></tr>
+                        <tr><td>4</td><td>Toque da Alma</td><td>Uma vez por cena, você pode tocar um aliado e transferir parte de sua vitalidade: role 1d8. Você perde essa quantidade de PV (mínimo 1) e o aliado recupera o mesmo valor. Não pode ser usado em si mesmo.</td></tr>
+                        <tr><td>3</td><td>Memória de Sangue</td><td>Quando você fere um inimigo, você "lembra" fraquezas dele em combates futuros contra o mesmo tipo de criatura. Ganha +1 em ataques e testes contra aquele tipo específico de monstro por 24 horas após o primeiro combate.</td></tr>
+                        <tr><td>5</td><td>Alma de Aço</td><td>Você resiste melhor à corrupção em troca de um preço. Ganha +2 em todas as Salvaguardas de Alma. No entanto, quando você ganha Corrupção, ganha 1 ponto a mais do que o normal.</td></tr>
+                        <tr><td>5</td><td>Pacto de Sangue</td><td><strong>+2 em Força e Vigor</strong> (não pode ultrapassar o máximo de atributo). Custo: <strong>−2 de Sanidade máxima permanente</strong> — o sangue fala mais alto que a mente.</td></tr>
+                        <tr><td>4</td><td>Desperto na Morte</td><td>1×/campanha, ao cair a 0 PV, sua Manifestação se manifesta de forma selvagem por 1 rodada (efeito de poder aprovado pelo Mestre). Custo: <strong>−1d4 de Sanidade máxima permanente</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
             <h3>Fraquezas / Traumas da Alma</h3>
+            <p>As fraquezas seguem as mesmas <strong>5 categorias</strong> dos traços positivos, para facilitar o balanceamento.</p>
+
+            <h4>Combate</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Fraqueza</th><th>Penalidade Mecânica</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>+4</td><td>Covardia Instintiva</td><td>Seu instinto de autopreservação é extremamente forte. Sempre que um aliado cair a 0 PV ou você sofrer mais de metade do seu PV em um único ataque, você deve fazer uma Salvaguarda de Carisma CD 15 ou fugir/retirar-se no seu próximo turno.</td></tr>
+                        <tr><td>+3</td><td>Aleijado / Lesão Permanente</td><td>Uma lesão antiga limita você. Escolha uma limitação permanente (ex: manca, braço fraco, pulmão danificado). Você sofre -2 em testes relacionados a essa limitação e seu deslocamento é reduzido em 1,5m se for na perna.</td></tr>
+                        <tr><td>+2</td><td>Problema Visual</td><td>Sua visão é permanentemente ruim. Você sofre desvantagem em testes de percepção visual a longa distância e em condições de baixa luz (mesmo com visão no escuro, se aplicável).</td></tr>
+                        <tr><td>+3~5</td><td>Cegueira Parcial</td><td>Você tem perda significativa de visão (valor define o grau). Você sofre desvantagem em todos os testes de ataque à distância e em testes de percepção visual. No nível 5, você é considerado cego em combate à distância.</td></tr>
+                        <tr><td>+2</td><td>Medo de um Tipo de Monstro</td><td>Você tem pavor profundo de um tipo específico de criatura (ex: insetos gigantes, mortos-vivos, humanoides distorcidos). Contra esse tipo, você sofre desvantagem em todos os testes e ataques, e deve fazer Salvaguarda de Carisma para não fugir ou congelar.</td></tr>
+                        <tr><td>+3</td><td>Corpo Desarmonizado</td><td>Existe um descompasso entre seu corpo e sua Alma. Você se cansa mais rápido ao usar poderes. Sempre que usar um poder que custe 3+ de PE, sofra 1 nível de Exaustão adicional.</td></tr>
+                        <tr><td>+3</td><td>Desejo de Morte</td><td>Em momentos de grande estresse ou desespero, você sente um impulso suicida. Quando reduzido a menos de 25% do PV, deve fazer uma Salvaguarda de Carisma CD 16 ou agir de forma temerária (sem se defender adequadamente) no próximo turno.</td></tr>
+                        <tr><td>+5</td><td>Indecisão da Alma</td><td>Em situações de alta pressão (combate, perseguição, dilemas morais), sua mente trava. No início do seu turno, role 1d6; em 1–2 você fica hesitante e tem <strong>Desvantagem na primeira ação do turno</strong> (não perde a ação).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Sobrevivência &amp; Exploração</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Fraqueza</th><th>Penalidade Mecânica</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>+2</td><td>Azar da Torre</td><td>A Torre nota você com mais frequência. Sempre que rolar um evento aleatório ou rolagem de Risco da Torre, role com desvantagem. Além disso, falhas críticas dentro de Torres causam efeitos um nível mais grave.</td></tr>
+                        <tr><td>+4</td><td>Rejeição da Torre</td><td>A Torre parece te rejeitar ativamente. Você sofre desvantagem em todas as rolagens de Risco da Torre e eventos aleatórios dentro de Torres. Além disso, monstros parecem te notar mais facilmente.</td></tr>
+                        <tr><td>+4</td><td>Cicatriz da Torre</td><td>Uma cicatriz física e espiritual da Torre dói quando você está perto de fontes de corrupção. Em áreas com alta corrupção ou andares profundos, você sofre -1 em todos os testes e perde 1 ponto de Sanidade a cada 4 horas.</td></tr>
+                        <tr><td>+3</td><td>Pavor do Vazio</td><td>Você tem medo profundo de espaços abertos, andares muito altos ou o vazio das Torres. Em áreas expostas ou com grande altura, sofre desvantagem em todos os testes e deve fazer Salvaguarda contra pânico se ficar sozinho.</td></tr>
+                        <tr><td>+3</td><td>Marca do Olho</td><td>A Torre do Pesadelo parece ter notado você especificamente. Sempre que você está em andares altos da Torre do Pesadelo (acima do 20º), o Mestre rola eventos aleatórios com +2 de risco. Monstros inteligentes podem reconhecer essa marca e priorizá-lo.</td></tr>
+                        <tr><td>+2</td><td>Sono Instável</td><td>Você tem dificuldade para dormir profundamente. Durante um descanso completo, role 1d6. Em 1-3, você só recupera metade do PV e STA normal, e não recupera Sanidade.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Mental &amp; Sanidade</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Fraqueza</th><th>Penalidade Mecânica</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>+3</td><td>Trauma Psíquico</td><td>Você carrega memórias traumáticas das Torres. Sempre que enfrentar uma situação que lembre um trauma passado (Mestre decide), você deve fazer uma Salvaguarda de Intelecto ou Carisma CD 15 ou perder 1d4 de Sanidade e ficar abalado por 1d4 rodadas.</td></tr>
+                        <tr><td>+3</td><td>Eco Mental</td><td>Você ocasionalmente escuta ecos de monstros que já enfrentou. Uma vez por cena, o Mestre pode forçar você a fazer um teste de Sanidade CD 14. Em falha, você perde 1d4 de Sanidade e fica distraído por 1 rodada.</td></tr>
+                        <tr><td>+4</td><td>Visões da Queda</td><td>Você ocasionalmente tem visões horríveis do futuro (ou de possíveis futuros). Uma vez por cena, o Mestre pode descrever uma visão aterrorizante. Você deve fazer uma Salvaguarda de Sanidade CD 15 ou perder 1d6 de Sanidade e ficar abalado por 1d4 rodadas.</td></tr>
+                        <tr><td>+3</td><td>Empatia Excessiva</td><td>Você sente o sofrimento alheio com intensidade dolorosa. Sempre que um aliado próximo sofrer dano grave ou trauma, você deve fazer uma Salvaguarda de Carisma CD 14 ou perder 1d4 de Sanidade.</td></tr>
+                        <tr><td>+1</td><td>Esquecido</td><td>Sua memória é falha. Desvantagem em testes para lembrar nomes, rostos, detalhes de conversas ou informações importantes obtidas recentemente.</td></tr>
+                        <tr><td>+1</td><td>Desatento</td><td>Você tem dificuldade em perceber segundas intenções. Desvantagem em testes para perceber mentiras, manipulação ou armadilhas sociais.</td></tr>
+                        <tr><td>+5</td><td>Alma Fragmentada</td><td>Seu Núcleo está mais quebrado que o normal. <strong>Desvantagem em testes de Alma/Intelecto para resistir à manipulação da Torre</strong>; <strong>Técnicas novas custam +1 PE na primeira semana após aprendidas</strong>. Além disso, falhas críticas em testes de Alma causam o dobro de Corrupção.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Social &amp; Mundo</h4>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -17180,45 +17738,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     </thead>
                     <tbody>
                         <tr><td>+2</td><td>Avareza</td><td>Você tem grande dificuldade em gastar recursos. Sempre que precisar gastar mais de 10 Esp de uma vez, role uma Salvaguarda de Carisma CD 14. Em caso de falha, você recusa o gasto ou tenta barganhar de forma humilhante.</td></tr>
-                        <tr><td>+3</td><td>Azar da Torre</td><td>A Torre nota você com mais frequência. Sempre que rolar um evento aleatório ou rolagem de Risco da Torre, role com desvantagem. Além disso, falhas críticas dentro de Torres causam efeitos um nível mais grave.</td></tr>
-                        <tr><td>+1</td><td>Desatencioso</td><td>Você tem dificuldade em perceber segundas intenções. Desvantagem em testes para perceber mentiras, manipulação ou armadilhas sociais.</td></tr>
-                        <tr><td>+3</td><td>Dívida Sangrenta</td><td>Você deve um favor significativo a alguém perigoso. Uma vez por incursão (ou quando o Mestre julgar apropriado), essa pessoa ou organização pode cobrar o favor de forma inconveniente ou perigosa.</td></tr>
-                        <tr><td>+1</td><td>Esquecido</td><td>Sua memória é falha. Desvantagem em testes para lembrar nomes, rostos, detalhes de conversas ou informações importantes obtidas recentemente.</td></tr>
                         <tr><td>+2</td><td>Honestidade Compulsiva</td><td>Você é quase incapaz de mentir. Em situações onde mentir seria vantajoso, você deve fazer uma Salvaguarda de Carisma CD 16. Em falha, você revela a verdade ou fica visivelmente desconfortável.</td></tr>
-                        <tr><td>+5</td><td>Indecisão da Alma</td><td>Em situações de alta pressão (combate, perseguição, dilemas morais), sua mente trava. No início de cada turno ou decisão crítica, role 1d6. Em 1–2, você perde sua ação ou decisão nesse turno.</td></tr>
-                        <tr><td>+4</td><td>Covardia Instintiva</td><td>Seu instinto de autopreservação é extremamente forte. Sempre que um aliado cair a 0 PV ou você sofrer mais de metade do seu PV em um único ataque, você deve fazer uma Salvaguarda de Carisma CD 15 ou fugir/retirar-se no seu próximo turno.</td></tr>
-                        <tr><td>+1~3</td><td>Código de Honra Rígido</td><td>Você segue um código pessoal inflexível. Quando esse código entrar em conflito com uma situação vantajosa, você sofre desvantagem em todos os testes até resolver o conflito de acordo com seu código (valor de pontos define quão restritivo é o código).</td></tr>
-                        <tr><td>+3</td><td>Aleijado / Lesão Permanente</td><td>Uma lesão antiga limita você. Escolha uma limitação permanente (ex: manca, braço fraco, pulmão danificado). Você sofre -2 em testes relacionados a essa limitação e seu deslocamento é reduzido em 1,5m se for na perna.</td></tr>
-                        <tr><td>+2</td><td>Problema Visual</td><td>Sua visão é permanentemente ruim. Você sofre desvantagem em testes de percepção visual a longa distância e em condições de baixa luz (mesmo com visão no escuro, se aplicável).</td></tr>
-                        <tr><td>+3~5</td><td>Cegueira Parcial</td><td>Você tem perda significativa de visão (valor define o grau). Você sofre desvantagem em todos os testes de ataque à distância e em testes de percepção visual. No nível 5, você é considerado cego em combate à distância.</td></tr>
-                        <tr><td>+3</td><td>Trauma Psíquico</td><td>Você carrega memórias traumáticas das Torres. Sempre que enfrentar uma situação que lembre um trauma passado (Mestre decide), você deve fazer uma Salvaguarda de Intelecto ou Carisma CD 15 ou perder 1d4 de Sanidade e ficar abalado por 1d4 rodadas.</td></tr>
-                        <tr><td>+4</td><td>Alma Instável</td><td>Seu PE é volátil. Sempre que você gastar 5 ou mais de PE em um único turno, role uma Salvaguarda de Alma CD 15. Em falha, você ganha 1 ponto de Corrupção e sofre 1d6 de dano psíquico.</td></tr>
+                        <tr><td>+3</td><td>Dívida Sangrenta</td><td>Você deve um favor significativo a alguém perigoso. Uma vez por incursão (ou quando o Mestre julgar apropriado), essa pessoa ou organização pode cobrar o favor de forma inconveniente ou perigosa.</td></tr>
                         <tr><td>+3</td><td>Inimigo Marcado</td><td>Uma entidade poderosa (pessoa, monstro ou organização) te caça ativamente. O Mestre pode introduzir esse inimigo ou seus agentes em momentos inoportunos, forçando confrontos ou complicações.</td></tr>
                         <tr><td>+2</td><td>Dependência de um Item</td><td>Sua Alma está ligada a um objeto específico. Se você perder ou ficar sem esse item por mais de 24 horas, você sofre -2 em todos os testes e perde acesso a um de seus poderes principais até recuperá-lo.</td></tr>
-                        <tr><td>+2</td><td>Medo de um Tipo de Monstro</td><td>Você tem pavor profundo de um tipo específico de criatura (ex: insetos gigantes, mortos-vivos, humanoides distorcidos). Contra esse tipo, você sofre desvantagem em todos os testes e ataques, e deve fazer Salvaguarda de Carisma para não fugir ou congelar.</td></tr>
-                        <tr><td>+3</td><td>Eco Mental</td><td>Você ocasionalmente escuta ecos de monstros que já enfrentou. Uma vez por cena, o Mestre pode forçar você a fazer um teste de Sanidade CD 14. Em falha, você perde 1d4 de Sanidade e fica distraído por 1 rodada.</td></tr>
-                        <tr><td>+4</td><td>Sede de Poder</td><td>Você tem dificuldade em recuar ou ser cauteloso quando há chance de evolução. Sempre que tiver a oportunidade de absorver um núcleo poderoso, você deve fazer uma Salvaguarda de Alma CD 16 para resistir ao impulso, mesmo que seja obviamente perigoso.</td></tr>
-                        <tr><td>+3</td><td>Corpo Desarmonizado</td><td>Existe um descompasso entre seu corpo e sua Alma. Você se cansa mais rápido ao usar poderes. Sempre que usar um poder que custe 3+ de PE, sofra 1 nível de Exaustão adicional.</td></tr>
                         <tr><td>+2</td><td>Marca Visível</td><td>Sua Alma deixou marcas físicas visíveis. Você sofre -2 em testes sociais com humanos que não o conhecem bem, e tem +1 de risco de atrair atenção hostil de monstros e facções preconceituosas.</td></tr>
-                        <tr><td>+2</td><td>Sono Instável</td><td>Você tem dificuldade para dormir profundamente. Durante um descanso completo, role 1d6. Em 1–3, você só recupera metade do PV e STA normal, e não recupera Sanidade.</td></tr>
-                        <tr><td>+4</td><td>Rejeição da Torre</td><td>A Torre parece te rejeitar ativamente. Você sofre desvantagem em todas as rolagens de Risco da Torre e eventos aleatórios dentro de Torres. Além disso, monstros parecem te notar mais facilmente.</td></tr>
-                        <tr><td>+3</td><td>Empatia Excessiva</td><td>Você sente o sofrimento alheio com intensidade dolorosa. Sempre que um aliado próximo sofrer dano grave ou trauma, você deve fazer uma Salvaguarda de Carisma CD 14 ou perder 1d4 de Sanidade.</td></tr>
                         <tr><td>+2</td><td>Dependência Emocional</td><td>Você se apega demais a pessoas ou objetos importantes. Se um aliado próximo ou item amado for perdido ou ameaçado, você sofre -2 em todos os testes até resolver a situação ou fazer um teste de Sanidade CD 15.</td></tr>
+                        <tr><td>+1~3</td><td>Código de Honra Rígido</td><td>Você segue um código pessoal inflexível. Quando esse código entrar em conflito com uma situação vantajosa, você sofre desvantagem em todos os testes até resolver o conflito de acordo com seu código (valor de pontos define quão restritivo é o código).</td></tr>
                         <tr><td>+3</td><td>Ira Acumulada</td><td>Você carrega uma raiva profunda. Quando provocado ou quando vir injustiça relacionada ao seu trauma, você deve fazer uma Salvaguarda de Carisma CD 14. Em falha, você entra em fúria e age de forma imprudente ou violenta por 1d4 rodadas.</td></tr>
-                        <tr><td>+5</td><td>Alma Fragmentada</td><td>Seu Núcleo está mais quebrado que o normal. Você tem desvantagem em todos os testes para evoluir ou fortalecer seu Poder Principal. Além disso, falhas críticas em testes de Alma causam o dobro de Corrupção.</td></tr>
-
-                        <!-- NOVAS FRAQUEZAS ADICIONADAS -->
-                        <tr><td>+3</td><td>Maldição de Sangue</td><td>Seu sangue atrai criaturas específicas. Monstros que se alimentam de sangue ou essência têm vantagem em testes para rastreá-lo e preferem atacá-lo em combate.</td></tr>
-                        <tr><td>+4</td><td>Visões da Queda</td><td>Você ocasionalmente tem visões horríveis do futuro (ou de possíveis futuros). Uma vez por cena, o Mestre pode descrever uma visão aterrorizante. Você deve fazer uma Salvaguarda de Sanidade CD 15 ou perder 1d6 de Sanidade e ficar abalado por 1d4 rodadas.</td></tr>
                         <tr><td>+3</td><td>Fome Insaciável</td><td>Você sente uma fome constante por poder ou recursos. Sempre que vir um núcleo ou item valioso, deve fazer uma Salvaguarda de Carisma CD 15 para não tentar tomá-lo imediatamente, mesmo que seja arriscado.</td></tr>
-                        <tr><td>+3</td><td>Pavor do Vazio</td><td>Você tem medo profundo de espaços abertos, andares muito altos ou o vazio das Torres. Em áreas expostas ou com grande altura, sofre desvantagem em todos os testes e deve fazer Salvaguarda contra pânico se ficar sozinho.</td></tr>
+                        <tr><td>+4</td><td>Sede de Poder</td><td>Você tem dificuldade em recuar ou ser cauteloso quando há chance de evolução. Sempre que tiver a oportunidade de absorver um núcleo poderoso, você deve fazer uma Salvaguarda de Alma CD 16 para resistir ao impulso, mesmo que seja obviamente perigoso.</td></tr>
                         <tr><td>+2</td><td>Lealdade Cega</td><td>Você é excessivamente leal a um grupo, líder ou ideal. Quando esse grupo ou ideal está em perigo, você tem dificuldade em recuar ou tomar decisões frias (desvantagem em testes de raciocínio estratégico nessas situações).</td></tr>
-                        <tr><td>+4</td><td>Cicatriz da Torre</td><td>Uma cicatriz física e espiritual da Torre dói quando você está perto de fontes de corrupção. Em áreas com alta corrupção ou andares profundos, você sofre -1 em todos os testes e perde 1 ponto de Sanidade a cada 4 horas.</td></tr>
-                        <tr><td>+3</td><td>Desejo de Morte</td><td>Em momentos de grande estresse ou desespero, você sente um impulso suicida. Quando reduzido a menos de 25% do PV, deve fazer uma Salvaguarda de Carisma CD 16 ou agir de forma temerária (sem se defender adequadamente) no próximo turno.</td></tr>
                         <tr><td>+2</td><td>Fragmento de Outro</td><td>Uma pequena parte de uma entidade antiga vive dentro de você. Uma vez por cena, o Mestre pode assumir temporariamente controle de suas ações por 1 rodada (o fragmento age de forma alienígena, mas não necessariamente hostil).</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-                        <!-- NOVAS FRAQUEZAS -->
-                        <tr><td>+3</td><td>Marca do Olho</td><td>A Torre do Pesadelo parece ter notado você especificamente. Sempre que você está em andares altos da Torre do Pesadelo (acima do 20º), o Mestre rola eventos aleatórios com +2 de risco. Monstros inteligentes podem reconhecer essa marca e priorizá-lo.</td></tr>
+            <h4>Alma &amp; Poder</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Pontos</th><th>Fraqueza</th><th>Penalidade Mecânica</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>+4</td><td>Alma Instável</td><td>Seu PE é volátil. Sempre que você gastar 5 ou mais de PE em um único turno, role uma Salvaguarda de Alma CD 15. Em falha, você ganha 1 ponto de Corrupção e sofre 1d6 de dano psíquico.</td></tr>
+                        <tr><td>+3</td><td>Maldição de Sangue</td><td>Seu sangue atrai criaturas específicas. Monstros que se alimentam de sangue ou essência têm vantagem em testes para rastreá-lo e preferem atacá-lo em combate.</td></tr>
                         <tr><td>+2</td><td>Repulsa por Núcleos</td><td>Você sente nojo físico ao absorver núcleos. Sempre que absorve um núcleo de qualidade B ou superior, deve fazer uma Salvaguarda de Vigor CD 14 ou perder 1d4 de Sanidade por náusea e rejeição.</td></tr>
                     </tbody>
                 </table>
@@ -17239,11 +17783,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="system-card">
                 <strong>Exemplo 3 — Aura de Calma + Empatia Excessiva</strong><br>
-                Você acalma aliados, mas sente o sofrimento deles com intensidade. Quando um companheiro começa a perder Sanidade, você pode ajudar… mas corre o risco de ser arrastado junto. Isso cria laços profundos e momentos de sacrifício emocional.
+                Você acalma aliados (Aura de Calma) e pode estabilizar um caído 1×/cena (texto canônico: como se tivesse Maestria em Medicina) — mas sente o sofrimento deles com intensidade (Empatia Excessiva). Quando um companheiro começa a perder Sanidade, você estabiliza o corpo dele — e carrega a dor. Isso cria laços profundos e momentos de sacrifício emocional.
             </div>
 
             <div class="lore-box">
-                <strong>Lembrete:</strong> Traços Positivos além do primeiro devem ser equilibrados por Fraquezas de valor igual ou superior em pontos. A Alma exige equilíbrio.
+                <strong>Lembrete:</strong> Traços Positivos além do primeiro devem ser equilibrados por Fraquezas de valor igual ou superior em pontos — ou por custos temáticos nos marcos de progressão (ver "A Alma cresce com cicatrizes"). Teto no nível 1: 1 grátis + 4 pagos; a Alma cresce com os níveis 5/10/15/20.
             </div>
 
             <p style="margin-top: 1.5rem;"><em>Os Traços da Alma são cicatrizes e bênçãos que sua Alma carrega. Eles não são apenas números — eles são quem você é agora, depois de tudo que as Torres já tiraram (e deram) de você. Escolha com coração e com medo. Porque os melhores Traços são aqueles que, em algum momento, vão doer.</em></p>
