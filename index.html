@@ -9123,8 +9123,107 @@ function cancelarNovoPersonagem() {
 // Overlay criado como div no body (mesmo padrão de abrirPerfilPublico).
 // Ao finalizar, usa o MESMO caminho de confirmarNovoPersonagem (lista →
 // ativarPersonagem → localStorage + Firestore + ranking) e abre a ficha.
+//
+// RASCUNHO PERSISTENTE: o estado do wizard é salvo no localStorage a cada
+// alteração (tp_wizard_rascunho_<user>). Fechar o overlay NÃO apaga nada —
+// ao reabrir, o usuário escolhe "Continuar" (restaura o passo salvo) ou
+// "Começar do zero" (limpa o rascunho). Só finalizar com sucesso remove.
 // ═══════════════════════════════════════════════════════════════════════
 let _wizardEstado = null;
+
+// Chave do rascunho no localStorage — com usuário para não vazar entre contas.
+function _wizardChaveRascunho() {
+  const u = (typeof usuarioAtual !== 'undefined' && usuarioAtual) ? String(usuarioAtual).trim().toLowerCase() : '';
+  return u ? 'tp_wizard_rascunho_' + u : 'tp_wizard_rascunho';
+}
+
+// Serializa o estado atual do wizard para o localStorage (try/catch: armazenamento
+// pode falhar em modo privado/quota — nesses casos o wizard simplesmente não
+// persiste, sem quebrar nada).
+function _wizardSalvarRascunho() {
+  if (!_wizardEstado) return;
+  try {
+    localStorage.setItem(_wizardChaveRascunho(), JSON.stringify(_wizardEstado));
+  } catch(e) {
+    console.warn('[Wizard] Não foi possível salvar o rascunho:', e);
+  }
+}
+
+// Lê o rascunho salvo. Devolve null se não existir, estiver corrompido ou
+// estiver "vazio" (passo 0 sem nenhum campo preenchido — nada a continuar).
+function _wizardCarregarRascunho() {
+  try {
+    const raw = localStorage.getItem(_wizardChaveRascunho());
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    if (!d || typeof d !== 'object' || typeof d.passo !== 'number') return null;
+    const temConteudo =
+      d.passo > 0 ||
+      !!(d.nome || d.alcunha || d.idade || d.cidade || d.genero ||
+         d.poder || d.pAttr || d.pDescricao || d.pConceito ||
+         d.despertar || d.antecedente || d.tracos || d.defeitos ||
+         d.tecnicaNome || d.tecnicaCusto || d.tecnicaDesc || d.tecnicaEfei);
+    if (!temConteudo) return null;
+    return d;
+  } catch(e) {
+    return null;
+  }
+}
+
+// Remove o rascunho (finalização com sucesso ou "Começar do zero").
+function _wizardLimparRascunho() {
+  try { localStorage.removeItem(_wizardChaveRascunho()); } catch(e) {}
+}
+
+// Estado novo, em branco (Passo 0). Usado tanto pelo fluxo normal quanto pelo
+// "Começar do zero" (que também limpa o rascunho antes).
+function _wizardEstadoNovo() {
+  return {
+    passo: 0,
+    nome:'', alcunha:'', idade:'', cidade:'', genero:'',
+    poder:'', pAttr:'', pDescricao:'', pConceito:'',
+    despertar: null,
+    metodoAtributo: 'pontos',
+    atrib: { for:10, des:10, vig:10, int:10, alm:10, car:10 },
+    rolagensFeitas: 0, rolagemAceita: false,
+    antecedente: null,
+    tracos:'', defeitos:'',
+    tecnicaNome:'', tecnicaCusto:'', tecnicaDesc:'', tecnicaEfei:''
+  };
+}
+
+// Passo especial de confirmação de rascunho (renderizado quando passo === -1).
+function _wizardMostrarContinuar() {
+  if (!_wizardEstado) return;
+  _wizardEstado.passo = -1;
+  _wizardRender();
+}
+
+function _wizardContinuarRascunho() {
+  if (!_wizardEstado) return;
+  const rascunho = _wizardCarregarRascunho();
+  if (rascunho) {
+    // Restaura o estado salvo; garante campos derivados presentes.
+    _wizardEstado = rascunho;
+    if (!_wizardEstado.atrib || typeof _wizardEstado.atrib !== 'object') {
+      _wizardEstado.atrib = { for:10, des:10, vig:10, int:10, alm:10, car:10 };
+    }
+    if (typeof _wizardEstado.passo !== 'number' || _wizardEstado.passo < 0) _wizardEstado.passo = 0;
+    if (typeof _wizardEstado.sanidadeAjuste !== 'number') _wizardEstado.sanidadeAjuste = 0;
+    if (typeof _wizardEstado.corrupcaoAjuste !== 'number') _wizardEstado.corrupcaoAjuste = 0;
+    if (typeof _wizardEstado.metodoAtributo !== 'string') _wizardEstado.metodoAtributo = 'pontos';
+  } else {
+    _wizardEstado = _wizardEstadoNovo();
+  }
+  _wizardRender();
+}
+
+function _wizardComecarDoZero() {
+  if (!_wizardEstado) return;
+  _wizardLimparRascunho();
+  _wizardEstado = _wizardEstadoNovo();
+  _wizardRender();
+}
 
 const _WIZARD_DESPERTARES = [
   { n:1, titulo:'Perda traumática', texto:'Alguém que você amava morreu num Surto (ou dentro de uma Torre), e seu Núcleo acordou no luto.', gancho:'Sanidade −1 inicial.', sanidade:-1, corrupcao:0 },
@@ -9183,19 +9282,17 @@ const _WIZARD_TECNICAS_ALEATORIAS = [
 
 function abrirWizardCriacao() {
   document.getElementById('wizard-criacao-overlay')?.remove();
-  _wizardEstado = {
-    passo: 0,
-    nome:'', alcunha:'', idade:'', cidade:'', genero:'',
-    poder:'', pAttr:'', pDescricao:'', pConceito:'',
-    despertar: null,
-    metodoAtributo: 'pontos',
-    atrib: { for:10, des:10, vig:10, int:10, alm:10, car:10 },
-    rolagensFeitas: 0, rolagemAceita: false,
-    antecedente: null,
-    tracos:'', defeitos:'',
-    tecnicaNome:'', tecnicaCusto:'', tecnicaDesc:'', tecnicaEfei:''
-  };
-  _wizardRender();
+  const rascunho = _wizardCarregarRascunho();
+  if (rascunho) {
+    // Há um rascunho em andamento — pergunta se quer continuar de onde parou.
+    _wizardEstado = _wizardEstadoNovo();
+    _wizardEstado.passo = -1; // tela de confirmação
+    _wizardEstado.rascunho = rascunho; // guarda o rascunho para a restauração
+    _wizardRender();
+  } else {
+    _wizardEstado = _wizardEstadoNovo();
+    _wizardRender();
+  }
 }
 
 function _wizardFechar() {
@@ -9214,6 +9311,10 @@ function _wizardRender() {
   }
   const w = _wizardEstado;
   if (!w) return;
+  // Persiste o rascunho a cada render (navegação, seleções, rolagens, destino
+  // da Torre) — o passo -1 (tela de confirmação) NÃO é salvo, pois não é um
+  // passo real de progresso: ele apenas reflete o rascunho já armazenado.
+  if (w.passo >= 0) _wizardSalvarRascunho();
   const passos = ['Identidade','Poder Principal','Como Você Despertou','Atributos','Antecedente','Traços da Alma','Técnica Inicial'];
   const pct = Math.round(((w.passo + 1) / 7) * 100);
   overlay.innerHTML = `
@@ -9235,11 +9336,15 @@ function _wizardRender() {
         ${_wizardCorpoHTML()}
       </div>
       <div class="critico-actions" style="border-top:1px solid var(--border)">
-        ${w.passo > 0 ? `<button class="critico-btn critico-btn-fechar" onclick="_wizardVoltar()">‹ Voltar</button>` : ''}
-        ${w.passo === 0 ? `<button class="critico-btn" onclick="_wizardDestinoDaTorre()" title="Gera despertar, atributos, antecedente e técnica aleatoriamente">${icone('moon','ic-sm')} Destino da Torre</button>` : ''}
-        ${w.passo < 6
-          ? `<button class="critico-btn" onclick="_wizardAvancar()">Avançar ›</button>`
-          : `<button class="critico-btn" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="_wizardFinalizar()">${icone('check','ic-sm')} Criar Personagem</button>`}
+        ${w.passo === -1 ? `
+          <button class="critico-btn critico-btn-fechar" onclick="_wizardFechar()">Fechar (mantém rascunho)</button>
+        ` : `
+          ${w.passo > 0 ? `<button class="critico-btn critico-btn-fechar" onclick="_wizardVoltar()">‹ Voltar</button>` : ''}
+          ${w.passo === 0 ? `<button class="critico-btn" onclick="_wizardDestinoDaTorre()" title="Gera despertar, atributos, antecedente e técnica aleatoriamente">${icone('moon','ic-sm')} Destino da Torre</button>` : ''}
+          ${w.passo < 6
+            ? `<button class="critico-btn" onclick="_wizardAvancar()">Avançar ›</button>`
+            : `<button class="critico-btn" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="_wizardFinalizar()">${icone('check','ic-sm')} Criar Personagem</button>`}
+        `}
       </div>
     </div>`;
 }
@@ -9249,6 +9354,29 @@ function _wizardCorpoHTML() {
   if (!w) return '';
   const inputStyle = 'background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .65rem;font-family:inherit;font-size:.88rem;outline:none;width:100%;';
   const labelStyle = 'display:block;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:.25rem;';
+
+  // Passo especial: confirmação de rascunho em andamento
+  if (w.passo === -1) {
+    const r = w.rascunho || _wizardCarregarRascunho() || {};
+    const passosNomes = ['Identidade','Poder Principal','Como Você Despertou','Atributos','Antecedente','Traços da Alma','Técnica Inicial'];
+    const passoNome = (typeof r.passo === 'number' && r.passo >= 0 && r.passo <= 6) ? passosNomes[r.passo] : 'Início';
+    const resumoCampos = [
+      r.nome ? ('<strong>Nome:</strong> ' + _escHtml(r.nome)) : null,
+      r.poder ? ('<strong>Poder:</strong> ' + _escHtml(r.poder)) : null,
+      r.despertar ? ('<strong>Despertar:</strong> escolhido (' + r.despertar + ')') : null,
+      r.antecedente ? ('<strong>Antecedente:</strong> ' + _escHtml(r.antecedente)) : null
+    ].filter(Boolean);
+    return `
+      <div class="lore-box" style="margin-bottom:.8rem">
+        <strong>Há uma criação em andamento.</strong> Você começou a criar um personagem (parou no passo <strong>${passoNome}</strong>) e o rascunho foi guardado neste dispositivo. Deseja continuar de onde parou?
+      </div>
+      ${resumoCampos.length ? `<div style="font-size:.8rem;color:var(--text-muted);line-height:1.6;margin-bottom:.8rem;padding:.7rem .8rem;border:1px solid var(--border);border-radius:4px">${resumoCampos.map(c => `<div>${c}</div>`).join('')}</div>` : ''}
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="critico-btn" style="background:var(--accent);color:#fff;border-color:var(--accent);flex:1;min-width:200px" onclick="_wizardContinuarRascunho()">${icone('play','ic-sm')} Continuar de onde parou</button>
+        <button class="critico-btn critico-btn-fechar" style="flex:1;min-width:200px" onclick="_wizardComecarDoZero()">${icone('refresh','ic-sm')} Começar do zero</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--text-muted);margin-top:.8rem;text-align:center">Fechar esta janela agora <strong>não apaga</strong> o rascunho — você pode voltar depois.</div>`;
+  }
 
   if (w.passo === 0) return `
     <div class="lore-box" style="margin-bottom:.8rem">
@@ -9365,6 +9493,7 @@ function _wizardCorpoHTML() {
 function _wizardSet(campo, valor) {
   if (!_wizardEstado) return;
   _wizardEstado[campo] = valor;
+  _wizardSalvarRascunho(); // input/select/textarea em tempo real
 }
 
 function wizardSelecionarDespertar(n) {
@@ -9390,6 +9519,7 @@ function _wizardAtributoInput(sigla, valor) {
   v = Math.max(0, Math.min(18, v));
   _wizardEstado.atrib[sigla] = v;
   if (_wizardEstado.metodoAtributo === 'rolagem') _wizardEstado.rolagemAceita = true; // edição manual assume o controle
+  _wizardSalvarRascunho(); // input em tempo real
 }
 
 function _wizardPontosRestantes() {
@@ -9609,6 +9739,9 @@ function _wizardFinalizar() {
 
   lista.push(nome);
   salvarListaPersonagens(lista);
+  // Personagem criado com sucesso (na lista) — limpa o rascunho para a
+  // próxima abertura não perguntar mais "Continuar de onde parou?".
+  _wizardLimparRascunho();
   document.getElementById('wizard-criacao-overlay')?.remove();
   _wizardEstado = null;
 
