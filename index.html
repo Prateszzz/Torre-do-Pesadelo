@@ -3736,6 +3736,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.7; }       /* Combate (trackers) */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 4.8; }       /* Sessões e XP */
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 5; }            /* Atributos    */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
@@ -8594,7 +8595,7 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
+let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
@@ -9240,7 +9241,7 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
@@ -9351,7 +9352,7 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
+      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
       _aplicarEstadoFichaExpand();
     }
   }
@@ -10446,6 +10447,98 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div><!-- /area-combate -->
 </div>
 
+<!-- SESSÕES E XP — sistema de sessões e experiência (capítulo #sessoes-xp) -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('sessoes')" id="toggle-sessoes">
+    <span class="ficha-expand-seta" id="seta-sessoes">▶</span> Sessões e XP
+  </div>
+  <div class="ficha-expand-area" id="area-sessoes">
+  <div class="ficha-panel-body">
+
+    <!-- REGISTRO DE SESSÃO -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Registro de Sessão</div>
+    <div class="field-row cols-3">
+      <div class="field-group">
+        <label>Tipo de Sessão</label>
+        <select id="sess-tipo" oninput="atualizarSugestaoXP()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Oficial">Oficial</option>
+          <option value="Livre">Livre</option>
+          <option value="Lore">Lore</option>
+          <option value="Extraordinária">Extraordinária</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Qualidade da Sessão</label>
+        <select id="sess-qualidade" oninput="atualizarSugestaoXP()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Simples">Simples</option>
+          <option value="Desenvolvida">Desenvolvida</option>
+          <option value="Excepcional">Excepcional</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>XP da Sessão</label>
+        <input type="number" id="sess-xp" min="0" value="300" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="_atualizarTotalPreview();salvarLocal()">
+        <span id="sess-xp-dica" style="font-size:.64rem;color:var(--text-muted)">Intervalo: 25–100 · Oficial: média ~300 (extraordinário 500+)</span>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Bônus por Risco (1×/sessão — rolagens pagas com Sanidade ou desesperadas)</label>
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <input type="checkbox" id="sess-risco" oninput="_atualizarTotalPreview();salvarLocal()">
+          <span style="font-size:.8rem;color:var(--text-muted)">Push / situação desesperada</span>
+          <input type="number" id="sess-risco-xp" min="0" max="50" value="25" style="width:70px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.4rem .5rem;font-size:.85rem;outline:none;text-align:center" oninput="_atualizarTotalPreview();salvarLocal()">
+          <span style="font-size:.64rem;color:var(--text-muted)">XP extra (padrão +25, máx +50)</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Observação</label>
+        <input type="text" id="sess-obs" placeholder="Nota livre da sessão..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.5rem">
+      <button onclick="registrarSessao()" style="background:var(--accent);border:none;color:#fff;padding:.55rem 1.4rem;font-family:'Playfair Display',serif;font-size:.9rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Registrar Sessão</button>
+      <span id="sess-total-preview" style="font-size:.85rem;color:var(--silver)">Total: +300 XP</span>
+      <span id="sess-msg" style="font-size:.8rem;color:var(--accent-light);min-height:1em"></span>
+    </div>
+
+    <!-- PROGRESSO -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Progresso</div>
+      <div class="field-row cols-3">
+        <div class="field-group">
+          <label>XP Atual</label>
+          <input type="number" id="xp-atual" min="0" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="atualizarProgressoXP();salvarLocal()">
+        </div>
+        <div class="field-group">
+          <label>Nível Atual</label>
+          <input type="text" id="xp-nivel-display" readonly value="1" style="background:var(--bg-input);border:1px solid var(--border);color:var(--silver);padding:.55rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100%">
+        </div>
+        <div class="field-group">
+          <label>Próximo Nível</label>
+          <div id="xp-proximo" style="font-size:.8rem;color:var(--text-muted);padding:.55rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:2.1em">Faltam 200 XP para o nível 2.</div>
+        </div>
+      </div>
+      <div style="margin-top:.6rem;background:var(--bg-input);border:1px solid var(--border);height:12px;border-radius:6px;overflow:hidden">
+        <div id="xp-barra-fill" style="height:100%;width:0%;background:linear-gradient(to right,var(--accent),var(--accent-light));transition:width .3s"></div>
+      </div>
+      <p style="font-size:.68rem;color:var(--text-muted);margin:.5rem 0 0">O XP é a fonte de verdade do nível: ao registrar sessões, o campo Nível da Ficha Base é atualizado automaticamente. O nível também pode ser ajustado manualmente na Ficha Base.</p>
+    </div>
+
+    <!-- HISTÓRICO DE SESSÕES -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Histórico de Sessões</div>
+      <div class="table-wrapper"><table>
+        <thead><tr><th>Tipo</th><th>Qualidade</th><th>XP</th><th>Risco</th><th>Observação</th><th>Data</th></tr></thead>
+        <tbody id="sess-historico-tbody"></tbody>
+      </table></div>
+      <input type="hidden" id="sess-historico" value="">
+    </div>
+
+  </div>
+  </div><!-- /area-sessoes -->
+</div>
+
 <!-- ATRIBUTOS — logo abaixo da ficha base, largura total -->
 <div class="ficha-full-row">
   <div class="ficha-panel" style="border-top:3px solid var(--accent)!important;margin-bottom:1rem">
@@ -11313,6 +11406,8 @@ function coletarDados() {
     'morrendo','torre-ticks','major-wound-texto',
     'cond-avareado-val','cond-sangrando-val','cond-envenenado-val','cond-agarrdo-val',
     'cond-exausto-val','cond-corrompido-val','cond-enlouquecido-val','cond-enfraquecido-val',
+    // sessões e XP
+    'xp-atual','sess-tipo','sess-qualidade','sess-xp','sess-risco-xp','sess-obs','sess-historico',
     // registro
     'r-personalidade','r-mentalidade','r-comportamento',
     'r-tracos','r-defeitos','r-ideais','r-ligacoes','r-antecedentes','r-historia','r-eventos','r-npcs',
@@ -11390,6 +11485,8 @@ function coletarDados() {
   ['ms1','ms2','ms3','mf1','mf2','mf3'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
   // condições do combate (C8) + ferimento grave (C4) — salvos como boolean
   ['cond-avareado','cond-sangrando','cond-envenenado','cond-cegado','cond-caido','cond-agarrdo','cond-incapacitado','cond-exausto','cond-corrompido','cond-enlouquecido','cond-enfraquecido','cond-concentracao','major-wound'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
+  // bônus por risco da sessão (XP)
+  ['sess-risco'].forEach(id=>{ const el=document.getElementById(id); if(el) d[id]=el.checked; });
   d.pericias = PERICIAS_DEF.map((_,i)=>({mt:document.getElementById(`pm-${i}`)?.checked||false,es:document.getElementById(`pe-${i}`)?.checked||false}));
   d.slotsPericia = JSON.parse(JSON.stringify(_slotsPericia));
   d.numPassivas = numPassivas;
@@ -12112,6 +12209,156 @@ function fecharRolagem() {
   document.getElementById('critico-overlay')?.remove();
 }
 
+// ─── SESSÕES E XP (capítulo #sessoes-xp do Livro do Jogador) ───
+// Limiares de XP total por nível (nível → XP total): 1→2:200, 2→3:500 ... 19→20:25.000
+const XP_TABELA = [200, 500, 900, 1400, 2000, 2700, 3500, 4400, 5400, 6500, 7700, 9000, 10500, 12200, 14100, 16200, 18600, 21500, 25000];
+
+// Sugestões e intervalos por tipo/qualidade (regras do livro)
+const _SESS_QUAL_SUGESTAO = { 'Simples': 50, 'Desenvolvida': 180, 'Excepcional': 350 };
+const _SESS_QUAL_INTERVALO = { 'Simples': '25–100', 'Desenvolvida': '125–250', 'Excepcional': '275–500' };
+const _SESS_TIPO_SUGESTAO = { 'Oficial': 300, 'Livre': null, 'Lore': 250, 'Extraordinária': 500 };
+const _SESS_TIPO_DICA = {
+  'Oficial': 'Oficial: média ~300 (extraordinário 500+)',
+  'Livre': 'Livre: 25–75 simples · 100–250 desenvolvida · até 500 c/ aprovação',
+  'Lore': 'Lore: ~250/etapa · conclusão do arco 750–1.500',
+  'Extraordinária': 'Extraordinário: acima de 500',
+};
+
+// Calcula o nível (1–20) e o progresso para o próximo nível a partir do XP total
+function calcularNivelPorXP(xp) {
+  xp = parseInt(xp, 10) || 0;
+  let nivel = 1;
+  for (let i = 0; i < XP_TABELA.length; i++) {
+    if (xp >= XP_TABELA[i]) nivel = i + 2;
+  }
+  const proximo = nivel < 20 ? XP_TABELA[nivel - 1] : null;
+  const anterior = nivel > 1 ? (XP_TABELA[nivel - 2] || 0) : 0;
+  const falta = proximo != null ? proximo - xp : 0;
+  const progresso = proximo != null ? Math.max(0, Math.min(100, Math.round(((xp - anterior) / (proximo - anterior)) * 100))) : 100;
+  return { nivel, proximo, anterior, falta, progresso };
+}
+
+// Sincroniza a UI de progresso com o XP atual (e atualiza o f-nivel da Ficha Base)
+function atualizarProgressoXP() {
+  const xpEl = document.getElementById('xp-atual');
+  if (!xpEl) return;
+  const nivelEl = document.getElementById('f-nivel');
+  const nivelAtual = nivelEl ? (parseInt(nivelEl.value, 10) || 1) : 1;
+  let xp = parseInt(xpEl.value, 10);
+  // Se o XP ainda não foi rastreado (campo vazio), inicializa no limiar mínimo do
+  // nível atual — evita "rebaixar" personagens existentes que usam f-nivel manual.
+  if (xpEl.value === '' || isNaN(xp)) {
+    xp = nivelAtual <= 1 ? 0 : (XP_TABELA[nivelAtual - 2] || 0);
+    xpEl.value = xp;
+  }
+  const res = calcularNivelPorXP(xp);
+  if (nivelEl && res.nivel !== nivelAtual) nivelEl.value = res.nivel;
+  const nivelDisp = document.getElementById('xp-nivel-display');
+  if (nivelDisp) nivelDisp.value = res.nivel;
+  const proxEl = document.getElementById('xp-proximo');
+  if (proxEl) {
+    proxEl.textContent = res.nivel >= 20
+      ? 'Nível máximo (20) alcançado.'
+      : 'Faltam ' + res.falta.toLocaleString('pt-BR') + ' XP para o nível ' + (res.nivel + 1) + '.';
+  }
+  const fill = document.getElementById('xp-barra-fill');
+  if (fill) fill.style.width = res.progresso + '%';
+  calcTudoDebounced();
+}
+
+// Sugestão de XP pelo tipo/qualidade da sessão (pré-preenche o campo)
+function atualizarSugestaoXP() {
+  const xpEl = document.getElementById('sess-xp');
+  const dicaEl = document.getElementById('sess-xp-dica');
+  if (!xpEl || !dicaEl) return;
+  const tipo = document.getElementById('sess-tipo')?.value || 'Oficial';
+  const qualidade = document.getElementById('sess-qualidade')?.value || 'Simples';
+  const sugestao = _SESS_TIPO_SUGESTAO[tipo] != null ? _SESS_TIPO_SUGESTAO[tipo] : (_SESS_QUAL_SUGESTAO[qualidade] || 50);
+  xpEl.value = sugestao;
+  dicaEl.textContent = 'Intervalo: ' + (_SESS_QUAL_INTERVALO[qualidade] || '25–100') + ' · ' + (_SESS_TIPO_DICA[tipo] || '');
+  _atualizarTotalPreview();
+}
+
+// Prévia do total (base + risco) exibida ao lado do botão
+function _atualizarTotalPreview() {
+  const el = document.getElementById('sess-total-preview');
+  if (!el) return;
+  const base = parseInt(document.getElementById('sess-xp')?.value, 10) || 0;
+  const risco = !!document.getElementById('sess-risco')?.checked;
+  const riscoXp = risco ? (parseInt(document.getElementById('sess-risco-xp')?.value, 10) || 25) : 0;
+  el.textContent = 'Total: +' + (base + riscoXp) + ' XP';
+}
+
+// Histórico de sessões — array em memória + input oculto `sess-historico` (JSON) p/ persistência flat
+let _sessHistorico = [];
+
+function renderSessHistorico() {
+  const tb = document.getElementById('sess-historico-tbody');
+  if (!tb) return;
+  if (!_sessHistorico.length) {
+    tb.innerHTML = '<tr><td colspan="6" style="color:#555;text-align:center;padding:.6rem;font-size:.8rem">Nenhuma sessão registrada ainda.</td></tr>';
+    return;
+  }
+  tb.innerHTML = _sessHistorico.slice().reverse().map(s => `
+    <tr>
+      <td data-label="Tipo">${_escHtml(s.tipo)}</td>
+      <td data-label="Qualidade">${_escHtml(s.qualidade)}</td>
+      <td data-label="XP">${parseInt(s.xp, 10) || 0}</td>
+      <td data-label="Risco">${s.risco ? '+' + (parseInt(s.risco, 10) || 0) : '—'}</td>
+      <td data-label="Observação">${_escHtml(s.obs || '')}</td>
+      <td data-label="Data">${_escHtml(s.data || '')}</td>
+    </tr>`).join('');
+}
+
+function _salvarSessHistorico() {
+  const el = document.getElementById('sess-historico');
+  if (el) el.value = JSON.stringify(_sessHistorico);
+  renderSessHistorico();
+}
+
+function _restaurarSessHistorico() {
+  const el = document.getElementById('sess-historico');
+  try {
+    _sessHistorico = el && el.value ? JSON.parse(el.value) : [];
+  } catch(e) { _sessHistorico = []; }
+  if (!Array.isArray(_sessHistorico)) _sessHistorico = [];
+  renderSessHistorico();
+}
+
+// Registra a sessão: soma o XP total ao personagem, adiciona ao histórico e limpa o formulário
+function registrarSessao() {
+  const tipo = document.getElementById('sess-tipo')?.value || 'Oficial';
+  const qualidade = document.getElementById('sess-qualidade')?.value || 'Simples';
+  const xpBase = parseInt(document.getElementById('sess-xp')?.value, 10) || 0;
+  const risco = !!document.getElementById('sess-risco')?.checked;
+  const riscoXp = risco ? (parseInt(document.getElementById('sess-risco-xp')?.value, 10) || 25) : 0;
+  const obs = (document.getElementById('sess-obs')?.value || '').trim();
+  const total = xpBase + riscoXp;
+  const msg = document.getElementById('sess-msg');
+  if (total <= 0) {
+    if (msg) { msg.textContent = 'Defina um valor de XP maior que 0 para registrar.'; msg.style.color = '#e0a040'; }
+    return;
+  }
+  _sessHistorico.push({
+    tipo, qualidade, xp: total, risco: riscoXp, obs,
+    data: new Date().toLocaleDateString('pt-BR')
+  });
+  if (_sessHistorico.length > 50) _sessHistorico = _sessHistorico.slice(-50); // mantém as últimas 50
+  const xpEl = document.getElementById('xp-atual');
+  if (xpEl) xpEl.value = (parseInt(xpEl.value, 10) || 0) + total;
+  _salvarSessHistorico();
+  atualizarProgressoXP();
+  // limpa o formulário
+  if (document.getElementById('sess-tipo')) document.getElementById('sess-tipo').value = 'Oficial';
+  if (document.getElementById('sess-qualidade')) document.getElementById('sess-qualidade').value = 'Simples';
+  if (document.getElementById('sess-risco')) document.getElementById('sess-risco').checked = false;
+  if (document.getElementById('sess-risco-xp')) document.getElementById('sess-risco-xp').value = 25;
+  if (document.getElementById('sess-obs')) document.getElementById('sess-obs').value = '';
+  atualizarSugestaoXP();
+  if (msg) { msg.textContent = 'Sessão registrada: +' + total + ' XP.'; msg.style.color = 'var(--accent-light)'; }
+  salvarLocal();
+}
+
 // ─── FOTO — botão de remover a foto principal ───────────────────
 async function removerFotoPrincipal() {
   // Mesmo padrão de segurança das outras funções de foto — ver comentário
@@ -12311,7 +12558,7 @@ function preencherCampos(d) {
   Object.entries(d).forEach(([id,val])=>{
     if(['pericias','tecnicas','numTecnicas','slotsPericia','numPassivas','numDespertares','numPets'].includes(id)) return;
     if(['ms1','ms2','ms3','mf1','mf2','mf3'].includes(id)){ const el=document.getElementById(id); if(el) el.checked=val; return; }
-    if(['cond-avareado','cond-sangrando','cond-envenenado','cond-cegado','cond-caido','cond-agarrdo','cond-incapacitado','cond-exausto','cond-corrompido','cond-enlouquecido','cond-enfraquecido','cond-concentracao','major-wound'].includes(id)){ const el=document.getElementById(id); if(el) el.checked=val; return; }
+    if(['cond-avareado','cond-sangrando','cond-envenenado','cond-cegado','cond-caido','cond-agarrdo','cond-incapacitado','cond-exausto','cond-corrompido','cond-enlouquecido','cond-enfraquecido','cond-concentracao','major-wound','sess-risco'].includes(id)){ const el=document.getElementById(id); if(el) el.checked=val; return; }
     const el=document.getElementById(id); if(el) el.value=val;
   });
 
@@ -12329,6 +12576,10 @@ function preencherCampos(d) {
     // para garantir que os bônus (+X) reflitam os valores reais do personagem
     buildPericias();
     atualizarAvisoTorre();
+    // Restaura histórico de sessões e sincroniza XP → nível
+    _restaurarSessHistorico();
+    atualizarProgressoXP();
+    atualizarSugestaoXP();
   }, 50);
 }
 
@@ -12379,7 +12630,7 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false };
+    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false };
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
