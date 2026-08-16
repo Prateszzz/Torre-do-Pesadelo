@@ -5203,6 +5203,7 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
         <p class="lendas-subtitle">Os Despertos mais temidos do mundo conhecido</p>
         <div class="lendas-header-actions">
           <button class="lendas-refresh-btn" onclick="carregarRanking()"><svg class="ic"><use href="#ic-refresh"></use></svg> Atualizar</button>
+          <button class="lendas-refresh-btn" onclick="reaplicarPontuacaoRanking(this)" title="Recalcula o score de todos os personagens com o sistema atual (nível × 1000 + núcleos)"><svg class="ic"><use href="#ic-core"></use></svg> Reaplicar pontuação</button>
           <button class="lendas-personalizar-btn" onclick="abrirPersonalizacao()"><svg class="ic"><use href="#ic-gear"></use></svg> Personalizar Perfil</button>
         </div>
       </div>
@@ -6187,7 +6188,14 @@ function _fichaFromRankingGlobal(docId, d) {
     // aparecerem "empatados em 10" por um valor que nunca foi real.
     atributos: d.atributos || null,
     atributosTotal: (typeof d.atributosTotal === 'number') ? d.atributosTotal : null,
-    score: (typeof d.score === 'number') ? d.score : (nivel * 1000 + nucleos),
+    // Score pelo SISTEMA NOVO (nivel×1000 + nucleos). Um score salvo antigo
+    // (nivel×10 + nucleos) é sempre menor que nivel×1000 — então só preserva
+    // o valor salvo quando ele já está no formato novo; caso contrário,
+    // recalcula na exibição (sem tocar no Firestore). Isso garante ordenação
+    // e barra de poder corretas mesmo antes da migração de escrita rodar.
+    score: (typeof d.score === 'number' && d.score >= (parseInt(d.nivel) || 1) * 1000)
+      ? d.score
+      : ((parseInt(d.nivel) || 1) * 1000 + (parseInt(d.nucleos) || 0)),
     ts: d.ts || 0,
     vitorias: parseInt(d.vitorias) || 0,
     foto: d.foto || null,
@@ -6642,6 +6650,21 @@ async function carregarRanking() {
     renderizarCartoes(visiveis, _abaAtual);
     _salvarCacheRanking(visiveis);
 
+    // ═══ MIGRAÇÃO AUTOMÁTICA (1×): score antigo → sistema novo ═══
+    // Personagens cujo score foi gravado com nivel×10+nucleos continuam com o
+    // valor antigo no Firestore. Na primeira carga do ranking desta sessão,
+    // reaplica o score pelo sistema atual (nivel×1000+nucleos) em todos os
+    // docs de rankingGlobal e recarrega para o usuário já ver os novos valores.
+    // O fallback de leitura (em _fichaFromRankingGlobal) garante a exibição
+    // correta mesmo se a escrita falhar por falta de permissão.
+    if (localStorage.getItem('tp_ranking_migrado_score') !== '1') {
+      localStorage.setItem('tp_ranking_migrado_score', '1');
+      _recalcularScoresRanking().then(() => {
+        // Recarrega com os scores atualizados (flag já marcado — sem loop).
+        if (!_rankingCarregando && document.getElementById('ranking-grid')) carregarRanking();
+      });
+    }
+
     // Auto-refresh de 30s REMOVIDO a pedido: o ranking agora só atualiza
     // quando a página carrega (login) ou quando o jogador clica no botão
     // "Atualizar" (.lendas-refresh-btn, ver HTML de #secao-ranking). Fora
@@ -6649,6 +6672,75 @@ async function carregarRanking() {
     // mesmo que o jogador entre e saia da aba várias vezes.
   } finally {
     _rankingCarregando = false;
+  }
+}
+
+// ─── MIGRAÇÃO DE SCORE DO RANKING (sistema novo: nivel×1000 + nucleos) ─────
+// Personagens cujo score foi gravado com o sistema ANTIGO (nivel×10 + nucleos)
+// continuam com o valor antigo no Firestore até serem salvos de novo. Esta
+// função lê TODOS os docs de rankingGlobal, recalcula o score pelo sistema
+// atual e grava APENAS o campo `score` via updateDoc (nunca setDoc — que
+// sobrescreveria o doc inteiro; e nunca toca a coleção `fichas`).
+// Retorna { total, atualizados, falhas } para feedback (console/botão).
+async function _recalcularScoresRanking() {
+  const resultado = { total: 0, atualizados: 0, falhas: 0 };
+  if (!window.db || !window.collection || !window.getDocs || !window.doc || !window.updateDoc) {
+    console.warn('[Ranking] Firestore indisponível para reaplicar pontuação.');
+    return resultado;
+  }
+  try {
+    const rankingSnap = await window.getDocs(window.collection(window.db, 'rankingGlobal'));
+    const escritas = [];
+    rankingSnap.forEach(docSnap => {
+      resultado.total++;
+      const d = docSnap.data() || {};
+      // Mesmo parse de updateRankingEntry/_fichaFromRankingGlobal.
+      const nucleos = parseInt(d.nucleos) || 0;
+      const nivel = parseInt(d.nivel) || 1;
+      const novoScore = nivel * 1000 + nucleos;
+      if (typeof d.score === 'number' && d.score === novoScore) return; // já no sistema novo
+      // Grava SOMENTE o campo score — updateDoc preserva todos os demais.
+      escritas.push(
+        window.updateDoc(window.doc(window.db, 'rankingGlobal', docSnap.id), { score: novoScore })
+          .then(() => { resultado.atualizados++; })
+          .catch(e => {
+            // Sem permissão para gravar doc de outro usuário (caso comum para
+            // players): apenas não atualiza aquele doc — o fallback de leitura
+            // (score antigo < nivel×1000 → recalcula na exibição) cobre o resto.
+            resultado.falhas++;
+            console.warn('[Ranking] Sem permissão para atualizar score de', docSnap.id, e);
+          })
+      );
+    });
+    // Aguarda todas as escritas (successo ou falha) antes de retornar.
+    await Promise.allSettled(escritas);
+  } catch(e) {
+    console.warn('[Ranking] Erro ao ler rankingGlobal para reaplicar pontuação:', e);
+  }
+  console.log('[Ranking] Reaplicação de pontuação concluída — total:', resultado.total,
+    '| atualizados:', resultado.atualizados, '| falhas:', resultado.falhas);
+  return resultado;
+}
+
+// Botão manual "Reaplicar pontuação do ranking" — roda a migração de score
+// e recarrega a lista com os novos valores. Feedback visual no botão.
+async function reaplicarPontuacaoRanking(btn) {
+  if (btn) {
+    btn.disabled = true;
+    const original = btn.innerHTML;
+    btn.innerHTML = '<span style="opacity:.75">Reaplicando...</span>';
+    try {
+      const r = await _recalcularScoresRanking();
+      if (document.getElementById('ranking-grid')) carregarRanking();
+      const msg = '[Ranking] Reaplicação: ' + r.atualizados + ' atualizado(s), ' + r.falhas + ' sem permissão.';
+      console.log(msg);
+      // Feedback discreto (não usa alert — o usuário pode recarregar à vontade).
+    } finally {
+      if (btn) { btn.disabled = false; btn.innerHTML = original; }
+    }
+  } else {
+    await _recalcularScoresRanking();
+    if (document.getElementById('ranking-grid')) carregarRanking();
   }
 }
 
