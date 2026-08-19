@@ -11174,7 +11174,7 @@ const ANTECEDENTES_INFO = {
   'Estudioso de Ruínas': 'Treinado em <strong>História</strong> (grátis) + Vantagem em História/decifração sobre as Torres. Diário de ruínas (1×/incursão). <em>Gancho:</em> a Torre nota estudiosos. <em>Relacionamento Nv1:</em> antigo mentor.',
   'Curandeiro de Feridas da Torre': 'Treinado em <strong>Medicina</strong> (grátis) + +2 em Medicina. Kit de Medicina e estabiliza 1×/cena. <em>Gancho:</em> o peso dos que não salvou. <em>Relacionamento Nv1:</em> paciente que não conseguiu salvar.',
   'Desertor das Guerras Humanas': 'Treinado em <strong>Ofícios</strong> ou <strong>Astúcia</strong> (grátis) + +1 Iniciativa em conflito armado. 1×/incursão improvisa barricada. <em>Gancho:</em> inimigos em facções. <em>Relacionamento Nv1:</em> antigo oficial.',
-  'Marcado pelo Primeiro Toque': '<strong>PE máxima +2</strong> + sensor de energia da Torre. Primeira técnica ganha efeito extra a partir do Nv 3. <em>Custo:</em> +1 Corrupção e +1 Atenção da Torre. <em>Relacionamento Nv1:</em> o toque que o marcou.',
+  'Marcado pelo Primeiro Toque': '<strong>PE máxima +2</strong> + sensor de energia da Torre. Desde o Nível 1, a primeira técnica ganha um efeito adicional menor gratuito. <em>Custo:</em> +1 Corrupção e +1 Atenção da Torre. <em>Relacionamento Nv1:</em> o toque que o marcou.',
   'Gladiador das Torres da Disputa': 'Treinado em <strong>Performance</strong> (grátis) + Vantagem em Performance/Intimidação pública. "Sangue Temperado" (+1 Rank na próxima forja ou Vantagem 1×/combate). <em>Gancho:</em> a Disputa ainda te vê. <em>Relacionamento Nv1:</em> rival nas Disputas.',
   'Testemunha da Devoração': 'Treinado em <strong>Intuição</strong> (grátis) + Vantagem em Vontade contra leitura de mente. Fragmento relacionado + conhecimento proibido. <em>Custo:</em> −1 a −2 Sanidade. <em>Relacionamento Nv1:</em> quem quer o segredo enterrado.',
   'Filho de Ascendido': 'Treinado em <strong>História</strong> (grátis) + Vantagem em conhecimento de Ascensão. Item herdado e 1 segredo sobre o parente. <em>Gancho:</em> herança perigosa. <em>Relacionamento Nv1:</em> memória/fantasma do parente.',
@@ -11304,6 +11304,40 @@ function migrarBonusesAntecedente(d) {
     localStorage.setItem(flag, '1');
     salvarLocal();
   }
+}
+
+// Botão manual "Reaplicar bônus do Antecedente": recalcula os bônus fixos do
+// antecedente atual do zero (reverte o que estiver aplicado e reaplica), para o
+// GM corrigir valores duplicados/errados. Dá feedback visual ao usuário.
+function reaplicarBonusesAntecedente() {
+  const sel = document.getElementById('f-antecedente');
+  const nome = sel ? sel.value : '';
+  if (!nome || !ANTECEDENTES_BONUS[nome]) {
+    _flashAntecedenteMsg('Nenhum antecedente com bônus fixos selecionado.', 'amber');
+    return;
+  }
+  // Reverte os bônus do antecedente atual (se já estavam aplicados) e reaplica.
+  reverterBonusesAntecedente(nome);
+  const aplicou = aplicarBonusesAntecedente(nome, { tipo: 'selecao' });
+  if (aplicou) {
+    if (typeof calcTudoDebounced === 'function') calcTudoDebounced();
+    if (typeof salvarLocal === 'function') salvarLocal();
+    _flashAntecedenteMsg('Bônus do antecedente reaplicados: ' + _resumoBonusAntecedente(nome) + '.', 'ok');
+  } else {
+    _flashAntecedenteMsg('Nada a reaplicar para este antecedente.', 'amber');
+  }
+}
+
+// Feedback visual temporário perto do seletor de antecedente.
+function _flashAntecedenteMsg(msg, tipo) {
+  const box = document.getElementById('antecedente-resumo');
+  if (!box) return;
+  const cor = tipo === 'ok' ? 'var(--gold-light)' : 'var(--accent-light)';
+  box.innerHTML = '<span style="color:' + cor + ';font-weight:600">' + msg + '</span>';
+  clearTimeout(_flashAntecedenteMsg._t);
+  _flashAntecedenteMsg._t = setTimeout(function () {
+    if (typeof atualizarResumoAntecedente === 'function') atualizarResumoAntecedente();
+  }, 3500);
 }
 
 // ═══ TRAÇOS DA ALMA — catálogo oficial (livro, seção #tracos-alma) ═══
