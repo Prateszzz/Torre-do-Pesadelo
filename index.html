@@ -3718,8 +3718,9 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-panel-body { padding: .9rem .8rem; }
 
   /* ── #FICHA-CONTENT COMO COLUNA ÚNICA ORDENÁVEL ──
-     Ordem mobile: Hero > Atributos > Recursos > Poder > Registro >
-     Inventário > Pets > Progressão > Perícias */
+     Ordem mobile: Hero > Atributos > Recursos > Poder > Traços da Alma >
+     Árvore > Utilizações > Combate > Sessões > Acampamento > Forja >
+     Relacionamentos > Registro > Inventário > Pets > Aparência > Perícias */
   #ficha-content {
     display: flex;
     flex-direction: column;
@@ -3733,6 +3734,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   /* Nova ordem das seções — espelha a ordem do HTML */
   #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 3; }       /* Ficha Base   */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 4; }  /* Poder        */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 4.1; }       /* Traços da Alma */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.7; }       /* Combate (trackers) */
@@ -8833,11 +8835,29 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+let _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
   _aplicarEstadoFichaExpand();
+  // Persiste a escolha do usuário entre renders/sessões (por usuário).
+  try { localStorage.setItem('tp_ficha_expandidos_' + (usuarioAtual || ''), JSON.stringify(_fichaExpandidos)); } catch (e) {}
+}
+
+// Restaura o estado expandido salvo (se houver) — a escolha do usuário
+// sobrevive a renders e sessões; nada é aberto por padrão.
+function _restaurarFichaExpandidos() {
+  try {
+    const raw = localStorage.getItem('tp_ficha_expandidos_' + (usuarioAtual || ''));
+    if (raw) {
+      const salvo = JSON.parse(raw);
+      if (salvo && typeof salvo === 'object') {
+        Object.keys(_fichaExpandidos).forEach(k => {
+          if (typeof salvo[k] === 'boolean') _fichaExpandidos[k] = salvo[k];
+        });
+      }
+    }
+  } catch (e) {}
 }
 
 function _aplicarEstadoFichaExpand() {
@@ -8865,6 +8885,23 @@ function _atualizarResumosFichaExpand() {
     const historia = document.getElementById('r-historia')?.value || '';
     const resumo = historia.replace(/\s+/g,' ').trim();
     resumoLore.textContent = resumo ? (resumo.length > 60 ? resumo.slice(0,60) + '…' : resumo) : '—';
+  }
+  const resumoTracos = document.getElementById('resumo-tracos');
+  if (resumoTracos) {
+    const b = _calcularBalanceTracos();
+    const nPos = document.querySelectorAll('#tracos-lista .traco-chip').length;
+    const nNeg = document.querySelectorAll('#fraquezas-lista .traco-chip').length;
+    const total = nPos + nNeg;
+    if (total === 0) {
+      resumoTracos.textContent = '—';
+      resumoTracos.style.color = '';
+    } else if (b.ok) {
+      resumoTracos.textContent = total + ' traços · Equilibrado ✓';
+      resumoTracos.style.color = 'var(--gold-light)';
+    } else {
+      resumoTracos.textContent = total + ' traços · Faltam ' + b.falta + ' pts de fraqueza';
+      resumoTracos.style.color = 'var(--accent-text)';
+    }
   }
 }
 
@@ -10301,7 +10338,8 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _restaurarFichaExpandidos();
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
@@ -10412,7 +10450,8 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+      _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+      _restaurarFichaExpandidos();
       _aplicarEstadoFichaExpand();
     }
   }
@@ -11288,14 +11327,14 @@ const TRACOS_ALMA = {
     { nome:'Predador Silencioso', custo:3, cat:1, desc:'Emboscada: primeiro ataque/poder +1d6; criaturas não alertadas têm desvantagem para detectá-lo.' },
     // ── 2 · Sobrevivência & Exploração ──
     { nome:'Explorador da Névoa', custo:2, cat:2, desc:'Vantagem em Navegação na Névoa/desorientação; eventos aleatórios hostis reduzidos em 1 nível.' },
-    { nome:'Afinidade com uma Torre Guardiã', custo:4, cat:2, desc:'Escolha uma Guardiã: −2 CD em Sobrevivência/Navegação + vantagem numa Salvaguarda do tema.' },
+    { nome:'Afinidade com uma Torre Guardiã', custo:4, cat:2, desc:'Escolha uma Torre Guardiã (Carmesim, Eco, Onírica ou Gélida). Dentro dela: −2 na dificuldade de testes de Sobrevivência e Navegação + Vantagem em 1 salvaguarda por incursão. Em qualquer outra torre, 1×/incursão sente ecos da Guardiã escolhida e recebe uma dica do Mestre.' },
     { nome:'Caçador de Anomalias', custo:2, cat:2, desc:'Vantagem para rastrear, identificar ou prever criaturas corrompidas ou anômalas.' },
-    { nome:'Fôlego da Alma', custo:2, cat:2, desc:'Prende a respiração 10 min sem testes; na Névoa densa sofre metade da penalidade em Vigor.' },
+    { nome:'Fôlego da Alma', custo:2, cat:2, desc:'Prende a respiração por até 10 minutos; metade da penalidade em Névoa densa; +2 em Salvaguardas de Vigor contra gases, fumaça e venenos inalados.' },
     { nome:'Sentidos Aguçados', custo:1, cat:2, desc:'Escolha um sentido: vantagem em Percepção que o use.' },
-    { nome:'Visão no Escuro', custo:2, cat:2, desc:'Enxerga perfeitamente em escuridão total dentro de Torres.' },
-    { nome:'Andarilho das Ruínas', custo:3, cat:2, desc:'+2 em Sobrevivência/Navegação/Furtividade em áreas arruinadas; monstros têm mais dificuldade para rastreá-lo.' },
+    { nome:'Visão no Escuro', custo:2, cat:2, desc:'Enxerga com clareza total em escuridão natural ou mágica, em qualquer ambiente (Névoa, torres, ruínas, noite). Vantagem em testes de Percepção para detectar ameaças no escuro. Criaturas que dependem do escuro não têm Vantagem automática contra você.' },
+    { nome:'Andarilho das Ruínas', custo:3, cat:2, desc:'Vantagem em testes de Sobrevivência, Navegação e Furtividade em ruínas e andares abandonados de torres. 1×/incursão, reconhece uma rota segura ou atalho: o Mestre revela 1 caminho sem encontro.' },
     { nome:'Olhos da Névoa', custo:3, cat:2, desc:'Enxerga através de névoa leve e ilusões menores; Percepção na Névoa com vantagem; metade da desorientação.' },
-    { nome:'Rastreador da Névoa', custo:3, cat:2, desc:'Vantagem em Sobrevivência/Navegação na Névoa; 1×/incursão segue um rastro sem teste.' },
+    { nome:'Rastreador da Névoa', custo:3, cat:2, desc:'Vantagem em testes de Sobrevivência e Navegação na Névoa. 1×/incursão, segue um rastro na Névoa com precisão: o Mestre revela o destino e 1 detalhe útil do caminho, sem teste.' },
     // ── 3 · Mental & Sanidade ──
     { nome:'Mente Focada', custo:3, cat:3, desc:'Concentração em 2 efeitos simultâneos; +2 contra distrações mentais.' },
     { nome:'Presença Inspiradora', custo:3, cat:3, desc:'Aliados a 9 m: +1 contra medo/exaustão; 1×/cena vantagem num teste de Sanidade de um aliado.' },
@@ -11312,23 +11351,23 @@ const TRACOS_ALMA = {
     { nome:'Ligação com Organização', custo:3, cat:4, desc:'Influência moderada numa facção; 1×/incursão favor menor (informação, abrigo, suprimentos).' },
     { nome:'Laços de Sangue', custo:2, cat:4, desc:'Vínculo com pessoa específica: a 30 m ambos +1 em Vigor e contra medo; estabiliza com vantagem 1×/cena.' },
     { nome:'Imponência da Alma', custo:3, cat:4, desc:'+2 em intimidação/liderança; criaturas comuns têm desvantagem em moral contra você.' },
-    { nome:'Marca do Consórcio', custo:3, cat:4, desc:'Acesso a laboratórios/agentes do Consórcio (1 favor menor/incursão). Custo: +1 Corrupção inicial.' },
-    { nome:'Protetor', custo:2, cat:4, desc:'Escolha 1 aliado: enquanto o protege, ambos +1 CA; se ele morrer, ganha a fraqueza "Cicatriz da Perda" (+3).' },
+    { nome:'Marca do Consórcio', custo:2, cat:4, desc:'Acesso a laboratórios e agentes do Consórcio em cidadelas (1 favor menor por incursão); reconhece agentes e símbolos do Consórcio. Começa com +1 de Corrupção.' },
+    { nome:'Protetor', custo:2, cat:4, desc:'Escolha 1 aliado específico: enquanto o protege (adjacente ou na linha de visão), ambos ganham +1 CA. Se ele morrer, ganha a fraqueza "Cicatriz da Perda" (+2) — o Mestre pode permitir superá-la na campanha.' },
     { nome:'Mãos de Ofício', custo:2, cat:4, desc:'Vantagem em Ofícios; começa com 1 ferramenta de ofício do Catálogo.' },
     // ── 5 · Alma & Poder ──
     { nome:'Inventor da Alma', custo:1, cat:5, desc:'Funde 2 itens mundanos num objeto improvisado funcional (Mestre aprova a utilidade).' },
-    { nome:'Empatia com Criaturas', custo:1, cat:5, desc:'Vantagem para acalmar, entender ou prever criaturas corrompidas.' },
-    { nome:'Tempo de Vida Estendido', custo:3, cat:5, desc:'Envelhece 50% mais devagar; +2 em Salvaguardas de Vigor contra doenças/venenos prolongados; resiste 1 Exaustão por fome/sede 1×/dia.' },
+    { nome:'Empatia com Criaturas', custo:1, cat:5, desc:'Vantagem para acalmar, entender ou prever animais e criaturas não inteligentes. Criaturas corrompidas têm Desvantagem para te enganar.' },
+    { nome:'Tempo de Vida Estendido', custo:2, cat:5, desc:'Envelhece 50% mais devagar; +2 em Salvaguardas de Vigor contra doenças e venenos prolongados; resiste a 1 nível de Exaustão por fome ou sede uma vez por dia.' },
     { nome:'Aura Reforçada', custo:5, cat:5, desc:'PE máximo +3; 1×/descanso longo recupera 1d6 de PE.' },
     { nome:'Sorte da Alma', custo:3, cat:5, desc:'1×/incursão, re-rola um teste/ataque falho e fica com o segundo resultado.' },
     { nome:'Fome da Alma', custo:4, cat:5, desc:'Absorve núcleo de monstro ≥ seu nível: recupera 1d6 PE ou 1d4 Sanidade (1×/monstro; núcleos humanos não ativam).' },
     { nome:'Regeneração Leve da Alma', custo:4, cat:5, desc:'Descanso curto: +1d6+2 PV/STA; 1×/dia ao cair a 0 PV, 1d20 15+ estabiliza com 1 PV.' },
     { nome:'Sentido do Fluxo', custo:4, cat:5, desc:'1×/cena detecta poder ativo, armadilha mágica ou direção de energia próxima.' },
-    { nome:'Herança Ancestral', custo:3, cat:5, desc:'Escolha 1 perícia de Intelecto: vantagem nela.' },
-    { nome:'Memória Muscular', custo:2, cat:5, desc:'Técnica nova: usável 1× com vantagem na primeira sessão após aprendida.' },
+    { nome:'Herança Ancestral', custo:2, cat:5, desc:'Escolha 1 perícia de Intelecto (História, Religião, Ofícios, Investigação). Vantagem nela.' },
+    { nome:'Memória Muscular', custo:2, cat:5, desc:'Ao aprender uma Técnica nova, pode usá-la 1× com Vantagem na primeira sessão. +2 em testes para copiar ou adaptar movimentos de outros.' },
     { nome:'Presença Etérea', custo:4, cat:5, desc:'1×/cena, 1 rodada intangível: ataques físicos têm desvantagem contra você.' },
-    { nome:'Eco de Poder', custo:4, cat:5, desc:'1×/cena replica efeito de poder visto por metade do custo (mín. 1 PE; Mestre aprova).' },
-    { nome:'Visão da Torre', custo:2, cat:5, desc:'1×/cena visão breve sobre perigo iminente ou caminho seguro (dica do Mestre).' },
+    { nome:'Eco de Poder', custo:3, cat:5, desc:'1×/cena, replica um efeito de poder que viu ser usado: custa metade do custo do poder copiado (mín. 1 PE); o Mestre aprova a fidelidade do efeito.' },
+    { nome:'Visão da Torre', custo:2, cat:5, desc:'1×/cena, o Mestre deve revelar uma dica curta e útil sobre um perigo ou segredo próximo. A dica funciona mesmo se a Torre tentar ocultá-lo — você sente através da própria Torre.' },
     { nome:'Consumidor de Essência', custo:4, cat:5, desc:'Derrota + absorve núcleo: recupera 1d8 PV ou 1d4 PE (1×/combate).' },
     { nome:'Toque da Alma', custo:4, cat:5, desc:'1×/cena toca aliado e transfere vitalidade: role 1d8, você perde esse valor e ele recupera.' },
     { nome:'Memória de Sangue', custo:3, cat:5, desc:'Fere um inimigo: +1 em ataques/testes contra aquele tipo de monstro por 24 h.' },
@@ -11500,14 +11539,29 @@ function atualizarBalanceTracos() {
   if (!b.temPos) {
     box.innerHTML = `<span style="color:var(--text-muted)">Sem traços positivos ainda — adicione pela lista acima.</span>`;
     box.style.borderColor = 'var(--border)';
-    return;
-  }
-  if (b.ok) {
+  } else if (b.ok) {
     box.innerHTML = `<span style="color:var(--gold-light)"><strong>Equilibrado ✓</strong></span> <span style="color:var(--text-muted)">— positivos ${txtPos} (${b.gratis} grátis) × fraquezas ${txtNeg}.</span>`;
     box.style.borderColor = 'rgba(220,180,60,.5)';
   } else {
     box.innerHTML = `<span style="color:var(--accent-text)"><strong>Faltam ${b.falta} ponto(s) de fraqueza</strong></span> <span style="color:var(--text-muted)">— positivos pagos ${b.posPagos} pts × fraquezas ${txtNeg}. Adicione fraquezas equivalentes.</span>`;
     box.style.borderColor = 'rgba(220,90,60,.55)';
+  }
+  // Alimenta o resumo do título do painel (contagem + balance).
+  const resumoTracos = document.getElementById('resumo-tracos');
+  if (resumoTracos) {
+    const nPos = document.querySelectorAll('#tracos-lista .traco-chip').length;
+    const nNeg = document.querySelectorAll('#fraquezas-lista .traco-chip').length;
+    const total = nPos + nNeg;
+    if (total === 0) {
+      resumoTracos.textContent = '—';
+      resumoTracos.style.color = '';
+    } else if (b.ok) {
+      resumoTracos.textContent = total + ' traços · Equilibrado ✓';
+      resumoTracos.style.color = 'var(--gold-light)';
+    } else {
+      resumoTracos.textContent = total + ' traços · Faltam ' + b.falta + ' pts de fraqueza';
+      resumoTracos.style.color = 'var(--accent-text)';
+    }
   }
 }
 
@@ -11840,6 +11894,48 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       </div>
     </div>
     <div id="tecnicas-lista"></div>
+  </div>
+  </div>
+</div>
+
+<!-- TRAÇOS DA ALMA — seletor de traços positivos e fraquezas com Balance -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('tracos')" id="toggle-tracos">
+    <span class="ficha-expand-seta" id="seta-tracos">▶</span> Traços da Alma
+    <span class="ficha-expand-resumo" id="resumo-tracos"></span>
+  </div>
+  <div class="ficha-expand-area" id="area-tracos">
+  <div class="ficha-panel-body">
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Traços da Alma — Positivos</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="select-traco-positivo" onchange="this.nextElementSibling.style.borderColor=this.value?'var(--accent)':'var(--border)'" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
+            <option value="">Escolher traço positivo...</option>
+            ${_opcoesTracos(true)}
+          </select>
+          <button type="button" onclick="adicionarTracoChip('traco','select-traco-positivo','tracos-lista')" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <div id="tracos-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
+        <textarea id="r-tracos" style="display:none"></textarea>
+        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Escolha os traços pela lista. O 1º positivo de até 2 pts é grátis; os demais exigem fraquezas equivalentes.</small>
+      </div>
+      <div class="field-group">
+        <label>Fraquezas / Traumas</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="select-fraqueza" onchange="this.nextElementSibling.style.borderColor=this.value?'var(--gold-light)':'var(--border)'" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
+            <option value="">Escolher fraqueza...</option>
+            ${_opcoesTracos(false)}
+          </select>
+          <button type="button" onclick="adicionarTracoChip('fraqueza','select-fraqueza','fraquezas-lista')" style="background:none;border:1px solid var(--gold-light);color:var(--gold-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <div id="fraquezas-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
+        <textarea id="r-defeitos" style="display:none"></textarea>
+        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Fraquezas equilibram os traços pagos — somam pontos contra eles.</small>
+      </div>
+    </div>
+    <!-- Balance de Traços (promessa do livro) -->
+    <div id="traco-balance-status" style="margin-top:.15rem;margin-bottom:.5rem;border:1px solid var(--border);border-radius:4px;padding:.55rem .7rem;font-size:.78rem;background:rgba(255,255,255,.02)"></div>
   </div>
   </div>
 </div>
@@ -12779,37 +12875,6 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       </div>
       ${fieldGroup('Comportamento em Combate / Situações de Pressão','r-comportamento','textarea')}
     </div>
-    <!-- TRAÇOS -->
-    <div class="field-row cols-2">
-      <div class="field-group">
-        <label>Traços da Alma — Positivos</label>
-        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
-          <select id="select-traco-positivo" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
-            <option value="">Escolher traço positivo...</option>
-            ${_opcoesTracos(true)}
-          </select>
-          <button type="button" onclick="adicionarTracoChip('traco','select-traco-positivo','tracos-lista')" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
-        </div>
-        <div id="tracos-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
-        <textarea id="r-tracos" style="display:none"></textarea>
-        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Escolha os traços pela lista. O 1º positivo de até 2 pts é grátis; os demais exigem fraquezas equivalentes.</small>
-      </div>
-      <div class="field-group">
-        <label>Fraquezas / Traumas</label>
-        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
-          <select id="select-fraqueza" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
-            <option value="">Escolher fraqueza...</option>
-            ${_opcoesTracos(false)}
-          </select>
-          <button type="button" onclick="adicionarTracoChip('fraqueza','select-fraqueza','fraquezas-lista')" style="background:none;border:1px solid var(--gold-light);color:var(--gold-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
-        </div>
-        <div id="fraquezas-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
-        <textarea id="r-defeitos" style="display:none"></textarea>
-        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Fraquezas equilibram os traços pagos — somam pontos contra eles.</small>
-      </div>
-    </div>
-    <!-- Balance de Traços (promessa do livro) -->
-    <div id="traco-balance-status" style="margin-top:.15rem;margin-bottom:.5rem;border:1px solid var(--border);border-radius:4px;padding:.55rem .7rem;font-size:.78rem;background:rgba(255,255,255,.02)"></div>
     <div class="field-row cols-2">
       ${fieldGroup('Ideais','r-ideais','textarea')}
       ${fieldGroup('Ligações','r-ligacoes','textarea')}
@@ -14993,7 +15058,8 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _restaurarFichaExpandidos();
     _aplicarEstadoFichaExpand();
   }
   renderizarPersonagensAccordion();
