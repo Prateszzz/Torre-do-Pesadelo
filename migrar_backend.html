@@ -279,8 +279,8 @@
     if (!raw) { setStatus('status-destino', 'Cole o firebaseConfig do projeto novo.', 'err'); return; }
     let cfg;
     try {
-      // Extrai o objeto firebaseConfig mesmo que o usuário cole o bloco inteiro
-      // (com imports, comentários e o const firebaseConfig = { ... }).
+      // Extrai os campos do firebaseConfig manualmente (imune a comentários,
+      // imports, aspas simples/duplas, chaves sem aspas, etc.).
       let texto = raw;
       // Remove comentários de linha (// ...) e de bloco (/* ... */).
       texto = texto.replace(/\/\/[^\n]*/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ');
@@ -292,15 +292,20 @@
         return;
       }
       texto = texto.slice(ini, fim + 1);
-      // Converte chaves sem aspas (ex: apiKey:) para chaves com aspas.
-      texto = texto.replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":');
-      cfg = JSON.parse(texto);
+      // Extrai cada campo com regex: "chave": "valor" (ou chave: 'valor' / chave: valor).
+      const campos = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId', 'measurementId', 'databaseURL'];
+      cfg = {};
+      for (const c of campos) {
+        const re = new RegExp('["\\\']?' + c + '["\\\']?\\s*:\\s*["\\\']([^"\\\']*)["\\\']', 'i');
+        const m = texto.match(re);
+        if (m) cfg[c] = m[1];
+      }
+      if (!cfg.apiKey || !cfg.projectId || !cfg.appId) {
+        setStatus('status-destino', 'Faltam campos (apiKey, projectId, appId). Confira o objeto colado.', 'err');
+        return;
+      }
     } catch (e) {
       setStatus('status-destino', 'Não consegui ler o firebaseConfig. Verifique se colou o objeto inteiro.', 'err');
-      return;
-    }
-    if (!cfg.apiKey || !cfg.projectId || !cfg.appId) {
-      setStatus('status-destino', 'Faltam campos (apiKey, projectId, appId). Confira o objeto colado.', 'err');
       return;
     }
     configDestino = cfg;
