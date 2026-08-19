@@ -279,9 +279,19 @@
     if (!raw) { setStatus('status-destino', 'Cole o firebaseConfig do projeto novo.', 'err'); return; }
     let cfg;
     try {
-      // Aceita o objeto com ou sem chaves, com aspas simples/duplas ou sem.
+      // Extrai o objeto firebaseConfig mesmo que o usuário cole o bloco inteiro
+      // (com imports, comentários e o const firebaseConfig = { ... }).
       let texto = raw;
-      if (!texto.trim().startsWith('{')) texto = '{' + texto + '}';
+      // Remove comentários de linha (// ...) e de bloco (/* ... */).
+      texto = texto.replace(/\/\/[^\n]*/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ');
+      // Pega do primeiro "{" até o último "}" (o objeto firebaseConfig).
+      const ini = texto.indexOf('{');
+      const fim = texto.lastIndexOf('}');
+      if (ini === -1 || fim === -1 || fim <= ini) {
+        setStatus('status-destino', 'Não encontrei o objeto { ... } no texto colado. Cole o firebaseConfig.', 'err');
+        return;
+      }
+      texto = texto.slice(ini, fim + 1);
       // Converte chaves sem aspas (ex: apiKey:) para chaves com aspas.
       texto = texto.replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":');
       cfg = JSON.parse(texto);
