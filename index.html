@@ -11146,6 +11146,127 @@ const ANTECEDENTES_INFO = {
   'Colecionador de Últimas Palavras': 'Treinado em <strong>Performance</strong> (grátis) + Vantagem em situações de morte iminente. Livro de ecos (1×/incursão = 1 pista). <em>Gancho:</em> coleção cobiçada. <em>Relacionamento Nv1:</em> fantasma/eco que o acompanha.'
 };
 
+// ─── BÔNUS FIXOS DOS ANTECEDENTES (auto-aplicação) ───
+// Efeitos que mexem em campos numéricos da ficha. Os efeitos "eventuais"
+// (Vantagens, desconto de forja, achados 1d6, etc.) NÃO entram aqui — vão como
+// texto no resumo/obs. `rolagem` marca os que dependem de dado (o wizard resolve
+// na criação; na ficha o jogador ajusta manualmente).
+const ANTECEDENTES_BONUS = {
+  'Marcado pelo Primeiro Toque': { bPe: 2, corrupcao: 1, ticks: 1 },
+  'Cativo da Torre': { ticks: 1 },
+  'Fugitivo do Culto do Olho': { sanidade: -2 },
+  'Testemunha da Devoração': { sanidade: -1 }, // default −1; jogador ajusta para −2
+  'Guarda de Muralha': { bCa: 1 },
+  'Mensageiro da Névoa': { provisoes: 1 },
+  'Catador de Fragmentos': { rolagem: 'espiritos' },   // 3d6×10 Esp
+  'Predador de Baixo Nível': { rolagem: 'materiais' }, // 1d4 materiais (item)
+  'Alquimista de Essências': { rolagem: 'doses' }      // 2d4 doses (item)
+};
+
+// Rótulos curtos dos bônus para o resumo dinâmico (ex.: "+2 PE, +1 Corrupção").
+const _ANTECEDENTES_BONUS_LABELS = {
+  bPe: '+2 PE', corrupcao: '+1 Corrupção', ticks: '+1 Atenção da Torre',
+  sanidade: '−2 Sanidade', bCa: '+1 CA', provisoes: '+1 provisão'
+};
+
+// Aplica (ou reverte) os EFEITOS FIXOS de um antecedente nos campos da ficha.
+// tipo: 'selecao' (troca limpa — subtrai o anterior, aplica o novo) |
+//       'migracao' (conservador — só aplica se os alvos estiverem zerados) |
+//       'wizard' (aplica nos valores que serão gravados pelo wizard).
+// Retorna true se algo foi aplicado (útil para o resumo dinâmico).
+function aplicarBonusesAntecedente(nomeAntecedente, opts) {
+  const tipo = (opts && opts.tipo) || 'selecao';
+  const bonus = nomeAntecedente ? ANTECEDENTES_BONUS[nomeAntecedente] : null;
+  if (!bonus) return false;
+
+  const getNum = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return 0;
+    const v = parseFloat(String(el.value).replace(',', '.'));
+    return isNaN(v) ? 0 : v;
+  };
+  const setNum = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  };
+
+  // Mapa campo → delta. Rolagens (espiritos/materiais/doses) são resolvidas
+  // pelo wizard na criação; na ficha o jogador ajusta manualmente.
+  const deltas = [];
+  if (bonus.bPe) deltas.push(['b-pe', bonus.bPe]);
+  if (bonus.corrupcao) deltas.push(['f-corrupcao', bonus.corrupcao]);
+  if (bonus.ticks) deltas.push(['torre-ticks', bonus.ticks]);
+  if (bonus.sanidade) deltas.push(['f-sanidade', bonus.sanidade]);
+  if (bonus.bCa) deltas.push(['b-ca', bonus.bCa]);
+  if (bonus.provisoes) deltas.push(['f-provisoes', bonus.provisoes]);
+
+  if (tipo === 'migracao') {
+    // Conservador: só aplica se TODOS os alvos estiverem vazios/zerados.
+    // Se algum já tem valor, o jogador editou — não sobrescreve.
+    const todosZerados = deltas.every(([id]) => getNum(id) === 0);
+    if (!todosZerados) return false;
+    deltas.forEach(([id, delta]) => setNum(id, getNum(id) + delta));
+    return true;
+  }
+
+  // 'selecao' e 'wizard' somam diretamente (a troca limpa já reverteu o anterior).
+  deltas.forEach(([id, delta]) => setNum(id, getNum(id) + delta));
+  return true;
+}
+
+// Reverte os efeitos fixos de um antecedente (usado na troca limpa do seletor).
+function reverterBonusesAntecedente(nomeAntecedente) {
+  const bonus = nomeAntecedente ? ANTECEDENTES_BONUS[nomeAntecedente] : null;
+  if (!bonus) return;
+  const getNum = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return 0;
+    const v = parseFloat(String(el.value).replace(',', '.'));
+    return isNaN(v) ? 0 : v;
+  };
+  const setNum = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  if (bonus.bPe) setNum('b-pe', getNum('b-pe') - bonus.bPe);
+  if (bonus.corrupcao) setNum('f-corrupcao', getNum('f-corrupcao') - bonus.corrupcao);
+  if (bonus.ticks) setNum('torre-ticks', getNum('torre-ticks') - bonus.ticks);
+  if (bonus.sanidade) setNum('f-sanidade', getNum('f-sanidade') - bonus.sanidade);
+  if (bonus.bCa) setNum('b-ca', getNum('b-ca') - bonus.bCa);
+  if (bonus.provisoes) setNum('f-provisoes', getNum('f-provisoes') - bonus.provisoes);
+}
+
+// Rótulo curto dos bônus aplicados para o resumo (ex.: "+2 PE, +1 Corrupção").
+function _resumoBonusAntecedente(nomeAntecedente) {
+  const bonus = nomeAntecedente ? ANTECEDENTES_BONUS[nomeAntecedente] : null;
+  if (!bonus) return '';
+  const partes = [];
+  if (bonus.bPe) partes.push(_ANTECEDENTES_BONUS_LABELS.bPe);
+  if (bonus.corrupcao) partes.push(_ANTECEDENTES_BONUS_LABELS.corrupcao);
+  if (bonus.ticks) partes.push(_ANTECEDENTES_BONUS_LABELS.ticks);
+  if (bonus.sanidade) partes.push(_ANTECEDENTES_BONUS_LABELS.sanidade);
+  if (bonus.bCa) partes.push(_ANTECEDENTES_BONUS_LABELS.bCa);
+  if (bonus.provisoes) partes.push(_ANTECEDENTES_BONUS_LABELS.provisoes);
+  if (bonus.rolagem) {
+    if (bonus.rolagem === 'espiritos') partes.push('3d6×10 Esp (rolagem)');
+    else if (bonus.rolagem === 'materiais') partes.push('1d4 materiais (rolagem)');
+    else if (bonus.rolagem === 'doses') partes.push('2d4 doses (rolagem)');
+  }
+  return partes.join(', ');
+}
+
+// Migração 1× por personagem: aplica os bônus do antecedente salvo se os campos
+// estiverem zerados. Flag no localStorage por personagem (granularidade fina —
+// cada personagem migra uma única vez; trocar de personagem não re-aplica).
+function migrarBonusesAntecedente(d) {
+  const nome = d && d['f-antecedente'];
+  if (!nome || !ANTECEDENTES_BONUS[nome]) return;
+  const flag = 'tp_antecedente_bonus_migrado_' + (usuarioAtual || '') + '_' + (personagemAtual || '');
+  if (localStorage.getItem(flag) === '1') return;
+  const aplicou = aplicarBonusesAntecedente(nome, { tipo: 'migracao' });
+  if (aplicou) {
+    localStorage.setItem(flag, '1');
+    salvarLocal();
+  }
+}
+
 // ═══ TRAÇOS DA ALMA — catálogo oficial (livro, seção #tracos-alma) ═══
 // Categorias: 1 Combate · 2 Sobrevivência & Exploração · 3 Mental & Sanidade ·
 // 4 Social & Mundo · 5 Alma & Poder. `custo` aceita faixas ("2~4", "+3~5").
@@ -11593,11 +11714,12 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       ${fieldGroup('Poder','f-poder-nome')}
       <div class="field-group">
         <label>Antecedente</label>
-        <select id="f-antecedente" ${isObs ? 'disabled style="cursor:default;opacity:.85"' : ''} onchange="atualizarResumoAntecedente();salvarLocal()" title="Seletor dos 20 Antecedentes — o resumo dos benefícios aparece abaixo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;transition:border-color .2s;width:100%${isAdm ? ';border-color:rgba(180,140,30,.3)' : ''}">
+        <select id="f-antecedente" ${isObs ? 'disabled style="cursor:default;opacity:.85"' : ''} onchange="trocarAntecedente(this)" title="Seletor dos 20 Antecedentes — o resumo dos benefícios aparece abaixo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;transition:border-color .2s;width:100%${isAdm ? ';border-color:rgba(180,140,30,.3)' : ''}">
           <option value="">Escolher…</option>
           ${_opcoesAntecedentes()}
         </select>
         <div id="antecedente-resumo" style="margin-top:.35rem;font-size:.72rem;color:var(--text-muted);line-height:1.5"></div>
+        <button type="button" onclick="reaplicarBonusesAntecedente()" title="Reaplica os bônus fixos do antecedente atual nos campos zerados (migração manual — o GM usa para corrigir)" style="margin-top:.4rem;background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .6rem;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)';this.style.color='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">Reaplicar bônus do Antecedente</button>
       </div>
     </div>
     <div class="field-row cols-4">
@@ -12488,6 +12610,8 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap">
         <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Espíritos:</span>
         <input type="text" id="inv-espiritos" placeholder="Ex: 500" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:140px" oninput="salvarLocal()">
+        <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Provisões (dias):</span>
+        <input type="number" id="f-provisoes" min="0" value="0" title="Dias de provisão que o personagem carrega — o Mensageiro da Névoa e o despertar 'Nascido na borda' somam +1 cada" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:80px" oninput="salvarLocal()">
       </div>
 
       <!-- Itens & Equipamentos -->
@@ -17402,7 +17526,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>12. Marcado pelo Primeiro Toque</strong><br><br>
                 <strong>Vida Anterior:</strong> Você não despertou de forma "natural". Você teve um encontro direto com algo da Torre — um núcleo exposto, uma distorção de espaço, uma "voz" que falou sem som, uma onda de energia durante um surto. A maioria das pessoas morre ou enlouquece. Você acordou com o Núcleo queimando dentro de você. Alguns dizem que a Torre te escolheu. Outros dizem que você roubou algo dela.<br><br>
                 <strong>Benefício de Competência:</strong> Sua reserva máxima de <strong>PE começa com +2</strong>. Você sente a presença de fontes fortes de energia da Torre com mais clareza que a maioria.<br><br>
-                <strong>Benefício de Mundo:</strong> Quando você cria sua primeira técnica, ela pode ter um efeito adicional menor gratuito escolhido da tabela "Exemplos de Efeitos e Poderes Acompanhantes para Técnicas" — <strong>mas apenas a partir do Nível 3</strong>. Antes disso, você só tem o "sensor" do toque.<br><br>
+                <strong>Benefício de Mundo:</strong> Desde o <strong>Nível 1</strong>, quando você cria sua primeira técnica, ela pode ter um efeito adicional menor gratuito escolhido da tabela "Exemplos de Efeitos e Poderes Acompanhantes para Técnicas".<br><br>
                 <strong>Custo / Gancho (Nerf):</strong> Você começa com <strong>+1 de Corrupção</strong>. Além disso, <strong>+1 Atenção da Torre inicial</strong>: o Relógio de Atenção começa 1 tick acima do normal — <em>a Torre já te vê</em>. Monstros de alta Qualidade reconhecem sua marca.<br><br>
                 <strong>Relacionamento Inicial (Nv 1):</strong> o <strong>toque que o marcou</strong> — um mistério: algo da Torre se comunicou com você e ainda pode voltar (contato com o desconhecido).<br><br>
                 <strong>Traços Sugeridos:</strong> Sentido do Fluxo, Visão da Torre, Fome da Alma, Alma Instável, Marca do Olho, Renascimento Parcial, Fragmento de Outro, Alma de Aço.
