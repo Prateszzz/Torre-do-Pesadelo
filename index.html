@@ -3718,9 +3718,9 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-panel-body { padding: .9rem .8rem; }
 
   /* ── #FICHA-CONTENT COMO COLUNA ÚNICA ORDENÁVEL ──
-     Ordem mobile: Hero > Atributos > Recursos > Poder > Traços da Alma >
-     Árvore > Utilizações > Combate > Sessões > Acampamento > Forja >
-     Relacionamentos > Registro > Inventário > Pets > Aparência > Perícias */
+     Ordem mobile: Hero > Atributos > Recursos > Poder > Corrupção & Atenção >
+     Traços da Alma > Árvore > Utilizações > Combate > Sessões > Acampamento >
+     Forja > Relacionamentos > Registro > Inventário > Pets > Aparência > Perícias */
   #ficha-content {
     display: flex;
     flex-direction: column;
@@ -3734,6 +3734,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   /* Nova ordem das seções — espelha a ordem do HTML */
   #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 3; }       /* Ficha Base   */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 4; }  /* Poder        */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 4.05; }   /* Corrupção & Atenção */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 4.1; }       /* Traços da Alma */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
@@ -4680,6 +4681,9 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
     <input type="text" id="login-user" placeholder="Seu usuário" autocomplete="username">
     <label for="login-pass">Senha</label>
     <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+    <label style="display:flex;align-items:center;gap:.45rem;font-size:.8rem;color:var(--text-muted);cursor:pointer;margin:.15rem 0 .6rem">
+      <input type="checkbox" id="lembrar-login" checked style="accent-color:var(--accent);width:15px;height:15px;cursor:pointer"> Lembrar de mim
+    </label>
     <button class="login-btn" onclick="tentarLogin()">Entrar na Torre</button>
     <div class="login-error" id="login-error" style="display:none;">Usuário ou senha incorretos.</div>
   </div>
@@ -8835,7 +8839,7 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+let _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
@@ -8902,6 +8906,13 @@ function _atualizarResumosFichaExpand() {
       resumoTracos.textContent = total + ' traços · Faltam ' + b.falta + ' pts de fraqueza';
       resumoTracos.style.color = 'var(--accent-text)';
     }
+  }
+  // Resumo do painel "Corrupção & Atenção da Torre" (Corrupção X · Atenção Y).
+  const resumoCorrupcao = document.getElementById('resumo-corrupcao');
+  if (resumoCorrupcao) {
+    const corr = parseInt(document.getElementById('f-corrupcao')?.value, 10) || 0;
+    const ticks = parseInt(document.getElementById('torre-ticks')?.value, 10) || 0;
+    resumoCorrupcao.textContent = 'Corrupção ' + corr + ' · Atenção ' + ticks;
   }
 }
 
@@ -10338,7 +10349,7 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
     _restaurarFichaExpandidos();
     _aplicarEstadoFichaExpand();
   }
@@ -10450,7 +10461,7 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+      _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
       _restaurarFichaExpandidos();
       _aplicarEstadoFichaExpand();
     }
@@ -11309,6 +11320,21 @@ function migrarBonusesAntecedente(d) {
 // Botão manual "Reaplicar bônus do Antecedente": recalcula os bônus fixos do
 // antecedente atual do zero (reverte o que estiver aplicado e reaplica), para o
 // GM corrigir valores duplicados/errados. Dá feedback visual ao usuário.
+// Troca limpa ao mudar o antecedente no seletor: reverte os bônus do anterior,
+// aplica os do novo, atualiza o resumo e o painel de Corrupção & Atenção.
+let _antecedenteAnterior = '';
+function trocarAntecedente(sel) {
+  const novo = sel ? sel.value : '';
+  const anterior = _antecedenteAnterior || '';
+  if (anterior && anterior !== novo) reverterBonusesAntecedente(anterior);
+  if (novo && novo !== anterior) aplicarBonusesAntecedente(novo, { tipo: 'selecao' });
+  _antecedenteAnterior = novo;
+  if (typeof atualizarResumoAntecedente === 'function') atualizarResumoAntecedente();
+  if (typeof atualizarResumoCorrupcao === 'function') atualizarResumoCorrupcao();
+  if (typeof calcTudoDebounced === 'function') calcTudoDebounced();
+  if (typeof salvarLocal === 'function') salvarLocal();
+}
+
 function reaplicarBonusesAntecedente() {
   const sel = document.getElementById('f-antecedente');
   const nome = sel ? sel.value : '';
@@ -11491,6 +11517,43 @@ let _tracoCounter = 1;
 let _fraquezaCounter = 1;
 
 // Adiciona um traço escolhido no dropdown ao painel de chips.
+// Busca um traço no catálogo pelo nome (positivo ou fraqueza). Helper global
+// usado pelo renderer do chip e pela restauração.
+function _tracoInfoPorNome(nome, positivo) {
+  const lista = positivo ? TRACOS_ALMA.positivos : TRACOS_ALMA.fraquezas;
+  const t = lista.find(x => x.nome === nome);
+  return t || null;
+}
+
+// Expande/colapsa a descrição de um chip de traço (acordeão). Funciona por
+// toque/clique (mobile-friendly). Fecha o anterior se outro estiver aberto.
+function toggleTracoDesc(el) {
+  const chip = el.closest('.traco-chip');
+  if (!chip) return;
+  const nomeEl = chip.querySelector('input[id$="-nome"]');
+  const nome = nomeEl ? nomeEl.value : '';
+  const positivo = chip.id.startsWith('traco');
+  const info = _tracoInfoPorNome(nome, positivo);
+  if (!info) return;
+
+  // Fecha qualquer descrição aberta em outro chip.
+  document.querySelectorAll('.traco-desc').forEach(d => d.remove());
+
+  const existente = chip.querySelector('.traco-desc');
+  if (existente) { existente.remove(); return; } // segundo toque fecha
+
+  const desc = document.createElement('div');
+  desc.className = 'traco-desc';
+  desc.style.cssText = 'margin-top:.35rem;padding:.45rem .55rem;border-left:2px solid ' + (positivo ? 'var(--accent)' : 'var(--gold)') + ';background:rgba(255,255,255,.03);border-radius:0 4px 4px 0;font-size:.74rem;color:var(--text-muted);line-height:1.5';
+  desc.textContent = info.desc;
+  chip.appendChild(desc);
+}
+
+// Fecha todas as descrições de traços abertas (clique fora).
+function fecharTodasTracoDesc() {
+  document.querySelectorAll('.traco-desc').forEach(d => d.remove());
+}
+
 function adicionarTracoChip(tipo, selectId, listaId) {
   const sel = document.getElementById(selectId);
   const lista = document.getElementById(listaId);
@@ -11510,7 +11573,7 @@ function adicionarTracoChip(tipo, selectId, listaId) {
     <input type="hidden" id="${prefix}${n}-nome" value="${_escHtml(nome)}">
     <input type="hidden" id="${prefix}${n}-custo" value="${_escHtml(String(custo))}">
     <input type="hidden" id="${prefix}${n}-cat" value="${cat}">
-    <span style="flex:1">${_escHtml(nome)}</span>
+    <span style="flex:1;cursor:pointer;text-decoration:underline dotted rgba(255,255,255,.35);text-underline-offset:3px" onclick="toggleTracoDesc(this)" title="Ver descrição">${_escHtml(nome)}</span>
     <span style="color:${positivo ? 'var(--accent-light)' : 'var(--gold-light)'};font-size:.72rem;white-space:nowrap">${_fmtCustoTraco(custo, positivo)}</span>
     <button type="button" onclick="removerTracoChip(this)" title="Remover" style="background:none;border:none;color:#777;cursor:pointer;font-size:.8rem;padding:0 .15rem;line-height:1">✕</button>
   `;
@@ -11636,13 +11699,6 @@ function restaurarTracosChips(d) {
 
   const temChips = Object.keys(d).some(k => /^(traco|fraqueza)\d+-nome$/.test(k));
 
-  // Busca o custo/categoria de um traço no catálogo pelo nome.
-  const infoPorNome = (nome, positivo) => {
-    const lista = positivo ? TRACOS_ALMA.positivos : TRACOS_ALMA.fraquezas;
-    const t = lista.find(x => x.nome === nome);
-    return t || null;
-  };
-
   const criaChip = (nome, custo, cat, positivo, lista) => {
     const n = positivo ? ++_tracoCounter : ++_fraquezaCounter;
     const prefix = positivo ? 'traco' : 'fraqueza';
@@ -11654,7 +11710,7 @@ function restaurarTracosChips(d) {
       <input type="hidden" id="${prefix}${n}-nome" value="${_escHtml(nome)}">
       <input type="hidden" id="${prefix}${n}-custo" value="${_escHtml(String(custo))}">
       <input type="hidden" id="${prefix}${n}-cat" value="${cat}">
-      <span style="flex:1">${_escHtml(nome)}</span>
+      <span style="flex:1;cursor:pointer;text-decoration:underline dotted rgba(255,255,255,.35);text-underline-offset:3px" onclick="toggleTracoDesc(this)" title="Ver descrição">${_escHtml(nome)}</span>
       <span style="color:${positivo ? 'var(--accent-light)' : 'var(--gold-light)'};font-size:.72rem;white-space:nowrap">${_fmtCustoTraco(custo, positivo)}</span>
       <button type="button" onclick="removerTracoChip(this)" title="Remover" style="background:none;border:none;color:#777;cursor:pointer;font-size:.8rem;padding:0 .15rem;line-height:1">✕</button>
     `;
@@ -11669,15 +11725,15 @@ function restaurarTracosChips(d) {
     ordem('traco').forEach(k => {
       const n = k.match(/^traco(\d+)-nome$/)[1];
       const nome = d[k] || '';
-      const custo = d['traco' + n + '-custo'] != null ? d['traco' + n + '-custo'] : (infoPorNome(nome, true)?.custo || 1);
-      const cat = d['traco' + n + '-cat'] != null ? parseInt(d['traco' + n + '-cat']) : (infoPorNome(nome, true)?.cat || 1);
+      const custo = d['traco' + n + '-custo'] != null ? d['traco' + n + '-custo'] : (_tracoInfoPorNome(nome, true)?.custo || 1);
+      const cat = d['traco' + n + '-cat'] != null ? parseInt(d['traco' + n + '-cat']) : (_tracoInfoPorNome(nome, true)?.cat || 1);
       if (nome) criaChip(nome, custo, cat, true, posLista);
     });
     ordem('fraqueza').forEach(k => {
       const n = k.match(/^fraqueza(\d+)-nome$/)[1];
       const nome = d[k] || '';
-      const custo = d['fraqueza' + n + '-custo'] != null ? d['fraqueza' + n + '-custo'] : (infoPorNome(nome, false)?.custo || 1);
-      const cat = d['fraqueza' + n + '-cat'] != null ? parseInt(d['fraqueza' + n + '-cat']) : (infoPorNome(nome, false)?.cat || 1);
+      const custo = d['fraqueza' + n + '-custo'] != null ? d['fraqueza' + n + '-custo'] : (_tracoInfoPorNome(nome, false)?.custo || 1);
+      const cat = d['fraqueza' + n + '-cat'] != null ? parseInt(d['fraqueza' + n + '-cat']) : (_tracoInfoPorNome(nome, false)?.cat || 1);
       if (nome) criaChip(nome, custo, cat, false, negLista);
     });
   } else {
@@ -11686,11 +11742,11 @@ function restaurarTracosChips(d) {
     const posNomes = parseTexto(d['r-tracos']);
     const negNomes = parseTexto(d['r-defeitos']);
     posNomes.forEach(nome => {
-      const info = infoPorNome(nome, true);
+      const info = _tracoInfoPorNome(nome, true);
       criaChip(nome, info ? info.custo : 1, info ? info.cat : 1, true, posLista);
     });
     negNomes.forEach(nome => {
-      const info = infoPorNome(nome, false);
+      const info = _tracoInfoPorNome(nome, false);
       criaChip(nome, info ? info.custo : 1, info ? info.cat : 1, false, negLista);
     });
   }
@@ -11739,6 +11795,7 @@ function restaurarAntecedente(valor) {
     sel.appendChild(opt);
     sel.value = opt.value;
   }
+  _antecedenteAnterior = sel.value;
   atualizarResumoAntecedente();
 }
 
@@ -11871,10 +11928,6 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       ${fieldGroup('Perícia do Antecedente','f-pericia-antecedente')}
     </div>
     <div class="field-row cols-2">
-      ${fieldGroup('Sanidade (inicial, opcional)','f-sanidade','number',{default:0})}
-      ${fieldGroup('Corrupção (inicial, opcional)','f-corrupcao','number',{default:0})}
-    </div>
-    <div class="field-row cols-2">
       ${fieldGroup('Descrição do Poder','p-descricao','textarea')}
       ${fieldGroup('Técnica Final / Suprema','p-suprema','textarea')}
     </div>
@@ -11928,6 +11981,56 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       </div>
     </div>
     <div id="tecnicas-lista"></div>
+  </div>
+  </div>
+</div>
+
+<!-- CORRUPÇÃO & ATENÇÃO DA TORRE — estágios, relógio e sanidade -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('corrupcao')" id="toggle-corrupcao">
+    <span class="ficha-expand-seta" id="seta-corrupcao">▶</span> Corrupção &amp; Atenção da Torre
+    <span class="ficha-expand-resumo" id="resumo-corrupcao"></span>
+  </div>
+  <div class="ficha-expand-area" id="area-corrupcao">
+  <div class="ficha-panel-body">
+    <div class="field-row cols-3">
+      <!-- CORRUPÇÃO -->
+      <div class="field-group">
+        <label>Corrupção</label>
+        <div style="display:flex;gap:.4rem;align-items:center">
+          <button type="button" onclick="mudarCorrupcao(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
+          <input type="number" id="f-corrupcao" min="0" value="0" style="flex:1;min-width:0;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-size:.95rem;outline:none;text-align:center" oninput="atualizarResumoCorrupcao();salvarLocal()">
+          <button type="button" onclick="mudarCorrupcao(1)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
+        </div>
+        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Estágio: <span id="corrupcao-estagio" style="font-weight:bold">Limpo</span> <span style="opacity:.7">(Limpo 0–2 · Marcado 3–5 · Corrompido 6–8 · Profanado 9–11 · Abissal 12+)</span></small>
+      </div>
+      <!-- SANIDADE -->
+      <div class="field-group">
+        <label>Sanidade</label>
+        <div style="display:flex;gap:.4rem;align-items:center">
+          <button type="button" onclick="mudarSanidade(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
+          <input type="number" id="f-sanidade" min="0" value="0" style="flex:1;min-width:0;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-size:.95rem;outline:none;text-align:center" oninput="atualizarResumoCorrupcao();salvarLocal()">
+          <button type="button" onclick="mudarSanidade(1)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
+        </div>
+        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Estágio: <span id="sanidade-estagio" style="font-weight:bold">Estável</span> <span style="opacity:.7">(Estável 8+ · Perturbado 6–7 · Abalado 4–5 · À Beira 2–3 · Ruptura ≤1)</span></small>
+      </div>
+      <!-- ATENÇÃO DA TORRE -->
+      <div class="field-group">
+        <label>Atenção da Torre</label>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+          <button onclick="mudarTicks(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
+          <input type="number" id="torre-ticks" min="0" max="8" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampTicks()">
+          <button onclick="mudarTicks(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
+          <button onclick="mudarTicks(2)" title="fogo / magia / sangue" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+2</button>
+          <button onclick="resetTicks()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
+          <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Cada rodada de combate além da 1ª = 1 tick (2 se fogo/magia/sangue). Ao encher (6–8): evento da Torre — reforço chega, ambiente piora, ou +1 de Corrupção/Atenção. Cada tick = +2 na Rolagem de Atenção do acampamento.</span></span>
+        </div>
+        <div id="torre-aviso" style="display:none;margin-top:.5rem;color:var(--accent-text);font-weight:bold;font-size:.82rem">A Torre nota vocês.</div>
+        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Cada tick = +2 na Rolagem de Atenção do acampamento.</small>
+      </div>
+    </div>
+    <!-- Linha de bônus do antecedente (o que a auto-aplicação aplicou) -->
+    <div id="corrupcao-bonus-antecedente" style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--text-muted)"></div>
   </div>
   </div>
 </div>
@@ -12187,21 +12290,6 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
         <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">0 PV → Morrendo 1 (2 se golpe crítico). Recovery check: d20 ≥ 10 + Morrendo no início do turno (sucesso −1, falha +1, 20 natural = −2 e acorda com 1 PV, 1 natural = +2). Morrendo 4 = morte.</span></span>
       </div>
       <div id="recovery-result" style="margin-top:.5rem;font-size:.8rem;min-height:1.1em"></div>
-    </div>
-
-    <!-- ATENÇÃO DA TORRE -->
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Atenção da Torre</div>
-      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-        <span style="font-size:.82rem;color:var(--text);flex:1;min-width:120px">Relógio de Atenção</span>
-        <button onclick="mudarTicks(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
-        <input type="number" id="torre-ticks" min="0" max="8" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampTicks()">
-        <button onclick="mudarTicks(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
-        <button onclick="mudarTicks(2)" title="fogo / magia / sangue" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+2</button>
-        <button onclick="resetTicks()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Cada rodada de combate além da 1ª = 1 tick (2 se fogo/magia/sangue). Ao encher (6–8): evento da Torre — reforço chega, ambiente piora, ou +1 de Corrupção/Atenção. Cada tick = +2 na Rolagem de Atenção do acampamento.</span></span>
-      </div>
-      <div id="torre-aviso" style="display:none;margin-top:.5rem;color:var(--accent-text);font-weight:bold;font-size:.82rem">A Torre nota vocês.</div>
     </div>
 
     <!-- ROLAGENS CRÍTICAS (d100) -->
@@ -14161,6 +14249,79 @@ function atualizarAvisoTorre() {
   aviso.style.display = (parseInt(el.value, 10) || 0) >= 6 ? 'block' : 'none';
 }
 
+// ─── CORRUPÇÃO & SANIDADE (painel próprio) ───
+// Estágios de Corrupção (faixas do livro) e de Sanidade (faixas simples).
+const _CORRUPCAO_ESTAGIOS = [
+  { max: 2,  nome: 'Limpo' },
+  { max: 5,  nome: 'Marcado' },
+  { max: 8,  nome: 'Corrompido' },
+  { max: 11, nome: 'Profanado' },
+  { max: Infinity, nome: 'Abissal' }
+];
+const _SANIDADE_ESTAGIOS = [
+  { min: 8,  nome: 'Estável' },
+  { min: 6,  nome: 'Perturbado' },
+  { min: 4,  nome: 'Abalado' },
+  { min: 2,  nome: 'À Beira' },
+  { min: 0,  nome: 'Ruptura' }
+];
+
+function _estagioCorrupcao(val) {
+  const v = parseInt(val, 10) || 0;
+  for (const e of _CORRUPCAO_ESTAGIOS) { if (v <= e.max) return e.nome; }
+  return 'Abissal';
+}
+function _estagioSanidade(val) {
+  const v = parseInt(val, 10) || 0;
+  for (const e of _SANIDADE_ESTAGIOS) { if (v >= e.min) return e.nome; }
+  return 'Ruptura';
+}
+
+function mudarCorrupcao(delta) {
+  const el = document.getElementById('f-corrupcao');
+  if (!el) return;
+  el.value = Math.max(0, (parseInt(el.value, 10) || 0) + delta);
+  atualizarResumoCorrupcao();
+  salvarLocal();
+}
+function mudarSanidade(delta) {
+  const el = document.getElementById('f-sanidade');
+  if (!el) return;
+  el.value = Math.max(0, (parseInt(el.value, 10) || 0) + delta);
+  atualizarResumoCorrupcao();
+  salvarLocal();
+}
+
+// Atualiza o resumo do título do painel "Corrupção & Atenção da Torre" e os
+// rótulos de estágio. Chamado no render e ao mudar valores.
+function atualizarResumoCorrupcao() {
+  const resumo = document.getElementById('resumo-corrupcao');
+  if (resumo) {
+    const corr = parseInt(document.getElementById('f-corrupcao')?.value, 10) || 0;
+    const ticks = parseInt(document.getElementById('torre-ticks')?.value, 10) || 0;
+    resumo.textContent = 'Corrupção ' + corr + ' · Atenção ' + ticks;
+  }
+  const estCorr = document.getElementById('corrupcao-estagio');
+  if (estCorr) {
+    const corr = parseInt(document.getElementById('f-corrupcao')?.value, 10) || 0;
+    estCorr.textContent = _estagioCorrupcao(corr);
+    estCorr.style.color = corr >= 6 ? 'var(--accent-text)' : 'var(--text-muted)';
+  }
+  const estSan = document.getElementById('sanidade-estagio');
+  if (estSan) {
+    const san = parseInt(document.getElementById('f-sanidade')?.value, 10) || 0;
+    estSan.textContent = _estagioSanidade(san);
+    estSan.style.color = san <= 3 ? 'var(--accent-text)' : 'var(--text-muted)';
+  }
+  // Linha de bônus do antecedente (o que a auto-aplicação aplicou).
+  const bonusLinha = document.getElementById('corrupcao-bonus-antecedente');
+  if (bonusLinha) {
+    const nome = document.getElementById('f-antecedente')?.value || '';
+    const resumoBonus = _resumoBonusAntecedente(nome);
+    bonusLinha.textContent = nome && resumoBonus ? (nome + ': ' + resumoBonus) : '';
+  }
+}
+
 // ─── ROLAGEM AUTOMÁTICA DAS TABELAS d100 DE CRÍTICO ───
 // (O Julgamento Favorável — 20 natural / O Olhar da Torre — 1 natural)
 let _criticoTipoAtual = 'acerto'; // 'acerto' | 'falha'
@@ -15042,6 +15203,8 @@ function preencherCampos(d) {
     atualizarArvoreResumo();
     atualizarAcampamento();
     atualizarForjaResumo();
+    // Painel "Corrupção & Atenção da Torre" (estágios + resumo + bônus do antecedente)
+    atualizarResumoCorrupcao();
   }, 50);
 }
 
@@ -15092,7 +15255,7 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
     _restaurarFichaExpandidos();
     _aplicarEstadoFichaExpand();
   }
@@ -15638,6 +15801,15 @@ async function tentarLogin() {
 
   try {
     await aguardarFirebase();
+    // Aplica a persistência escolhida ANTES do login: "Lembrar de mim"
+    // marcado (padrão) → token sobrevive à recarga (local); desmarcado →
+    // sessão (fecha o navegador desloga). Nunca armazena a senha — só o token.
+    const lembrar = document.getElementById('lembrar-login')?.checked !== false;
+    try {
+      if (window._fbSetPersistence) {
+        await window._fbSetPersistence(lembrar ? window._fbLocalPersistence : window._fbSessionPersistence);
+      }
+    } catch (e) { console.warn('[Auth] Falha ao definir persistência:', e.code, e.message); }
     const cred = await window._fbSignIn(email, pass);
     const uid = cred.user.uid;
 
@@ -15721,6 +15893,62 @@ async function logout() {
   const err = document.getElementById('login-error');
   if (err) err.style.display = 'none';
   try { if (window._fbSignOut) await window._fbSignOut(); } catch(e) {}
+}
+
+// ─── RESTAURAÇÃO AUTOMÁTICA DE SESSÃO ───
+// No load, se o Firebase já tiver um token persistido (login anterior com
+// "Lembrar de mim"), restaura o usuário sem pedir senha de novo. Roda UMA vez
+// via onAuthStateChanged; o flag _sessaoRestaurada evita duplicar o iniciar()
+// quando o login manual já cuidou do fluxo.
+let _sessaoRestaurada = false;
+function restaurarSessao() {
+  if (_sessaoRestaurada) return;
+  _sessaoRestaurada = true;
+  if (!window._fbOnAuth) return;
+  window._fbOnAuth(async (user) => {
+    // Se um login manual já está em andamento (usuarioAtual definido), não age.
+    if (usuarioAtual) return;
+    if (!user) {
+      // Sem sessão: mantém a tela de login como está.
+      return;
+    }
+    if (user.isAnonymous) {
+      // Observador anônimo persistido: restaura como __observador__.
+      usuarioAtual = '__observador__'; roleAtual = 'observador';
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('app').style.display='block';
+      _toggleTabbar(true);
+      iniciarObservador();
+      setTimeout(() => navTo('ficha'), 150);
+      return;
+    }
+    // Usuário real: deriva o username do email interno.
+    const email = user.email || '';
+    const userKey = email.replace(/@torredopesadelo\.app$/i, '').toLowerCase();
+    if (!userKey) return;
+    try {
+      const snap = await window.getDoc(window.doc(window.db, 'usuarios_extras', userKey));
+      if (!snap.exists()) {
+        // Perfil não existe (conta órfã): desloga e mostra o login.
+        await window._fbSignOut();
+        return;
+      }
+      const perfil = snap.data();
+      perfil.role = _roleEfetiva(userKey, perfil.role);
+      USUARIOS[userKey] = perfil;
+      usuarioAtual = userKey;
+      roleAtual    = perfil.role;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      _toggleTabbar(true);
+      iniciar();
+      if (roleAtual !== 'adm') {
+        setTimeout(() => navTo('ficha'), 150);
+      }
+    } catch(e) {
+      console.warn('[Auth] Erro ao restaurar sessão:', e.code, e.message);
+    }
+  });
 }
 
 document.getElementById('login-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') tentarLogin(); });
@@ -16647,6 +16875,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', () => {
     document.querySelectorAll('.info-btn.show').forEach(b => b.classList.remove('show'));
   });
+
+  // Fecha as descrições de traços ao clicar fora de um chip (acordeão).
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.traco-chip')) fecharTodasTracoDesc();
+  });
+
+  // Restaura sessão persistida (login automático) após o Firebase estar pronto.
+  // Roda UMA vez no load; o flag _sessaoRestaurada evita duplicar o iniciar().
+  aguardarFirebase().then(() => restaurarSessao());
 });
 
 </script>
@@ -16673,7 +16910,10 @@ document.addEventListener('DOMContentLoaded', () => {
     signInWithEmailAndPassword,
     signInAnonymously,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   console.log("[Firebase] Módulo carregado.");
@@ -16713,6 +16953,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window._fbSignOut  = ()            => signOut(auth);
   window._fbSignAnon = ()            => signInAnonymously(auth);
   window._fbOnAuth   = (cb)          => onAuthStateChanged(auth, cb);
+  window._fbSetPersistence = (tipo)  => setPersistence(auth, tipo);
+  window._fbLocalPersistence  = browserLocalPersistence;
+  window._fbSessionPersistence = browserSessionPersistence;
 
   console.log("[Firebase] SDK + Auth prontos.");
 </script>
