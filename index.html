@@ -3718,9 +3718,11 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-panel-body { padding: .9rem .8rem; }
 
   /* ── #FICHA-CONTENT COMO COLUNA ÚNICA ORDENÁVEL ──
-     Ordem mobile: Hero > Atributos > Recursos > Poder > Corrupção & Atenção >
-     Traços da Alma > Árvore > Utilizações > Combate > Sessões > Acampamento >
-     Forja > Relacionamentos > Registro > Inventário > Pets > Aparência > Perícias */
+     Ordem mobile: Personagens > Hero > Ficha Base > Atributos > Poder >
+     Recursos de Combate > Armas > Combate > Corrupção & Atenção >
+     Árvore da Alma > Utilizações > Traços da Alma > Perícias >
+     Sessões e XP > Acampamento > Forja e Barmans > Relacionamentos >
+     Inventário > Pets > Aparência > Lore > Grimório */
   #ficha-content {
     display: flex;
     flex-direction: column;
@@ -3733,17 +3735,8 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 
   /* Nova ordem das seções — espelha a ordem do HTML */
   #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 3; }       /* Ficha Base   */
+  #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 3.5; }            /* Atributos    */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 4; }  /* Poder        */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 4.05; }   /* Corrupção & Atenção */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 4.1; }       /* Traços da Alma */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.7; }       /* Combate (trackers) */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 4.8; }       /* Sessões e XP */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 4.9; }   /* Acampamento */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 5.1; }          /* Forja e Barmans */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 5.2; } /* Relacionamentos */
-  #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 5; }            /* Atributos    */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
   .ficha-layout-cols {
@@ -3752,26 +3745,35 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-col-left, .ficha-col-right {
     display: contents;
   }
-  .ficha-col-left .ficha-panel  { order: 6; } /* Recursos de Combate */
-  .ficha-col-right .ficha-panel { order: 7; } /* Armas */
+  .ficha-col-left .ficha-panel  { order: 4.1; } /* Recursos de Combate */
+  .ficha-col-right .ficha-panel { order: 4.2; } /* Armas */
 
-  /* Perícias */
-  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 8; }
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.3; }       /* Combate (trackers) */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 4.4; }   /* Corrupção & Atenção */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 4.7; }       /* Traços da Alma */
+  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 4.8; }    /* Perícias */
+
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 4.9; }       /* Sessões e XP */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 5.1; }   /* Acampamento */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 5.2; }          /* Forja e Barmans */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 5.3; } /* Relacionamentos */
 
   /* Inventário */
-  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 9; }
+  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 6; }
 
   /* Pets & Montarias */
-  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 10; }
+  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 7; }
 
   /* Aparência */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 11; }
+  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 8; }
 
   /* Lore */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 12; }
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 9; }
 
   /* Grimório dos Despertos — Perfil Público */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-grimorio) { order: 13; }
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-grimorio) { order: 10; }
 
   .save-bar { order: 100; }
 
@@ -11898,6 +11900,49 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div>
 </div>
 
+<!-- ATRIBUTOS — logo abaixo da ficha base, largura total -->
+<div class="ficha-full-row">
+  <div class="ficha-panel" style="border-top:3px solid var(--accent)!important;margin-bottom:1rem">
+    <div class="ficha-panel-title" style="font-size:.9rem;letter-spacing:4px;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between" id="toggle-atributos">
+      <span>Atributos</span>
+      <span style="font-size:.62rem;letter-spacing:1px;color:var(--text-muted);text-transform:none;font-weight:400">arraste para reordenar · ⭐ para favoritar</span>
+    </div>
+    <div id="area-atributos">
+    <div class="ficha-panel-body" style="padding:1.75rem 1.5rem 1.5rem">
+      <div class="atributos-grid" id="atributos-grid" style="gap:.85rem">
+        ${ATRIBUTOS_DEF.map(({sigla, nome}, idx) => `
+        <div class="atributo-box" id="attr-box-${sigla}" draggable="true"
+          ondragstart="_attrDragStart(event,'${sigla}')" ondragover="_attrDragOver(event)"
+          ondrop="_attrDrop(event,'${sigla}')" ondragend="_attrDragEnd(event)">
+          <button class="atributo-fav-btn" id="fav-${sigla}" onclick="toggleFavoritoAtributo('${sigla}',event)" title="Favoritar ${nome}">${icone('star','ic-sm')}</button>
+          <div class="attr-ordem-btns">
+            <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',-1,event)" title="Mover para cima" ${idx === 0 ? 'style="visibility:hidden"' : ''}>▲</button>
+            <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',1,event)" title="Mover para baixo" ${idx === ATRIBUTOS_DEF.length - 1 ? 'style="visibility:hidden"' : ''}>▼</button>
+          </div>
+          <label style="letter-spacing:2px" title="${nome}">${nome}</label>
+          <input type="number" id="a-${sigla}" min="1" max="30" value="10" oninput="calcTudoDebounced()">
+          <div class="atributo-mod" id="m-${sigla}">+0</div>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;flex-wrap:wrap;gap:.75rem">
+        <p style="font-size:.78rem;color:var(--text-muted);margin:0">Total: <strong id="total-attr" style="color:var(--accent-light);font-family:'Playfair Display',serif;font-size:1.05rem">60</strong> <span style="color:#555">/ 80 pontos</span></p>
+        <div style="display:flex;gap:2rem">
+          <div style="text-align:center">
+            <div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">Maestria</div>
+            <div id="r-maestria" style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--silver)">+2</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">Iniciativa</div>
+            <div id="r-init" style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--silver)">+0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div><!-- /ficha-full-row atributos -->
+
+
 <!-- PODER — barra grande expansível igual à Lore -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('poder')" id="toggle-poder">
@@ -11984,652 +12029,6 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div>
   </div>
 </div>
-
-<!-- CORRUPÇÃO & ATENÇÃO DA TORRE — estágios, relógio e sanidade -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('corrupcao')" id="toggle-corrupcao">
-    <span class="ficha-expand-seta" id="seta-corrupcao">▶</span> Corrupção &amp; Atenção da Torre
-    <span class="ficha-expand-resumo" id="resumo-corrupcao"></span>
-  </div>
-  <div class="ficha-expand-area" id="area-corrupcao">
-  <div class="ficha-panel-body">
-    <div class="field-row cols-3">
-      <!-- CORRUPÇÃO -->
-      <div class="field-group">
-        <label>Corrupção</label>
-        <div style="display:flex;gap:.4rem;align-items:center">
-          <button type="button" onclick="mudarCorrupcao(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
-          <input type="number" id="f-corrupcao" min="0" value="0" style="flex:1;min-width:0;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-size:.95rem;outline:none;text-align:center" oninput="atualizarResumoCorrupcao();salvarLocal()">
-          <button type="button" onclick="mudarCorrupcao(1)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
-        </div>
-        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Estágio: <span id="corrupcao-estagio" style="font-weight:bold">Limpo</span> <span style="opacity:.7">(Limpo 0–2 · Marcado 3–5 · Corrompido 6–8 · Profanado 9–11 · Abissal 12+)</span></small>
-      </div>
-      <!-- SANIDADE -->
-      <div class="field-group">
-        <label>Sanidade</label>
-        <div style="display:flex;gap:.4rem;align-items:center">
-          <button type="button" onclick="mudarSanidade(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
-          <input type="number" id="f-sanidade" min="0" value="0" style="flex:1;min-width:0;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-size:.95rem;outline:none;text-align:center" oninput="atualizarResumoCorrupcao();salvarLocal()">
-          <button type="button" onclick="mudarSanidade(1)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
-        </div>
-        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Estágio: <span id="sanidade-estagio" style="font-weight:bold">Estável</span> <span style="opacity:.7">(Estável 8+ · Perturbado 6–7 · Abalado 4–5 · À Beira 2–3 · Ruptura ≤1)</span></small>
-      </div>
-      <!-- ATENÇÃO DA TORRE -->
-      <div class="field-group">
-        <label>Atenção da Torre</label>
-        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
-          <button onclick="mudarTicks(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
-          <input type="number" id="torre-ticks" min="0" max="8" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampTicks()">
-          <button onclick="mudarTicks(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
-          <button onclick="mudarTicks(2)" title="fogo / magia / sangue" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+2</button>
-          <button onclick="resetTicks()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
-          <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Cada rodada de combate além da 1ª = 1 tick (2 se fogo/magia/sangue). Ao encher (6–8): evento da Torre — reforço chega, ambiente piora, ou +1 de Corrupção/Atenção. Cada tick = +2 na Rolagem de Atenção do acampamento.</span></span>
-        </div>
-        <div id="torre-aviso" style="display:none;margin-top:.5rem;color:var(--accent-text);font-weight:bold;font-size:.82rem">A Torre nota vocês.</div>
-        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Cada tick = +2 na Rolagem de Atenção do acampamento.</small>
-      </div>
-    </div>
-    <!-- Linha de bônus do antecedente (o que a auto-aplicação aplicou) -->
-    <div id="corrupcao-bonus-antecedente" style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--text-muted)"></div>
-  </div>
-  </div>
-</div>
-
-<!-- TRAÇOS DA ALMA — seletor de traços positivos e fraquezas com Balance -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('tracos')" id="toggle-tracos">
-    <span class="ficha-expand-seta" id="seta-tracos">▶</span> Traços da Alma
-    <span class="ficha-expand-resumo" id="resumo-tracos"></span>
-  </div>
-  <div class="ficha-expand-area" id="area-tracos">
-  <div class="ficha-panel-body">
-    <div class="field-row cols-2">
-      <div class="field-group">
-        <label>Traços da Alma — Positivos</label>
-        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
-          <select id="select-traco-positivo" onchange="this.nextElementSibling.style.borderColor=this.value?'var(--accent)':'var(--border)'" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
-            <option value="">Escolher traço positivo...</option>
-            ${_opcoesTracos(true)}
-          </select>
-          <button type="button" onclick="adicionarTracoChip('traco','select-traco-positivo','tracos-lista')" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
-        </div>
-        <div id="tracos-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
-        <textarea id="r-tracos" style="display:none"></textarea>
-        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Escolha os traços pela lista. O 1º positivo de até 2 pts é grátis; os demais exigem fraquezas equivalentes.</small>
-      </div>
-      <div class="field-group">
-        <label>Fraquezas / Traumas</label>
-        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
-          <select id="select-fraqueza" onchange="this.nextElementSibling.style.borderColor=this.value?'var(--gold-light)':'var(--border)'" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
-            <option value="">Escolher fraqueza...</option>
-            ${_opcoesTracos(false)}
-          </select>
-          <button type="button" onclick="adicionarTracoChip('fraqueza','select-fraqueza','fraquezas-lista')" style="background:none;border:1px solid var(--gold-light);color:var(--gold-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
-        </div>
-        <div id="fraquezas-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
-        <textarea id="r-defeitos" style="display:none"></textarea>
-        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Fraquezas equilibram os traços pagos — somam pontos contra eles.</small>
-      </div>
-    </div>
-    <!-- Balance de Traços (promessa do livro) -->
-    <div id="traco-balance-status" style="margin-top:.15rem;margin-bottom:.5rem;border:1px solid var(--border);border-radius:4px;padding:.55rem .7rem;font-size:.78rem;background:rgba(255,255,255,.02)"></div>
-  </div>
-  </div>
-</div>
-
-<!-- ÁRVORE DA ALMA — pontos da alma e ramos por aspecto -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('arvore')" id="toggle-arvore">
-    <span class="ficha-expand-seta" id="seta-arvore">▶</span> Árvore da Alma
-  </div>
-  <div class="ficha-expand-area" id="area-arvore">
-  <div class="ficha-panel-body">
-    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap">
-      <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Pontos da Alma disponíveis</span>
-      <input type="number" id="aa-pontos" min="0" value="0" title="6 Pontos da Alma por nível (1–20) · máx: 3 Aspectos completos + 1 parcial · Missão de Maestria = +1 Ramo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100px" oninput="atualizarArvoreResumo()">
-      <span style="font-size:.78rem;color:var(--text-muted)">Gasto: <strong id="aa-total-gasto" style="color:var(--silver)">0</strong></span>
-      <span style="font-size:.78rem;color:var(--text-muted)">Saldo: <strong id="aa-saldo" style="color:var(--accent-light)">0</strong></span>
-    </div>
-    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">6 pontos por nível (1–20) · máx. 3 Aspectos completos + 1 parcial · Missão de Maestria = +1 Ramo · clique em ⓘ para ver os níveis de cada Ramo</p>
-
-    <!-- ARCANO -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Arcano</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Controle <span id="aa-prog-arcano-controle" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','controle')" title="Ver os 10 níveis do Ramo Controle" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-controle" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Expansão <span id="aa-prog-arcano-expansao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','expansao')" title="Ver os 10 níveis do Ramo Expansão" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-expansao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Versatilidade <span id="aa-prog-arcano-versatilidade" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','versatilidade')" title="Ver os 10 níveis do Ramo Versatilidade" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-versatilidade" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- BÉLICO -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Bélico</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Impacto <span id="aa-prog-belico-impacto" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','impacto')" title="Ver os 10 níveis do Ramo Impacto" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-impacto" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Perfuração <span id="aa-prog-belico-perfuracao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','perfuracao')" title="Ver os 10 níveis do Ramo Perfuração" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-perfuracao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Execução <span id="aa-prog-belico-execucao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','execucao')" title="Ver os 10 níveis do Ramo Execução" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-execucao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- MOBILIDADE -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Mobilidade</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Deslocamento <span id="aa-prog-mobilidade-deslocamento" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','deslocamento')" title="Ver os 10 níveis do Ramo Deslocamento" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-deslocamento" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Instinto <span id="aa-prog-mobilidade-instinto" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','instinto')" title="Ver os 10 níveis do Ramo Instinto" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-instinto" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Acrobacia <span id="aa-prog-mobilidade-acrobacia" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','acrobacia')" title="Ver os 10 níveis do Ramo Acrobacia" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-acrobacia" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- GUARDIÃO -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Guardião</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Resistência <span id="aa-prog-guardiao-resistencia" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','resistencia')" title="Ver os 10 níveis do Ramo Resistência" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-resistencia" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Vitalidade <span id="aa-prog-guardiao-vitalidade" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','vitalidade')" title="Ver os 10 níveis do Ramo Vitalidade" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-vitalidade" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Fortaleza <span id="aa-prog-guardiao-fortaleza" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','fortaleza')" title="Ver os 10 níveis do Ramo Fortaleza" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-fortaleza" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- CATALISADOR -->
-    <div>
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Catalisador</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Fortalecimento <span id="aa-prog-catalisador-fortalecimento" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','fortalecimento')" title="Ver os 10 níveis do Ramo Fortalecimento" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-fortalecimento" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Sustentação <span id="aa-prog-catalisador-sustentacao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','sustentacao')" title="Ver os 10 níveis do Ramo Sustentação" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-sustentacao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Supressão <span id="aa-prog-catalisador-supressao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','supressao')" title="Ver os 10 níveis do Ramo Supressão" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-supressao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-  </div>
-  </div><!-- /area-arvore -->
-</div>
-
-<!-- UTILIZAÇÕES REGISTRADAS — linhas dinâmicas de utilização de técnicas/poderes -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('utilizacoes')" id="toggle-utilizacoes">
-    <span class="ficha-expand-seta" id="seta-utilizacoes">▶</span> Utilizações Registradas
-  </div>
-  <div class="ficha-expand-area" id="area-utilizacoes">
-  <div class="ficha-panel-body">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
-      <div class="ficha-panel-title" style="font-size:.72rem;padding:.4rem 0">Utilizações</div>
-      <div style="display:flex;gap:.4rem">
-        <button onclick="addUtilizacao()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Utilização</button>
-      </div>
-    </div>
-    <div class="table-wrapper"><table>
-      <thead><tr><th style="min-width:140px">Nome</th><th style="min-width:110px">Categoria</th><th style="min-width:120px">Característica</th><th style="min-width:110px">Custo Inicial</th><th style="min-width:110px">Manutenção</th><th>Descrição</th><th style="width:30px"></th></tr></thead>
-      <tbody id="util-tbody">
-        <tr>
-          <td data-label="Nome"><input type="text" id="util1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
-          <td data-label="Categoria"><input type="text" id="util1-categoria" placeholder="Simples/Média/Alta/..." oninput="salvarLocal()"></td>
-          <td data-label="Característica"><input type="text" id="util1-caracteristica" placeholder="Controle/Expansão/..." oninput="salvarLocal()"></td>
-          <td data-label="Custo Inicial"><input type="text" id="util1-custo" placeholder="Ex: 22 Stamina" oninput="salvarLocal()"></td>
-          <td data-label="Manutenção"><input type="text" id="util1-manut" placeholder="Ex: 10 Stamina" oninput="salvarLocal()"></td>
-          <td data-label="Descrição"><input type="text" id="util1-desc" placeholder="Descrição..." oninput="salvarLocal()"></td>
-          <td><button onclick="removerUtilizacaoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-  </div>
-  </div><!-- /area-utilizacoes -->
-</div>
-
-<!-- COMBATE — trackers do combate lapidado (decisões C4, C8, C9) -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('combate')" id="toggle-combate">
-    <span class="ficha-expand-seta" id="seta-combate">▶</span> Combate
-  </div>
-  <div class="ficha-expand-area" id="area-combate">
-  <div class="ficha-panel-body">
-
-    <!-- CONDIÇÕES -->
-    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Condições</div>
-    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.75rem">Formato nome + valor + efeito. Marque a condição e, quando aplicável, o valor X.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.5rem">
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-avareado" oninput="salvarLocal()">
-        <label for="cond-avareado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Apavorado</label>
-        <input type="number" id="cond-avareado-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em testes e CA; cai 1 por turno</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-sangrando" oninput="salvarLocal()">
-        <label for="cond-sangrando" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Sangrando</label>
-        <input type="number" id="cond-sangrando-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">perde X de PV no início da rodada; Medicina estanca</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-envenenado" oninput="salvarLocal()">
-        <label for="cond-envenenado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Envenenado</label>
-        <input type="number" id="cond-envenenado-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Vigor; dano contínuo ou desvantagem</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-cegado" oninput="salvarLocal()">
-        <label for="cond-cegado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Cegado</label>
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">desvantagem em ataques; Percepção falha</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-caido" oninput="salvarLocal()">
-        <label for="cond-caido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Caído</label>
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">desvantagem em corpo a corpo; à distância tem vantagem contra você</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-agarrdo" oninput="salvarLocal()">
-        <label for="cond-agarrdo" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Agarrado</label>
-        <input type="number" id="cond-agarrdo-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">deslocamento 0; desvantagem em Destreza; escapar = Salvaguarda de Força/Destreza vs X</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-incapacitado" oninput="salvarLocal()">
-        <label for="cond-incapacitado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Incapacitado</label>
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">não age nem reage; concentração quebrada</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-exausto" oninput="salvarLocal()">
-        <label for="cond-exausto" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Exausto</label>
-        <input type="number" id="cond-exausto-val" min="0" max="6" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−1 em tudo por nível (1–6; 6 = morte)</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-corrompido" oninput="salvarLocal()">
-        <label for="cond-corrompido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Corrompido</label>
-        <input type="number" id="cond-corrompido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em testes de Alma; Corrupção mais fácil de ganhar</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-enlouquecido" oninput="salvarLocal()">
-        <label for="cond-enlouquecido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Enlouquecido</label>
-        <input type="number" id="cond-enlouquecido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Intelecto/Carisma; risco de ação irracional</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-enfraquecido" oninput="salvarLocal()">
-        <label for="cond-enfraquecido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Enfraquecido</label>
-        <input type="number" id="cond-enfraquecido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Força/Vigor</span></span>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
-        <input type="checkbox" id="cond-concentracao" oninput="salvarLocal()">
-        <label for="cond-concentracao" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Concentração quebrada</label>
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">efeito contínuo perdido</span></span>
-      </div>
-
-    </div>
-
-    <!-- FERIMENTO GRAVE & MORRENDO -->
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Ferimento Grave &amp; Morrendo</div>
-      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap">
-        <input type="checkbox" id="major-wound" oninput="salvarLocal()">
-        <label for="major-wound" style="font-size:.82rem;color:var(--text);cursor:pointer">Ferimento Grave</label>
-        <input type="text" id="major-wound-texto" placeholder="Observação..." style="flex:1;min-width:180px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.4rem .6rem;font-size:.8rem;outline:none" oninput="salvarLocal()">
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Golpe único ≥ metade dos PV Máximos → Salvaguarda de Corpo; falha = incapacitado.</span></span>
-      </div>
-      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-        <span style="font-size:.82rem;color:var(--text);flex:1;min-width:80px">Morrendo</span>
-        <button onclick="mudarMorrendo(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
-        <input type="number" id="morrendo" min="0" max="4" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampMorrendo()">
-        <button onclick="mudarMorrendo(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
-        <button onclick="resetMorrendo()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
-        <button onclick="rolarRecovery()" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Recovery Check</button>
-        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">0 PV → Morrendo 1 (2 se golpe crítico). Recovery check: d20 ≥ 10 + Morrendo no início do turno (sucesso −1, falha +1, 20 natural = −2 e acorda com 1 PV, 1 natural = +2). Morrendo 4 = morte.</span></span>
-      </div>
-      <div id="recovery-result" style="margin-top:.5rem;font-size:.8rem;min-height:1.1em"></div>
-    </div>
-
-    <!-- ROLAGENS CRÍTICAS (d100) -->
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Rolagens Críticas (d100)</div>
-      <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.6rem">Um 20 natural dobra o dano e rola na tabela de Acerto Crítico (O Julgamento Favorável); um 1 natural rola na tabela de Falha Crítica (O Olhar da Torre).</p>
-      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-        <button onclick="abrirRolagemCritico()" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Rolagem Crítica (d100)</button>
-        <button onclick="abrirRolagemFalha()" style="background:none;border:1px solid var(--gold);color:var(--gold-light);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Falha Crítica (d100)</button>
-      </div>
-    </div>
-
-  </div>
-  </div><!-- /area-combate -->
-</div>
-
-<!-- SESSÕES E XP — sistema de sessões e experiência (capítulo #sessoes-xp) -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('sessoes')" id="toggle-sessoes">
-    <span class="ficha-expand-seta" id="seta-sessoes">▶</span> Sessões e XP
-  </div>
-  <div class="ficha-expand-area" id="area-sessoes">
-  <div class="ficha-panel-body">
-
-    <!-- REGISTRO DE SESSÃO -->
-    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Registro de Sessão</div>
-    <div class="field-row cols-3">
-      <div class="field-group">
-        <label>Tipo de Sessão</label>
-        <select id="sess-tipo" oninput="atualizarSugestaoXP();salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="Oficial">Oficial</option>
-          <option value="Livre">Livre</option>
-          <option value="Lore">Lore</option>
-          <option value="Extraordinária">Extraordinária</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Qualidade da Sessão</label>
-        <select id="sess-qualidade" oninput="atualizarSugestaoXP();salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="Simples">Simples</option>
-          <option value="Desenvolvida">Desenvolvida</option>
-          <option value="Excepcional">Excepcional</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>XP da Sessão</label>
-        <input type="number" id="sess-xp" min="0" value="300" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="_atualizarTotalPreview();salvarLocal()">
-        <span id="sess-xp-dica" style="font-size:.64rem;color:var(--text-muted)">Intervalo: 25–100 · Oficial: média ~300 (extraordinário 500+)</span>
-      </div>
-    </div>
-    <div class="field-row cols-2">
-      <div class="field-group">
-        <label>Bônus por Risco (1×/sessão — rolagens pagas com Sanidade ou desesperadas)</label>
-        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-          <input type="checkbox" id="sess-risco" oninput="_atualizarTotalPreview();salvarLocal()">
-          <span style="font-size:.8rem;color:var(--text-muted)">Push / situação desesperada</span>
-          <input type="number" id="sess-risco-xp" min="0" max="50" value="25" style="width:70px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.4rem .5rem;font-size:.85rem;outline:none;text-align:center" oninput="_atualizarTotalPreview();salvarLocal()">
-          <span style="font-size:.64rem;color:var(--text-muted)">XP extra (padrão +25, máx +50)</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label>Observação</label>
-        <input type="text" id="sess-obs" placeholder="Nota livre da sessão..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.5rem">
-      <button onclick="registrarSessao()" style="background:var(--accent);border:none;color:#fff;padding:.55rem 1.4rem;font-family:'Playfair Display',serif;font-size:.9rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Registrar Sessão</button>
-      <span id="sess-total-preview" style="font-size:.85rem;color:var(--silver)">Total: +300 XP</span>
-      <span id="sess-msg" style="font-size:.8rem;color:var(--accent-light);min-height:1em"></span>
-    </div>
-
-    <!-- PROGRESSO -->
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Progresso</div>
-      <div class="field-row cols-3">
-        <div class="field-group">
-          <label>XP Atual</label>
-          <input type="number" id="xp-atual" min="0" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="atualizarProgressoXP();salvarLocal()">
-        </div>
-        <div class="field-group">
-          <label>Nível Atual</label>
-          <input type="text" id="xp-nivel-display" readonly value="1" style="background:var(--bg-input);border:1px solid var(--border);color:var(--silver);padding:.55rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100%">
-        </div>
-        <div class="field-group">
-          <label>Próximo Nível</label>
-          <div id="xp-proximo" style="font-size:.8rem;color:var(--text-muted);padding:.55rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:2.1em">Faltam 200 XP para o nível 2.</div>
-        </div>
-      </div>
-      <div style="margin-top:.6rem;background:var(--bg-input);border:1px solid var(--border);height:12px;border-radius:6px;overflow:hidden">
-        <div id="xp-barra-fill" style="height:100%;width:0%;background:linear-gradient(to right,var(--accent),var(--accent-light));transition:width .3s"></div>
-      </div>
-      <p style="font-size:.68rem;color:var(--text-muted);margin:.5rem 0 0">O XP é a fonte de verdade do nível: ao registrar sessões, o campo Nível da Ficha Base é atualizado automaticamente. O nível também pode ser ajustado manualmente na Ficha Base.</p>
-    </div>
-
-    <!-- HISTÓRICO DE SESSÕES -->
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Histórico de Sessões</div>
-      <div class="table-wrapper"><table>
-        <thead><tr><th>Tipo</th><th>Qualidade</th><th>XP</th><th>Risco</th><th>Observação</th><th>Data</th></tr></thead>
-        <tbody id="sess-historico-tbody"></tbody>
-      </table></div>
-      <input type="hidden" id="sess-historico" value="">
-    </div>
-
-  </div>
-  </div><!-- /area-sessoes -->
-</div>
-
-<!-- ACAMPAMENTO — abrigo, atividade e rolagem de atenção da Torre -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('acampamento')" id="toggle-acampamento">
-    <span class="ficha-expand-seta" id="seta-acampamento">▶</span> Acampamento
-  </div>
-  <div class="ficha-expand-area" id="area-acampamento">
-  <div class="ficha-panel-body">
-
-    <!-- ABRIGO & ATIVIDADE -->
-    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Abrigo &amp; Atividade</div>
-    <div class="field-row cols-3">
-      <div class="field-group">
-        <label>Nível do Abrigo</label>
-        <select id="acamp-nivel" oninput="atualizarAcampamento()" title="Nv1 Básico: 1d6+2 PV/STA · +1 Sanidade · −1 Corrupção · risco Alto | Nv2 Médio: 2d6+4 PV/STA · +1d4 Sanidade · −1d4 Corrupção · risco Médio | Nv3 Avançado: 3d6+6 PV/STA · +2 Sanidade · −1d6+1 Corrupção · risco Baixo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="1">Básico (Nv1)</option>
-          <option value="2">Médio (Nv2)</option>
-          <option value="3">Avançado (Nv3)</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Atividade Principal</label>
-        <select id="acamp-atividade" oninput="atualizarAcampamento()" title="CDs: Vigiar 15/13/11 (por nível do abrigo) · Cozinhar 14 · Meditar 15 + Corrupção · Explorar Arredores 16" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="Descansar">Descansar</option>
-          <option value="Vigiar">Vigiar</option>
-          <option value="Cozinhar">Cozinhar</option>
-          <option value="Meditar-Ritual">Meditar / Ritual</option>
-          <option value="Explorar Arredores">Explorar Arredores</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Recuperação do Abrigo</label>
-        <input type="text" id="acamp-recuperacao" readonly value="1d6+2 PV/STA · +1 Sanidade · −1 Corrupção · risco Alto" style="background:var(--bg-input);border:1px solid var(--border);color:var(--silver);padding:.55rem .7rem;font-family:inherit;font-size:.85rem;outline:none;width:100%">
-      </div>
-    </div>
-
-    <!-- ROLAGEM DE ATENÇÃO DA TORRE -->
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Rolagem de Atenção da Torre</div>
-      <div class="field-row cols-4">
-        <div class="field-group">
-          <label>Andar Atual</label>
-          <input type="number" id="acamp-andar" min="1" value="1" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
-        </div>
-        <div class="field-group">
-          <label>Modificador</label>
-          <input type="number" id="acamp-mod" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
-        </div>
-        <div class="field-group">
-          <label>Rolagem (d20 + andar÷2 − abrigo×2 + ticks + mod)</label>
-          <input type="text" id="acamp-rolagem" readonly value="—" style="background:var(--bg-input);border:1px solid var(--border);color:var(--gold-light);padding:.55rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100%">
-        </div>
-        <div class="field-group">
-          <label>Ação</label>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap">
-            <button onclick="rolarAtencaoAcampamento()" style="background:var(--accent);border:none;color:#fff;padding:.5rem .9rem;font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Rolar Atenção</button>
-            <button onclick="resetTicks()" title="Zera o Relógio de Atenção do combate" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.5rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Zerar ticks do combate</button>
-          </div>
-        </div>
-      </div>
-      <div id="acamp-resultado" style="margin-top:.5rem;font-size:.85rem;min-height:1.2em;font-weight:bold"></div>
-      <p style="font-size:.68rem;color:var(--text-muted);margin:.5rem 0 0">Ponte com o combate: cada <strong>tick do Relógio de Atenção</strong> (painel Combate) soma <strong>+2 na rolagem</strong>; o nível do abrigo reduz os ticks acumulados (−2 por nível). Resultados: ≤10 Silêncio · 11–15 Presença Leve · 16–20 Atenção Crescente · 21–25 Interferência Ativa · 26+ Ira da Torre.</p>
-    </div>
-
-  </div>
-  </div><!-- /area-acampamento -->
-</div>
-
-<!-- FORJA E BARMAN — tracker de forja e contatos barmans -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('forja')" id="toggle-forja">
-    <span class="ficha-expand-seta" id="seta-forja">▶</span> Forja e Barmans
-  </div>
-  <div class="ficha-expand-area" id="area-forja">
-  <div class="ficha-panel-body">
-
-    <!-- FORJA -->
-    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Forja</div>
-    <div class="field-row cols-3">
-      <div class="field-group">
-        <label>Rank do Item em Trabalho</label>
-        <select id="forja-rank" onchange="atualizarForjaResumo()" title="Ruim −2 · Comum 0 · Bom +1 · Épico +2 · Mítico +3 · Lendário +4" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="Ruim (−2)">Ruim (−2)</option>
-          <option value="Comum (0)">Comum (0)</option>
-          <option value="Bom (+1)">Bom (+1)</option>
-          <option value="Épico (+2)">Épico (+2)</option>
-          <option value="Mítico (+3)">Mítico (+3)</option>
-          <option value="Lendário (+4)">Lendário (+4)</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Classe da Arma/Equipamento</label>
-        <select id="forja-classe" onchange="atualizarForjaResumo()" title="F Comum (sem núcleo) · E Reforçada (núcleo D) · D Energizada (núcleo C, ferreiro IV) · C Rúnica (núcleo B, runa preservada) · B Relíquia (núcleo A, materiais raros) · A Mítica (núcleo A refinado, múltiplas runas) · S Lendária (núcleo S) · SS Ascendida (parcialmente viva) · SSS Singular (única)" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="F Comum">F Comum</option>
-          <option value="E Reforçada">E Reforçada</option>
-          <option value="D Energizada">D Energizada</option>
-          <option value="C Rúnica">C Rúnica</option>
-          <option value="B Relíquia">B Relíquia</option>
-          <option value="A Mítica">A Mítica</option>
-          <option value="S Lendária">S Lendária</option>
-          <option value="SS Ascendida">SS Ascendida</option>
-          <option value="SSS Singular">SSS Singular</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Nível do Ferreiro</label>
-        <select id="forja-ferreiro" onchange="atualizarForjaResumo()" title="I Ferreiro Comum (máx Bom) · II Artesão de Cidadela (máx Épico) · III Mestre Ferreiro (máx Mítico) · IV Artífice de Torre (máx Lendário) · V Forjador Lendário (máx Ascendida) · VI O Último dos Grandes (máx Singular)" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="I Ferreiro Comum">I Ferreiro Comum</option>
-          <option value="II Artesão de Cidadela">II Artesão de Cidadela</option>
-          <option value="III Mestre Ferreiro">III Mestre Ferreiro</option>
-          <option value="IV Artífice de Torre">IV Artífice de Torre</option>
-          <option value="V Forjador Lendário">V Forjador Lendário</option>
-          <option value="VI O Último dos Grandes">VI O Último dos Grandes</option>
-        </select>
-      </div>
-    </div>
-    <div class="field-row cols-2">
-      <div class="field-group">
-        <label>Potencial do Material</label>
-        <input type="number" id="forja-potencial" min="0" max="150" value="50" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="atualizarForjaResumo()">
-        <span style="font-size:.64rem;color:var(--text-muted)">Abaixo de 40 → rank baixo · 50–80 → Épico/Mítico · acima de 90 → Lendário/Ascendido</span>
-      </div>
-      <div class="field-group">
-        <label>Materiais Secundários</label>
-        <input type="text" id="forja-materiais" placeholder="Nota livre (runas, materiais raros)..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
-      </div>
-    </div>
-    <div style="margin-top:.5rem">
-      <label style="font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted)">Resumo</label>
-      <div id="forja-resumo" style="font-size:.8rem;color:var(--silver);padding:.5rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:1.2em">Bom (+1) · C Rúnica · III Mestre Ferreiro (máx Mítico)</div>
-    </div>
-
-    <!-- BARMAN (contatos) -->
-    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
-        <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Barmans (contatos)</div>
-        <div style="display:flex;gap:.4rem">
-          <button onclick="addBarman()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Barman</button>
-        </div>
-      </div>
-      <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:.5rem">Risco de informação falsa: Comum 30% · Bom 15% · Excelente 5% · Lendário variável (pode ser venenosa).</p>
-      <div class="table-wrapper"><table>
-        <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:100px">Qualidade</th><th style="min-width:100px">Confiança</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
-        <tbody id="barmans-tbody">
-          <tr>
-            <td data-label="Nome"><input type="text" id="barman1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
-            <td data-label="Qualidade"><select id="barman1-qualidade" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Comum">Comum</option><option value="Bom">Bom</option><option value="Excelente">Excelente</option><option value="Lendário">Lendário</option></select></td>
-            <td data-label="Confiança"><select id="barman1-confianca" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Neutro">Neutro</option><option value="Positivo">Positivo</option><option value="Confiança">Confiança</option><option value="Aliança">Aliança</option></select></td>
-            <td data-label="Cidade"><input type="text" id="barman1-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
-            <td data-label="Observação"><input type="text" id="barman1-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
-            <td><button onclick="removerBarmanEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
-          </tr>
-        </tbody>
-      </table></div>
-    </div>
-
-  </div>
-  </div><!-- /area-forja -->
-</div>
-
-<!-- RELACIONAMENTOS — laços, níveis e tipos -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('relacionamentos')" id="toggle-relacionamentos">
-    <span class="ficha-expand-seta" id="seta-relacionamentos">▶</span> Relacionamentos
-  </div>
-  <div class="ficha-expand-area" id="area-relacionamentos">
-  <div class="ficha-panel-body">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Laços do Personagem <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></div>
-      <div style="display:flex;gap:.4rem">
-        <button onclick="addRelacionamento()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Relacionamento</button>
-      </div>
-    </div>
-    <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:.5rem">Laços platônicos, de amizade profunda ou de "família encontrada" são tão poderosos quanto os românticos. A perda de um ente querido custa 2d10 de Sanidade (Salvaguarda de Alma reduz) e pode gerar 1d6 de Corrupção.</p>
-    <div class="table-wrapper"><table>
-      <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:150px">Nível <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></th><th style="min-width:100px">Tipo</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
-      <tbody id="rel-tbody">
-        <tr>
-          <td data-label="Nome"><input type="text" id="rel1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
-          <td data-label="Nível"><select id="rel1-nivel" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="1 Amizade Sólida">1 Amizade Sólida</option><option value="2 Confiança Profunda">2 Confiança Profunda</option><option value="3 Intimidade">3 Intimidade</option><option value="4 Laço de Alma">4 Laço de Alma</option></select></td>
-          <td data-label="Tipo"><select id="rel1-tipo" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Aliado">Aliado</option><option value="Amigo">Amigo</option><option value="Íntimo">Íntimo</option><option value="Familiar">Familiar</option><option value="Rival">Rival</option></select></td>
-          <td data-label="Cidade"><input type="text" id="rel1-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
-          <td data-label="Observação"><input type="text" id="rel1-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
-          <td><button onclick="removerRelacionamentoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-  </div>
-  </div><!-- /area-relacionamentos -->
-</div>
-
-<!-- ATRIBUTOS — logo abaixo da ficha base, largura total -->
-<div class="ficha-full-row">
-  <div class="ficha-panel" style="border-top:3px solid var(--accent)!important;margin-bottom:1rem">
-    <div class="ficha-panel-title" style="font-size:.9rem;letter-spacing:4px;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between" id="toggle-atributos">
-      <span>Atributos</span>
-      <span style="font-size:.62rem;letter-spacing:1px;color:var(--text-muted);text-transform:none;font-weight:400">arraste para reordenar · ⭐ para favoritar</span>
-    </div>
-    <div id="area-atributos">
-    <div class="ficha-panel-body" style="padding:1.75rem 1.5rem 1.5rem">
-      <div class="atributos-grid" id="atributos-grid" style="gap:.85rem">
-        ${ATRIBUTOS_DEF.map(({sigla, nome}, idx) => `
-        <div class="atributo-box" id="attr-box-${sigla}" draggable="true"
-          ondragstart="_attrDragStart(event,'${sigla}')" ondragover="_attrDragOver(event)"
-          ondrop="_attrDrop(event,'${sigla}')" ondragend="_attrDragEnd(event)">
-          <button class="atributo-fav-btn" id="fav-${sigla}" onclick="toggleFavoritoAtributo('${sigla}',event)" title="Favoritar ${nome}">${icone('star','ic-sm')}</button>
-          <div class="attr-ordem-btns">
-            <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',-1,event)" title="Mover para cima" ${idx === 0 ? 'style="visibility:hidden"' : ''}>▲</button>
-            <button class="attr-ordem-btn" onclick="_attrMover('${sigla}',1,event)" title="Mover para baixo" ${idx === ATRIBUTOS_DEF.length - 1 ? 'style="visibility:hidden"' : ''}>▼</button>
-          </div>
-          <label style="letter-spacing:2px" title="${nome}">${nome}</label>
-          <input type="number" id="a-${sigla}" min="1" max="30" value="10" oninput="calcTudoDebounced()">
-          <div class="atributo-mod" id="m-${sigla}">+0</div>
-        </div>`).join('')}
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;flex-wrap:wrap;gap:.75rem">
-        <p style="font-size:.78rem;color:var(--text-muted);margin:0">Total: <strong id="total-attr" style="color:var(--accent-light);font-family:'Playfair Display',serif;font-size:1.05rem">60</strong> <span style="color:#555">/ 80 pontos</span></p>
-        <div style="display:flex;gap:2rem">
-          <div style="text-align:center">
-            <div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">Maestria</div>
-            <div id="r-maestria" style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--silver)">+2</div>
-          </div>
-          <div style="text-align:center">
-            <div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">Iniciativa</div>
-            <div id="r-init" style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--silver)">+0</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </div>
-</div><!-- /ficha-full-row atributos -->
-
 
 <!-- LAYOUT DE DUAS COLUNAS (desktop): Recursos | Armas -->
 <div class="ficha-layout-cols">
@@ -12806,6 +12205,327 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
 
 </div><!-- /ficha-layout-cols -->
 
+<!-- COMBATE — trackers do combate lapidado (decisões C4, C8, C9) -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('combate')" id="toggle-combate">
+    <span class="ficha-expand-seta" id="seta-combate">▶</span> Combate
+  </div>
+  <div class="ficha-expand-area" id="area-combate">
+  <div class="ficha-panel-body">
+
+    <!-- CONDIÇÕES -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Condições</div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.75rem">Formato nome + valor + efeito. Marque a condição e, quando aplicável, o valor X.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.5rem">
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-avareado" oninput="salvarLocal()">
+        <label for="cond-avareado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Apavorado</label>
+        <input type="number" id="cond-avareado-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em testes e CA; cai 1 por turno</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-sangrando" oninput="salvarLocal()">
+        <label for="cond-sangrando" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Sangrando</label>
+        <input type="number" id="cond-sangrando-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">perde X de PV no início da rodada; Medicina estanca</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-envenenado" oninput="salvarLocal()">
+        <label for="cond-envenenado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Envenenado</label>
+        <input type="number" id="cond-envenenado-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Vigor; dano contínuo ou desvantagem</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-cegado" oninput="salvarLocal()">
+        <label for="cond-cegado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Cegado</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">desvantagem em ataques; Percepção falha</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-caido" oninput="salvarLocal()">
+        <label for="cond-caido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Caído</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">desvantagem em corpo a corpo; à distância tem vantagem contra você</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-agarrdo" oninput="salvarLocal()">
+        <label for="cond-agarrdo" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Agarrado</label>
+        <input type="number" id="cond-agarrdo-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">deslocamento 0; desvantagem em Destreza; escapar = Salvaguarda de Força/Destreza vs X</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-incapacitado" oninput="salvarLocal()">
+        <label for="cond-incapacitado" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Incapacitado</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">não age nem reage; concentração quebrada</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-exausto" oninput="salvarLocal()">
+        <label for="cond-exausto" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Exausto</label>
+        <input type="number" id="cond-exausto-val" min="0" max="6" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−1 em tudo por nível (1–6; 6 = morte)</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-corrompido" oninput="salvarLocal()">
+        <label for="cond-corrompido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Corrompido</label>
+        <input type="number" id="cond-corrompido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em testes de Alma; Corrupção mais fácil de ganhar</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-enlouquecido" oninput="salvarLocal()">
+        <label for="cond-enlouquecido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Enlouquecido</label>
+        <input type="number" id="cond-enlouquecido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Intelecto/Carisma; risco de ação irracional</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-enfraquecido" oninput="salvarLocal()">
+        <label for="cond-enfraquecido" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Enfraquecido</label>
+        <input type="number" id="cond-enfraquecido-val" min="0" max="10" value="0" style="width:46px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.2rem .3rem;font-size:.78rem;outline:none;text-align:center" oninput="salvarLocal()" title="Valor X">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">−X em Força/Vigor</span></span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;padding:.35rem .6rem">
+        <input type="checkbox" id="cond-concentracao" oninput="salvarLocal()">
+        <label for="cond-concentracao" style="font-size:.8rem;color:var(--text);cursor:pointer;flex:1">Concentração quebrada</label>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">efeito contínuo perdido</span></span>
+      </div>
+
+    </div>
+
+    <!-- FERIMENTO GRAVE & MORRENDO -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Ferimento Grave &amp; Morrendo</div>
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap">
+        <input type="checkbox" id="major-wound" oninput="salvarLocal()">
+        <label for="major-wound" style="font-size:.82rem;color:var(--text);cursor:pointer">Ferimento Grave</label>
+        <input type="text" id="major-wound-texto" placeholder="Observação..." style="flex:1;min-width:180px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.4rem .6rem;font-size:.8rem;outline:none" oninput="salvarLocal()">
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Golpe único ≥ metade dos PV Máximos → Salvaguarda de Corpo; falha = incapacitado.</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <span style="font-size:.82rem;color:var(--text);flex:1;min-width:80px">Morrendo</span>
+        <button onclick="mudarMorrendo(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
+        <input type="number" id="morrendo" min="0" max="4" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampMorrendo()">
+        <button onclick="mudarMorrendo(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
+        <button onclick="resetMorrendo()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
+        <button onclick="rolarRecovery()" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Recovery Check</button>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">0 PV → Morrendo 1 (2 se golpe crítico). Recovery check: d20 ≥ 10 + Morrendo no início do turno (sucesso −1, falha +1, 20 natural = −2 e acorda com 1 PV, 1 natural = +2). Morrendo 4 = morte.</span></span>
+      </div>
+      <div id="recovery-result" style="margin-top:.5rem;font-size:.8rem;min-height:1.1em"></div>
+    </div>
+
+    <!-- ROLAGENS CRÍTICAS (d100) -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Rolagens Críticas (d100)</div>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.6rem">Um 20 natural dobra o dano e rola na tabela de Acerto Crítico (O Julgamento Favorável); um 1 natural rola na tabela de Falha Crítica (O Olhar da Torre).</p>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <button onclick="abrirRolagemCritico()" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Rolagem Crítica (d100)</button>
+        <button onclick="abrirRolagemFalha()" style="background:none;border:1px solid var(--gold);color:var(--gold-light);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">Falha Crítica (d100)</button>
+      </div>
+    </div>
+
+  </div>
+  </div><!-- /area-combate -->
+</div>
+
+<!-- CORRUPÇÃO & ATENÇÃO DA TORRE — estágios, relógio e sanidade -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('corrupcao')" id="toggle-corrupcao">
+    <span class="ficha-expand-seta" id="seta-corrupcao">▶</span> Corrupção &amp; Atenção da Torre
+    <span class="ficha-expand-resumo" id="resumo-corrupcao"></span>
+  </div>
+  <div class="ficha-expand-area" id="area-corrupcao">
+  <div class="ficha-panel-body">
+    <div class="field-row cols-3">
+      <!-- CORRUPÇÃO -->
+      <div class="field-group">
+        <label>Corrupção</label>
+        <div style="display:flex;gap:.4rem;align-items:center">
+          <button type="button" onclick="mudarCorrupcao(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
+          <input type="number" id="f-corrupcao" min="0" value="0" style="flex:1;min-width:0;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-size:.95rem;outline:none;text-align:center" oninput="atualizarResumoCorrupcao();salvarLocal()">
+          <button type="button" onclick="mudarCorrupcao(1)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
+        </div>
+        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Estágio: <span id="corrupcao-estagio" style="font-weight:bold">Limpo</span> <span style="opacity:.7">(Limpo 0–2 · Marcado 3–5 · Corrompido 6–8 · Profanado 9–11 · Abissal 12+)</span></small>
+      </div>
+      <!-- SANIDADE -->
+      <div class="field-group">
+        <label>Sanidade</label>
+        <div style="display:flex;gap:.4rem;align-items:center">
+          <button type="button" onclick="mudarSanidade(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
+          <input type="number" id="f-sanidade" min="0" value="0" style="flex:1;min-width:0;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-size:.95rem;outline:none;text-align:center" oninput="atualizarResumoCorrupcao();salvarLocal()">
+          <button type="button" onclick="mudarSanidade(1)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.9rem;cursor:pointer;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
+        </div>
+        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Estágio: <span id="sanidade-estagio" style="font-weight:bold">Estável</span> <span style="opacity:.7">(Estável 8+ · Perturbado 6–7 · Abalado 4–5 · À Beira 2–3 · Ruptura ≤1)</span></small>
+      </div>
+      <!-- ATENÇÃO DA TORRE -->
+      <div class="field-group">
+        <label>Atenção da Torre</label>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+          <button onclick="mudarTicks(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
+          <input type="number" id="torre-ticks" min="0" max="8" value="0" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampTicks()">
+          <button onclick="mudarTicks(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
+          <button onclick="mudarTicks(2)" title="fogo / magia / sangue" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+2</button>
+          <button onclick="resetTicks()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset</button>
+          <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Cada rodada de combate além da 1ª = 1 tick (2 se fogo/magia/sangue). Ao encher (6–8): evento da Torre — reforço chega, ambiente piora, ou +1 de Corrupção/Atenção. Cada tick = +2 na Rolagem de Atenção do acampamento.</span></span>
+        </div>
+        <div id="torre-aviso" style="display:none;margin-top:.5rem;color:var(--accent-text);font-weight:bold;font-size:.82rem">A Torre nota vocês.</div>
+        <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem">Cada tick = +2 na Rolagem de Atenção do acampamento.</small>
+      </div>
+    </div>
+    <!-- Linha de bônus do antecedente (o que a auto-aplicação aplicou) -->
+    <div id="corrupcao-bonus-antecedente" style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--text-muted)"></div>
+  </div>
+  </div>
+</div>
+
+<!-- ÁRVORE DA ALMA — pontos da alma e ramos por aspecto -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('arvore')" id="toggle-arvore">
+    <span class="ficha-expand-seta" id="seta-arvore">▶</span> Árvore da Alma
+  </div>
+  <div class="ficha-expand-area" id="area-arvore">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap">
+      <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Pontos da Alma disponíveis</span>
+      <input type="number" id="aa-pontos" min="0" value="0" title="6 Pontos da Alma por nível (1–20) · máx: 3 Aspectos completos + 1 parcial · Missão de Maestria = +1 Ramo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100px" oninput="atualizarArvoreResumo()">
+      <span style="font-size:.78rem;color:var(--text-muted)">Gasto: <strong id="aa-total-gasto" style="color:var(--silver)">0</strong></span>
+      <span style="font-size:.78rem;color:var(--text-muted)">Saldo: <strong id="aa-saldo" style="color:var(--accent-light)">0</strong></span>
+    </div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">6 pontos por nível (1–20) · máx. 3 Aspectos completos + 1 parcial · Missão de Maestria = +1 Ramo · clique em ⓘ para ver os níveis de cada Ramo</p>
+
+    <!-- ARCANO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Arcano</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Controle <span id="aa-prog-arcano-controle" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','controle')" title="Ver os 10 níveis do Ramo Controle" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-controle" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Expansão <span id="aa-prog-arcano-expansao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','expansao')" title="Ver os 10 níveis do Ramo Expansão" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-expansao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Versatilidade <span id="aa-prog-arcano-versatilidade" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('arcano','versatilidade')" title="Ver os 10 níveis do Ramo Versatilidade" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-arcano-versatilidade" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+
+    <!-- BÉLICO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Bélico</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Impacto <span id="aa-prog-belico-impacto" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','impacto')" title="Ver os 10 níveis do Ramo Impacto" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-impacto" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Perfuração <span id="aa-prog-belico-perfuracao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','perfuracao')" title="Ver os 10 níveis do Ramo Perfuração" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-perfuracao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Execução <span id="aa-prog-belico-execucao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico','execucao')" title="Ver os 10 níveis do Ramo Execução" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico-execucao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+
+    <!-- MOBILIDADE -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Mobilidade</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Deslocamento <span id="aa-prog-mobilidade-deslocamento" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','deslocamento')" title="Ver os 10 níveis do Ramo Deslocamento" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-deslocamento" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Instinto <span id="aa-prog-mobilidade-instinto" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','instinto')" title="Ver os 10 níveis do Ramo Instinto" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-instinto" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Acrobacia <span id="aa-prog-mobilidade-acrobacia" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('mobilidade','acrobacia')" title="Ver os 10 níveis do Ramo Acrobacia" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-mobilidade-acrobacia" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+
+    <!-- GUARDIÃO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Guardião</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Resistência <span id="aa-prog-guardiao-resistencia" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','resistencia')" title="Ver os 10 níveis do Ramo Resistência" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-resistencia" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Vitalidade <span id="aa-prog-guardiao-vitalidade" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','vitalidade')" title="Ver os 10 níveis do Ramo Vitalidade" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-vitalidade" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Fortaleza <span id="aa-prog-guardiao-fortaleza" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('guardiao','fortaleza')" title="Ver os 10 níveis do Ramo Fortaleza" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-guardiao-fortaleza" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+
+    <!-- CATALISADOR -->
+    <div>
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Catalisador</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Fortalecimento <span id="aa-prog-catalisador-fortalecimento" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','fortalecimento')" title="Ver os 10 níveis do Ramo Fortalecimento" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-fortalecimento" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Sustentação <span id="aa-prog-catalisador-sustentacao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','sustentacao')" title="Ver os 10 níveis do Ramo Sustentação" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-sustentacao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Supressão <span id="aa-prog-catalisador-supressao" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('catalisador','supressao')" title="Ver os 10 níveis do Ramo Supressão" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-catalisador-supressao" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /area-arvore -->
+</div>
+
+<!-- UTILIZAÇÕES REGISTRADAS — linhas dinâmicas de utilização de técnicas/poderes -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('utilizacoes')" id="toggle-utilizacoes">
+    <span class="ficha-expand-seta" id="seta-utilizacoes">▶</span> Utilizações Registradas
+  </div>
+  <div class="ficha-expand-area" id="area-utilizacoes">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+      <div class="ficha-panel-title" style="font-size:.72rem;padding:.4rem 0">Utilizações</div>
+      <div style="display:flex;gap:.4rem">
+        <button onclick="addUtilizacao()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Utilização</button>
+      </div>
+    </div>
+    <div class="table-wrapper"><table>
+      <thead><tr><th style="min-width:140px">Nome</th><th style="min-width:110px">Categoria</th><th style="min-width:120px">Característica</th><th style="min-width:110px">Custo Inicial</th><th style="min-width:110px">Manutenção</th><th>Descrição</th><th style="width:30px"></th></tr></thead>
+      <tbody id="util-tbody">
+        <tr>
+          <td data-label="Nome"><input type="text" id="util1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+          <td data-label="Categoria"><input type="text" id="util1-categoria" placeholder="Simples/Média/Alta/..." oninput="salvarLocal()"></td>
+          <td data-label="Característica"><input type="text" id="util1-caracteristica" placeholder="Controle/Expansão/..." oninput="salvarLocal()"></td>
+          <td data-label="Custo Inicial"><input type="text" id="util1-custo" placeholder="Ex: 22 Stamina" oninput="salvarLocal()"></td>
+          <td data-label="Manutenção"><input type="text" id="util1-manut" placeholder="Ex: 10 Stamina" oninput="salvarLocal()"></td>
+          <td data-label="Descrição"><input type="text" id="util1-desc" placeholder="Descrição..." oninput="salvarLocal()"></td>
+          <td><button onclick="removerUtilizacaoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+  </div><!-- /area-utilizacoes -->
+</div>
+
+<!-- TRAÇOS DA ALMA — seletor de traços positivos e fraquezas com Balance -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('tracos')" id="toggle-tracos">
+    <span class="ficha-expand-seta" id="seta-tracos">▶</span> Traços da Alma
+    <span class="ficha-expand-resumo" id="resumo-tracos"></span>
+  </div>
+  <div class="ficha-expand-area" id="area-tracos">
+  <div class="ficha-panel-body">
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Traços da Alma — Positivos</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="select-traco-positivo" onchange="this.nextElementSibling.style.borderColor=this.value?'var(--accent)':'var(--border)'" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
+            <option value="">Escolher traço positivo...</option>
+            ${_opcoesTracos(true)}
+          </select>
+          <button type="button" onclick="adicionarTracoChip('traco','select-traco-positivo','tracos-lista')" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <div id="tracos-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
+        <textarea id="r-tracos" style="display:none"></textarea>
+        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Escolha os traços pela lista. O 1º positivo de até 2 pts é grátis; os demais exigem fraquezas equivalentes.</small>
+      </div>
+      <div class="field-group">
+        <label>Fraquezas / Traumas</label>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.4rem">
+          <select id="select-fraqueza" onchange="this.nextElementSibling.style.borderColor=this.value?'var(--gold-light)':'var(--border)'" style="flex:1;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;font-family:inherit;font-size:.85rem;outline:none">
+            <option value="">Escolher fraqueza...</option>
+            ${_opcoesTracos(false)}
+          </select>
+          <button type="button" onclick="adicionarTracoChip('fraqueza','select-fraqueza','fraquezas-lista')" style="background:none;border:1px solid var(--gold-light);color:var(--gold-light);padding:.5rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap">+ Adicionar</button>
+        </div>
+        <div id="fraquezas-lista" style="display:flex;flex-direction:column;gap:.3rem;margin-bottom:.35rem"></div>
+        <textarea id="r-defeitos" style="display:none"></textarea>
+        <small style="color:var(--text-muted);font-size:.68rem;line-height:1.4">Fraquezas equilibram os traços pagos — somam pontos contra eles.</small>
+      </div>
+    </div>
+    <!-- Balance de Traços (promessa do livro) -->
+    <div id="traco-balance-status" style="margin-top:.15rem;margin-bottom:.5rem;border:1px solid var(--border);border-radius:4px;padding:.55rem .7rem;font-size:.78rem;background:rgba(255,255,255,.02)"></div>
+  </div>
+  </div>
+</div>
+
   <!-- PERÍCIAS — abaixo dos recursos e armas, largura total -->
   <div class="ficha-panel ficha-full-row" style="margin-bottom:1rem">
     <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('pericias')" id="toggle-pericias">
@@ -12817,6 +12537,288 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     </div>
     </div>
   </div>
+
+<!-- SESSÕES E XP — sistema de sessões e experiência (capítulo #sessoes-xp) -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('sessoes')" id="toggle-sessoes">
+    <span class="ficha-expand-seta" id="seta-sessoes">▶</span> Sessões e XP
+  </div>
+  <div class="ficha-expand-area" id="area-sessoes">
+  <div class="ficha-panel-body">
+
+    <!-- REGISTRO DE SESSÃO -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Registro de Sessão</div>
+    <div class="field-row cols-3">
+      <div class="field-group">
+        <label>Tipo de Sessão</label>
+        <select id="sess-tipo" oninput="atualizarSugestaoXP();salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Oficial">Oficial</option>
+          <option value="Livre">Livre</option>
+          <option value="Lore">Lore</option>
+          <option value="Extraordinária">Extraordinária</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Qualidade da Sessão</label>
+        <select id="sess-qualidade" oninput="atualizarSugestaoXP();salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Simples">Simples</option>
+          <option value="Desenvolvida">Desenvolvida</option>
+          <option value="Excepcional">Excepcional</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>XP da Sessão</label>
+        <input type="number" id="sess-xp" min="0" value="300" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="_atualizarTotalPreview();salvarLocal()">
+        <span id="sess-xp-dica" style="font-size:.64rem;color:var(--text-muted)">Intervalo: 25–100 · Oficial: média ~300 (extraordinário 500+)</span>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Bônus por Risco (1×/sessão — rolagens pagas com Sanidade ou desesperadas)</label>
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <input type="checkbox" id="sess-risco" oninput="_atualizarTotalPreview();salvarLocal()">
+          <span style="font-size:.8rem;color:var(--text-muted)">Push / situação desesperada</span>
+          <input type="number" id="sess-risco-xp" min="0" max="50" value="25" style="width:70px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.4rem .5rem;font-size:.85rem;outline:none;text-align:center" oninput="_atualizarTotalPreview();salvarLocal()">
+          <span style="font-size:.64rem;color:var(--text-muted)">XP extra (padrão +25, máx +50)</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Observação</label>
+        <input type="text" id="sess-obs" placeholder="Nota livre da sessão..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.5rem">
+      <button onclick="registrarSessao()" style="background:var(--accent);border:none;color:#fff;padding:.55rem 1.4rem;font-family:'Playfair Display',serif;font-size:.9rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Registrar Sessão</button>
+      <span id="sess-total-preview" style="font-size:.85rem;color:var(--silver)">Total: +300 XP</span>
+      <span id="sess-msg" style="font-size:.8rem;color:var(--accent-light);min-height:1em"></span>
+    </div>
+
+    <!-- PROGRESSO -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Progresso</div>
+      <div class="field-row cols-3">
+        <div class="field-group">
+          <label>XP Atual</label>
+          <input type="number" id="xp-atual" min="0" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="atualizarProgressoXP();salvarLocal()">
+        </div>
+        <div class="field-group">
+          <label>Nível Atual</label>
+          <input type="text" id="xp-nivel-display" readonly value="1" style="background:var(--bg-input);border:1px solid var(--border);color:var(--silver);padding:.55rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100%">
+        </div>
+        <div class="field-group">
+          <label>Próximo Nível</label>
+          <div id="xp-proximo" style="font-size:.8rem;color:var(--text-muted);padding:.55rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:2.1em">Faltam 200 XP para o nível 2.</div>
+        </div>
+      </div>
+      <div style="margin-top:.6rem;background:var(--bg-input);border:1px solid var(--border);height:12px;border-radius:6px;overflow:hidden">
+        <div id="xp-barra-fill" style="height:100%;width:0%;background:linear-gradient(to right,var(--accent),var(--accent-light));transition:width .3s"></div>
+      </div>
+      <p style="font-size:.68rem;color:var(--text-muted);margin:.5rem 0 0">O XP é a fonte de verdade do nível: ao registrar sessões, o campo Nível da Ficha Base é atualizado automaticamente. O nível também pode ser ajustado manualmente na Ficha Base.</p>
+    </div>
+
+    <!-- HISTÓRICO DE SESSÕES -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Histórico de Sessões</div>
+      <div class="table-wrapper"><table>
+        <thead><tr><th>Tipo</th><th>Qualidade</th><th>XP</th><th>Risco</th><th>Observação</th><th>Data</th></tr></thead>
+        <tbody id="sess-historico-tbody"></tbody>
+      </table></div>
+      <input type="hidden" id="sess-historico" value="">
+    </div>
+
+  </div>
+  </div><!-- /area-sessoes -->
+</div>
+
+<!-- ACAMPAMENTO — abrigo, atividade e rolagem de atenção da Torre -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('acampamento')" id="toggle-acampamento">
+    <span class="ficha-expand-seta" id="seta-acampamento">▶</span> Acampamento
+  </div>
+  <div class="ficha-expand-area" id="area-acampamento">
+  <div class="ficha-panel-body">
+
+    <!-- ABRIGO & ATIVIDADE -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Abrigo &amp; Atividade</div>
+    <div class="field-row cols-3">
+      <div class="field-group">
+        <label>Nível do Abrigo</label>
+        <select id="acamp-nivel" oninput="atualizarAcampamento()" title="Nv1 Básico: 1d6+2 PV/STA · +1 Sanidade · −1 Corrupção · risco Alto | Nv2 Médio: 2d6+4 PV/STA · +1d4 Sanidade · −1d4 Corrupção · risco Médio | Nv3 Avançado: 3d6+6 PV/STA · +2 Sanidade · −1d6+1 Corrupção · risco Baixo" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="1">Básico (Nv1)</option>
+          <option value="2">Médio (Nv2)</option>
+          <option value="3">Avançado (Nv3)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Atividade Principal</label>
+        <select id="acamp-atividade" oninput="atualizarAcampamento()" title="CDs: Vigiar 15/13/11 (por nível do abrigo) · Cozinhar 14 · Meditar 15 + Corrupção · Explorar Arredores 16" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Descansar">Descansar</option>
+          <option value="Vigiar">Vigiar</option>
+          <option value="Cozinhar">Cozinhar</option>
+          <option value="Meditar-Ritual">Meditar / Ritual</option>
+          <option value="Explorar Arredores">Explorar Arredores</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Recuperação do Abrigo</label>
+        <input type="text" id="acamp-recuperacao" readonly value="1d6+2 PV/STA · +1 Sanidade · −1 Corrupção · risco Alto" style="background:var(--bg-input);border:1px solid var(--border);color:var(--silver);padding:.55rem .7rem;font-family:inherit;font-size:.85rem;outline:none;width:100%">
+      </div>
+    </div>
+
+    <!-- ROLAGEM DE ATENÇÃO DA TORRE -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Rolagem de Atenção da Torre</div>
+      <div class="field-row cols-4">
+        <div class="field-group">
+          <label>Andar Atual</label>
+          <input type="number" id="acamp-andar" min="1" value="1" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+        </div>
+        <div class="field-group">
+          <label>Modificador</label>
+          <input type="number" id="acamp-mod" value="0" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+        </div>
+        <div class="field-group">
+          <label>Rolagem (d20 + andar÷2 − abrigo×2 + ticks + mod)</label>
+          <input type="text" id="acamp-rolagem" readonly value="—" style="background:var(--bg-input);border:1px solid var(--border);color:var(--gold-light);padding:.55rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none;width:100%">
+        </div>
+        <div class="field-group">
+          <label>Ação</label>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+            <button onclick="rolarAtencaoAcampamento()" style="background:var(--accent);border:none;color:#fff;padding:.5rem .9rem;font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Rolar Atenção</button>
+            <button onclick="resetTicks()" title="Zera o Relógio de Atenção do combate" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.5rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Zerar ticks do combate</button>
+          </div>
+        </div>
+      </div>
+      <div id="acamp-resultado" style="margin-top:.5rem;font-size:.85rem;min-height:1.2em;font-weight:bold"></div>
+      <p style="font-size:.68rem;color:var(--text-muted);margin:.5rem 0 0">Ponte com o combate: cada <strong>tick do Relógio de Atenção</strong> (painel Corrupção &amp; Atenção da Torre) soma <strong>+2 na rolagem</strong>; o nível do abrigo reduz os ticks acumulados (−2 por nível). Resultados: ≤10 Silêncio · 11–15 Presença Leve · 16–20 Atenção Crescente · 21–25 Interferência Ativa · 26+ Ira da Torre.</p>
+    </div>
+
+  </div>
+  </div><!-- /area-acampamento -->
+</div>
+
+<!-- FORJA E BARMAN — tracker de forja e contatos barmans -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('forja')" id="toggle-forja">
+    <span class="ficha-expand-seta" id="seta-forja">▶</span> Forja e Barmans
+  </div>
+  <div class="ficha-expand-area" id="area-forja">
+  <div class="ficha-panel-body">
+
+    <!-- FORJA -->
+    <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Forja</div>
+    <div class="field-row cols-3">
+      <div class="field-group">
+        <label>Rank do Item em Trabalho</label>
+        <select id="forja-rank" onchange="atualizarForjaResumo()" title="Ruim −2 · Comum 0 · Bom +1 · Épico +2 · Mítico +3 · Lendário +4" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="Ruim (−2)">Ruim (−2)</option>
+          <option value="Comum (0)">Comum (0)</option>
+          <option value="Bom (+1)">Bom (+1)</option>
+          <option value="Épico (+2)">Épico (+2)</option>
+          <option value="Mítico (+3)">Mítico (+3)</option>
+          <option value="Lendário (+4)">Lendário (+4)</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Classe da Arma/Equipamento</label>
+        <select id="forja-classe" onchange="atualizarForjaResumo()" title="F Comum (sem núcleo) · E Reforçada (núcleo D) · D Energizada (núcleo C, ferreiro IV) · C Rúnica (núcleo B, runa preservada) · B Relíquia (núcleo A, materiais raros) · A Mítica (núcleo A refinado, múltiplas runas) · S Lendária (núcleo S) · SS Ascendida (parcialmente viva) · SSS Singular (única)" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="F Comum">F Comum</option>
+          <option value="E Reforçada">E Reforçada</option>
+          <option value="D Energizada">D Energizada</option>
+          <option value="C Rúnica">C Rúnica</option>
+          <option value="B Relíquia">B Relíquia</option>
+          <option value="A Mítica">A Mítica</option>
+          <option value="S Lendária">S Lendária</option>
+          <option value="SS Ascendida">SS Ascendida</option>
+          <option value="SSS Singular">SSS Singular</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Nível do Ferreiro</label>
+        <select id="forja-ferreiro" onchange="atualizarForjaResumo()" title="I Ferreiro Comum (máx Bom) · II Artesão de Cidadela (máx Épico) · III Mestre Ferreiro (máx Mítico) · IV Artífice de Torre (máx Lendário) · V Forjador Lendário (máx Ascendida) · VI O Último dos Grandes (máx Singular)" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="I Ferreiro Comum">I Ferreiro Comum</option>
+          <option value="II Artesão de Cidadela">II Artesão de Cidadela</option>
+          <option value="III Mestre Ferreiro">III Mestre Ferreiro</option>
+          <option value="IV Artífice de Torre">IV Artífice de Torre</option>
+          <option value="V Forjador Lendário">V Forjador Lendário</option>
+          <option value="VI O Último dos Grandes">VI O Último dos Grandes</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Potencial do Material</label>
+        <input type="number" id="forja-potencial" min="0" max="150" value="50" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="atualizarForjaResumo()">
+        <span style="font-size:.64rem;color:var(--text-muted)">Abaixo de 40 → rank baixo · 50–80 → Épico/Mítico · acima de 90 → Lendário/Ascendido</span>
+      </div>
+      <div class="field-group">
+        <label>Materiais Secundários</label>
+        <input type="text" id="forja-materiais" placeholder="Nota livre (runas, materiais raros)..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+      </div>
+    </div>
+    <div style="margin-top:.5rem">
+      <label style="font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted)">Resumo</label>
+      <div id="forja-resumo" style="font-size:.8rem;color:var(--silver);padding:.5rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:1.2em">Bom (+1) · C Rúnica · III Mestre Ferreiro (máx Mítico)</div>
+    </div>
+
+    <!-- BARMAN (contatos) -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+        <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Barmans (contatos)</div>
+        <div style="display:flex;gap:.4rem">
+          <button onclick="addBarman()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Barman</button>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:.5rem">Risco de informação falsa: Comum 30% · Bom 15% · Excelente 5% · Lendário variável (pode ser venenosa).</p>
+      <div class="table-wrapper"><table>
+        <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:100px">Qualidade</th><th style="min-width:100px">Confiança</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
+        <tbody id="barmans-tbody">
+          <tr>
+            <td data-label="Nome"><input type="text" id="barman1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+            <td data-label="Qualidade"><select id="barman1-qualidade" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Comum">Comum</option><option value="Bom">Bom</option><option value="Excelente">Excelente</option><option value="Lendário">Lendário</option></select></td>
+            <td data-label="Confiança"><select id="barman1-confianca" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Neutro">Neutro</option><option value="Positivo">Positivo</option><option value="Confiança">Confiança</option><option value="Aliança">Aliança</option></select></td>
+            <td data-label="Cidade"><input type="text" id="barman1-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
+            <td data-label="Observação"><input type="text" id="barman1-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
+            <td><button onclick="removerBarmanEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+
+  </div>
+  </div><!-- /area-forja -->
+</div>
+
+<!-- RELACIONAMENTOS — laços, níveis e tipos -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('relacionamentos')" id="toggle-relacionamentos">
+    <span class="ficha-expand-seta" id="seta-relacionamentos">▶</span> Relacionamentos
+  </div>
+  <div class="ficha-expand-area" id="area-relacionamentos">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Laços do Personagem <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></div>
+      <div style="display:flex;gap:.4rem">
+        <button onclick="addRelacionamento()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Relacionamento</button>
+      </div>
+    </div>
+    <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:.5rem">Laços platônicos, de amizade profunda ou de "família encontrada" são tão poderosos quanto os românticos. A perda de um ente querido custa 2d10 de Sanidade (Salvaguarda de Alma reduz) e pode gerar 1d6 de Corrupção.</p>
+    <div class="table-wrapper"><table>
+      <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:150px">Nível <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></th><th style="min-width:100px">Tipo</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
+      <tbody id="rel-tbody">
+        <tr>
+          <td data-label="Nome"><input type="text" id="rel1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+          <td data-label="Nível"><select id="rel1-nivel" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="1 Amizade Sólida">1 Amizade Sólida</option><option value="2 Confiança Profunda">2 Confiança Profunda</option><option value="3 Intimidade">3 Intimidade</option><option value="4 Laço de Alma">4 Laço de Alma</option></select></td>
+          <td data-label="Tipo"><select id="rel1-tipo" onchange="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.35rem .4rem;font-family:inherit;font-size:.82rem;outline:none;width:100%"><option value="Aliado">Aliado</option><option value="Amigo">Amigo</option><option value="Íntimo">Íntimo</option><option value="Familiar">Familiar</option><option value="Rival">Rival</option></select></td>
+          <td data-label="Cidade"><input type="text" id="rel1-cidade" placeholder="Cidade..." oninput="salvarLocal()"></td>
+          <td data-label="Observação"><input type="text" id="rel1-obs" placeholder="Observação..." oninput="salvarLocal()"></td>
+          <td><button onclick="removerRelacionamentoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+  </div><!-- /area-relacionamentos -->
+</div>
 
   <!-- INVENTÁRIO -->
   <div class="ficha-panel ficha-full-row">
