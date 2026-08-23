@@ -3952,14 +3952,19 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 #livro-jogador #sumario a:hover { color: var(--accent); text-decoration: underline; }
 
 /* Sumário 2 colunas */
-#livro-jogador .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
-#livro-jogador .sumario-side-panel { background: #242030; border: 1px solid #3a3548; border-radius: 6px; padding: 1.3rem 1.4rem; font-size: .88rem; color: #c5c5d1; }
+#livro-jogador .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: stretch; }
+#livro-jogador .sumario-side-panel { background: #242030; border: 1px solid #3a3548; border-radius: 6px; padding: 1.3rem 1.4rem; font-size: .88rem; color: #c5c5d1; display: flex; flex-direction: column; gap: 1.1rem; }
 #livro-jogador .sumario-side-panel h4 { color: var(--accent); font-size: 1rem; margin-bottom: .8rem; padding-bottom: .4rem; border-bottom: 1px solid #2a2a32; }
 #livro-jogador .sumario-side-panel ul { list-style: none; padding: 0; margin: 0; }
 #livro-jogador .sumario-side-panel li { padding: .3rem 0; border-bottom: 1px solid #222228; font-size: .85rem; line-height: 1.3; }
 #livro-jogador .sumario-side-panel li:last-child { border-bottom: none; }
-#livro-jogador .sumario-side-panel .warning { background: var(--deep-t12); border-left: 3px solid var(--accent); padding: .6rem .75rem; margin-top: .9rem; font-size: .82rem; color: #d4a3a3; line-height: 1.35; }
+#livro-jogador .sumario-side-panel .warning { background: var(--deep-t12); border-left: 3px solid var(--accent); padding: .6rem .75rem; margin-top: auto; font-size: .82rem; color: #d4a3a3; line-height: 1.35; }
 #livro-jogador .sumario-content a { display: block; padding: .12rem 0; }
+/* Links do painel lateral: âncoras reais com seta e hover */
+#livro-jogador .sumario-side-panel .sumario-destaques a { color: var(--accent-light); text-decoration: none; border-bottom: 1px solid rgba(var(--accent-rgb), .25); transition: color .2s, border-color .2s; }
+#livro-jogador .sumario-side-panel .sumario-destaques a::before { content: "→ "; color: var(--gold-light); opacity: .7; }
+#livro-jogador .sumario-side-panel .sumario-destaques a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+#livro-jogador .sumario-side-panel .sumario-ref li { font-size: .8rem; }
 
 /* Conteúdo do livro: tipografia ajustada ao sistema existente */
 #livro-jogador p { margin-bottom: 1.05rem; color: #d4d4dc; }
@@ -3971,7 +3976,9 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 /* Responsivo do sumário */
 @media (max-width:1024px) {
   #livro-jogador .sumario-content { grid-template-columns: 1fr; }
-  #livro-jogador .sumario-side-panel { display: none; }
+  /* O painel lateral empilha abaixo do índice (não some no celular) */
+  #livro-jogador .sumario-side-panel { margin-top: 1rem; font-size: .82rem; }
+  #livro-jogador .sumario-side-panel li { font-size: .8rem; }
 }
 @media (max-width:640px) {
   #livro-jogador .sumario-content { font-size: .92rem; }
@@ -17360,26 +17367,32 @@ document.addEventListener('DOMContentLoaded', () => {
                         <li><strong>Facções dominantes:</strong> Consórcio Carmesim, Ordem do Véu Branco, Círculo de Cinzas e a misteriosa Irmandade do Último Suspiro.</li>
                     </ul>
 
-                    <h4 style="margin-top: 1.1rem;">Curiosidades dos Veteranos</h4>
-                    <ul>
-                        <li>Dizem que quem atinge o estágio 5 do Despertar do Predador na Torre das Disputas começa a sonhar com o Boss todas as noites.</li>
-                        <li>Alguns Barmans lendários aceitam núcleos de humanos como pagamento... e ninguém sabe o que eles fazem com eles.</li>
-                        <li>A Torre do Pesadelo registra não apenas quem sobe, mas quem desiste. E ela nunca esquece.</li>
-                        <li>Existem relatos de Despertos que voltaram de expedições longas sem lembrar o próprio nome, mas com runas que nunca viram antes gravadas na pele.</li>
+                    <h4>Sistemas em Destaque</h4>
+                    <ul class="sumario-destaques">
+                        <li><a href="#sanidade">Sanidade e Corrupção</a> — Quanto mais você sobe, menos você volta. E o que sobra nem sempre é você.</li>
+                        <li><a href="#rituais">Sistema de Rituais</a> — O poder da Torre tem preço — e os rituais sabem cobrar.</li>
+                        <li><a href="#forja">Sistema de Forja</a> — Transformar o poder dos monstros em armas. Mas a forja nunca devolve só metal.</li>
+                        <li><a href="#barmans">Barmans</a> — As únicas pessoas que realmente sabem o que está acontecendo nas sombras das cidades.</li>
+                        <li><a href="#relacionamentos">Relacionamentos</a> — O único escudo contra a solidão... e a maior fraqueza que a Torre pode explorar.</li>
+                        <li><a href="#arvore-alma">A Árvore da Alma</a> — Cada ponto gasto é uma escolha sobre quem você quer se tornar.</li>
+                        <li><a href="#tracos-alma">Traços da Alma</a> — Sua personalidade não é só quem você é. É o que a Torre vai usar contra você.</li>
+                        <li><a href="#surtos">Surtos Decenais</a> — A cada dez anos, o mundo lembra por que ninguém deveria ter subido tanto.</li>
+                        <li><a href="#ascensao">Ascensão</a> — Cada nível te torna mais forte. E menos humano. Até o dia em que a Torre te reconhece.</li>
                     </ul>
 
-                    <h4 style="margin-top: 1.1rem;">Sistemas que Valem a Pena Explorar</h4>
-                    <ul>
-                        <li><strong>Torre das Disputas</strong> — Glória rápida, apostas altas e o risco de chamar atenção de algo que gosta de assistir.</li>
-                        <li><strong>Barmans</strong> — As únicas pessoas que realmente sabem o que está acontecendo nas sombras das cidades.</li>
-                        <li><strong>Forja</strong> — Transformar o poder dos monstros em armas. Mas a forja nunca devolve só metal.</li>
-                        <li><strong>Relacionamentos</strong> — O único escudo contra a solidão... e a maior fraqueza que a Torre pode explorar.</li>
-                        <li><strong>Sanidade e Corrupção</strong> — Quanto mais você sobe, menos você volta. E o que sobra nem sempre é você.</li>
-                        <li><strong>Surtos Decenais</strong> — A cada dez anos, o mundo lembra por que ninguém deveria ter subido tanto.</li>
-                        <li><strong>Traços da Alma</strong> — Sua personalidade não é só quem você é. É o que a Torre vai usar contra você.</li>
-                        <li><strong>A Névoa</strong> — O que escapa das torres não some. Ele espera. E aprende.</li>
-                        <li><strong>Ascensão</strong> — Cada nível te torna mais forte. E menos humano. Até o dia em que a Torre te reconhece.</li>
+                    <h4>Referência Rápida</h4>
+                    <ul class="sumario-ref">
+                        <li><strong>CD</strong> = 8 + Maestria + Mod</li>
+                        <li><strong>Maestria</strong> = 1 + ⌈Nível ÷ 4⌉</li>
+                        <li><strong>PV</strong> = 20 + Vigor×3 + (8 + ModVig×2)×(Nv−1)</li>
+                        <li><strong>Sanidade</strong> = 10 + ModInt + ModCar</li>
+                        <li><strong>Corrupção:</strong> 0–2 Limpo · 3–5 Marcado · 6–8 Corrompido · 9–11 Profanado · 12+ Abissal</li>
+                        <li><strong>Atenção da Torre:</strong> 6–8 ticks = evento</li>
                     </ul>
+
+                    <div class="lore-box" style="margin-top:1rem;padding:.6rem .75rem;font-size:.8rem">
+                        <strong>Dica do Mestre:</strong> a Torre cobra tudo — mas cobra antes. Leia as regras de Sanidade e Corrupção antes de subir o primeiro andar.
+                    </div>
 
                     <div class="warning" style="margin-top: auto;">
                         <strong>Lembrete dos que Sobreviveram:</strong><br>
@@ -21536,6 +21549,23 @@ document.addEventListener('DOMContentLoaded', () => {
             <em>Consistente com a tabela completa do Livro do Mestre.</em>
         </div>
 
+        <h4>Eventos de Sanidade</h4>
+        <p>Nem toda perda de Sanidade vem de um teste falho. Às vezes a própria Torre decide cobrar — ou o trauma deixa uma cicatriz que não aparece na hora. Quando o Mestre quiser um efeito de Sanidade sem rolar um teste completo, role na tabela abaixo:</p>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>1d10</th><th>Evento</th><th>Efeito</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1–2</td><td><strong>Pesadelo recorrente</strong></td><td>Você acorda suando e com o coração acelerado. Perde 1 de Sanidade ao acordar. Se o pesadelo for sobre algo que aconteceu na última sessão, o Mestre pode dar uma pista velada sobre o que vem.</td></tr>
+                    <tr><td>3–4</td><td><strong>Tique ou mania</strong></td><td>Um comportamento involuntário se instala (contar passos, verificar armas repetidamente, evitar sombras). Desvantagem situacional em testes que exijam discrição ou calma até o tique ser trabalhado.</td></tr>
+                    <tr><td>5–6</td><td><strong>Alucinação auditiva</strong></td><td>Você ouve vozes, passos ou sussurros que não existem. Percepção CD 14 ou fica confuso por 1 rodada (em combate) ou 1 minuto (fora).</td></tr>
+                    <tr><td>7–8</td><td><strong>Fobia aguda</strong></td><td>Um gatilho específico (altura, escuridão, sangue, multidão) passa a causar Desvantagem em testes de Sanidade enquanto presente. O Mestre define o gatilho com base na sua história.</td></tr>
+                    <tr><td>9–10</td><td><strong>Visão da Torre</strong></td><td>Por um instante você enxerga algo que não deveria. O Mestre revela 1 dica curta e útil sobre um perigo ou segredo próximo — e você perde 1 de Sanidade pelo privilégio.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
         <h4>Como a Sanidade é perdida</h4>
         <p>Sempre que você falha em uma Salvaguarda de Intelecto ou Carisma contra medo, ilusão, influência mental ou a própria presença da Torre, role 1d4. Esse é o dano mental que você sofre.</p>
         <p>Em andares muito profundos ou situações extremamente traumáticas, o Mestre pode fazer você rolar mais dados ou causar perda automática de Sanidade.</p>
@@ -21576,6 +21606,63 @@ document.addEventListener('DOMContentLoaded', () => {
             </table>
         </div>
 
+        <h4>Marcas da Corrupção</h4>
+        <p>A Corrupção não é invisível. Cada estágio deixa marcas físicas e comportamentais que os outros percebem — e que a Torre reconhece. Role 1d12 (ou escolha) quando o personagem entra em um novo estágio:</p>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>1d12</th><th>Marca</th><th>Estágio</th><th>Efeito mecânico leve</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td><strong>Olhos escurecidos</strong></td><td>Marcado</td><td>−1 em testes sociais com desconhecidos (o branco dos olhos escurece).</td></tr>
+                    <tr><td>2</td><td><strong>Veias escuras</strong></td><td>Marcado</td><td>Percepção CD 12 nota as veias; −1 em disfarce.</td></tr>
+                    <tr><td>3</td><td><strong>Voz rouca</strong></td><td>Marcado</td><td>−1 em Persuasão/Enganação quando a voz falha em momentos de tensão.</td></tr>
+                    <tr><td>4</td><td><strong>Frio ao toque</strong></td><td>Marcado</td><td>Animais ficam inquietos perto de você; −1 em testes com montarias.</td></tr>
+                    <tr><td>5</td><td><strong>Garras</strong></td><td>Corrompido</td><td>+1 de dano em ataques desarmados; difícil esconder as mãos.</td></tr>
+                    <tr><td>6</td><td><strong>Escamas</strong></td><td>Corrompido</td><td>+1 CA natural; −1 em testes sociais com humanos.</td></tr>
+                    <tr><td>7</td><td><strong>Olho extra</strong></td><td>Corrompido</td><td>Vantagem em Percepção visual; assusta quem vê (Desvantagem social).</td></tr>
+                    <tr><td>8</td><td><strong>Cheiro metálico</strong></td><td>Corrompido</td><td>Monstros o farejam a distância; −1 em Furtividade.</td></tr>
+                    <tr><td>9</td><td><strong>Sombra viva</strong></td><td>Corrompido</td><td>Sua sombra se move sozinha; 1×/cena, +1 em Intimidação.</td></tr>
+                    <tr><td>10</td><td><strong>Cheiro de carne podre</strong></td><td>Profanado</td><td>−2 em testes sociais com humanos; monstros o tratam como "quase um deles".</td></tr>
+                    <tr><td>11</td><td><strong>A Torre sussurra</strong></td><td>Profanado</td><td>Você ouve a Torre constantemente; Desvantagem em descanso dentro de torres.</td></tr>
+                    <tr><td>12</td><td><strong>Olhos de brasa</strong></td><td>Abissal</td><td>Seus olhos brilham no escuro; criaturas da Torre o reconhecem como aliado (ou presa).</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4>Corrupção e a Torre</h4>
+        <p>A Corrupção não afeta só o seu corpo — ela muda como a Torre (e tudo dentro dela) te enxerga.</p>
+        <div class="system-card">
+            <strong>Corrompido (6+):</strong><br>
+            • <strong>+1 na Rolagem de Atenção da Torre</strong> (ver o Relógio de Atenção no painel de Acampamento) — a Torre já te nota como parte do ambiente.<br>
+            • <strong>Monstros inteligentes te priorizam</strong>: criaturas com QI suficiente reconhecem a marca e preferem atacar você (ou tentar te recrutar).
+        </div>
+        <div class="system-card">
+            <strong>Profanado (9+):</strong><br>
+            • <strong>Eventos aleatórios com +1 de risco</strong> dentro de torres — a Torre te trata como um intruso que já foi "quase dela".<br>
+            • <strong>Monstros comuns hesitam</strong> em atacá-lo (1×/cena, um monstro de Tier baixo pode recuar), mas monstros de alta Qualidade o caçam com mais afinco.
+        </div>
+
+        <h4>Ritual de Purificação</h4>
+        <p>Existe uma forma de reduzir a Corrupção — mas a Torre nunca deixa sair de graça.</p>
+        <div class="system-card">
+            <strong>Ritual de Purificação:</strong><br><br>
+            • <strong>Círculo:</strong> Nível 2 (ver <a href="#rituais">Sistema de Rituais</a>).<br>
+            • <strong>Custo:</strong> 50–100 Espíritos em materiais (sais, velas, essências).<br>
+            • <strong>Teste:</strong> <strong>Alma ou Religião CD 15</strong>.<br>
+            • <strong>Sucesso:</strong> reduz <strong>1d6 de Corrupção</strong>.<br>
+            • <strong>Falha:</strong> nada acontece (materiais perdidos).<br>
+            • <strong>Falha crítica:</strong> <strong>+1 de Corrupção</strong> e a Torre <strong>"anota seu nome"</strong> — <strong>+1 no Relógio de Atenção</strong>.
+        </div>
+
+        <h4>Sanidade × Corrupção</h4>
+        <p>Os dois sistemas se alimentam. Uma Alma frágil se corrompe mais fácil; um corpo corrompido resiste menos ao horror.</p>
+        <div class="lore-box">
+            <strong>Regras cruzadas:</strong><br><br>
+            • <strong>Sanidade abaixo de 50%:</strong> cada <strong>falha em Salvaguarda de Alma</strong> soma <strong>+1 de Corrupção adicional</strong> (além da espiral autocatalítica do estágio Marcado).<br>
+            • <strong>Corrupção 6+:</strong> <strong>Desvantagem em testes de Sanidade</strong> — a Torre usa sua própria corrupção contra você.
+        </div>
+
         <div class="lore-box">
             <strong>A espiral autocatalítica:</strong> a partir do estágio <strong>Marcado (3+)</strong>, cada <strong>falha em Salvaguarda de Alma</strong> soma <strong>+1 de Corrupção adicional</strong>. Quanto mais corrompido você está, mais fácil se corromper — a Torre cobra em dobro de quem já se entregou.
         </div>
@@ -21585,8 +21672,21 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <h4>Recuperação de Sanidade e Redução de Corrupção</h4>
-        <p>Dentro das Torres, curar a mente e a Alma é extremamente difícil. O sistema de Acampamento é uma das poucas ferramentas que você tem para tentar se recompor.</p>
-
+        <p>Curar a mente e a Alma é difícil — mas não impossível. Os números abaixo substituem a descrição narrativa: use-os como referência rápida.</p>
+        <div class="system-card">
+            <strong>Recuperação de Sanidade:</strong><br><br>
+            • <strong>Descanso completo FORA da Torre</strong> (cidadela, assentamento seguro): <strong>+1d6 de Sanidade</strong> por dia de descanso real.<br>
+            • <strong>1 dia em cidadela</strong> (sem descanso completo, apenas vivendo normalmente): <strong>+1d4 de Sanidade</strong>.<br>
+            • <strong>Terapia / confissão</strong> com um Barman, mentor ou figura de confiança: teste de <strong>Carisma ou Persuasão CD 14</strong> = <strong>+1d4 de Sanidade</strong> (1×/sessão).<br>
+            • <strong>Acampamento</strong> (ver seção de Sobrevivência): abrigo Nv 1 = <strong>+1</strong>, Nv 2 = <strong>+1d4</strong>, Nv 3 = <strong>+2</strong>.<br>
+            • <strong>Traços da Alma</strong> que aceleram a recuperação (ex.: Equilíbrio Interno, Aura de Calma) somam seus bônus a qualquer uma das opções acima.
+        </div>
+        <div class="system-card">
+            <strong>Redução de Corrupção:</strong><br><br>
+            • <strong>Ritual de Purificação</strong> (ver abaixo): reduz <strong>1d6 de Corrupção</strong>.<br>
+            • <strong>Acampamento</strong> de qualidade: Nv 1 = <strong>−1</strong>, Nv 2 = <strong>−1d4</strong>, Nv 3 = <strong>−1d6+1</strong>.<br>
+            • <strong>Descanso prolongado fora da Torre</strong>: −1 de Corrupção por semana de vida normal (sem usar poderes).
+        </div>
         <p>Quanto melhor o abrigo (e quanto menos tempo você passar nele), maior a chance de recuperar Sanidade e reduzir Corrupção. Porém, quanto mais tempo você fica, maior o risco de a Torre interferir.</p>
 
         <p>Descanso verdadeiro só acontece fora das Torres — em cidadelas fortificadas, em segurança relativa. Muitos Despertos veteranos dizem que o verdadeiro veneno das Torres não é o que elas fazem com você enquanto você está dentro... é o que elas deixam dentro de você quando você sai.</p>
@@ -21620,6 +21720,54 @@ document.addEventListener('DOMContentLoaded', () => {
             Sanidade, Corrupção e o risco constante da Torre são os verdadeiros medidores de quanto tempo você ainda tem. Quanto mais você sobe, mais esses três sistemas vão apertar. Não existe herói que suba para sempre sem pagar um preço terrível.
         </div>
 
+        <h4>Os Quatro Níveis de Relacionamento</h4>
+        <p>Todo laço começa pequeno e pode crescer — ou quebrar. Os níveis abaixo definem o que um relacionamento significa mecanicamente:</p>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Nível</th><th>Nome</th><th>Benefício</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Nv 1</strong></td><td><strong>Amizade Sólida</strong></td><td>Você ganha <strong>+1 de Sanidade</strong> quando está perto dessa pessoa (mesma cena). A presença dela ancora você.</td></tr>
+                    <tr><td><strong>Nv 2</strong></td><td><strong>Confiança Profunda</strong></td><td><strong>+2 em testes contra medo</strong> quando a pessoa está por perto, e vocês podem <strong>se comunicar sem palavras</strong> (olhares, gestos sutis) em situações de tensão.</td></tr>
+                    <tr><td><strong>Nv 3</strong></td><td><strong>Intimidade</strong></td><td>Você ganha <strong>+1d6 de PV e STA temporários</strong> enquanto a pessoa está na mesma cena (recupera ao se separar).</td></tr>
+                    <tr><td><strong>Nv 4</strong></td><td><strong>Laço de Alma</strong></td><td><strong>+2d6 de PV e STA máximos</strong> (permanentes enquanto o laço existir) e <strong>proteção mútua</strong>: 1×/cena, um pode sofrer o dano do outro.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4>Como Criar e Evoluir um Laço</h4>
+        <p>Laços não aparecem prontos. Eles crescem com tempo, favores e momentos compartilhados — e podem regredir quando são traídos.</p>
+        <div class="system-card">
+            <strong>Evolução Nv 1 → Nv 4:</strong><br><br>
+            • <strong>Nv 1 → Nv 2:</strong> convivência de algumas semanas OU um favor significativo. Teste de <strong>Carisma CD 14</strong>.<br>
+            • <strong>Nv 2 → Nv 3:</strong> meses de convivência OU sobreviver juntos a um evento traumático. Teste de <strong>Carisma ou Alma CD 16</strong>.<br>
+            • <strong>Nv 3 → Nv 4:</strong> um marco inesquecível (salvar a vida, sacrifício, revelação profunda). Teste de <strong>Alma CD 18</strong> — e o Mestre pode exigir um custo narrativo.<br>
+            • <strong>Marcos:</strong> o Mestre pode conceder evolução automática em momentos de grande drama, sem teste.
+        </div>
+        <div class="system-card">
+            <strong>Regressão:</strong><br><br>
+            • <strong>Traição</strong> (mentira grave, abandono, escolha que prejudica a pessoa): o laço <strong>cai 1 nível</strong>.<br>
+            • <strong>Zerar o laço</strong> (traição extrema ou perda irreversível): o laço <strong>quebra</strong> — você perde <strong>1d6 de Sanidade</strong> e todos os bônus do nível.
+        </div>
+
+        <h4>Eventos de Relacionamento</h4>
+        <p>Quando o Mestre quiser dar vida a um laço sem planejar tudo, role na tabela abaixo:</p>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>1d10</th><th>Evento</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1–2</td><td><strong>NPC precisa de ajuda.</strong> Um favor simples — e uma chance de subir o nível do laço.</td></tr>
+                    <tr><td>3–4</td><td><strong>NPC se aproxima.</strong> Um momento de vulnerabilidade. Teste de <strong>Carisma CD 14</strong> para subir o nível.</td></tr>
+                    <tr><td>5–6</td><td><strong>NPC ameaçado pela Torre.</strong> A Torre encontrou seu ponto fraco. Proteja — ou perca.</td></tr>
+                    <tr><td>7–8</td><td><strong>NPC descobre um segredo seu.</strong> Teste de <strong>Enganação CD 14</strong> ou o segredo vem à tona (risco de regressão).</td></tr>
+                    <tr><td>9–10</td><td><strong>NPC corrompido ou sequestrado.</strong> O pior cenário: a Torre usa seu laço contra você.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
         <h4>Como os Relacionamentos Evoluem</h4>
         <p>Os laços não aparecem do nada. Eles se formam e se fortalecem através de momentos compartilhados:</p>
         <ul>
@@ -21633,10 +21781,51 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>Quando alguém que você ama morre ou é perdido de forma irreversível, o impacto é devastador:</p>
         <ul>
             <li>Perca imediata de todos os bônus de PV e STA concedidos pelo relacionamento.</li>
-            <li>Perda de 2d10 de Sanidade (pode ser reduzida com uma Salvaguarda de Alma bem-sucedida).</li>
-            <li>Possibilidade de ganhar 1d6 de Corrupção (a dor abre brechas na Alma).</li>
+            <li>Perda de <strong>2d10 de Sanidade</strong> (pode ser reduzida com uma Salvaguarda de Alma bem-sucedida).</li>
+            <li>Possibilidade de ganhar <strong>1d6 de Corrupção</strong> (a dor abre brechas na Alma).</li>
             <li>Por um tempo (definido pelo Mestre), o personagem sofre desvantagem em todos os testes de Sanidade e pode ter visões ou alucinações da pessoa perdida.</li>
         </ul>
+        <div class="system-card">
+            <strong>Trauma "Cicatriz da Perda" (+3):</strong><br>
+            A perda deixa uma marca permanente. O personagem ganha a fraqueza <strong>Cicatriz da Perda</strong> (equivalente a +3 pontos de fraqueza): situações que lembram a pessoa perdida causam Desvantagem em testes de Sanidade, e o Mestre pode usar a memória dela para pressionar o personagem. O Mestre pode permitir superá-la ao longo da campanha (um marco de aceitação ou vingança concluída).
+        </div>
+        <div class="system-card">
+            <strong>Gancho de vingança:</strong><br>
+            Se a pessoa foi morta por algo específico (um monstro, uma facção, um Desperto), o personagem pode ganhar o traço <strong>Inimigo Marcado</strong> — a entidade que tirou a vida dela agora o caça, ou você a caça. O Mestre introduz esse inimigo em momentos inoportunos.
+        </div>
+        <div class="lore-box">
+            <strong>Luto:</strong> por <strong>1d4 semanas</strong>, o personagem sofre <strong>Desvantagem em testes de Sanidade</strong> e pode ter visões ou alucinações da pessoa perdida. Aliados próximos podem ajudar a encurtar o luto com apoio real (roleplay + testes de Carisma).
+        </div>
+
+        <h4>Relacionamentos com Facções</h4>
+        <p>Nem todo laço é pessoal. Sua reputação com uma facção (Consórcio Carmesim, Ordem do Véu Branco, Círculo de Cinzas, Irmandade do Último Suspiro) funciona como um relacionamento coletivo:</p>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Reputação</th><th>O que significa</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>−3</strong></td><td><strong>Caçado.</strong> A facção quer você morto ou capturado. Agentes ativos o procuram.</td></tr>
+                    <tr><td><strong>−2</strong></td><td><strong>Inimigo.</strong> Portas fechadas, preços dobrados, informantes te denunciam.</td></tr>
+                    <tr><td><strong>−1</strong></td><td><strong>Desconfiado.</strong> Favores negados; acesso limitado.</td></tr>
+                    <tr><td><strong>0</strong></td><td><strong>Neutro.</strong> Tratamento padrão.</td></tr>
+                    <tr><td><strong>+1</strong></td><td><strong>Conhecido.</strong> Preços justos, informações básicas, acesso a áreas comuns.</td></tr>
+                    <tr><td><strong>+2</strong></td><td><strong>Respeitado.</strong> Preços reduzidos, acesso a áreas restritas, 1 favor menor por incursão.</td></tr>
+                    <tr><td><strong>+3</strong></td><td><strong>Lenda.</strong> A facção abre portas para você. 1 favor significativo por incursão — e rivais da facção te tratam como alvo.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>A reputação sobe com missões, favores e presentes; cai com traições, dívidas não pagas e escolhas contra os interesses da facção.</p>
+
+        <h4>Relacionamentos com Barmans</h4>
+        <p>Os Barmans são a Rede — e a Rede é um laço coletivo que quase todo Desperto carrega.</p>
+        <div class="system-card">
+            <strong>A Rede como laço:</strong><br><br>
+            • <strong>Favores:</strong> cada Barman guarda favores e dívidas. Um favor bem pago sobe sua reputação na Rede; uma dívida não paga desce.<br>
+            • <strong>Informações:</strong> a Rede é a melhor fonte de informação das cidades — e a mais cara.<br>
+            • <strong>Barman como NPC:</strong> um Barman específico pode ser um relacionamento de <strong>Nível 1 a 4</strong> (use a tabela de níveis acima). Um Barman Nv 3+ pode arranjar coisas que ninguém mais consegue.<br>
+            • <strong>Referência:</strong> veja a seção de <a href="#barmans">Barmans — As Vozes Invisíveis</a> para o sistema completo.
+        </div>
 
         <div class="lore-box">
             <strong>Nota importante:</strong> Este sistema existe para criar drama, tensão e momentos memoráveis. Nunca force um relacionamento romântico ou íntimo entre personagens de jogadores sem consentimento explícito e contínuo de todos os envolvidos. Laços platônicos, de amizade profunda ou de "família encontrada" são tão válidos e poderosos quanto os românticos — e muitas vezes mais trágicos neste mundo.
