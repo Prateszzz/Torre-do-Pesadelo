@@ -4970,11 +4970,11 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
             <span class="formula-editor-title">Pontos de Vida (PV)</span>
           </div>
           <div class="formula-editor-body">
-            <div class="formula-desc">Resistência total. Padrão: <code>20 + (vigor × 3) + (8 + modVigor × 2) × (nível − 1)</code></div>
+            <div class="formula-desc">Resistência total. Padrão: <code>20 + (vigor × 3) + (10 + modVigor × 2) × (nível − 1)</code></div>
             <div class="formula-vars">Variáveis recomendadas: <code>vigor</code> <code>alma</code> <code>nivel</code> <code>modVigor</code> <code>modAlma</code> <code>bonusPV</code></div>
             <div class="formula-row" style="margin-top:.75rem">
               <span class="formula-label">Fórmula PV Base</span>
-              <input type="text" class="formula-input" id="form-pv" value="20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)">
+              <input type="text" class="formula-input" id="form-pv" value="20 + (vigor * 3) + (10 + modVigor * 2) * (nivel - 1)">
               <button class="apply-formula-btn" onclick="aplicarFormula(&#39;pv&#39;)">Aplicar</button>
             </div>
             <div class="formula-result" id="res-pv">✓ Fórmula salva e aplicada.</div>
@@ -5194,7 +5194,7 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
 
     <section id="cap3" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 3</span><h1>Atributos</h1><p>Todo personagem possui seis atributos que definem do que ele é capaz — no corpo, na mente e na alma. Ao criar, você recebe <strong class="key-term">80 pontos</strong> para distribuir entre eles. Cada valor gera um <strong>modificador</strong> (a tabela no fim do capítulo), que é o número que de fato entra nas rolagens.</p><div class="attr-grid"><div class="attr-card"><h4>Força (FOR)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Poder físico bruto do corpo.</p><ul><li>O quanto você acerta num soco ou golpe corpo a corpo</li><li>Levantar, empurrar ou arrastar peso</li><li>Quebrar, dobrar ou forçar objetos</li><li>Resistir a um agarrão ou se soltar dele</li></ul></div><div class="attr-card"><h4>Destreza (DES)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Agilidade, reflexos e precisão.</p><ul><li>Esquivar de ataques e desviar de perigos</li><li>Mirar com precisão à distância</li><li>Equilíbrio, acrobacia e furtividade</li><li>Quem age primeiro no combate (iniciativa)</li></ul></div><div class="attr-card"><h4>Vigor (VIG)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Resistência e vitalidade do corpo.</p><ul><li>Seus Pontos de Vida</li><li>Aguentar dano, veneno, frio e exaustão</li><li>Sustentar esforço físico prolongado</li><li>Segurar o próprio poder sem o corpo colapsar</li></ul></div><div class="attr-card"><h4>Intelecto (INT)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Raciocínio, percepção e saber.</p><ul><li>Resolver problemas e bolar estratégias</li><li>Investigar, deduzir e notar detalhes</li><li>Conhecimento sobre o mundo e suas ameaças</li><li>Controle mental sobre poderes complexos</li></ul></div><div class="attr-card"><h4>Alma (ALM)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">A força do seu Núcleo e do seu poder.</p><ul><li>A potência bruta do seu Poder</li><li>Manipular energia e o sobrenatural</li><li>Resistir à corrupção da Névoa</li><li>Firmeza espiritual diante do medo e do horror</li></ul></div><div class="attr-card"><h4>Carisma (CAR)</h4><p style="font-size:.86rem;color:var(--text-muted);margin-bottom:.5rem">Presença e força de personalidade.</p><ul><li>Convencer, enganar ou intimidar</li><li>Liderar e inspirar aliados</li><li>Resistir a manipulação mental ou espiritual</li><li>O peso da sua presença num ambiente</li></ul></div></div><p style="margin-top:1.25rem"><strong>Como o modificador funciona:</strong> o valor que você coloca no atributo não é usado diretamente nas rolagens — o que conta é o modificador derivado dele. A partir de 10 (o valor "humano médio"), cada 2 pontos sobem o modificador em +1. É esse número que você soma aos dados.</p><div class="table-wrapper"><table><thead><tr><th>Valor do Atributo</th><th>Modificador</th></tr></thead><tbody><tr><td>8–9</td><td>−1</td></tr><tr><td>10–11</td><td>+0</td></tr><tr><td>12–13</td><td>+1</td></tr><tr><td>14–15</td><td>+2</td></tr><tr><td>16–17</td><td>+3</td></tr><tr><td>18–19</td><td>+4</td></tr><tr><td>20–21</td><td>+5</td></tr></tbody></table></div></section>
 
-    <section id="cap4" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 4</span><h1>Recursos</h1><p>Recursos são os números que dizem o quanto o personagem aguenta, quanto poder consegue gastar e quão difícil é atingi-lo. Eles não são distribuídos manualmente: a ficha calcula todos automaticamente a partir dos seus atributos e nível. Quando você sobe um atributo, os recursos ligados a ele sobem junto.</p><div class="attr-grid"><div class="attr-card"><h4>PV — Pontos de Vida</h4><p style="font-size:.87rem;color:var(--text-muted)">O quanto o corpo aguenta antes de cair. Nasce do Vigor (durabilidade física) somado à Alma (energia vital que sustenta o corpo).</p></div><div class="attr-card"><h4>STA — Stamina</h4><p style="font-size:.87rem;color:var(--text-muted)">Fôlego para esforço físico intenso: correr, escalar, lutar de forma prolongada. Esgotar a stamina deixa o personagem exausto.</p></div><div class="attr-card"><h4>PE — Energia</h4><p style="font-size:.87rem;color:var(--text-muted)">O combustível dos poderes e técnicas. Cada técnica tem um custo em PE — sem energia, o poder não se manifesta.</p></div><div class="attr-card"><h4>CA — Classe de Armadura</h4><p style="font-size:.87rem;color:var(--text-muted)">O quão difícil é acertar o personagem. Quanto maior, mais ataques erram ou são desviados antes de causar dano.</p></div><div class="attr-card"><h4>Iniciativa</h4><p style="font-size:.87rem;color:var(--text-muted)">Define quem age primeiro quando o combate começa. Ligada à Destreza — reflexos rápidos agem antes.</p></div><div class="attr-card"><h4>Proficiência</h4><p style="font-size:.87rem;color:var(--text-muted)">O bônus de treinamento que cresce com o nível. É somado às perícias em que você tem Maestria ou Especialização.</p></div></div><div class="system-card"><strong>Fórmulas dos Recursos:</strong><br><br>PV = 20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)<br>STA = 20 + (Alma × 2 + Intelecto) + (6 + ModAlma + ModIntelecto) × (Nível − 1)<br>PE = (⌊Nível ÷ 2⌋ + 2) × (ModAlma + ModIntelecto + 1)<br><br>O Vigor é o coração dos Pontos de Vida — cada ponto soma 3 PV, e o crescimento por nível é acelerado pelo seu modificador. A Stamina é alimentada pela Alma e pelo Intelecto, e a Energia (PE) nasce dos modificadores de Alma e Intelecto. Os três recursos crescem juntos conforme o personagem sobe de nível.</div></section>
+    <section id="cap4" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 4</span><h1>Recursos</h1><p>Recursos são os números que dizem o quanto o personagem aguenta, quanto poder consegue gastar e quão difícil é atingi-lo. Eles não são distribuídos manualmente: a ficha calcula todos automaticamente a partir dos seus atributos e nível. Quando você sobe um atributo, os recursos ligados a ele sobem junto.</p><div class="attr-grid"><div class="attr-card"><h4>PV — Pontos de Vida</h4><p style="font-size:.87rem;color:var(--text-muted)">O quanto o corpo aguenta antes de cair. Nasce do Vigor (durabilidade física) somado à Alma (energia vital que sustenta o corpo).</p></div><div class="attr-card"><h4>STA — Stamina</h4><p style="font-size:.87rem;color:var(--text-muted)">Fôlego para esforço físico intenso: correr, escalar, lutar de forma prolongada. Esgotar a stamina deixa o personagem exausto.</p></div><div class="attr-card"><h4>PE — Energia</h4><p style="font-size:.87rem;color:var(--text-muted)">O combustível dos poderes e técnicas. Cada técnica tem um custo em PE — sem energia, o poder não se manifesta.</p></div><div class="attr-card"><h4>CA — Classe de Armadura</h4><p style="font-size:.87rem;color:var(--text-muted)">O quão difícil é acertar o personagem. Quanto maior, mais ataques erram ou são desviados antes de causar dano.</p></div><div class="attr-card"><h4>Iniciativa</h4><p style="font-size:.87rem;color:var(--text-muted)">Define quem age primeiro quando o combate começa. Ligada à Destreza — reflexos rápidos agem antes.</p></div><div class="attr-card"><h4>Proficiência</h4><p style="font-size:.87rem;color:var(--text-muted)">O bônus de treinamento que cresce com o nível. É somado às perícias em que você tem Maestria ou Especialização.</p></div></div><div class="system-card"><strong>Fórmulas dos Recursos:</strong><br><br>PV = 20 + (Vigor × 3) + (10 + ModVigor × 2) × (Nível − 1)<br>STA = 20 + (Alma × 2 + Intelecto) + (6 + ModAlma + ModIntelecto) × (Nível − 1)<br>PE = (⌊Nível ÷ 2⌋ + 2) × (ModAlma + ModIntelecto + 1)<br><br>O Vigor é o coração dos Pontos de Vida — cada ponto soma 3 PV, e o crescimento por nível é acelerado pelo seu modificador. A Stamina é alimentada pela Alma e pelo Intelecto, e a Energia (PE) nasce dos modificadores de Alma e Intelecto. Os três recursos crescem juntos conforme o personagem sobe de nível.</div></section>
 
     <section id="cap5" class="section-anchor"><div class="divider"></div><span class="chapter-number">Capítulo 5</span><h1>Poder</h1><p>O Poder é o coração do personagem — mas é muito mais do que uma "habilidade". Ele é a <strong class="key-term">expressão da sua Alma</strong>: nasce de quem o personagem é, da sua personalidade, das suas dores e da sua história. Dois Despertos nunca manifestam o mesmo poder da mesma forma, porque nenhum deles tem a mesma alma.</p><p>O poder não vive separado do corpo. Ele está ligado diretamente à pessoa: ao que ela sente, ao que ela suporta fisicamente e ao quanto ela compreende a si mesma. Por isso, para funcionar de verdade, todo poder se apoia em <strong>três pilares</strong> que precisam crescer juntos.</p><div class="attr-grid"><div class="attr-card"><h4>Poder — a Expressão</h4><p style="font-size:.88rem;color:var(--text-muted)">A matéria-prima do seu conceito: espadas, fogo, sombras, telecinese, ecos. É a parte visível — o "o quê" você manifesta.</p></div><div class="attr-card"><h4>Mente — o Controle</h4><p style="font-size:.88rem;color:var(--text-muted)">Sua capacidade de moldar, direcionar e compreender o poder. Quanto mais complexo ele fica, mais exige foco, vontade e entendimento.</p></div><div class="attr-card"><h4>Corpo — o Suporte</h4><p style="font-size:.88rem;color:var(--text-muted)">O quanto seu corpo aguenta sustentar o poder. Mesmo poderes "mentais" cobram um preço físico quando usados de forma intensa.</p></div></div><div class="lore-box"><strong>A verdade sobre o Poder:</strong> os melhores poderes não são os mais fortes no começo — são aqueles cujos donos fizeram os três pilares evoluírem em equilíbrio. Um poder que cresce torto sempre cobra um preço: na sanidade, no corpo, ou na própria alma. À medida que você avança pelos Despertares, o conceito se expande, mas a exigência sobre mente e corpo cresce junto.</div><div class="system-card"><strong>Na ficha, seu Poder reúne:</strong><br><br><strong>Poder Principal</strong> — o conceito central da sua Alma.<br><strong>Conceito do Poder</strong> — por que ele é assim, ligado à sua personalidade e história.<br><strong>Atributo Principal</strong> — o atributo que rege sua manifestação.<br><strong>Técnicas</strong> — as aplicações concretas que você usa em combate, com custos e efeitos.<br><strong>Despertares</strong> — as evoluções que expandem o que seu poder pode fazer.</div></section>
 
@@ -10716,7 +10716,7 @@ const _FORMULA_ANTIGA = {
   'per-base': 'attrmod+floor(nivel/2)',
 };
 const _FORMULA_NOVA = {
-  pv:  '20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)',
+  pv:  '20 + (vigor * 3) + (10 + modVigor * 2) * (nivel - 1)',
   sta: '20 + (alma * 2 + intelecto) + (6 + modAlma + modIntelecto) * (nivel - 1)',
   pe:  '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE',
   'per-base': 'attrMod',
@@ -10731,13 +10731,18 @@ function _migrarFormulasAntigas(f) {
       f[chave] = _FORMULA_NOVA[chave];
     }
   });
+  // Migração da base do PV: o padrão anterior usava base 8 no PV; agora
+  // usa 10. Jogadores que salvaram a fórmula antiga são migrados para o 10.
+  if (typeof f['pv'] === 'string' && _normFormula(f['pv']) === '20+(vigor*3)+(8+modvigor*2)*(nivel-1)') {
+    f['pv'] = _FORMULA_NOVA['pv'];
+  }
   return f;
 }
 
 function getFormulas() {
   const def = {
     // Fórmulas oficiais Torre do Pesadelo — padrão único PV/STA/PE
-    pv:         '20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)',
+    pv:         '20 + (vigor * 3) + (10 + modVigor * 2) * (nivel - 1)',
     sta:        '20 + (alma * 2 + intelecto) + (6 + modAlma + modIntelecto) * (nivel - 1)',
     // PE inclui bonusPE explicitamente — a variável existe no contexto
     pe:         '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE',
@@ -10836,7 +10841,7 @@ function getFormulas() {
 // (localStorage + Firestore compartilhado), e recalcula a ficha aberta.
 function restaurarFormulasPadrao() {
   const def = {
-    pv:         '20 + (vigor * 3) + (8 + modVigor * 2) * (nivel - 1)',
+    pv:         '20 + (vigor * 3) + (10 + modVigor * 2) * (nivel - 1)',
     sta:        '20 + (alma * 2 + intelecto) + (6 + modAlma + modIntelecto) * (nivel - 1)',
     pe:         '(floor(nivel / 2) + 2) * (modAlma + modIntelecto + 1) + bonusPE',
     ca:         '10 + modDestreza + ceil(modVigor / 2) + bonusCA',
@@ -12067,7 +12072,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
           <!-- PV -->
           <div style="background:linear-gradient(160deg,#161220,#0e0c14);border:1px solid rgba(50,40,65,.5);border-top:2px solid var(--accent);padding:.75rem .6rem">
             <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.5rem;display:flex;align-items:center;gap:.3rem">
-              PV <span class="info-btn" style="font-size:.65rem">ⓘ<span class="tooltip">20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)</span></span>
+              PV <span class="info-btn" style="font-size:.65rem">ⓘ<span class="tooltip">20 + (Vigor × 3) + (10 + ModVigor × 2) × (Nível − 1)</span></span>
             </div>
             <div style="text-align:center;font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--accent-light);line-height:1;margin-bottom:.3rem" id="r-pv">0</div>
             <div style="font-size:.58rem;color:#555;text-align:center;margin-bottom:.5rem">máximo</div>
@@ -17417,7 +17422,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <ul class="sumario-ref">
                         <li><strong>CD</strong> = 10 + Maestria + Mod</li>
                         <li><strong>Maestria</strong> = 1 + ⌈Nível ÷ 4⌉</li>
-                        <li><strong>PV</strong> = 20 + Vigor×3 + (8 + ModVig×2)×(Nv−1)</li>
+                        <li><strong>PV</strong> = 20 + Vigor×3 + (10 + ModVig×2)×(Nv−1)</li>
                         <li><strong>STA</strong> = 20 + Alma×2 + Intelecto + (6 + ModAlma + ModInt)×(Nv−1)</li>
                         <li><strong>PE</strong> = (⌊Nv÷2⌋+2)×(ModAlma+ModInt+1)</li>
                         <li><strong>Sanidade</strong> = 10 + ModInt + ModCar</li>
@@ -17818,7 +17823,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>Pontos de Vida (PV), Stamina (STA) e Energia da Alma (PE)</h3>
             <p>Cada recurso tem sua própria fórmula e cresce junto com o nível de personagem (1 a 20):</p>
             <div class="system-card">
-                <strong>PV = 20 + (Vigor × 3) + (8 + ModVigor × 2) × (Nível − 1)</strong><br>
+                <strong>PV = 20 + (Vigor × 3) + (10 + ModVigor × 2) × (Nível − 1)</strong><br>
                 <em>Vigor é o principal: cada ponto de Vigor vale 3 na base e o modificador de Vigor dobra no crescimento.</em><br><br>
                 <strong>STA = 20 + (Alma × 2 + Intelecto) + (6 + ModAlma + ModIntelecto) × (Nível − 1)</strong><br>
                 <em>Alma (peso 2) e Intelecto alimentam a Stamina: fôlego, concentração e canalização.</em><br><br>
