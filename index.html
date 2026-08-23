@@ -12013,6 +12013,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       <span><strong style="color:var(--arcane-light)">MENTE</strong> <span id="pilar-mente">0</span></span>
       <span><strong style="color:var(--gold-light)">CORPO</strong> <span id="pilar-corpo">0</span></span>
       <span id="pilar-aviso" style="display:none;color:var(--warn);font-weight:600">Poder desequilibrado — considere pagar em Mente ou Corpo.</span>
+      <span id="pilar-nucleo" style="display:none;color:var(--warn);font-weight:600">Seu Núcleo despertou — escolha a forma (voz, marca ou presença) e registre no efeito do 3º Despertar.</span>
     </div>
 
     <!-- PASSIVAS -->
@@ -12042,7 +12043,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       </div>
     </div>
     <div class="table-wrapper"><table>
-      <thead><tr><th style="min-width:70px">Estágio</th><th style="min-width:170px">Capacidade Escolhida</th><th style="min-width:150px">Custo Pago</th><th style="min-width:100px">Status</th><th>Efeito / Transformação</th></tr></thead>
+      <thead><tr><th style="min-width:70px">Estágio</th><th style="min-width:170px">Capacidade Escolhida</th><th style="min-width:150px">Custo Pago</th><th style="min-width:100px">Status</th><th style="min-width:150px">Ganho Profundo</th><th>Efeito / Transformação</th></tr></thead>
       <tbody id="despertares-tbody">
         <tr>
           <td data-label="Estágio"><input type="number" id="desp1-estagio" min="1" max="10" value="1" style="width:56px;text-align:center" oninput="salvarLocal()"></td>
@@ -12062,6 +12063,14 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
           <td data-label="Status"><select id="desp1-status" onchange="salvarLocal();atualizarPilaresPoder()" style="width:100%">
             <option value="Aceito">Aceito</option>
             <option value="Adormecido">Adormecido</option>
+          </select></td>
+          <td data-label="Ganho Profundo"><select id="desp1-ganho" onchange="salvarLocal()" style="width:100%">
+            <option value="Nenhum">Nenhum</option>
+            <option value="Nova Manifestação">Nova Manifestação</option>
+            <option value="Transformação Estética">Transformação Estética</option>
+            <option value="Voz do Núcleo">Voz do Núcleo</option>
+            <option value="Dado Temático">Dado Temático</option>
+            <option value="Ressonância">Ressonância</option>
           </select></td>
           <td data-label="Efeito"><textarea id="desp1-efei" style="min-height:44px" placeholder="Efeito / transformação..." oninput="salvarLocal()"></textarea></td>
         </tr>
@@ -13573,7 +13582,7 @@ function coletarDados() {
     [1,2,3,4,5,6].flatMap(n=>['nome','bat','dano','crit','tipo','alc','obs'].map(f=>`arm${n}-${f}`)).forEach(f => armaFields.push(f));
   }
   const passFields  = Array.from({length:numPassivas},(_,i)=>i+1).flatMap(n=>['nome','desc'].map(f=>`pass${n}-${f}`));
-  const despFields  = Array.from({length:numDespertares},(_,i)=>i+1).flatMap(n=>['estagio','capacidade','custo','status','efei'].map(f=>`desp${n}-${f}`));
+  const despFields  = Array.from({length:numDespertares},(_,i)=>i+1).flatMap(n=>['estagio','capacidade','custo','status','ganho','efei'].map(f=>`desp${n}-${f}`));
   // Escaneia as linhas de inventário REALMENTE presentes no DOM (mesmo
   // padrão usado acima para armas), em vez de confiar em _invCounters.
   // _invCounters nunca era decrementado ao remover uma linha do MEIO
@@ -13918,6 +13927,14 @@ function addDespertar() {
       <option value="Aceito">Aceito</option>
       <option value="Adormecido">Adormecido</option>
     </select></td>
+    <td data-label="Ganho Profundo"><select id="desp${numDespertares}-ganho" onchange="salvarLocal()" style="width:100%">
+      <option value="Nenhum">Nenhum</option>
+      <option value="Nova Manifestação">Nova Manifestação</option>
+      <option value="Transformação Estética">Transformação Estética</option>
+      <option value="Voz do Núcleo">Voz do Núcleo</option>
+      <option value="Dado Temático">Dado Temático</option>
+      <option value="Ressonância">Ressonância</option>
+    </select></td>
     <td data-label="Efeito"><textarea id="desp${numDespertares}-efei" style="min-height:44px" placeholder="Efeito / transformação..." oninput="salvarLocal()"></textarea></td>
   `;
   tbody.appendChild(tr);
@@ -13959,6 +13976,9 @@ function atualizarPilaresPoder() {
     const pv = parseInt(document.getElementById('r-pv')?.textContent, 10) || 0;
     aviso.style.display = (aceitos > 0 && aceitos > mente && aceitos > pv) ? 'inline' : 'none';
   }
+  // Aviso do Núcleo: a partir do 3º Despertar aceito, o Núcleo desperta.
+  const nucleo = document.getElementById('pilar-nucleo');
+  if (nucleo) nucleo.style.display = aceitos >= 3 ? 'inline' : 'none';
 }
 
 function addPet() {
@@ -18785,6 +18805,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Técnicas:</strong> as técnicas podem se transformar junto com o conceito.<br>
                 • <strong>Conexão com Marcas da Corrupção:</strong> quando o custo pago for Corrupção, a transformação se conecta às <a href="#corrupcao-marcas">Marcas da Corrupção</a> — o corpo carrega a marca do que foi pago.
             </div>
+
+            <h3>Ganhos Profundos</h3>
+            <p>Cada Despertar aceito concede, além do trio de técnicas, <strong>1 ganho profundo</strong> escolhido de um menu:</p>
+            <div class="system-card">
+                <strong>Menu de Ganhos Profundos:</strong><br><br>
+                • <strong>1. Nova Manifestação</strong> — o poder ganha um uso novo e temático (Utilização registrada de graça, categoria ≤ limite do nível).<br>
+                • <strong>2. Transformação Estética Marcante</strong> — aura, olhos, forma do poder mudam visivelmente (conecta com as <a href="#corrupcao-marcas">Marcas da Corrupção</a> se o custo for Corrupção).<br>
+                • <strong>3. Voz do Núcleo</strong> — o poder ganha uma "voz"/instinto próprio: 1×/cena, o Mestre pode dar uma dica temática (ou o poder se manifesta sem comando em perigo).<br>
+                • <strong>4. Dado Temático</strong> — +1 dado em testes temáticos do poder (ex.: +1d4 em testes de Alma/Intelecto relacionados à Manifestação).<br>
+                • <strong>5. Ressonância</strong> — o poder ressoa com a <a href="#arvore-alma">Árvore da Alma</a>: 1 Ramo escolhido ganha +1 ponto.
+            </div>
+
+            <h3>O Núcleo Desperta</h3>
+            <p>A partir do <strong>3º Despertar aceito</strong>, o Núcleo desperta — o jogador escolhe uma forma:</p>
+            <div class="system-card">
+                <strong>Formas do Núcleo Desperto:</strong><br><br>
+                • <strong>Voz</strong> — o poder manifesta-se sem comando 1×/cena (age por instinto em perigo).<br>
+                • <strong>Marca permanente</strong> — uma marca visível no corpo, conectada à <a href="#corrupcao-marcas">Corrupção</a> se o custo for Corrupção.<br>
+                • <strong>Presença</strong> — o poder emana presença: ganchos narrativos e reações do mundo ao seu redor.
+            </div>
+            <p>Despertares adicionais aprofundam a forma escolhida — a voz fica mais clara, a marca mais forte, a presença mais pesada.</p>
         </section>
 
         <section id="poder-mente-corpo">
