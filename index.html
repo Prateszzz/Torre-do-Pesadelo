@@ -11338,6 +11338,15 @@ function trocarAntecedente(sel) {
   if (anterior && anterior !== novo) reverterBonusesAntecedente(anterior);
   if (novo && novo !== anterior) aplicarBonusesAntecedente(novo, { tipo: 'selecao' });
   _antecedenteAnterior = novo;
+  // Pré-preenche o Relacionamento Nv1 com o do antecedente selecionado
+  // (mesmo mapa usado pelo wizard — o jogador pode editar depois).
+  const relInfo = novo ? (_WIZARD_ANTECEDENTES_REL[novo] || null) : null;
+  if (relInfo) {
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal('rel1-nome', relInfo.nome || '');
+    setVal('rel1-tipo', relInfo.tipo || '');
+    setVal('rel1-obs', relInfo.obs || '');
+  }
   if (typeof atualizarResumoAntecedente === 'function') atualizarResumoAntecedente();
   if (typeof atualizarResumoCorrupcao === 'function') atualizarResumoCorrupcao();
   if (typeof calcTudoDebounced === 'function') calcTudoDebounced();
@@ -12804,14 +12813,14 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   <div class="ficha-expand-area" id="area-relacionamentos">
   <div class="ficha-panel-body">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Laços do Personagem <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></div>
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light)">Laços do Personagem <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 PV/STA temporários juntos · 4 Laço de Alma: +2d6 PV/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></div>
       <div style="display:flex;gap:.4rem">
         <button onclick="addRelacionamento()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Relacionamento</button>
       </div>
     </div>
     <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:.5rem">Laços platônicos, de amizade profunda ou de "família encontrada" são tão poderosos quanto os românticos. A perda de um ente querido custa 2d10 de Sanidade (Salvaguarda de Alma reduz) e pode gerar 1d6 de Corrupção.</p>
     <div class="table-wrapper"><table>
-      <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:150px">Nível <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 HP/STA temporários juntos · 4 Laço de Alma: +2d6 HP/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></th><th style="min-width:100px">Tipo</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
+      <thead><tr><th style="min-width:120px">Nome</th><th style="min-width:150px">Nível <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">1 Amizade Sólida: +1 Sanidade perto do amigo · 2 Confiança Profunda: +2 vs medo, comunicação sem palavras · 3 Intimidade: +1d6 PV/STA temporários juntos · 4 Laço de Alma: +2d6 PV/STA máximos enquanto vivo; morte do outro = CD 20 ou 2d6 Corrupção + 2d8 Sanidade</span></span></th><th style="min-width:100px">Tipo</th><th style="min-width:110px">Cidade</th><th>Observação</th><th style="width:30px"></th></tr></thead>
       <tbody id="rel-tbody">
         <tr>
           <td data-label="Nome"><input type="text" id="rel1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
@@ -13489,7 +13498,7 @@ function coletarDados() {
     'r-personalidade','r-mentalidade','r-comportamento',
     'r-tracos','r-defeitos','r-ideais','r-ligacoes','r-antecedentes','r-historia','r-eventos','r-npcs',
     // inventário
-    'inv-espiritos',
+    'inv-espiritos','f-provisoes',
     // pets
     'pet-nome','pet-especie','pet-tipo','pet-for','pet-des','pet-vig','pet-int','pet-esp','pet-car',
     'pet-pv','pet-ca','pet-mov','pet-hab','pet-evo'
@@ -17388,7 +17397,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <li><strong>Torres conhecidas:</strong> Centenas espalhadas pelo mundo. Apenas uma fração foi explorada além do 20º andar.</li>
                         <li><strong>Guardiãs:</strong> Todas permanecem ativas. Nenhuma foi silenciada até hoje.</li>
                         <li><strong>Ameaça atual:</strong> Crescente. Os Surtos estão chegando mais cedo e com mais força.</li>
-                        <li><strong>Facções dominantes:</strong> Consórcio Carmesim, Ordem do Véu Branco, Círculo de Cinzas e a misteriosa Irmandade do Último Suspiro.</li>
+                        <li><strong>Facções dominantes:</strong> Irmandade do Vazio, Consórcio Carmesim, Ordem do Eco, Círculo Onírico e a Fraternidade Gélida.</li>
                     </ul>
 
                     <h4>Sistemas em Destaque</h4>
@@ -17406,9 +17415,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     <h4>Referência Rápida</h4>
                     <ul class="sumario-ref">
-                        <li><strong>CD</strong> = 8 + Maestria + Mod</li>
+                        <li><strong>CD</strong> = 10 + Maestria + Mod</li>
                         <li><strong>Maestria</strong> = 1 + ⌈Nível ÷ 4⌉</li>
                         <li><strong>PV</strong> = 20 + Vigor×3 + (8 + ModVig×2)×(Nv−1)</li>
+                        <li><strong>STA</strong> = 20 + Alma×2 + Intelecto + (6 + ModAlma + ModInt)×(Nv−1)</li>
+                        <li><strong>PE</strong> = (⌊Nv÷2⌋+2)×(ModAlma+ModInt+1)</li>
                         <li><strong>Sanidade</strong> = 10 + ModInt + ModCar</li>
                         <li><strong>Corrupção:</strong> 0–2 Limpo · 3–5 Marcado · 6–8 Corrompido · 9–11 Profanado · 12+ Abissal</li>
                         <li><strong>Atenção da Torre:</strong> 6–8 ticks = evento</li>
@@ -20615,8 +20626,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>2. Efeitos Diversos (Resistência vs. CD)</strong><br>
                 Usado para efeitos de área, mentais, biológicos ou de ambiente. Aqui quem rola o dado é a <strong>vítima</strong> tentando resistir.<br><br>
                 <strong>Como calcular a CD da sua habilidade:</strong><br>
-                <strong>CD = 8 + Maestria + Modificador do Atributo-chave</strong><br>
-                Geralmente o atributo-chave é a <strong>Alma</strong> (a fonte do poder); o Mestre pode usar o atributo do poder se for diferente. Exemplo: um poder de Alma com Maestria +3 e mod de Alma +2 tem CD 13.
+<strong>CD = 10 + Maestria + Modificador do Atributo-chave</strong><br>
+                 Geralmente o atributo-chave é a <strong>Alma</strong> (a fonte do poder); o Mestre pode usar o atributo do poder se for diferente. Exemplo: um poder de Alma com Maestria +3 e mod de Alma +2 tem CD 15.
             </div>
 
             <p>Existem três tipos de teste de resistência, cada um ligado a um tipo de ameaça:</p>
@@ -21823,7 +21834,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <h4 id="rel-faccoes">Relacionamentos com Facções</h4>
-        <p>Nem todo laço é pessoal. Sua reputação com uma facção (Consórcio Carmesim, Ordem do Véu Branco, Círculo de Cinzas, Irmandade do Último Suspiro) funciona como um relacionamento coletivo:</p>
+        <p>Nem todo laço é pessoal. Sua reputação com uma facção (Irmandade do Vazio, Consórcio Carmesim, Ordem do Eco, Círculo Onírico, Fraternidade Gélida) funciona como um relacionamento coletivo:</p>
         <div class="table-wrapper">
             <table>
                 <thead>
