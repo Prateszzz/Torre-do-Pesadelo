@@ -11977,7 +11977,10 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div class="field-row cols-3">
       ${fieldGroup('Poder Principal','p-principal')}
       ${fieldGroup('Atributo Principal','p-attr')}
-      ${fieldGroup('Técnicas Máximas','p-max','number',{default:0})}
+      <div class="field-group">
+        <label>Técnicas Máximas <span class="info-btn" style="font-size:.6rem">ⓘ<span class="tooltip">Sugerido automaticamente = nº de Despertares aceitos (cada Ascensão libera um trio de técnicas). Você pode ajustar manualmente.</span></span></label>
+        <input type="number" id="p-max" min="0" value="0" oninput="salvarLocal()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+      </div>
     </div>
     <div class="field-row cols-2">
       <div class="field-group">
@@ -12001,6 +12004,15 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     </div>
     <div class="field-row">
       ${fieldGroup('Conceito do Poder — por que seu personagem tem esse poder?','p-conceito','textarea')}
+    </div>
+
+    <!-- TRÊS PILARES DO PODER -->
+    <div id="pilares-poder" style="margin-top:.75rem;padding:.7rem .8rem;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02);font-size:.78rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+      <span style="color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;font-size:.65rem">Três Pilares</span>
+      <span><strong style="color:var(--accent-light)">PODER</strong> <span id="pilar-poder">0</span></span>
+      <span><strong style="color:var(--arcane-light)">MENTE</strong> <span id="pilar-mente">0</span></span>
+      <span><strong style="color:var(--gold-light)">CORPO</strong> <span id="pilar-corpo">0</span></span>
+      <span id="pilar-aviso" style="display:none;color:var(--warn);font-weight:600">Poder desequilibrado — considere pagar em Mente ou Corpo.</span>
     </div>
 
     <!-- PASSIVAS -->
@@ -12030,12 +12042,28 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       </div>
     </div>
     <div class="table-wrapper"><table>
-      <thead><tr><th style="min-width:160px">Nome do Despertar</th><th>Condição / Gatilho</th><th>Efeito</th></tr></thead>
+      <thead><tr><th style="min-width:70px">Estágio</th><th style="min-width:170px">Capacidade Escolhida</th><th style="min-width:150px">Custo Pago</th><th style="min-width:100px">Status</th><th>Efeito / Transformação</th></tr></thead>
       <tbody id="despertares-tbody">
         <tr>
-          <td data-label="Nome do Despertar"><input type="text" id="desp1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
-          <td data-label="Condição / Gatilho"><input type="text" id="desp1-cond" placeholder="Gatilho..." oninput="salvarLocal()"></td>
-          <td data-label="Efeito"><textarea id="desp1-efei" style="min-height:44px" placeholder="Efeito..." oninput="salvarLocal()"></textarea></td>
+          <td data-label="Estágio"><input type="number" id="desp1-estagio" min="1" max="10" value="1" style="width:56px;text-align:center" oninput="salvarLocal()"></td>
+          <td data-label="Capacidade"><select id="desp1-capacidade" onchange="salvarLocal()" style="width:100%">
+            <option value="Técnica no pico (tier = Ascensão)">Técnica no pico (tier = Ascensão)</option>
+            <option value="Técnica suplementar (tier −1)">Técnica suplementar (tier −1)</option>
+            <option value="Técnica livre (tier −1)">Técnica livre (tier −1)</option>
+            <option value="Transformação estética">Transformação estética</option>
+          </select></td>
+          <td data-label="Custo"><select id="desp1-custo" onchange="salvarLocal()" style="width:100%">
+            <option value="Nenhum (adormecido)">Nenhum (adormecido)</option>
+            <option value="−2 Sanidade máx">−2 Sanidade máx</option>
+            <option value="+1 Corrupção">+1 Corrupção</option>
+            <option value="+1 Atenção">+1 Atenção</option>
+            <option value="Relacionamento −1 nível">Relacionamento −1 nível</option>
+          </select></td>
+          <td data-label="Status"><select id="desp1-status" onchange="salvarLocal();atualizarPilaresPoder()" style="width:100%">
+            <option value="Aceito">Aceito</option>
+            <option value="Adormecido">Adormecido</option>
+          </select></td>
+          <td data-label="Efeito"><textarea id="desp1-efei" style="min-height:44px" placeholder="Efeito / transformação..." oninput="salvarLocal()"></textarea></td>
         </tr>
       </tbody>
     </table></div>
@@ -13545,7 +13573,7 @@ function coletarDados() {
     [1,2,3,4,5,6].flatMap(n=>['nome','bat','dano','crit','tipo','alc','obs'].map(f=>`arm${n}-${f}`)).forEach(f => armaFields.push(f));
   }
   const passFields  = Array.from({length:numPassivas},(_,i)=>i+1).flatMap(n=>['nome','desc'].map(f=>`pass${n}-${f}`));
-  const despFields  = Array.from({length:numDespertares},(_,i)=>i+1).flatMap(n=>['nome','cond','efei'].map(f=>`desp${n}-${f}`));
+  const despFields  = Array.from({length:numDespertares},(_,i)=>i+1).flatMap(n=>['estagio','capacidade','custo','status','efei'].map(f=>`desp${n}-${f}`));
   // Escaneia as linhas de inventário REALMENTE presentes no DOM (mesmo
   // padrão usado acima para armas), em vez de confiar em _invCounters.
   // _invCounters nunca era decrementado ao remover uma linha do MEIO
@@ -13872,9 +13900,25 @@ function addDespertar() {
   if (!tbody) return;
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td data-label="Nome do Despertar"><input type="text" id="desp${numDespertares}-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
-    <td data-label="Condição / Gatilho"><input type="text" id="desp${numDespertares}-cond" placeholder="Gatilho..." oninput="salvarLocal()"></td>
-    <td data-label="Efeito"><textarea id="desp${numDespertares}-efei" style="min-height:44px" placeholder="Efeito..." oninput="salvarLocal()"></textarea></td>
+    <td data-label="Estágio"><input type="number" id="desp${numDespertares}-estagio" min="1" max="10" value="1" style="width:56px;text-align:center" oninput="salvarLocal()"></td>
+    <td data-label="Capacidade"><select id="desp${numDespertares}-capacidade" onchange="salvarLocal()" style="width:100%">
+      <option value="Técnica no pico (tier = Ascensão)">Técnica no pico (tier = Ascensão)</option>
+      <option value="Técnica suplementar (tier −1)">Técnica suplementar (tier −1)</option>
+      <option value="Técnica livre (tier −1)">Técnica livre (tier −1)</option>
+      <option value="Transformação estética">Transformação estética</option>
+    </select></td>
+    <td data-label="Custo"><select id="desp${numDespertares}-custo" onchange="salvarLocal()" style="width:100%">
+      <option value="Nenhum (adormecido)">Nenhum (adormecido)</option>
+      <option value="−2 Sanidade máx">−2 Sanidade máx</option>
+      <option value="+1 Corrupção">+1 Corrupção</option>
+      <option value="+1 Atenção">+1 Atenção</option>
+      <option value="Relacionamento −1 nível">Relacionamento −1 nível</option>
+    </select></td>
+    <td data-label="Status"><select id="desp${numDespertares}-status" onchange="salvarLocal();atualizarPilaresPoder()" style="width:100%">
+      <option value="Aceito">Aceito</option>
+      <option value="Adormecido">Adormecido</option>
+    </select></td>
+    <td data-label="Efeito"><textarea id="desp${numDespertares}-efei" style="min-height:44px" placeholder="Efeito / transformação..." oninput="salvarLocal()"></textarea></td>
   `;
   tbody.appendChild(tr);
   salvarLocal();
@@ -13886,6 +13930,35 @@ function removeDespertar() {
   if (!tbody) return;
   const rows = tbody.querySelectorAll('tr');
   if (rows.length > 1) { rows[rows.length-1].remove(); numDespertares--; salvarLocal(); }
+}
+
+// ─── TRÊS PILARES DO PODER (display + p-max automático) ───
+// PODER = nº de Despertares aceitos · MENTE = Sanidade atual · CORPO = PV/STA.
+// Sugere p-max = nº de Despertares aceitos (mantém editável: só preenche se
+// o campo estiver zerado). Mostra aviso de desequilíbrio quando Poder domina.
+function atualizarPilaresPoder() {
+  const aceitos = Array.from(document.querySelectorAll('#despertares-tbody select[id$="-status"]'))
+    .filter(s => s.value === 'Aceito').length;
+  const pMaxEl = document.getElementById('p-max');
+  if (pMaxEl && (parseInt(pMaxEl.value, 10) || 0) === 0 && aceitos > 0) {
+    pMaxEl.value = aceitos;
+  }
+  const pilarPoder = document.getElementById('pilar-poder');
+  if (pilarPoder) pilarPoder.textContent = aceitos;
+  const pilarMente = document.getElementById('pilar-mente');
+  if (pilarMente) pilarMente.textContent = parseInt(document.getElementById('f-sanidade')?.value, 10) || 0;
+  const pilarCorpo = document.getElementById('pilar-corpo');
+  if (pilarCorpo) {
+    const pv = parseInt(document.getElementById('r-pv')?.textContent, 10) || 0;
+    const sta = parseInt(document.getElementById('r-sta')?.textContent, 10) || 0;
+    pilarCorpo.textContent = pv + '/' + sta;
+  }
+  const aviso = document.getElementById('pilar-aviso');
+  if (aviso) {
+    const mente = parseInt(document.getElementById('f-sanidade')?.value, 10) || 0;
+    const pv = parseInt(document.getElementById('r-pv')?.textContent, 10) || 0;
+    aviso.style.display = (aceitos > 0 && aceitos > mente && aceitos > pv) ? 'inline' : 'none';
+  }
 }
 
 function addPet() {
@@ -15197,6 +15270,19 @@ function preencherCampos(d) {
     const el=document.getElementById(id); if(el) el.value=val;
   });
 
+  // Fallback de Despertares antigos (despN-nome/cond): dados salvos antes da
+  // estruturação v2 não têm estagio/capacidade/custo/status. Copia nome+cond
+  // para o campo de efeito (se vazio) para não perder o registro.
+  Object.keys(d).filter(k => /^desp\d+-nome$/.test(k)).forEach(k => {
+    const n = k.match(/^desp(\d+)-nome$/)[1];
+    const efeiEl = document.getElementById('desp' + n + '-efei');
+    if (efeiEl && !efeiEl.value) {
+      const nome = d[k] || '';
+      const cond = d['desp' + n + '-cond'] || '';
+      efeiEl.value = [nome, cond].filter(Boolean).join(' — ');
+    }
+  });
+
   // Restaura o seletor de Antecedentes e seu resumo — dados antigos de texto
   // livre que não casam com as 20 opções viram "Personalizado: <valor>".
   restaurarAntecedente(d['f-antecedente']);
@@ -15230,6 +15316,8 @@ function preencherCampos(d) {
     atualizarForjaResumo();
     // Painel "Corrupção & Atenção da Torre" (estágios + resumo + bônus do antecedente)
     atualizarResumoCorrupcao();
+    // Três Pilares do Poder (display + p-max automático)
+    if (typeof atualizarPilaresPoder === 'function') atualizarPilaresPoder();
   }, 50);
 }
 
@@ -18658,6 +18746,45 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="lore-box">
                 Evoluir o poder é evoluir a si mesmo. Quanto mais você compreende quem realmente é… mais forte (e mais perigosa) sua alma se torna.
             </div>
+
+            <h3>As Três Formas de Desbloquear Técnicas</h3>
+            <p>Existem três caminhos para ganhar novas técnicas — e eles se somam.</p>
+            <div class="system-card">
+                <strong>Forma 1 — Ascensão (Despertares):</strong><br><br>
+                Cada nível de Ascensão (0–10) libera 1 Despertar. Cada Despertar libera um <strong>trio de técnicas</strong>:<br>
+                • <strong>1 técnica no pico</strong> (tier = nível da Ascensão, livre — pode ser qualquer coisa)<br>
+                • <strong>1 suplementar</strong> (tier − 1)<br>
+                • <strong>1 livre</strong> (tier − 1)<br><br>
+                <em>Exemplo:</em> Ascensão Nv 3 → 1 técnica tier 3 + 1 suplementar tier 2 + 1 livre tier 2.
+            </div>
+            <div class="system-card">
+                <strong>Forma 2 — Up de nível (XP):</strong><br><br>
+                Cada subida de Nível (1–20) libera <strong>outro trio de técnicas</strong>, no mesmo tier da Ascensão atual.
+            </div>
+            <div class="system-card">
+                <strong>Forma 3 — Desenvolvimento espontâneo:</strong><br><br>
+                Independente de nível — o jogador pode desenvolver <strong>1 técnica espontaneamente</strong> em momentos de pico e cenas lendárias (o Mestre concede quando a cena merece).
+            </div>
+
+            <h3>Aceitar vs Negligenciar</h3>
+            <p>Nem todo Despertar é bem-vindo. Quando um Despertar se manifesta, você escolhe como responder.</p>
+            <div class="system-card">
+                <strong>Aceitar:</strong><br>
+                Você paga o <strong>custo temático</strong> (−2 Sanidade máx, +1 Corrupção, +1 Atenção, ou Relacionamento −1 nível) e recebe a <strong>transformação completa</strong> do Despertar.
+            </div>
+            <div class="system-card">
+                <strong>Negligenciar:</strong><br>
+                O Despertar fica <strong>adormecido</strong> — sem efeito, sem custo e sem transformação. Você pode aceitá-lo depois, a qualquer momento, pagando o custo. <em>A Torre insiste.</em>
+            </div>
+
+            <h3>Transformação do Usuário</h3>
+            <p>Um Despertar aceito não muda só o poder — muda você.</p>
+            <div class="system-card">
+                <strong>Transformação:</strong><br><br>
+                • <strong>Estética:</strong> marcas, olhos, aura, forma do poder — o corpo reflete a evolução.<br>
+                • <strong>Técnicas:</strong> as técnicas podem se transformar junto com o conceito.<br>
+                • <strong>Conexão com Marcas da Corrupção:</strong> quando o custo pago for Corrupção, a transformação se conecta às <a href="#corrupcao-marcas">Marcas da Corrupção</a> — o corpo carrega a marca do que foi pago.
+            </div>
         </section>
 
         <section id="poder-mente-corpo">
@@ -18720,6 +18847,21 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="lore-box">
                 <strong>Lembrete importante:</strong><br>
                 Os melhores poderes não são os mais fortes no início. São aqueles cujos usuários conseguiram fazer os três pilares evoluírem juntos através dos Despertares. Um poder que cresce de forma desequilibrada quase sempre cobra um preço alto — seja em sanidade, em corpo, ou na própria alma.
+            </div>
+
+            <h3>Os Três Pilares com Números</h3>
+            <p>Na prática, os pilares se traduzem em números da ficha:</p>
+            <div class="system-card">
+                <strong>PODER</strong> = suas <strong>técnicas e dados</strong> (nº de técnicas, tiers e dados de dano).<br>
+                <strong>MENTE</strong> = <strong>Sanidade</strong> e perícias mentais (Intelecto, Carisma, Vontade).<br>
+                <strong>CORPO</strong> = <strong>PV e STA</strong> (Pontos de Vida e Stamina).
+            </div>
+            <div class="system-card">
+                <strong>Equilíbrio:</strong><br><br>
+                Um Despertar que aumenta muito o <strong>PODER</strong> exige um dos seguintes custos de equilíbrio:<br>
+                • <strong>−1 de Sanidade máxima</strong> (paga na MENTE)<br>
+                • <strong>−1 de PV máximo</strong> (paga no CORPO)<br>
+                • OU uma <strong>fraqueza temática</strong> (Traço da Alma) que represente o desequilíbrio.
             </div>
 
             <h2 id="tecnicas-habilidades">Criação de Técnicas e Habilidades</h2>
