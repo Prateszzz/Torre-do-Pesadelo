@@ -16639,6 +16639,10 @@ function _mostrarLivro() {
   if (roleAtual === 'gm') _ativarEdicaoBlocosLivro();
   // Sidebar responsiva do livro
   _livroSidebarResponsiva();
+  // Navegação do livro: breadcrumb + anterior/próximo em cada seção
+  _injetarNavLivro();
+  // Barra de progresso de leitura + botão scroll-to-top
+  _inicializarProgressoLeitura();
   // Se não tem usuário logado, tenta carregar blocos da nuvem em background
   if (!usuarioAtual) {
     aguardarFirebase().then(() => {
@@ -16703,7 +16707,96 @@ function _inicializarLinksLivro() {
 // .open, nunca via display:none). A função antiga que escondia a sidebar
 // com display:none em telas largas foi removida: ela impediria o CSS de
 // animá-la para dentro/fora (transform não anima um elemento display:none).
-function _livroSidebarResponsiva() {}
+function _livroSidebarResponsiva() {
+  // Garante que o backdrop fecha a sidebar ao toque/clique (mobile).
+  const backdrop = document.getElementById('livro-sidebar-backdrop');
+  if (backdrop && !backdrop._livroListener) {
+    backdrop._livroListener = true;
+    backdrop.addEventListener('click', fecharLivroSidebar);
+  }
+  // Em telas pequenas, a sidebar começa fechada (drawer) — nunca aberta
+  // por padrão, para não cobrir o conteúdo ao abrir o livro no mobile.
+  if (window.innerWidth <= 1024) fecharLivroSidebar();
+}
+
+// ── NAVEGAÇÃO DO LIVRO (breadcrumb + anterior/próximo) ──
+// Ordem das seções (mesma do sumário) e mapeamento para as partes I–IX.
+const _LIVRO_SECOES = ['intro','torre-pesadelo','guardias','torre-disputas','mundo-fora','nevoa','geopolitica','despertos','criacao','atributos','aparencia','tracos-alma','alma-fragmentada','poder-mente-corpo','arvore-alma','utilizacao-manifestacao','rituais','ascensao','sessoes-xp','surtos','economia','mecanico','combate','sobrecarga','recuperacao','sobrevivencia','sanidade','relacionamentos'];
+const _LIVRO_PARTES = {
+  intro:'I · O Mundo', 'torre-pesadelo':'I · O Mundo', guardias:'I · O Mundo', 'torre-disputas':'I · O Mundo', 'mundo-fora':'I · O Mundo', nevoa:'I · O Mundo', geopolitica:'I · O Mundo', despertos:'I · O Mundo',
+  criacao:'II · Criação', atributos:'II · Criação', aparencia:'II · Criação', 'tracos-alma':'II · Criação',
+  'alma-fragmentada':'III · Sistema de Poder', 'poder-mente-corpo':'III · Sistema de Poder', 'arvore-alma':'III · Sistema de Poder', 'utilizacao-manifestacao':'III · Sistema de Poder', rituais:'III · Sistema de Poder',
+  ascensao:'IV · Progressão', 'sessoes-xp':'IV · Progressão', surtos:'IV · Progressão',
+  economia:'V · Economia',
+  mecanico:'VI · Regras de Jogo', combate:'VI · Regras de Jogo', sobrecarga:'VI · Regras de Jogo', recuperacao:'VI · Regras de Jogo',
+  sobrevivencia:'VII · Sobrevivência',
+  sanidade:'VIII · Sanidade e Corrupção',
+  relacionamentos:'IX · Relacionamentos'
+};
+
+// Injeta breadcrumb (topo) e botões "← Anterior / Próximo →" (fim) em cada
+// seção do livro. Idempotente: se já injetou, não duplica.
+function _injetarNavLivro() {
+  const livro = document.getElementById('livro-jogador');
+  if (!livro) return;
+  _LIVRO_SECOES.forEach((id, i) => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    if (sec.querySelector('.livro-nav')) return; // já injetado
+    const parte = _LIVRO_PARTES[id] || '';
+    const titulo = sec.querySelector('h1,h2')?.textContent || '';
+    // Breadcrumb no topo da seção.
+    if (parte) {
+      const bc = document.createElement('div');
+      bc.className = 'livro-breadcrumb';
+      bc.textContent = parte + ' → ' + titulo;
+      sec.insertBefore(bc, sec.firstChild);
+    }
+    // Navegação anterior/próximo no fim da seção.
+    const prev = i > 0 ? _LIVRO_SECOES[i - 1] : null;
+    const next = i < _LIVRO_SECOES.length - 1 ? _LIVRO_SECOES[i + 1] : null;
+    if (prev || next) {
+      const nav = document.createElement('div');
+      nav.className = 'livro-nav';
+      let html = '';
+      if (prev) html += '<a href="#' + prev + '" class="livro-nav-btn">← Anterior</a>';
+      if (next) html += '<a href="#' + next + '" class="livro-nav-btn">Próximo →</a>';
+      nav.innerHTML = html;
+      sec.appendChild(nav);
+    }
+  });
+}
+
+// Barra de progresso de leitura + botão scroll-to-top do livro.
+function _inicializarProgressoLeitura() {
+  const livro = document.getElementById('livro-jogador');
+  if (!livro) return;
+  // Barra de progresso no topo do conteúdo.
+  let bar = document.getElementById('livro-progresso');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'livro-progresso';
+    livro.insertBefore(bar, livro.firstChild);
+  }
+  // Botão flutuante de voltar ao topo.
+  let btn = document.getElementById('livro-scroll-top');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'livro-scroll-top';
+    btn.textContent = '↑';
+    btn.title = 'Voltar ao topo';
+    btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.appendChild(btn);
+  }
+  const atualizar = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+    bar.style.width = pct + '%';
+    btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
+  };
+  window.addEventListener('scroll', atualizar, { passive: true });
+  atualizar();
+}
 
 // ── Modo editor do livro (GM) ──
 let _livroModoEditor = false;
@@ -16856,6 +16949,14 @@ document.addEventListener('DOMContentLoaded', () => {
     #livro-content a { color: var(--accent-light); text-decoration: none; border-bottom: 1px solid rgba(var(--accent-rgb), .3); transition: color .2s, border-color .2s; }
     #livro-content a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
     #livro-content a:visited { color: var(--accent-light); }
+    /* Navegação do livro: breadcrumb, anterior/próximo, progresso e scroll-top */
+    .livro-breadcrumb { font-size:.72rem; color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:1.2rem; padding-bottom:.5rem; border-bottom:1px solid var(--border); }
+    .livro-nav { display:flex; justify-content:space-between; gap:.75rem; margin-top:2.5rem; padding-top:1.2rem; border-top:1px solid var(--border); }
+    .livro-nav-btn { display:inline-block; background:rgba(var(--deep-rgb), .12); border:1px solid var(--accent-t35); color:var(--accent-light); padding:.55rem 1.1rem; font-family:inherit; font-size:.85rem; border-radius:4px; text-decoration:none !important; transition:background .2s,border-color .2s; }
+    .livro-nav-btn:hover { background:rgba(var(--deep-rgb), .22); border-color:var(--accent-light); color:var(--accent-light); }
+    #livro-progresso { position:sticky; top:0; left:0; height:3px; width:0%; background:var(--accent); z-index:60; }
+    #livro-scroll-top { position:fixed; bottom:1.4rem; right:1.4rem; width:44px; height:44px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.1rem; cursor:pointer; display:none; align-items:center; justify-content:center; z-index:70; box-shadow:0 4px 14px rgba(0,0,0,.5); transition:background .2s; }
+    #livro-scroll-top:hover { background:var(--accent-light); }
     @media (max-width:1024px) {
       /* Drawer flutuante é a única estratégia mobile; regra estática removida. */
       #livro-sidebar { position: fixed !important; }
@@ -17012,6 +17113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#torre-pesadelo">A Torre do Pesadelo</a></li>
             <li><a href="#guardias">As Quatro Torres Guardiãs</a></li>
             <li><a href="#torre-disputas">A Torre das Disputas</a></li>
+            <li><a href="#mundo-fora">O Mundo Fora das Torres</a></li>
             <li><a href="#nevoa">A Névoa e o Mundo Exterior</a></li>
             <li><a href="#geopolitica">Geopolítica e Facções</a></li>
             <li><a href="#despertos">Os Despertos</a></li>
@@ -17024,8 +17126,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-voce-despertou">Como Você Despertou?</a></li>
             <li><a href="#personalidade-poder">Personalidade e Poder Principal</a></li>
             <li><a href="#atributos">Sistema de Atributos</a></li>
-            <li><a href="#tracos-alma">Traços da Alma</a></li>
             <li><a href="#aparencia">Aparência e Antecedentes</a></li>
+            <li><a href="#tracos-alma">Traços da Alma</a></li>
         </ul>
 
         <!-- III. SISTEMA DE PODER -->
@@ -17046,6 +17148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#ascensao">As Espirais da Ascensão (Humanos)</a></li>
             <li><a href="#corrupcao">As Espirais da Corrupção — Monstros</a></li>
             <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
+            <li><a href="#surtos">Surtos Decenais</a></li>
         </ul>
 
         <!-- V. ECONOMIA E ARTESANATO -->
@@ -17068,13 +17171,27 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#combate">Combate</a></li>
             <li><a href="#sobrecarga">Sobrecarga, Exaustão e Colapso</a></li>
             <li><a href="#recuperacao">Recuperação</a></li>
-            <li><a href="#surtos">Surtos Decenais</a></li>
+        </ul>
+
+        <!-- VII. SOBREVIVÊNCIA -->
+        <span class="toc-label">VII. Sobrevivência</span>
+        <ul>
             <li><a href="#sobrevivencia">Sobrevivência nas Torres</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#acampamento">Acampamento</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#provisoes">Provisões e Suprimentos</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#frio-temperatura">Frio e Temperatura</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#viagem-nevoa">Viagem pela Névoa</a></li>
-            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade">Sanidade e Corrupção</a></li>
+        </ul>
+
+        <!-- VIII. SANIDADE E CORRUPÇÃO -->
+        <span class="toc-label">VIII. Sanidade e Corrupção</span>
+        <ul>
+            <li><a href="#sanidade">Sanidade e Corrupção</a></li>
+        </ul>
+
+        <!-- IX. RELACIONAMENTOS -->
+        <span class="toc-label">IX. Relacionamentos</span>
+        <ul>
             <li><a href="#relacionamentos">Relacionamentos e Intimidade</a></li>
         </ul>
 
@@ -17132,6 +17249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li><a href="#torre-pesadelo">A Torre do Pesadelo</a></li>
                             <li><a href="#guardias">As Quatro Torres Guardiãs</a></li>
                             <li><a href="#torre-disputas">A Torre das Disputas</a></li>
+                            <li><a href="#mundo-fora">O Mundo Fora das Torres</a></li>
                             <li><a href="#nevoa">A Névoa e o Mundo Exterior</a></li>
                             <li><a href="#geopolitica">Geopolítica e Facções</a></li>
                             <li><a href="#despertos">Os Despertos</a></li>
@@ -17146,8 +17264,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-voce-despertou">Como Você Despertou?</a></li>
                             <li><a href="#personalidade-poder">Personalidade e Poder Principal</a></li>
                             <li><a href="#atributos">Sistema de Atributos</a></li>
-                            <li><a href="#tracos-alma">Traços da Alma</a></li>
                             <li><a href="#aparencia">Aparência e Antecedentes</a></li>
+                            <li><a href="#tracos-alma">Traços da Alma</a></li>
                         </ul>
                     </div>
 
@@ -17172,6 +17290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li><a href="#ascensao">As Espirais da Ascensão (Humanos)</a></li>
                             <li><a href="#corrupcao">As Espirais da Corrupção — Monstros</a></li>
                             <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
+                            <li><a href="#surtos">Surtos Decenais</a></li>
                         </ul>
                     </div>
 
@@ -17189,7 +17308,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
 
                     <!-- VI. REGRAS DE JOGO -->
-                    <div>
+                    <div style="margin-bottom: 1.4rem;">
                         <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VI. Regras de Jogo</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sistema-resolucao">Sistema de Resolução</a></li>
@@ -17198,13 +17317,33 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#combate">Combate</a></li>
                             <li><a href="#sobrecarga">Sobrecarga, Exaustão e Colapso</a></li>
                             <li><a href="#recuperacao">Recuperação</a></li>
-                            <li><a href="#surtos">Surtos Decenais</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- VII. SOBREVIVÊNCIA -->
+                    <div style="margin-bottom: 1.4rem;">
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VII. Sobrevivência</h3>
+                        <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sobrevivencia">Sobrevivência nas Torres</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#acampamento">Acampamento</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#provisoes">Provisões e Suprimentos</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#frio-temperatura">Frio e Temperatura</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#viagem-nevoa">Viagem pela Névoa</a></li>
-                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade">Sanidade e Corrupção</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- VIII. SANIDADE E CORRUPÇÃO -->
+                    <div style="margin-bottom: 1.4rem;">
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VIII. Sanidade e Corrupção</h3>
+                        <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
+                            <li><a href="#sanidade">Sanidade e Corrupção</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- IX. RELACIONAMENTOS -->
+                    <div>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IX. Relacionamentos</h3>
+                        <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#relacionamentos">Relacionamentos e Intimidade</a></li>
                         </ul>
                     </div>
@@ -17423,7 +17562,21 @@ document.addEventListener('DOMContentLoaded', () => {
         </section>
 
         <!-- GEOPOLÍTICA -->
-        <section id="geopolitica">
+        <section id="nevoa">
+            <h2>A Névoa</h2>
+            <p>A Névoa é um dos maiores perigos do mundo atual. Ela não é apenas um fenômeno climático — é uma manifestação da corrupção das Torres que se espalhou pelo planeta.</p>
+            
+            <div class="system-card">
+                <strong>Efeitos da Névoa:</strong><br>
+                • Redução drástica de visibilidade<br>
+                • Desorientação espacial e temporal<br>
+                • Distorção de percepção (pessoas esquecem nomes, objetivos, direções)<br>
+                • Habitat natural de monstros que escaparam das Torres<br>
+                • Em áreas densas, pode causar alucinações e perda de sanidade
+            </div>
+
+            <p>Alguns Despertos desenvolvem resistência ou até afinidade com a Névoa (veja o Traço "Explorador da Névoa"). Viajar através dela sem preparação é considerado suicídio por muitos veteranos.</p>
+        </section><section id="geopolitica">
             <h2>Geopolítica do Mundo</h2>
             <p>Não existe mais a antiga divisão de países. Governos nacionais, fronteiras e grande parte da estrutura política do velho mundo colapsaram após o surgimento das torres.</p>
             <p>O planeta atual é fragmentado. O que restou da humanidade vive espalhado entre cidadelas fortificadas, assentamentos, facções, zonas independentes, grupos militares e organizações de Despertos.</p>
@@ -17442,21 +17595,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </section>
 
         <!-- A NÉVOA (novo subtópico) -->
-        <section id="nevoa">
-            <h2>A Névoa</h2>
-            <p>A Névoa é um dos maiores perigos do mundo atual. Ela não é apenas um fenômeno climático — é uma manifestação da corrupção das Torres que se espalhou pelo planeta.</p>
-            
-            <div class="system-card">
-                <strong>Efeitos da Névoa:</strong><br>
-                • Redução drástica de visibilidade<br>
-                • Desorientação espacial e temporal<br>
-                • Distorção de percepção (pessoas esquecem nomes, objetivos, direções)<br>
-                • Habitat natural de monstros que escaparam das Torres<br>
-                • Em áreas densas, pode causar alucinações e perda de sanidade
-            </div>
-
-            <p>Alguns Despertos desenvolvem resistência ou até afinidade com a Névoa (veja o Traço "Explorador da Névoa"). Viajar através dela sem preparação é considerado suicídio por muitos veteranos.</p>
-        </section>
+        
 
         <div class="section-divider"></div>
 
@@ -19728,7 +19867,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Lembrete da Torre:</strong> subir de nível é a recompensa por histórias bem contadas — não por números acumulados. A Torre não premia quem corre em círculos. Ela premia quem constrói algo que vale a pena ser lembrado. E ela lembra de tudo.
             </div>
         </section>
-    <section id="economia">
+    <section id="surtos">
+            <h2>Surtos Decenais</h2>
+            <p>A cada dez anos, as Torres liberam uma onda massiva de monstros. O nível dessas criaturas não é aleatório — ele é diretamente ligado ao maior andar que a humanidade já alcançou naquela torre.</p>
+
+            <p>Os Surtos são a prova mais cruel de que a ascensão tem um preço coletivo. Quanto mais alto a humanidade sobe, mais terrível se torna a próxima onda. Não é uma maldição externa. Somos nós mesmos que alimentamos o ciclo.</p>
+
+            <h3>O Peso de Saber</h3>
+            <p>Todo Desperto que chega ao nível de Ungido ou superior carrega uma verdade incômoda: cada andar que você conquista está, de certa forma, assinando a sentença de morte de milhares de pessoas que ainda não nasceram.</p>
+
+            <p>Os Surtos não são apenas eventos de destruição. São momentos em que a humanidade é forçada a olhar para o espelho e ver o monstro que ela mesma está criando. Cidades inteiras desaparecem. Regiões inteiras são perdidas. E, depois de cada Surto, a humanidade fica mais fraca… e mais desesperada para subir ainda mais.</p>
+
+            <h3>Memórias de Surtos Passados</h3>
+            <p>Os veteranos e os estudiosos guardam registros dos grandes Surtos. Alguns são tratados quase como lendas sombrias:</p>
+
+            <ul>
+                <li><strong>O Surto do Silêncio (há 47 anos)</strong>: Nenhuma onda de monstros invadiu as cidadelas. Em vez disso, as pessoas começaram a enlouquecer. Milhares se suicidaram ou se mataram entre si antes que o fenômeno fosse entendido.</li>
+                <li><strong>O Surto Carmesim (há 87 anos)</strong>: A Torre Carmesim liberou uma quantidade absurda de monstros de carne. Três cidadelas inteiras foram perdidas em menos de dois meses.</li>
+                <li><strong>O Grande Eclipse (há 127 anos)</strong>: O maior Surto registrado. Dizem que a escuridão durou treze dias e que monstros do tamanho de fortalezas caminharam pela superfície.</li>
+            </ul>
+
+            <p>Essas histórias são contadas em voz baixa nas cidadelas. Servem tanto como aviso quanto como motivação sombria: “Se não subirmos, o próximo Surto será pior. Se subirmos, o próximo Surto também será pior.”</p>
+
+            <h3>Como o Mundo se Prepara (ou não)</h3>
+            <p>Algumas cidadelas tratam os Surtos como eventos religiosos ou proféticos. Outras tentam ignorar até o último momento. Existem lugares onde, nos anos que antecedem um Surto, as pessoas se entregam a excessos, festas e violência, como se já soubessem que muitos não sobreviverão.</p>
+
+            <p>Despertos de alto nível são frequentemente convocados (ou obrigados) a participar da defesa durante os Surtos. Alguns facções oferecem grandes recompensas. Outras simplesmente sequestram ou chantageiam quem tem poder suficiente para fazer diferença.</p>
+
+            <p>Muitos grupos de Despertos planejam suas maiores incursões justamente nos anos que antecedem um Surto, na esperança de ficarem mais fortes antes da próxima onda. Outros fazem o oposto: descem das torres e voltam para as cidadelas para proteger o que resta da humanidade.</p>
+
+            <div class="system-card">
+                <strong>O Dilema dos Despertos</strong><br><br>
+                Quanto mais você sobe, mais forte você fica… e mais forte fica o próximo Surto. Alguns Despertos carregam essa culpa pelo resto da vida. Outros decidem que a única forma de sobreviver é continuar subindo, não importa o preço que o mundo pague.
+            </div>
+
+            <h3>O Que os Jogadores Sabem</h3>
+            <p>Todo Desperto que já viveu um Surto (ou ouviu relatos confiáveis) sabe de algumas verdades básicas:</p>
+
+            <ul>
+                <li>Os Surtos não são iguais. Alguns são ondas diretas de monstros. Outros são mais sutis e traiçoeiros (como o Surto do Silêncio).</li>
+                <li>Quanto maior o progresso humano em uma torre específica, mais forte será o Surto que ela liberará.</li>
+                <li>Não existe forma conhecida de impedir um Surto, exceto uma: dominar completamente a torre. Enquanto houver andares não conquistados, a torre continuará liberando Surtos equivalentes ao seu andar mais alto ainda não dominado.</li>
+                <li>Se todos os andares de uma torre forem vencidos e controlados, ela deixaria de gerar Surtos. Essa é a única forma conhecida de silenciar permanentemente uma torre.</li>
+                <li>Após cada Surto, o mundo fica um pouco pior. Territórios são perdidos. Facções enfraquecem. A humanidade recua.</li>
+            </ul>
+
+            <p>Por isso muitos veteranos dizem a mesma frase, repetida como um mantra sombrio:</p>
+
+            <p class="highlight" style="display:block; margin:1rem 0; padding:0.8rem 1rem; font-style:italic;">
+                “Subir não é ambição. É desespero disfarçado de esperança.”
+            </p>
+        </section><section id="economia">
         <h1>Sistema Monetário e de Equipamentos</h1>
 
         <h2 id="moeda">A Moeda é Espíritos (Esp)</h2>
@@ -21232,57 +21421,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>O sistema de Acampamento (ver seção de Sobrevivência) oferece bônus significativos de recuperação dependendo da qualidade do abrigo. Fora da Torre, o corpo e a Alma se refazem por inteiro — dentro dela, todo alívio tem um preço.</p>
         </section>
 
-        <section id="surtos">
-            <h2>Surtos Decenais</h2>
-            <p>A cada dez anos, as Torres liberam uma onda massiva de monstros. O nível dessas criaturas não é aleatório — ele é diretamente ligado ao maior andar que a humanidade já alcançou naquela torre.</p>
-
-            <p>Os Surtos são a prova mais cruel de que a ascensão tem um preço coletivo. Quanto mais alto a humanidade sobe, mais terrível se torna a próxima onda. Não é uma maldição externa. Somos nós mesmos que alimentamos o ciclo.</p>
-
-            <h3>O Peso de Saber</h3>
-            <p>Todo Desperto que chega ao nível de Ungido ou superior carrega uma verdade incômoda: cada andar que você conquista está, de certa forma, assinando a sentença de morte de milhares de pessoas que ainda não nasceram.</p>
-
-            <p>Os Surtos não são apenas eventos de destruição. São momentos em que a humanidade é forçada a olhar para o espelho e ver o monstro que ela mesma está criando. Cidades inteiras desaparecem. Regiões inteiras são perdidas. E, depois de cada Surto, a humanidade fica mais fraca… e mais desesperada para subir ainda mais.</p>
-
-            <h3>Memórias de Surtos Passados</h3>
-            <p>Os veteranos e os estudiosos guardam registros dos grandes Surtos. Alguns são tratados quase como lendas sombrias:</p>
-
-            <ul>
-                <li><strong>O Surto do Silêncio (há 47 anos)</strong>: Nenhuma onda de monstros invadiu as cidadelas. Em vez disso, as pessoas começaram a enlouquecer. Milhares se suicidaram ou se mataram entre si antes que o fenômeno fosse entendido.</li>
-                <li><strong>O Surto Carmesim (há 87 anos)</strong>: A Torre Carmesim liberou uma quantidade absurda de monstros de carne. Três cidadelas inteiras foram perdidas em menos de dois meses.</li>
-                <li><strong>O Grande Eclipse (há 127 anos)</strong>: O maior Surto registrado. Dizem que a escuridão durou treze dias e que monstros do tamanho de fortalezas caminharam pela superfície.</li>
-            </ul>
-
-            <p>Essas histórias são contadas em voz baixa nas cidadelas. Servem tanto como aviso quanto como motivação sombria: “Se não subirmos, o próximo Surto será pior. Se subirmos, o próximo Surto também será pior.”</p>
-
-            <h3>Como o Mundo se Prepara (ou não)</h3>
-            <p>Algumas cidadelas tratam os Surtos como eventos religiosos ou proféticos. Outras tentam ignorar até o último momento. Existem lugares onde, nos anos que antecedem um Surto, as pessoas se entregam a excessos, festas e violência, como se já soubessem que muitos não sobreviverão.</p>
-
-            <p>Despertos de alto nível são frequentemente convocados (ou obrigados) a participar da defesa durante os Surtos. Alguns facções oferecem grandes recompensas. Outras simplesmente sequestram ou chantageiam quem tem poder suficiente para fazer diferença.</p>
-
-            <p>Muitos grupos de Despertos planejam suas maiores incursões justamente nos anos que antecedem um Surto, na esperança de ficarem mais fortes antes da próxima onda. Outros fazem o oposto: descem das torres e voltam para as cidadelas para proteger o que resta da humanidade.</p>
-
-            <div class="system-card">
-                <strong>O Dilema dos Despertos</strong><br><br>
-                Quanto mais você sobe, mais forte você fica… e mais forte fica o próximo Surto. Alguns Despertos carregam essa culpa pelo resto da vida. Outros decidem que a única forma de sobreviver é continuar subindo, não importa o preço que o mundo pague.
-            </div>
-
-            <h3>O Que os Jogadores Sabem</h3>
-            <p>Todo Desperto que já viveu um Surto (ou ouviu relatos confiáveis) sabe de algumas verdades básicas:</p>
-
-            <ul>
-                <li>Os Surtos não são iguais. Alguns são ondas diretas de monstros. Outros são mais sutis e traiçoeiros (como o Surto do Silêncio).</li>
-                <li>Quanto maior o progresso humano em uma torre específica, mais forte será o Surto que ela liberará.</li>
-                <li>Não existe forma conhecida de impedir um Surto, exceto uma: dominar completamente a torre. Enquanto houver andares não conquistados, a torre continuará liberando Surtos equivalentes ao seu andar mais alto ainda não dominado.</li>
-                <li>Se todos os andares de uma torre forem vencidos e controlados, ela deixaria de gerar Surtos. Essa é a única forma conhecida de silenciar permanentemente uma torre.</li>
-                <li>Após cada Surto, o mundo fica um pouco pior. Territórios são perdidos. Facções enfraquecem. A humanidade recua.</li>
-            </ul>
-
-            <p>Por isso muitos veteranos dizem a mesma frase, repetida como um mantra sombrio:</p>
-
-            <p class="highlight" style="display:block; margin:1rem 0; padding:0.8rem 1rem; font-style:italic;">
-                “Subir não é ambição. É desespero disfarçado de esperança.”
-            </p>
-        </section>
+        
 
         <div class="section-divider"></div>
 
@@ -21357,7 +21496,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong>Exposição prolongada:</strong> a cada <strong>3 dias contínuos na Névoa</strong>, cada personagem faz uma <strong>Salvaguarda de Alma CD 13</strong> ou ganha <strong>+1 de Corrupção</strong>. A Névoa sussurra — e depois de tempo suficiente, você começa a responder.
         </div>
 
-        <h3 id="sanidade">Sistema de Sanidade</h3>
+        </section>
+
+<section id="sanidade">
+            <h1>Sanidade e Corrupção — O Preço da Alma</h1>
         <p>A Sanidade é a sua capacidade de continuar sendo você mesmo diante do impossível. As Torres não destroem apenas o corpo — elas comem a mente, devoram memórias, distorcem o que você ama e transformam o familiar em pesadelo.</p>
 
         <p>Quanto mais tempo você passa dentro delas, mais a linha entre o que é real e o que a Torre quer que você veja começa a se borrar.</p>
@@ -21456,7 +21598,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="section-divider"></div>
 
-        <h3 id="relacionamentos">Relacionamentos e Intimidade</h3>
+        
+        </section>
+
+<section id="relacionamentos">
+            <h1>Relacionamentos — Laços que a Torre Cobra</h1>
 
         <p>Em um mundo onde a Torre tenta quebrar tudo que é humano, os laços que as pessoas formam entre si se tornam uma das poucas coisas que ainda valem a pena defender. O amor, a amizade profunda e a confiança cega são tanto uma fonte de força quanto uma das maiores fraquezas que um Desperto pode carregar.</p>
 
@@ -21496,6 +21642,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong>Nota importante:</strong> Este sistema existe para criar drama, tensão e momentos memoráveis. Nunca force um relacionamento romântico ou íntimo entre personagens de jogadores sem consentimento explícito e contínuo de todos os envolvidos. Laços platônicos, de amizade profunda ou de "família encontrada" são tão válidos e poderosos quanto os românticos — e muitas vezes mais trágicos neste mundo.
         </div>
 
+        
         </section>
 
         <!-- FECHAMENTO FINAL -->
