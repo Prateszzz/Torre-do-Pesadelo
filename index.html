@@ -5374,9 +5374,11 @@ const PERICIAS_DEF = [
   {nome:'Atletismo',attr:'FOR'},{nome:'Luta',attr:'DES'},{nome:'Acrobacia',attr:'DES'},
   {nome:'Furtividade',attr:'DES'},{nome:'Pontaria',attr:'DES'},{nome:'Prestidigitação',attr:'DES'},
   {nome:'Reflexos',attr:'DES'},{nome:'Fortitude',attr:'VIG'},{nome:'Integridade',attr:'VIG'},
+  {nome:'Sobrevivência',attr:'VIG'},
   {nome:'Intuição',attr:'INT'},{nome:'Medicina',attr:'INT'},{nome:'Percepção',attr:'INT'},
   {nome:'Astúcia',attr:'INT'},{nome:'Investigação',attr:'INT'},{nome:'História',attr:'INT'},
-  {nome:'Ofícios',attr:'INT'},{nome:'Religião',attr:'INT'},{nome:'Magia',attr:'ALM'},
+  {nome:'Ofícios',attr:'INT'},{nome:'Religião',attr:'INT'},{nome:'Navegação',attr:'INT'},
+  {nome:'Magia',attr:'ALM'},
   {nome:'Feitiçaria',attr:'ALM'},{nome:'Vontade',attr:'ALM'},{nome:'Persuasão',attr:'CAR'},
   {nome:'Enganação',attr:'CAR'},{nome:'Intimidação',attr:'CAR'},{nome:'Performance',attr:'CAR'},
 ];
@@ -13190,7 +13192,7 @@ function atualizarSlotsPericia() {
 }
 
 // ─── TABELA DE TODAS AS PERÍCIAS ─────────────────────────────────────────
-// Mostra as 24 perícias da ficha (PERICIAS_DEF) de uma vez, cada uma já
+// Mostra as 26 perícias da ficha (PERICIAS_DEF) de uma vez, cada uma já
 // com o bônus calculado pro personagem atual — não só as que estão num
 // slot de Maestria/Especialização. Quem está num slot usa a MESMA fórmula
 // configurada pelo GM (per-mt/per-es) que os slots já usam; quem não está
