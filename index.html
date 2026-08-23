@@ -17194,12 +17194,24 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="toc-label">VIII. Sanidade e Corrupção</span>
         <ul>
             <li><a href="#sanidade">Sanidade e Corrupção</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-faixas">As Faixas de Sanidade</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-eventos">Eventos de Sanidade</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#corrupcao-estagios">Estágios de Corrupção</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#corrupcao-marcas">Marcas da Corrupção</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#corrupcao-purificacao">Ritual de Purificação</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-recuperacao">Recuperação</a></li>
         </ul>
 
         <!-- IX. RELACIONAMENTOS -->
         <span class="toc-label">IX. Relacionamentos</span>
         <ul>
             <li><a href="#relacionamentos">Relacionamentos e Intimidade</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-niveis">Os Quatro Níveis</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-criar-evoluir">Como Criar e Evoluir</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-eventos">Eventos de Relacionamento</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-perda">Perda de um Ente Querido</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-faccoes">Facções</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-barmans">Barmans</a></li>
         </ul>
 
         <!-- Botão de saída — sempre visível ao final da lista de seções -->
@@ -17344,6 +17356,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VIII. Sanidade e Corrupção</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sanidade">Sanidade e Corrupção</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-faixas">As Faixas de Sanidade</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-eventos">Eventos de Sanidade</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#corrupcao-estagios">Estágios de Corrupção</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#corrupcao-marcas">Marcas da Corrupção</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#corrupcao-purificacao">Ritual de Purificação</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-recuperacao">Recuperação</a></li>
                         </ul>
                     </div>
 
@@ -17352,6 +17370,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IX. Relacionamentos</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#relacionamentos">Relacionamentos e Intimidade</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-niveis">Os Quatro Níveis</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-criar-evoluir">Como Criar e Evoluir</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-eventos">Eventos de Relacionamento</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-perda">Perda de um Ente Querido</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-faccoes">Facções</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-barmans">Barmans</a></li>
                         </ul>
                     </div>
 
@@ -21519,7 +21543,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <p><strong>Valor Inicial de Sanidade:</strong> 10 + Modificador de Intelecto + Modificador de Carisma.</p>
 
-        <h4>O que acontece quando você perde Sanidade</h4>
+        <h4 id="sanidade-faixas">O que acontece quando você perde Sanidade</h4>
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -21536,6 +21560,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </table>
         </div>
 
+        <h4 id="sanidade-ruptura">Tabela de Ruptura</h4>
         <div class="system-card">
             <strong>Tabela de Ruptura (1d8):</strong><br><br>
             <strong>1 – Fúria Cega:</strong> O personagem ataca indiscriminadamente (aliados incluídos) por 1d6 rodadas.<br>
@@ -21549,7 +21574,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <em>Consistente com a tabela completa do Livro do Mestre.</em>
         </div>
 
-        <h4>Eventos de Sanidade</h4>
+        <h4 id="sanidade-eventos">Eventos de Sanidade</h4>
         <p>Nem toda perda de Sanidade vem de um teste falho. Às vezes a própria Torre decide cobrar — ou o trauma deixa uma cicatriz que não aparece na hora. Quando o Mestre quiser um efeito de Sanidade sem rolar um teste completo, role na tabela abaixo:</p>
         <div class="table-wrapper">
             <table>
@@ -21566,7 +21591,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </table>
         </div>
 
-        <h4>Como a Sanidade é perdida</h4>
+        <h4 id="sanidade-perda">Como a Sanidade é perdida</h4>
         <p>Sempre que você falha em uma Salvaguarda de Intelecto ou Carisma contra medo, ilusão, influência mental ou a própria presença da Torre, role 1d4. Esse é o dano mental que você sofre.</p>
         <p>Em andares muito profundos ou situações extremamente traumáticas, o Mestre pode fazer você rolar mais dados ou causar perda automática de Sanidade.</p>
 
@@ -21583,14 +21608,14 @@ document.addEventListener('DOMContentLoaded', () => {
             • Às vezes, o melhor a fazer é sair da Torre por um tempo. Descanso verdadeiro fora dela é a forma mais eficaz de se recompor.
         </div>
 
-        <h3>Sistema de Corrupção</h3>
+        <h3 id="corrupcao-sistema">Sistema de Corrupção</h3>
         <p>A Corrupção é o que acontece quando você começa a se parecer demais com as coisas que caçam você.</p>
 
         <p>Ela não é apenas "ficar mau". É o seu corpo e sua Alma se adaptando ao ambiente mais hostil que existe. Quanto mais você usa o poder das Torres contra elas, mais elas deixam marcas permanentes em você.</p>
 
         <p>Alguns Despertos veem a Corrupção como um atalho para poder. Outros a temem mais que a morte.</p>
 
-        <h4>Estágios de Corrupção</h4>
+        <h4 id="corrupcao-estagios">Estágios de Corrupção</h4>
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -21606,7 +21631,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </table>
         </div>
 
-        <h4>Marcas da Corrupção</h4>
+        <h4 id="corrupcao-marcas">Marcas da Corrupção</h4>
         <p>A Corrupção não é invisível. Cada estágio deixa marcas físicas e comportamentais que os outros percebem — e que a Torre reconhece. Role 1d12 (ou escolha) quando o personagem entra em um novo estágio:</p>
         <div class="table-wrapper">
             <table>
@@ -21630,7 +21655,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </table>
         </div>
 
-        <h4>Corrupção e a Torre</h4>
+        <h4 id="corrupcao-torre">Corrupção e a Torre</h4>
         <p>A Corrupção não afeta só o seu corpo — ela muda como a Torre (e tudo dentro dela) te enxerga.</p>
         <div class="system-card">
             <strong>Corrompido (6+):</strong><br>
@@ -21643,7 +21668,7 @@ document.addEventListener('DOMContentLoaded', () => {
             • <strong>Monstros comuns hesitam</strong> em atacá-lo (1×/cena, um monstro de Tier baixo pode recuar), mas monstros de alta Qualidade o caçam com mais afinco.
         </div>
 
-        <h4>Ritual de Purificação</h4>
+        <h4 id="corrupcao-purificacao">Ritual de Purificação</h4>
         <p>Existe uma forma de reduzir a Corrupção — mas a Torre nunca deixa sair de graça.</p>
         <div class="system-card">
             <strong>Ritual de Purificação:</strong><br><br>
@@ -21655,7 +21680,7 @@ document.addEventListener('DOMContentLoaded', () => {
             • <strong>Falha crítica:</strong> <strong>+1 de Corrupção</strong> e a Torre <strong>"anota seu nome"</strong> — <strong>+1 no Relógio de Atenção</strong>.
         </div>
 
-        <h4>Sanidade × Corrupção</h4>
+        <h4 id="sanidade-corrupcao">Sanidade × Corrupção</h4>
         <p>Os dois sistemas se alimentam. Uma Alma frágil se corrompe mais fácil; um corpo corrompido resiste menos ao horror.</p>
         <div class="lore-box">
             <strong>Regras cruzadas:</strong><br><br>
@@ -21671,7 +21696,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong>A Verdade Incômoda:</strong> A Ascensão e a Corrupção são dois caminhos que raramente convivem por muito tempo. Quanto mais você sobe, mais a Torre tenta te puxar para baixo. Muitos dos maiores heróis da humanidade terminaram como as piores coisas que já existiram dentro das Torres.
         </div>
 
-        <h4>Recuperação de Sanidade e Redução de Corrupção</h4>
+        <h4 id="sanidade-recuperacao">Recuperação de Sanidade e Redução de Corrupção</h4>
         <p>Curar a mente e a Alma é difícil — mas não impossível. Os números abaixo substituem a descrição narrativa: use-os como referência rápida.</p>
         <div class="system-card">
             <strong>Recuperação de Sanidade:</strong><br><br>
@@ -21706,7 +21731,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <p>Em um mundo onde a Torre tenta quebrar tudo que é humano, os laços que as pessoas formam entre si se tornam uma das poucas coisas que ainda valem a pena defender. O amor, a amizade profunda e a confiança cega são tanto uma fonte de força quanto uma das maiores fraquezas que um Desperto pode carregar.</p>
 
-        <h4>Relacionamentos e o Perigo do Apego</h4>
+        <h4 id="rel-perigo-apego">Relacionamentos e o Perigo do Apego</h4>
         <p>Em um mundo onde a Torre tenta quebrar tudo que é humano, os laços que você forma com outras pessoas se tornam uma das poucas coisas que ainda valem a pena defender. Amizade profunda, amor, lealdade — tudo isso é fonte de força... e também uma das maiores fraquezas que um Desperto pode carregar.</p>
 
         <p>Quanto mais forte o vínculo, mais a Torre pode tentar usá-lo contra vocês. Ela odeia o que é humano e vai explorar qualquer brecha emocional que encontrar: visões, ilusões, ecos da pessoa amada, ofertas terríveis em momentos de desespero, ou a possibilidade de forçar você a enfrentar alguém que já foi importante para você, agora corrompido.</p>
@@ -21720,7 +21745,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Sanidade, Corrupção e o risco constante da Torre são os verdadeiros medidores de quanto tempo você ainda tem. Quanto mais você sobe, mais esses três sistemas vão apertar. Não existe herói que suba para sempre sem pagar um preço terrível.
         </div>
 
-        <h4>Os Quatro Níveis de Relacionamento</h4>
+        <h4 id="rel-niveis">Os Quatro Níveis de Relacionamento</h4>
         <p>Todo laço começa pequeno e pode crescer — ou quebrar. Os níveis abaixo definem o que um relacionamento significa mecanicamente:</p>
         <div class="table-wrapper">
             <table>
@@ -21736,7 +21761,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </table>
         </div>
 
-        <h4>Como Criar e Evoluir um Laço</h4>
+        <h4 id="rel-criar-evoluir">Como Criar e Evoluir um Laço</h4>
         <p>Laços não aparecem prontos. Eles crescem com tempo, favores e momentos compartilhados — e podem regredir quando são traídos.</p>
         <div class="system-card">
             <strong>Evolução Nv 1 → Nv 4:</strong><br><br>
@@ -21751,7 +21776,7 @@ document.addEventListener('DOMContentLoaded', () => {
             • <strong>Zerar o laço</strong> (traição extrema ou perda irreversível): o laço <strong>quebra</strong> — você perde <strong>1d6 de Sanidade</strong> e todos os bônus do nível.
         </div>
 
-        <h4>Eventos de Relacionamento</h4>
+        <h4 id="rel-eventos">Eventos de Relacionamento</h4>
         <p>Quando o Mestre quiser dar vida a um laço sem planejar tudo, role na tabela abaixo:</p>
         <div class="table-wrapper">
             <table>
@@ -21777,7 +21802,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><strong>Traumas compartilhados</strong> (perder alguém juntos, testemunhar a corrupção de um amigo, etc.) podem criar laços muito fortes, mas também muito frágeis.</li>
         </ul>
 
-        <h4>Perda de um Ente Querido</h4>
+        <h4 id="rel-perda">Perda de um Ente Querido</h4>
         <p>Quando alguém que você ama morre ou é perdido de forma irreversível, o impacto é devastador:</p>
         <ul>
             <li>Perca imediata de todos os bônus de PV e STA concedidos pelo relacionamento.</li>
@@ -21797,7 +21822,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong>Luto:</strong> por <strong>1d4 semanas</strong>, o personagem sofre <strong>Desvantagem em testes de Sanidade</strong> e pode ter visões ou alucinações da pessoa perdida. Aliados próximos podem ajudar a encurtar o luto com apoio real (roleplay + testes de Carisma).
         </div>
 
-        <h4>Relacionamentos com Facções</h4>
+        <h4 id="rel-faccoes">Relacionamentos com Facções</h4>
         <p>Nem todo laço é pessoal. Sua reputação com uma facção (Consórcio Carmesim, Ordem do Véu Branco, Círculo de Cinzas, Irmandade do Último Suspiro) funciona como um relacionamento coletivo:</p>
         <div class="table-wrapper">
             <table>
@@ -21817,7 +21842,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <p>A reputação sobe com missões, favores e presentes; cai com traições, dívidas não pagas e escolhas contra os interesses da facção.</p>
 
-        <h4>Relacionamentos com Barmans</h4>
+        <h4 id="rel-barmans">Relacionamentos com Barmans</h4>
         <p>Os Barmans são a Rede — e a Rede é um laço coletivo que quase todo Desperto carrega.</p>
         <div class="system-card">
             <strong>A Rede como laço:</strong><br><br>
