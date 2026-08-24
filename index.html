@@ -57,6 +57,7 @@
   --gold: #b8972a;
   --gold-light: #e0bc4a;
   --gold-glow: rgba(224,188,74,.3);
+  --gold-rgb: 184,151,42;      /* = #b8972a */
 
   /* ─── AZUL ARCANO (novo — para poder/mana/energia) ─── */
   --arcane: #4a6cc0;
@@ -446,6 +447,7 @@ button { transition: transform var(--dur-fast) var(--ease), filter var(--dur-fas
 .topbar { position:sticky; top:0; z-index:300; background:rgba(10,9,13,.92); backdrop-filter:blur(14px) saturate(1.2); -webkit-backdrop-filter:blur(14px) saturate(1.2); border-bottom:1px solid var(--border); display:none; align-items:center; justify-content:space-between; padding:.5rem .75rem; padding-top:calc(.5rem + var(--safe-top)); gap:.5rem; }
 .topbar-logo { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:#f0f0f5; letter-spacing:.3px; flex:1; text-align:center; }
 .topbar-menu-btn { background:none; border:none; color:var(--silver); cursor:pointer; padding:.4rem; display:flex; align-items:center; justify-content:center; border-radius:var(--r-sm); transition:color var(--dur), background var(--dur); }
+.topbar-menu-btn:hover { background:rgba(var(--accent-rgb),.08); color:var(--accent-light); }
 .topbar-menu-btn:active { background:rgba(255,255,255,.06); color:var(--accent-light); }
 .hamburger { background:none; border:none; color:var(--text); font-size:1.6rem; cursor:pointer; padding:.3rem; }
 
@@ -527,6 +529,50 @@ main { padding:2rem 2rem 6rem; max-width:100%; box-sizing:border-box; overflow-x
 .hero-tag { border:1px solid var(--border); padding:.35rem .9rem; font-size:.78rem; color:var(--text-muted); letter-spacing:1px; }
 .hero-cta { background:var(--accent); color:#fff; border:none; padding:.8rem 2rem; font-family:'Playfair Display',serif; font-size:1rem; cursor:pointer; letter-spacing:1px; transition:background .2s; }
 .hero-cta:hover { background:var(--accent-light); }
+
+/* Grupo de CTAs da landing: ação principal + instalação secundária */
+.hero-cta-group { display:flex; flex-wrap:wrap; gap:1.1rem; justify-content:center; align-items:stretch; width:100%; }
+.hero-cta-secondary {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  padding: .8rem 2rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+.hero-cta-secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 38%, rgba(var(--gold-rgb), .14) 50%, transparent 62%);
+  transform: translateX(-130%);
+  transition: transform .7s var(--ease-out);
+  pointer-events: none;
+}
+.hero-cta-secondary:hover {
+  background: rgba(var(--gold-rgb), .10);
+  border-color: var(--gold-light);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px var(--gold-glow);
+}
+.hero-cta-secondary:hover::before { transform: translateX(130%); }
+.hero-cta-secondary:active { transform: translateY(0); box-shadow: none; }
+.hero-cta-secondary .ic { width: 1.15em; height: 1.15em; flex-shrink: 0; opacity: .9; }
+@media (max-width:480px) {
+  .hero-cta-group { flex-direction: column; width: 100%; max-width: 320px; gap: .85rem; }
+  .hero-cta-group .hero-cta,
+  .hero-cta-group .hero-cta-secondary { width: 100%; display: flex; align-items: center; justify-content: center; }
+}
 
 .divider { height:1px; background:linear-gradient(to right,transparent,var(--accent),transparent); margin:3rem 0; opacity:.4; }
 h1,h2,h3,h4 { font-family:'Playfair Display',serif; color:#f0f0f5; }
@@ -4861,10 +4907,12 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
         <p style="color:var(--text-muted);max-width:520px;margin-bottom:2rem;font-size:.95rem;">
           Bem-vindo, Desperto. Este portal contém tudo que você precisa para criar seu personagem, entender as mecânicas e registrar sua progressão dentro das Torres.
         </p>
-        <button class="hero-cta" id="hero-cta-btn" onclick="navTo(&#39;ficha&#39;)">Acessar Minha Ficha</button>
-        <button class="hero-cta" id="btn-instalar-app-landing" onclick="instalarApp()" style="background:none;border:1px solid var(--gold);color:var(--gold-light);margin-left:.6rem;display:none">
-          <svg class="ic" style="width:1rem;height:1rem;vertical-align:-2px;margin-right:.4rem"><use href="#ic-download"></use></svg> Instalar App
-        </button>
+        <div class="hero-cta-group">
+          <button class="hero-cta" id="hero-cta-btn" onclick="navTo(&#39;ficha&#39;)">Acessar Minha Ficha</button>
+          <button class="hero-cta-secondary" id="btn-instalar-app-landing" onclick="instalarApp()" aria-label="Instalar App" title="Instalar o app no dispositivo" style="display:none">
+            <svg class="ic"><use href="#ic-download"></use></svg> Instalar App
+          </button>
+        </div>
       </div>
     </section>
 
