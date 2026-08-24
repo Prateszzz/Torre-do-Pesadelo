@@ -14325,7 +14325,7 @@ const TABELA_CRITICO_FALHA = [
   { n:13, nome:'Golpe Defletido', efeito:'O alvo ganha +2 de CA contra você até o fim do combate.' },
   { n:14, nome:'Postura Aberta', efeito:'Você sofre Desvantagem em Defesa até o início do seu próximo turno.' },
   { n:15, nome:'Reação Alheia', efeito:'O alvo pode realizar 1 Ataque de Oportunidade contra você (sem gastar Reação).' },
-  { n:16, nome:'Esforço Excessivo', efeito:'Você sofre 1d4 de dano de Sobrecarga (HP direto).' },
+  { n:16, nome:'Esforço Excessivo', efeito:'Você sofre 1d4 de dano de Sobrecarga (PV direto).' },
   { n:17, nome:'Puxão', efeito:'Uma criatura o agarra (Salvaguarda de Força para escapar).' },
   { n:18, nome:'Voo', efeito:'Você é deslocado 1 zona na direção do golpe.' },
   { n:19, nome:'Fratura Menor', efeito:'-1 em testes de Força ou Vigor até descanso completo.' },
@@ -14386,7 +14386,7 @@ const TABELA_CRITICO_FALHA = [
   { n:74, nome:'Colapso da Alma', efeito:'Você fica à beira da Ruptura: perde 1d6 de Sanidade e 1 de Corrupção.' },
   { n:75, nome:'Morte Branca', efeito:'Você desmaia por 1d4 rodadas (PV > 0, mas inconsciente).' },
   { n:76, nome:'Ferimento Grave', efeito:'Você sofre um ferimento que exige tratamento (perícia Medicina ou descanso longo).' },
-  { n:77, nome:'Sangramento Interno', efeito:'Você perde 1d4 de HP no início de cada rodada até ser estabilizado.' },
+  { n:77, nome:'Sangramento Interno', efeito:'Você perde 1d4 de PV no início de cada rodada até ser estabilizado.' },
   { n:78, nome:'Deslocamento', efeito:'Você é arremessado para Longa distância e sofre 1d6 de dano.' },
   { n:79, nome:'Fratura Exposta', efeito:'-1 permanente em um atributo físico até tratamento sério (Mestre decide qual).' },
   { n:80, nome:'Perto da Morte', efeito:'Você cai a 0 PV em vez de falhar (se já estiver ferido, sofre 1 ferimento).' },
@@ -20223,6 +20223,29 @@ document.addEventListener('DOMContentLoaded', () => {
             • Matar e absorver diversos monstros ao longo de várias incursões é o caminho mais comum e seguro de progredir.<br>
             • Absorver um único núcleo extremamente poderoso pode acelerar bastante o processo, mas ainda assim raramente é suficiente para completar um grande salto sozinho.
         </div>
+
+        <h3>Energia por Núcleo</h3>
+        <p>Cada núcleo absorvido fornece uma quantidade fixa de energia, conforme o Tier do monstro:</p>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Núcleo</th><th>Tier</th><th>Energia</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Larva</td><td>1</td><td>10</td></tr>
+                    <tr><td>Rastejante</td><td>2</td><td>50</td></tr>
+                    <tr><td>Disforme</td><td>3</td><td>125</td></tr>
+                    <tr><td>Carnífice</td><td>4</td><td>320</td></tr>
+                    <tr><td>Profano</td><td>5</td><td>750</td></tr>
+                    <tr><td>Aberrante</td><td>6</td><td>1.700</td></tr>
+                    <tr><td>Ruína</td><td>7</td><td>4.200</td></tr>
+                    <tr><td>Arcaico</td><td>8</td><td>9.500</td></tr>
+                    <tr><td>Calamidade</td><td>9</td><td>21.000</td></tr>
+                    <tr><td>Inominável</td><td>10</td><td>50.000</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>A energia acumulada alimenta a Espiral da Ascensão — veja a tabela de Níveis de Ascensão acima.</p>
 
         <ul>
             <li><strong>Manifesto (Nível 4):</strong> Exige o acúmulo de 1.500 pontos de energia. Geralmente acontece ao consumir vários núcleos de qualidade superior ao longo do tempo. É quando o Aspecto desperta de verdade.</li>
