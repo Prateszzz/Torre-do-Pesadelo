@@ -10025,6 +10025,17 @@ function _wizardMontarDados() {
     numTecnicas: tecnicas.length,
     attrPrefs: { ordem: ['for','des','vig','int','alm','car'], favoritos: [] }
   };
+  // Itens iniciais do Antecedente (armas/itens/consumíveis/materiais) —
+  // aplicados diretamente no objeto de dados com as chaves itemN-*/armN-*.
+  const itensAnt = w.antecedente ? ANTECEDENTES_ITENS[w.antecedente] : null;
+  if (itensAnt) {
+    let nArm = 0, nItem = 0, nCons = 0, nMat = 0;
+    (itensAnt.armas || []).forEach(a => { nArm++; d['arm' + nArm + '-nome'] = a.nome || ''; d['arm' + nArm + '-dano'] = a.dano || ''; d['arm' + nArm + '-tipo'] = a.tipo || ''; });
+    (itensAnt.itens || []).forEach(it => { nItem++; d['item' + nItem + '-nome'] = it.nome || ''; d['item' + nItem + '-qtd'] = it.qtd != null ? String(it.qtd) : ''; d['item' + nItem + '-esp'] = it.esp != null ? String(it.esp) : ''; d['item' + nItem + '-desc'] = it.desc || ''; });
+    (itensAnt.cons || []).forEach(c => { nCons++; d['cons' + nCons + '-nome'] = c.nome || ''; d['cons' + nCons + '-qtd'] = c.qtd != null ? String(c.qtd) : ''; d['cons' + nCons + '-efei'] = c.efei || ''; });
+    (itensAnt.mats || []).forEach(m => { nMat++; d['mat' + nMat + '-nome'] = m.nome || ''; d['mat' + nMat + '-qtd'] = m.qtd != null ? String(m.qtd) : ''; });
+  }
+  return d;
 }
 
 function _wizardFinalizar() {
@@ -11229,6 +11240,26 @@ const ANTECEDENTES_BONUS = {
   'Alquimista de Essências': { rolagem: 'doses' }      // 2d4 doses (item)
 };
 
+// Itens iniciais de cada Antecedente (armas/itens/consumíveis/materiais).
+// Antecedentes sem item (Fugitivo, Filho da Rede, Desertor, Marcado,
+// Construtor) não entram no mapa.
+const ANTECEDENTES_ITENS = {
+  'Sobrevivente de Surto': { armas: [{ nome:'Espada Curta', dano:'1d8', tipo:'Cortante' }] },
+  'Aprendiz de Ferreiro das Espirais': { itens: [{ nome:'Adaga reforçada', qtd:1, esp:20, desc:'Item de forja inicial' }] },
+  'Guarda de Muralha': { itens: [{ nome:'Armadura de Couro', qtd:1, esp:40, desc:'+1 CA (armadura leve)' }] },
+  'Predador de Baixo Nível': { mats: [{ nome:'Dentes/Ossos/Peles', qtd:'1d4' }] },
+  'Estudioso de Ruínas': { itens: [{ nome:'Diário de ruínas', qtd:1, esp:0, desc:'1×/incursão: Vantagem num teste de conhecimento OU 1 dica do Mestre' }] },
+  'Curandeiro de Feridas da Torre': { itens: [{ nome:'Kit de Medicina', qtd:1, esp:60, desc:'5 usos' }] },
+  'Gladiador das Torres da Disputa': { mats: [{ nome:'Sangue Temperado', qtd:1 }] },
+  'Testemunha da Devoração': { itens: [{ nome:'Fragmento da Devoração', qtd:1, esp:0, desc:'Núcleo rachado / marca / nome' }] },
+  'Filho de Ascendido': { itens: [{ nome:'Item herdado', qtd:1, esp:0, desc:'Foco +1 num tipo de teste OU material de forja Rank C' }] },
+  'Alquimista de Essências': { cons: [{ nome:'Poção de Cura Menor', qtd:'1d4', efei:'1d6+1 PV' }, { nome:'Tônico de STA', qtd:'1d4', efei:'1d6 STA' }] },
+  'Cativo da Torre': { itens: [{ nome:'Lembrança da Torre', qtd:1, esp:0, desc:'Marca/segredo' }] },
+  'Espião de Cidadela': { itens: [{ nome:'Identidade falsa', qtd:1, esp:0, desc:'2 documentos + 1 contato de fachada' }] },
+  'Colecionador de Últimas Palavras': { itens: [{ nome:'Livro de ecos', qtd:1, esp:0, desc:'1×/incursão = 1 pista' }] },
+  'Catador de Fragmentos': { mats: [{ nome:'Material bruto', qtd:'3d6×10 Esp' }] }
+};
+
 // Rótulos curtos dos bônus para o resumo dinâmico (ex.: "+2 PE, +1 Corrupção").
 const _ANTECEDENTES_BONUS_LABELS = {
   bPe: '+2 PE', corrupcao: '+1 Corrupção', ticks: '+1 Atenção da Torre',
@@ -11280,6 +11311,71 @@ function aplicarBonusesAntecedente(nomeAntecedente, opts) {
   return true;
 }
 
+// Aplica os ITENS INICIAIS do antecedente na ficha (armas/itens/consumíveis/
+// materiais). Anti-duplicação: flag tp_antecedente_itens_<user>_<personagem>
+// garante 1× por personagem. Espíritos do Catador (3d6×10) só se o campo
+// estiver vazio/zerado — não sobrescreve.
+function aplicarItensAntecedente(nomeAntecedente) {
+  const itens = nomeAntecedente ? ANTECEDENTES_ITENS[nomeAntecedente] : null;
+  if (!itens) return;
+  const flag = 'tp_antecedente_itens_' + (usuarioAtual || '') + '_' + (personagemAtual || '');
+  if (localStorage.getItem(flag) === '1') return;
+
+  const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+
+  // Armas (addArmaRow numera via _armaCounter).
+  (itens.armas || []).forEach(a => {
+    if (typeof addArmaRow === 'function') addArmaRow();
+    const n = _armaCounter;
+    if (a.nome) setVal('arm' + n + '-nome', a.nome);
+    if (a.dano) setVal('arm' + n + '-dano', a.dano);
+    if (a.tipo) setVal('arm' + n + '-tipo', a.tipo);
+  });
+
+  // Itens (addInvRow numera via _invCounters['item']).
+  (itens.itens || []).forEach(it => {
+    if (typeof addInvRow === 'function') addInvRow('inv-itens-tbody', 'item', ['nome','qtd','esp','desc'], ['Nome do Item','Qtd','Esp','Descrição']);
+    const n = _invCounters['item'];
+    if (it.nome) setVal('item' + n + '-nome', it.nome);
+    if (it.qtd != null) setVal('item' + n + '-qtd', it.qtd);
+    if (it.esp != null) setVal('item' + n + '-esp', it.esp);
+    if (it.desc) setVal('item' + n + '-desc', it.desc);
+  });
+
+  // Consumíveis.
+  (itens.cons || []).forEach(c => {
+    if (typeof addInvRow === 'function') addInvRow('inv-cons-tbody', 'cons', ['nome','qtd','efei'], ['Nome','Qtd','Efeito']);
+    const n = _invCounters['cons'];
+    if (c.nome) setVal('cons' + n + '-nome', c.nome);
+    if (c.qtd != null) setVal('cons' + n + '-qtd', c.qtd);
+    if (c.efei) setVal('cons' + n + '-efei', c.efei);
+  });
+
+  // Materiais.
+  (itens.mats || []).forEach(m => {
+    if (typeof addInvRow === 'function') addInvRow('inv-mat-tbody', 'mat', ['nome','qtd'], ['Material','Qtd']);
+    const n = _invCounters['mat'];
+    if (m.nome) setVal('mat' + n + '-nome', m.nome);
+    if (m.qtd != null) setVal('mat' + n + '-qtd', m.qtd);
+  });
+
+  // Espíritos do Catador (3d6×10) — só se o campo estiver vazio/zerado.
+  const bonus = ANTECEDENTES_BONUS[nomeAntecedente];
+  if (bonus && bonus.rolagem === 'espiritos') {
+    const espEl = document.getElementById('inv-espiritos');
+    if (espEl) {
+      const atual = parseInt(String(espEl.value).replace(/\D/g, ''), 10) || 0;
+      if (atual === 0) {
+        const rolagem = (Math.floor(Math.random()*6)+1) + (Math.floor(Math.random()*6)+1) + (Math.floor(Math.random()*6)+1);
+        espEl.value = String(rolagem * 10);
+      }
+    }
+  }
+
+  localStorage.setItem(flag, '1');
+  if (typeof salvarLocal === 'function') salvarLocal();
+}
+
 // Reverte os efeitos fixos de um antecedente (usado na troca limpa do seletor).
 function reverterBonusesAntecedente(nomeAntecedente) {
   const bonus = nomeAntecedente ? ANTECEDENTES_BONUS[nomeAntecedente] : null;
@@ -11327,6 +11423,9 @@ function migrarBonusesAntecedente(d) {
   const flag = 'tp_antecedente_bonus_migrado_' + (usuarioAtual || '') + '_' + (personagemAtual || '');
   if (localStorage.getItem(flag) === '1') return;
   const aplicou = aplicarBonusesAntecedente(nome, { tipo: 'migracao' });
+  // Também aplica os itens iniciais do antecedente (flag própria interna
+  // tp_antecedente_itens_... evita duplicação).
+  if (typeof aplicarItensAntecedente === 'function') aplicarItensAntecedente(nome);
   if (aplicou) {
     localStorage.setItem(flag, '1');
     salvarLocal();
@@ -11344,6 +11443,8 @@ function trocarAntecedente(sel) {
   const anterior = _antecedenteAnterior || '';
   if (anterior && anterior !== novo) reverterBonusesAntecedente(anterior);
   if (novo && novo !== anterior) aplicarBonusesAntecedente(novo, { tipo: 'selecao' });
+  // Aplica os itens iniciais do antecedente (armas/itens/consumíveis/materiais).
+  if (novo && novo !== anterior) aplicarItensAntecedente(novo);
   _antecedenteAnterior = novo;
   // Pré-preenche o Relacionamento Nv1 com o do antecedente selecionado
   // (mesmo mapa usado pelo wizard — o jogador pode editar depois).
