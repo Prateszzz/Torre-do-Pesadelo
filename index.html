@@ -4554,6 +4554,7 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
     <symbol id="ic-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M6 7l1 13h10l1-13"></path></symbol>
     <symbol id="ic-check" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></symbol>
     <symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></symbol>
+    <symbol id="ic-download" viewBox="0 0 24 24"><path d="M12 4v10M7 10l5 5 5-5" stroke-width="1.4"></path><path d="M5 19h14" stroke-width="1.4"></path></symbol>
     <symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></symbol>
     <symbol id="ic-minus" viewBox="0 0 24 24"><path d="M5 12h14"></path></symbol>
     <symbol id="ic-chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></symbol>
@@ -4740,6 +4741,9 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
       <svg class="ic ic-lg"><use href="#ic-menu"></use></svg>
     </button>
     <span class="topbar-logo">Torre do Pesadelo</span>
+    <button class="topbar-menu-btn" id="btn-instalar-app" onclick="instalarApp()" aria-label="Instalar App" title="Instalar o app no dispositivo" style="display:none">
+      <svg class="ic ic-lg"><use href="#ic-download"></use></svg>
+    </button>
     <button class="topbar-menu-btn" onclick="navTo(&#39;secao-ranking&#39;)" aria-label="Ranking">
       <svg class="ic ic-lg"><use href="#ic-lendas"></use></svg>
     </button>
@@ -4858,6 +4862,9 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
           Bem-vindo, Desperto. Este portal contém tudo que você precisa para criar seu personagem, entender as mecânicas e registrar sua progressão dentro das Torres.
         </p>
         <button class="hero-cta" id="hero-cta-btn" onclick="navTo(&#39;ficha&#39;)">Acessar Minha Ficha</button>
+        <button class="hero-cta" id="btn-instalar-app-landing" onclick="instalarApp()" style="background:none;border:1px solid var(--gold);color:var(--gold-light);margin-left:.6rem;display:none">
+          <svg class="ic" style="width:1rem;height:1rem;vertical-align:-2px;margin-right:.4rem"><use href="#ic-download"></use></svg> Instalar App
+        </button>
       </div>
     </section>
 
@@ -24234,5 +24241,94 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
+
+  // ─── INSTALAR APP (PWA) ───
+  // Guarda o prompt nativo de instalação (Chrome/Edge/Android).
+  let _deferredPrompt = null;
+  const _btnInstalar = document.getElementById('btn-instalar-app');
+  const _btnInstalarLanding = document.getElementById('btn-instalar-app-landing');
+
+  // Detecta iOS/Safari (não suporta beforeinstallprompt).
+  function _isIOS() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  // Mostra os botões de instalação (sempre visíveis — o clique decide o caminho).
+  function _mostrarBotoesInstalar() {
+    if (_btnInstalar) _btnInstalar.style.display = '';
+    if (_btnInstalarLanding) _btnInstalarLanding.style.display = '';
+  }
+
+  // Captura o beforeinstallprompt (Chrome/Edge/Android).
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    _deferredPrompt = e;
+    _mostrarBotoesInstalar();
+  });
+
+  // App instalado: esconde os botões.
+  window.addEventListener('appinstalled', () => {
+    _deferredPrompt = null;
+    if (_btnInstalar) _btnInstalar.style.display = 'none';
+    if (_btnInstalarLanding) _btnInstalarLanding.style.display = 'none';
+  });
+
+  // Modal de instruções (iOS e navegadores sem suporte nativo).
+  function _mostrarInstrucoesInstalar() {
+    document.getElementById('instalar-overlay')?.remove();
+    const overlay = document.createElement('div');
+    overlay.className = 'critico-overlay';
+    overlay.id = 'instalar-overlay';
+    const ios = _isIOS();
+    const corpo = ios
+      ? '<p style="margin-bottom:.8rem">No <strong>iPhone/iPad</strong>, o app é instalado pela tela de início:</p>' +
+        '<ol style="padding-left:1.2rem;line-height:1.8">' +
+        '<li>Toque no botão <strong>Compartilhar</strong> (quadrado com seta para cima) na barra do Safari.</li>' +
+        '<li>Role até <strong>"Adicionar à Tela de Início"</strong>.</li>' +
+        '<li>Toque em <strong>Adicionar</strong>.</li>' +
+        '</ol>'
+      : '<p style="margin-bottom:.8rem">Para instalar o app no seu dispositivo:</p>' +
+        '<ol style="padding-left:1.2rem;line-height:1.8">' +
+        '<li>Abra o menu do navegador (<strong>⋮</strong> ou <strong>☰</strong>).</li>' +
+        '<li>Toque em <strong>"Instalar app"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</li>' +
+        '<li>Confirme a instalação.</li>' +
+        '</ol>';
+    overlay.innerHTML = `
+      <div class="critico-modal" style="max-width:480px;border-top-color:var(--gold)">
+        <div class="critico-header">
+          <span class="critico-titulo">Instalar o App</span>
+          <button class="critico-close" onclick="document.getElementById('instalar-overlay')?.remove()">✕</button>
+        </div>
+        <div class="critico-corpo" style="font-size:.9rem;color:var(--text);line-height:1.6">
+          ${corpo}
+          <p style="margin-top:.8rem;font-size:.8rem;color:var(--text-muted)">Depois de instalar, o app abre em tela cheia e funciona offline.</p>
+          <button onclick="document.getElementById('instalar-overlay')?.remove()" style="margin-top:1rem;background:var(--accent);border:none;color:#fff;padding:.6rem 1.4rem;font-family:inherit;font-size:.9rem;cursor:pointer;border-radius:4px">Entendi</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+  }
+
+  // Clique no botão: dispara o prompt nativo ou mostra instruções.
+  function instalarApp() {
+    if (_deferredPrompt) {
+      _deferredPrompt.prompt();
+      _deferredPrompt.userChoice.then((choice) => {
+        if (choice.outcome === 'accepted') {
+          _deferredPrompt = null;
+          if (_btnInstalar) _btnInstalar.style.display = 'none';
+          if (_btnInstalarLanding) _btnInstalarLanding.style.display = 'none';
+        } else {
+          _mostrarInstrucoesInstalar();
+        }
+      });
+    } else {
+      _mostrarInstrucoesInstalar();
+    }
+  }
+
+  // Se o navegador não dispara beforeinstallprompt (iOS/Firefox/desktop),
+  // mostra os botões mesmo assim — o clique exibe as instruções.
+  setTimeout(_mostrarBotoesInstalar, 1500);
 </script>
 </body></html>
