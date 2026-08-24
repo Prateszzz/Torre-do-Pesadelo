@@ -12988,6 +12988,35 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       <div id="forja-resumo" style="font-size:.8rem;color:var(--silver);padding:.5rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:1.2em">Bom (+1) · C Rúnica · III Mestre Ferreiro (máx Mítico)</div>
     </div>
 
+    <!-- ALQUIMIA -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Alquimia</div>
+      <div class="field-row cols-2">
+        <div class="field-group">
+          <label>Receita <span class="info-btn" style="font-size:.6rem">ⓘ<span class="tooltip">Teste de Ofícios vs CD da receita. CD 16+ exige Maestria em Ofícios. Falha = materiais perdidos. Falha crítica = ingrediente raro destruído + Salv. Alma CD 14 ou +1 Corrupção.</span></span></label>
+          <select id="select-alquimia" onchange="atualizarResumoAlquimia()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+            <option value="">Escolher receita...</option>
+            ${_opcoesAlquimia()}
+          </select>
+          <div id="alquimia-resumo" style="margin-top:.4rem;font-size:.75rem;color:var(--text-muted);line-height:1.5"></div>
+        </div>
+        <div class="field-group">
+          <label>Ação</label>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+            <button onclick="criarAlquimia()" style="background:var(--accent);border:none;color:#fff;padding:.55rem 1.1rem;font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Criar</button>
+            <button onclick="limparResultadoAlquimia()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-size:.78rem;cursor:pointer;font-family:inherit" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">Limpar</button>
+          </div>
+          <div id="alquimia-resultado" style="margin-top:.5rem;font-size:.8rem;min-height:1.2em;font-weight:bold"></div>
+        </div>
+      </div>
+      <div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)">
+        <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.4rem">Histórico de Criações</div>
+        <div id="alq-historico-lista" style="font-size:.75rem;color:var(--text-muted);line-height:1.6"></div>
+        <input type="hidden" id="alq-ultima">
+        <input type="hidden" id="alq-historico">
+      </div>
+    </div>
+
     <!-- BARMAN (contatos) -->
     <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
@@ -13703,6 +13732,8 @@ function coletarDados() {
     'xp-atual','sess-tipo','sess-qualidade','sess-xp','sess-risco-xp','sess-obs','sess-historico',
     // rituais
     'rit-ultimo','rit-historico',
+    // alquimia
+    'alq-ultima','alq-historico',
     // acampamento
     'acamp-nivel','acamp-atividade','acamp-andar','acamp-mod','acamp-rolagem',
     // forja e barmans
@@ -14638,6 +14669,140 @@ function _renderRitHistorico() {
   if (hidden) hidden.value = JSON.stringify(hist);
   if (!hist.length) { box.textContent = 'Nenhum ritual executado ainda.'; return; }
   box.innerHTML = hist.map(h => `<div>• <strong>${_escHtml(h.nome)}</strong> — ${_escHtml(h.resultado)} · custo ${_escHtml(h.custo)}</div>`).join('');
+}
+
+// ─── ALQUIMIA (sub-seção do painel Forja e Barmans) ───
+// 8 receitas: nome, CD, ingredientes (texto), efeito, tempo, venda.
+const _RECEITAS_ALQUIMIA = [
+  { nome:'Poção de Cura Menor', cd:12, ing:'Sangue Tier 1–2 + Ervas', efeito:'1d6+1 PV', tempo:'1h', venda:40 },
+  { nome:'Tônico de STA', cd:12, ing:'Fragmento D–C + água', efeito:'1d6 STA', tempo:'1h', venda:30 },
+  { nome:'Antídoto', cd:14, ing:'Glândula + ervas amargas', efeito:'Remove Envenenado', tempo:'2h', venda:50 },
+  { nome:'Óleo de Resistência', cd:14, ing:'Escama + essência', efeito:'Resistência temporária', tempo:'2h', venda:60 },
+  { nome:'Veneno', cd:14, ing:'Glândula + sangue corrompido', efeito:'Envenenado 1–3', tempo:'2–4h', venda:50 },
+  { nome:'Tônico de Essência', cd:16, ing:'Fragmento B+ + Cinzas', efeito:'1d4 PE', tempo:'4h', venda:100 },
+  { nome:'Poção de Cura Maior', cd:16, ing:'Sangue Tier 3+ + Coração', efeito:'2d6+2 PV', tempo:'4h', venda:120 },
+  { nome:'Elixir de Purificação', cd:18, ing:'Fragmento Onírico + água benta + Cinzas', efeito:'Reduz 1 Corrupção', tempo:'1 dia', venda:200 }
+];
+
+// Gera as <option> do select de receitas.
+function _opcoesAlquimia() {
+  return _RECEITAS_ALQUIMIA.map(r => `<option value="${r.nome}" data-cd="${r.cd}" data-ing="${_escHtml(r.ing)}" data-efeito="${_escHtml(r.efeito)}" data-tempo="${r.tempo}" data-venda="${r.venda}">${r.nome} (CD ${r.cd})</option>`).join('');
+}
+
+// Mostra o resumo da receita selecionada.
+function atualizarResumoAlquimia() {
+  const sel = document.getElementById('select-alquimia');
+  const box = document.getElementById('alquimia-resumo');
+  if (!sel || !box) return;
+  const opt = sel.selectedOptions[0];
+  if (!opt || !opt.value) { box.innerHTML = ''; return; }
+  box.innerHTML = `<strong>CD ${opt.getAttribute('data-cd')}</strong> · Ingredientes: ${opt.getAttribute('data-ing')} · Tempo: ${opt.getAttribute('data-tempo')} · Venda: ${opt.getAttribute('data-venda')} Esp<br><em>${opt.getAttribute('data-efeito')}</em>`;
+}
+
+// Verifica o Gate da Maestria: CD 16+ exige Maestria em Ofícios.
+function _alquimiaGateOk(cd) {
+  if (cd < 16) return null;
+  const maestrias = (_slotsPericia && _slotsPericia.maestrias || []).filter(Boolean).map(s => s.nome);
+  if (!maestrias.includes('Ofícios')) return 'Requer Maestria em Ofícios';
+  return null;
+}
+
+// Consome um ingrediente de matN-* (procura pelo nome parcial). Retorna true se consumiu.
+function _consumirIngrediente(nomeParcial) {
+  const tbody = document.getElementById('inv-mat-tbody');
+  if (!tbody) return false;
+  const rows = tbody.querySelectorAll('tr');
+  for (const tr of rows) {
+    const nomeEl = tr.querySelector('input[id$="-nome"]');
+    if (nomeEl && String(nomeEl.value).toLowerCase().includes(String(nomeParcial).toLowerCase())) {
+      const qtdEl = tr.querySelector('input[id$="-qtd"]');
+      if (qtdEl) {
+        const qtd = parseInt(qtdEl.value, 10) || 0;
+        if (qtd > 0) { qtdEl.value = String(qtd - 1); return true; }
+      }
+    }
+  }
+  return false;
+}
+
+// Cria o item alquímico: valida gate, consome ingredientes, rola teste.
+function criarAlquimia() {
+  const sel = document.getElementById('select-alquimia');
+  const res = document.getElementById('alquimia-resultado');
+  if (!sel || !res) return;
+  const opt = sel.selectedOptions[0];
+  if (!opt || !opt.value) { res.innerHTML = '<span style="color:var(--accent-text)">Escolha uma receita primeiro.</span>'; return; }
+  const nome = opt.value;
+  const cd = parseInt(opt.getAttribute('data-cd'), 10);
+  const efeito = opt.getAttribute('data-efeito');
+
+  // Gate da Maestria.
+  const gate = _alquimiaGateOk(cd);
+  if (gate) { res.innerHTML = '<span style="color:var(--accent-text)">' + gate + ' — criação não realizada.</span>'; return; }
+
+  // Consome os ingredientes (procura por palavras-chave no nome do material).
+  const ing = opt.getAttribute('data-ing');
+  const palavras = ing.split('+').map(s => s.trim().split(' ')[0]);
+  let faltando = [];
+  palavras.forEach(p => { if (!_consumirIngrediente(p)) faltando.push(p); });
+  if (faltando.length) {
+    res.innerHTML = '<span style="color:var(--accent-text)">Faltam ingredientes: ' + faltando.join(', ') + ' (adicione em Materiais).</span>';
+    return;
+  }
+
+  // Teste: d20 + bônus de Ofícios.
+  const ctx = _getCalcCtx ? _getCalcCtx() : {};
+  const modOf = ctx.modIntelecto || 0;
+  const f = getFormulas ? getFormulas() : {};
+  const bonus = _bonusPericiaSafe ? _bonusPericiaSafe(f['per-mt'], 'per-mt', ctx, modOf) : modOf;
+  const rolagem = Math.floor(Math.random() * 20) + 1;
+  const total = rolagem + bonus;
+  const sucesso = total >= cd;
+
+  let resultado = '';
+  if (sucesso) {
+    // Adiciona ao inventário de consumíveis.
+    if (typeof addInvRow === 'function') addInvRow('inv-cons-tbody', 'cons', ['nome','qtd','efei'], ['Nome','Qtd','Efeito']);
+    const n = _invCounters['cons'];
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal('cons' + n + '-nome', nome);
+    setVal('cons' + n + '-qtd', '1');
+    setVal('cons' + n + '-efei', efeito);
+    resultado = '<span style="color:var(--ok)">Sucesso (' + rolagem + ' + ' + bonus + ' = ' + total + ' ≥ CD ' + cd + ')</span> — ' + nome + ' criado (' + efeito + ').';
+  } else if (rolagem === 1) {
+    // Falha crítica: ingrediente raro destruído + Salv. Alma CD 14 ou +1 Corrupção.
+    const corrEl = document.getElementById('f-corrupcao');
+    if (corrEl) corrEl.value = (parseInt(corrEl.value, 10) || 0) + 1;
+    resultado = '<span style="color:var(--accent-text)">Falha crítica (1 natural)</span> — ingrediente raro destruído + Salv. Alma CD 14 ou +1 Corrupção (aplicado).';
+  } else {
+    resultado = '<span style="color:var(--accent-text)">Falha (' + rolagem + ' + ' + bonus + ' = ' + total + ' < CD ' + cd + ')</span> — materiais consumidos, nada criado.';
+  }
+  res.innerHTML = resultado;
+
+  // Histórico.
+  const hist = _parseJSONSafe(localStorage.getItem('tp_alq_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || '')), []);
+  hist.unshift({ nome, resultado: sucesso ? 'Sucesso' : (rolagem === 1 ? 'Falha crítica' : 'Falha') });
+  localStorage.setItem('tp_alq_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || ''), JSON.stringify(hist.slice(0, 10)));
+  _renderAlqHistorico();
+  if (typeof atualizarResumoCorrupcao === 'function') atualizarResumoCorrupcao();
+  salvarLocal();
+}
+
+// Limpa o resultado da alquimia.
+function limparResultadoAlquimia() {
+  const res = document.getElementById('alquimia-resultado');
+  if (res) res.innerHTML = '';
+}
+
+// Renderiza o histórico de criações (últimos 10).
+function _renderAlqHistorico() {
+  const box = document.getElementById('alq-historico-lista');
+  if (!box) return;
+  const hist = _parseJSONSafe(localStorage.getItem('tp_alq_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || '')), []);
+  const hidden = document.getElementById('alq-historico');
+  if (hidden) hidden.value = JSON.stringify(hist);
+  if (!hist.length) { box.textContent = 'Nenhuma criação ainda.'; return; }
+  box.innerHTML = hist.map(h => `<div>• <strong>${_escHtml(h.nome)}</strong> — ${_escHtml(h.resultado)}</div>`).join('');
 }
 function rolarRecovery() {
   const inp = document.getElementById('morrendo');
@@ -15721,6 +15886,11 @@ function preencherCampos(d) {
       try { localStorage.setItem('tp_rit_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || ''), d['rit-historico']); } catch (e) {}
     }
     if (typeof _renderRitHistorico === 'function') _renderRitHistorico();
+    // Histórico de Alquimia (restaura do campo salvo na ficha)
+    if (d['alq-historico']) {
+      try { localStorage.setItem('tp_alq_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || ''), d['alq-historico']); } catch (e) {}
+    }
+    if (typeof _renderAlqHistorico === 'function') _renderAlqHistorico();
   }, 50);
 }
 
@@ -17675,7 +17845,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="toc-label">V. Economia e Artesanato</span>
         <ul>
             <li><a href="#economia">Sistema Monetário (Espíritos)</a></li>
-            <li><a href="#forja">Sistema de Forja</a></li>
+<li><a href="#forja">Sistema de Forja</a></li>
+                            <li><a href="#alquimia">Alquimia — A Arte de Transformar</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#catalogo-equipamentos">Catálogo de Equipamentos</a></li>
             <li><a href="#ranks-equipamentos">Classificação de Equipamentos</a></li>
             <li><a href="#ferreiros">Ferreiros e Classificações</a></li>
@@ -17837,7 +18008,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">V. Economia e Artesanato</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#economia">Sistema Monetário (Espíritos)</a></li>
-                            <li><a href="#forja">Sistema de Forja</a></li>
+<li><a href="#forja">Sistema de Forja</a></li>
+            <li><a href="#alquimia">Alquimia — A Arte de Transformar</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#catalogo-equipamentos">Catálogo de Equipamentos</a></li>
                             <li><a href="#ranks-equipamentos">Classificação de Equipamentos</a></li>
                             <li><a href="#ferreiros">Ferreiros e Classificações</a></li>
@@ -21094,6 +21266,56 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><strong>Herança de Monstro</strong>: O equipamento herda uma habilidade passiva do monstro original.</li>
             <li><strong>Falha Catastrófica</strong>: O item explode, amaldiçoa o ferreiro, ou cria algo perigoso para todos ao redor.</li>
         </ul>
+
+        <h2 id="alquimia">Alquimia — A Arte de Transformar</h2>
+        <p>A Alquimia é o ofício de transformar ingredientes brutos — sangue, ervas, fragmentos e cinzas — em poções, venenos e elixires. Onde a Forja trabalha o metal, a Alquimia trabalha a essência. É uma arte perigosa: os ingredientes são caros, os testes são difíceis e uma falha crítica pode custar mais do que o material.</p>
+
+        <h3>Receitas</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Receita</th><th>Efeito</th><th>Ingredientes</th><th>CD</th><th>Tempo</th><th>Venda</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Poção de Cura Menor</strong></td><td>1d6+1 PV</td><td>Sangue Tier 1–2 + Ervas</td><td>12</td><td>1h</td><td>40</td></tr>
+                    <tr><td><strong>Tônico de STA</strong></td><td>1d6 STA</td><td>Fragmento D–C + água</td><td>12</td><td>1h</td><td>30</td></tr>
+                    <tr><td><strong>Antídoto</strong></td><td>Remove Envenenado</td><td>Glândula + ervas amargas</td><td>14</td><td>2h</td><td>50</td></tr>
+                    <tr><td><strong>Óleo de Resistência</strong></td><td>Resistência temporária</td><td>Escama + essência</td><td>14</td><td>2h</td><td>60</td></tr>
+                    <tr><td><strong>Veneno</strong></td><td>Envenenado 1–3</td><td>Glândula + sangue corrompido</td><td>14–16</td><td>2–4h</td><td>50–120</td></tr>
+                    <tr><td><strong>Tônico de Essência</strong></td><td>1d4 PE</td><td>Fragmento B+ + Cinzas</td><td>16</td><td>4h</td><td>100</td></tr>
+                    <tr><td><strong>Poção de Cura Maior</strong></td><td>2d6+2 PV</td><td>Sangue Tier 3+ + Coração</td><td>16</td><td>4h</td><td>120</td></tr>
+                    <tr><td><strong>Elixir de Purificação</strong></td><td>Reduz 1 Corrupção</td><td>Fragmento Onírico + água benta + Cinzas</td><td>18</td><td>1 dia</td><td>200</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Ingredientes</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Ingrediente</th><th>Como obter</th><th>Custo</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Ervas da Névoa</strong></td><td>Sobrevivência CD 14 (forragear)</td><td>1d3 · 5 Esp</td></tr>
+                    <tr><td><strong>Sangue de monstro</strong></td><td>Coletado de monstros abatidos</td><td>10–50 Esp</td></tr>
+                    <tr><td><strong>Fragmentos de núcleo</strong></td><td>Núcleos quebrados/parciais</td><td>15–100 Esp</td></tr>
+                    <tr><td><strong>Glândula de veneno</strong></td><td>Monstros venenosos</td><td>30 Esp</td></tr>
+                    <tr><td><strong>Cinzas de Surto</strong></td><td>Áreas pós-Surto (volátil)</td><td>80 Esp</td></tr>
+                    <tr><td><strong>Coração de Monstro</strong></td><td>Monstros Tier 3+</td><td>300 Esp</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Regra de Criação</h3>
+        <div class="system-card">
+            <strong>Criar um item alquímico:</strong><br><br>
+            • <strong>Teste:</strong> <strong>Ofícios</strong> vs CD da receita (12–18).<br>
+            • <strong>Tempo:</strong> 1h a 1 dia (reduzir o tempo = <strong>+2 na CD</strong>).<br>
+            • <strong>Materiais:</strong> consumidos na tentativa.<br>
+            • <strong>Falha:</strong> nada é criado (materiais perdidos).<br>
+            • <strong>Falha crítica:</strong> ingrediente raro destruído + <strong>Salvaguarda de Alma CD 14 ou +1 de Corrupção</strong>.<br>
+            • <strong>Gate da Maestria:</strong> receitas CD 16+ exigem <strong>Maestria em Ofícios</strong>.
+        </div>
 
         <h2 id="barmans">Barmans – As Vozes Invisíveis das Cidades</h2>
 
