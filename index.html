@@ -3737,6 +3737,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 3; }       /* Ficha Base   */
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 3.5; }            /* Atributos    */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 4; }  /* Poder        */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-rituais) { order: 4.05; }  /* Rituais */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
   .ficha-layout-cols {
@@ -8850,7 +8851,7 @@ async function inicializarFotos() {
 }
 
 // ─── SEÇÕES EXPANSÍVEIS (todas as seções da ficha) ───
-let _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+let _fichaExpandidos = { poder: false, rituais: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
 
 function toggleFichaExpand(secao) {
   _fichaExpandidos[secao] = !_fichaExpandidos[secao];
@@ -10371,7 +10372,7 @@ async function ativarPersonagem(nome) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _fichaExpandidos = { poder: false, rituais: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
     _restaurarFichaExpandidos();
     _aplicarEstadoFichaExpand();
   }
@@ -10483,7 +10484,7 @@ async function deletarPersonagem(nome) {
       calcTudo();
       await inicializarFotos();
       _aplicarOrdemAtributos();
-      _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+      _fichaExpandidos = { poder: false, rituais: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
       _restaurarFichaExpandidos();
       _aplicarEstadoFichaExpand();
     }
@@ -12380,6 +12381,43 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
 
 </div><!-- /ficha-layout-cols -->
 
+<!-- RITUAIS — execução de rituais com círculos, custos e falhas -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('rituais')" id="toggle-rituais">
+    <span class="ficha-expand-seta" id="seta-rituais">▶</span> Rituais
+    <span class="ficha-expand-resumo" id="resumo-rituais"></span>
+  </div>
+  <div class="ficha-expand-area" id="area-rituais">
+  <div class="ficha-panel-body">
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Ritual <span class="info-btn" style="font-size:.6rem">ⓘ<span class="tooltip">Círculos 1–5. CD = 10 + Círculo × 2 (C1=12, C2=14, C3=16, C4=18, C5=20). C3+ exige Maestria em Feitiçaria; C5 exige Especialização. Teste: d20 + mod Alma (ou bônus de Feitiçaria).</span></span></label>
+        <select id="select-ritual" onchange="atualizarResumoRitual()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="">Escolher ritual...</option>
+          ${_opcoesRituais()}
+        </select>
+        <div id="ritual-resumo" style="margin-top:.4rem;font-size:.75rem;color:var(--text-muted);line-height:1.5"></div>
+      </div>
+      <div class="field-group">
+        <label>Custo em Espíritos (opcional — ajuste)</label>
+        <input type="number" id="rit-custo-esp" min="0" value="75" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+        <div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap">
+          <button onclick="executarRitual()" style="background:var(--accent);border:none;color:#fff;padding:.55rem 1.1rem;font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Executar Ritual</button>
+          <button onclick="limparResultadoRitual()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-size:.78rem;cursor:pointer;font-family:inherit" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">Limpar</button>
+        </div>
+        <div id="ritual-resultado" style="margin-top:.5rem;font-size:.8rem;min-height:1.2em;font-weight:bold"></div>
+      </div>
+    </div>
+    <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.4rem">Histórico de Rituais</div>
+      <div id="rit-historico-lista" style="font-size:.75rem;color:var(--text-muted);line-height:1.6"></div>
+      <input type="hidden" id="rit-ultimo">
+      <input type="hidden" id="rit-historico">
+    </div>
+  </div>
+  </div>
+</div>
+
 <!-- COMBATE — trackers do combate lapidado (decisões C4, C8, C9) -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('combate')" id="toggle-combate">
@@ -13663,6 +13701,8 @@ function coletarDados() {
     'cond-exausto-val','cond-corrompido-val','cond-enlouquecido-val','cond-enfraquecido-val',
     // sessões e XP
     'xp-atual','sess-tipo','sess-qualidade','sess-xp','sess-risco-xp','sess-obs','sess-historico',
+    // rituais
+    'rit-ultimo','rit-historico',
     // acampamento
     'acamp-nivel','acamp-atividade','acamp-andar','acamp-mod','acamp-rolagem',
     // forja e barmans
@@ -14455,6 +14495,149 @@ function resetFugaDistancia() {
   const el = document.getElementById('fuga-distancia');
   if (el) el.value = 3;
   salvarLocal();
+}
+
+// ─── RITUAIS (painel da ficha) ───
+// Dados dos 10 rituais prontos: círculo, CD, custo Esp (médio), custo mental
+// (Sanidade e/ou Corrupção) e efeito.
+const _RITUAIS = [
+  { nome:'Purificação Menor', circulo:1, cd:12, esp:75, san:'1d4', corr:0, efeito:'Remove 1 de Corrupção OU estabiliza Sanidade à beira da Ruptura.' },
+  { nome:'Proteção de Acampamento', circulo:1, cd:12, esp:75, san:'1d4', corr:0, efeito:'1 noite: o acampamento reduz 1 nível de risco de Atenção.' },
+  { nome:'Selar Porta / Runa de Barreira', circulo:2, cd:14, esp:350, san:'1d6', corr:1, efeito:'Bloqueia passagem por 1d4h; falha = +1 no Relógio de Atenção.' },
+  { nome:'Leitura de Ecos', circulo:2, cd:14, esp:350, san:'1d6', corr:1, efeito:'Ouve o local nas últimas 24h; 1 cena/pista.' },
+  { nome:'Extrair Runa', circulo:3, cd:16, esp:1150, san:'1d8', corr:2, efeito:'Remove uma runa com segurança; falha destrói.' },
+  { nome:'Maldição Temática', circulo:3, cd:16, esp:1150, san:'1d8', corr:2, efeito:'Condição à distância por 1d4 dias; Salv. Alma CD 16 reduz metade.' },
+  { nome:'Devoração Assistida', circulo:3, cd:16, esp:1150, san:'1d8', corr:2, efeito:'+25% energia na absorção, reduz risco de Corrupção em 1; a Torre percebe.' },
+  { nome:'Chamar a Névoa', circulo:4, cd:18, esp:3500, san:'1d10', corr:1, efeito:'Evoca a Névoa por 1d4h.' },
+  { nome:'Vínculo com a Torre', circulo:4, cd:18, esp:3500, san:'1d10', corr:1, efeito:'Comunicação breve com uma entidade; 1 pergunta.' },
+  { nome:'Ritual Inverso / Proibido', circulo:5, cd:20, esp:10000, san:'2d10', corr:2, efeito:'Ato tabu extremo (Mestre define o efeito).' }
+];
+
+// Gera as <option> do select de rituais.
+function _opcoesRituais() {
+  return _RITUAIS.map(r => `<option value="${r.nome}" data-circulo="${r.circulo}" data-cd="${r.cd}" data-esp="${r.esp}" data-san="${r.san}" data-corr="${r.corr}" data-efeito="${_escHtml(r.efeito)}">${r.nome} (C${r.circulo} · CD ${r.cd})</option>`).join('');
+}
+
+// Mostra o resumo do ritual selecionado (círculo, CD, custos, efeito).
+function atualizarResumoRitual() {
+  const sel = document.getElementById('select-ritual');
+  const box = document.getElementById('ritual-resumo');
+  const custoEsp = document.getElementById('rit-custo-esp');
+  if (!sel || !box) return;
+  const opt = sel.selectedOptions[0];
+  if (!opt || !opt.value) { box.innerHTML = ''; return; }
+  const circulo = opt.getAttribute('data-circulo');
+  const cd = opt.getAttribute('data-cd');
+  const esp = opt.getAttribute('data-esp');
+  const san = opt.getAttribute('data-san');
+  const corr = opt.getAttribute('data-corr');
+  const efeito = opt.getAttribute('data-efeito');
+  if (custoEsp) custoEsp.value = esp;
+  box.innerHTML = `<strong>Círculo ${circulo}</strong> · CD ${cd} · Custo: ${esp} Esp + ${san} Sanidade${corr !== '0' ? ' ou ' + corr + ' Corrupção' : ''}<br><em>${efeito}</em>`;
+}
+
+// Rola 1dX (suporta "2d10").
+function _rolarDados(expr) {
+  const m = String(expr || '1d4').match(/^(\d*)d(\d+)$/i);
+  const n = m && m[1] ? parseInt(m[1], 10) : 1;
+  const d = m ? parseInt(m[2], 10) : 4;
+  let total = 0;
+  for (let i = 0; i < n; i++) total += Math.floor(Math.random() * d) + 1;
+  return total;
+}
+
+// Verifica o Gate da Maestria: C3+ exige Maestria em Feitiçaria; C5 exige Especialização.
+function _ritualGateOk(circulo) {
+  const maestrias = (_slotsPericia && _slotsPericia.maestrias || []).filter(Boolean).map(s => s.nome);
+  const especs = (_slotsPericia && _slotsPericia.especializacoes || []).filter(Boolean).map(s => s.nome);
+  if (circulo >= 5 && !especs.includes('Feitiçaria')) return 'Requer Especialização em Feitiçaria';
+  if (circulo >= 3 && !maestrias.includes('Feitiçaria')) return 'Requer Maestria em Feitiçaria';
+  return null;
+}
+
+// Executa o ritual: valida gate, aplica custo, rola d20 vs CD, aplica falhas.
+function executarRitual() {
+  const sel = document.getElementById('select-ritual');
+  const res = document.getElementById('ritual-resultado');
+  if (!sel || !res) return;
+  const opt = sel.selectedOptions[0];
+  if (!opt || !opt.value) { res.innerHTML = '<span style="color:var(--accent-text)">Escolha um ritual primeiro.</span>'; return; }
+  const nome = opt.value;
+  const circulo = parseInt(opt.getAttribute('data-circulo'), 10);
+  const cd = parseInt(opt.getAttribute('data-cd'), 10);
+  const sanExpr = opt.getAttribute('data-san');
+  const corr = parseInt(opt.getAttribute('data-corr'), 10);
+
+  // Gate da Maestria.
+  const gate = _ritualGateOk(circulo);
+  if (gate) { res.innerHTML = '<span style="color:var(--accent-text)">' + gate + ' — ritual não executado.</span>'; return; }
+
+  // Custo em Espíritos (input do jogador).
+  const espEl = document.getElementById('rit-custo-esp');
+  const espCusto = parseInt(espEl ? espEl.value : '0', 10) || 0;
+  const espAtual = parseInt(String(document.getElementById('inv-espiritos')?.value || '0').replace(/\D/g, ''), 10) || 0;
+  if (espAtual < espCusto) { res.innerHTML = '<span style="color:var(--accent-text)">Espíritos insuficientes (' + espAtual + ' < ' + espCusto + ').</span>'; return; }
+  if (espEl) document.getElementById('inv-espiritos').value = String(espAtual - espCusto);
+
+  // Custo mental: Sanidade (sempre) + Corrupção (C4+ exige ambos; C2–C3 ou/ou).
+  const danoSan = _rolarDados(sanExpr);
+  const sanEl = document.getElementById('f-sanidade');
+  if (sanEl) sanEl.value = Math.max(0, (parseInt(sanEl.value, 10) || 0) - danoSan);
+  const corrEl = document.getElementById('f-corrupcao');
+  if (corrEl && corr > 0) corrEl.value = (parseInt(corrEl.value, 10) || 0) + corr;
+
+  // Teste: d20 + mod Alma (ou bônus de Feitiçaria se treinada).
+  const ctx = _getCalcCtx ? _getCalcCtx() : {};
+  const modAlma = ctx.modAlma || 0;
+  const f = getFormulas ? getFormulas() : {};
+  const bonusFeit = _bonusPericiaSafe ? _bonusPericiaSafe(f['per-mt'], 'per-mt', ctx, modAlma) : modAlma;
+  const rolagem = Math.floor(Math.random() * 20) + 1;
+  const total = rolagem + bonusFeit;
+  const sucesso = total >= cd;
+
+  let resultado = '';
+  if (sucesso) {
+    resultado = '<span style="color:var(--ok)">Sucesso (' + rolagem + ' + ' + bonusFeit + ' = ' + total + ' ≥ CD ' + cd + ')</span> — ' + opt.getAttribute('data-efeito');
+  } else {
+    // Falha: rola a tabela de Falhas d10.
+    const falha = Math.floor(Math.random() * 10) + 1;
+    let falhaTxt = '';
+    if (falha <= 2) falhaTxt = 'Silêncio — nada acontece (custo pago).';
+    else if (falha <= 4) falhaTxt = 'Efeito Parcial — o ritual funciona pela metade (Mestre decide).';
+    else if (falha <= 6) { falhaTxt = 'Atenção +2 — +2 ticks no Relógio de Atenção.'; const t = document.getElementById('torre-ticks'); if (t) t.value = Math.max(0, Math.min(8, (parseInt(t.value, 10) || 0) + 2)); }
+    else if (falha <= 8) { falhaTxt = 'Custo em Dobro — pague o custo mental de novo.'; if (sanEl) sanEl.value = Math.max(0, (parseInt(sanEl.value, 10) || 0) - danoSan); if (corrEl && corr > 0) corrEl.value = (parseInt(corrEl.value, 10) || 0) + corr; }
+    else if (falha === 9) { falhaTxt = 'Falha Crítica — condição adversa ou +1 de Corrupção.'; if (corrEl) corrEl.value = (parseInt(corrEl.value, 10) || 0) + 1; }
+    else falhaTxt = 'Ira da Torre — evento grave (Mestre define; +1 Atenção).';
+    resultado = '<span style="color:var(--accent-text)">Falha (' + rolagem + ' + ' + bonusFeit + ' = ' + total + ' < CD ' + cd + ') — d10: ' + falha + '</span> ' + falhaTxt;
+  }
+  res.innerHTML = resultado;
+
+  // Histórico.
+  const hist = _parseJSONSafe(localStorage.getItem('tp_rit_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || '')), []);
+  hist.unshift({ nome, resultado: sucesso ? 'Sucesso' : 'Falha (d10 ' + (sucesso ? '' : '') + ')', custo: espCusto + ' Esp / ' + danoSan + ' San' });
+  localStorage.setItem('tp_rit_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || ''), JSON.stringify(hist.slice(0, 10)));
+  _renderRitHistorico();
+  if (typeof atualizarResumoCorrupcao === 'function') atualizarResumoCorrupcao();
+  if (typeof atualizarAvisoTorre === 'function') atualizarAvisoTorre();
+  salvarLocal();
+}
+
+// Limpa o resultado do ritual.
+function limparResultadoRitual() {
+  const res = document.getElementById('ritual-resultado');
+  if (res) res.innerHTML = '';
+}
+
+// Renderiza o histórico de rituais (últimos 10).
+function _renderRitHistorico() {
+  const box = document.getElementById('rit-historico-lista');
+  if (!box) return;
+  const hist = _parseJSONSafe(localStorage.getItem('tp_rit_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || '')), []);
+  // Sincroniza o campo hidden (persistência na ficha).
+  const hidden = document.getElementById('rit-historico');
+  if (hidden) hidden.value = JSON.stringify(hist);
+  if (!hist.length) { box.textContent = 'Nenhum ritual executado ainda.'; return; }
+  box.innerHTML = hist.map(h => `<div>• <strong>${_escHtml(h.nome)}</strong> — ${_escHtml(h.resultado)} · custo ${_escHtml(h.custo)}</div>`).join('');
 }
 function rolarRecovery() {
   const inp = document.getElementById('morrendo');
@@ -15533,6 +15716,11 @@ function preencherCampos(d) {
     if (typeof atualizarPilaresPoder === 'function') atualizarPilaresPoder();
     // Espiral de Ascensão (classificação + energia + aviso)
     if (typeof atualizarEspiralAscensao === 'function') atualizarEspiralAscensao();
+    // Histórico de Rituais (restaura do campo salvo na ficha)
+    if (d['rit-historico']) {
+      try { localStorage.setItem('tp_rit_historico_' + (usuarioAtual || '') + '_' + (personagemAtual || ''), d['rit-historico']); } catch (e) {}
+    }
+    if (typeof _renderRitHistorico === 'function') _renderRitHistorico();
   }, 50);
 }
 
@@ -15583,7 +15771,7 @@ async function gmAssumirPersonagem(targetUser, nomePersonagem) {
     calcTudo();
     atualizarFichaHero();
     _aplicarOrdemAtributos();
-    _fichaExpandidos = { poder: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
+    _fichaExpandidos = { poder: false, rituais: false, corrupcao: false, tracos: false, lore: false, fichabase: false, aparencia: false, recursos: false, armas: false, pericias: false, inventario: false, pets: false, grimorio: false, arvore: false, utilizacoes: false, combate: false, sessoes: false, acampamento: false, forja: false, relacionamentos: false };
     _restaurarFichaExpandidos();
     _aplicarEstadoFichaExpand();
   }
