@@ -12395,6 +12395,20 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       <div id="recovery-result" style="margin-top:.5rem;font-size:.8rem;min-height:1.1em"></div>
     </div>
 
+    <!-- DISTÂNCIA DE FUGA -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Distância de Fuga</div>
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <span style="font-size:.82rem;color:var(--text);flex:1;min-width:80px">Zonas de distância</span>
+        <button onclick="mudarFugaDistancia(-1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−1</button>
+        <input type="number" id="fuga-distancia" min="0" max="5" value="3" style="width:56px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.3rem .4rem;font-size:.9rem;outline:none;text-align:center" oninput="_salvarClampFuga()">
+        <button onclick="mudarFugaDistancia(1)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+1</button>
+        <button onclick="resetFugaDistancia()" style="background:none;border:1px solid rgba(245,160,160,.3);color:var(--accent-text);padding:.3rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.background='rgba(220,60,60,.1)'" onmouseout="this.style.background='none'">Reset (3)</button>
+        <span class="info-btn" style="font-size:.62rem">ⓘ<span class="tooltip">Distância inicial: 3 zonas. Chegou a 5 = escapou (role para se esconder). Caiu a 0 = capturado (combate ou rendição). Cada passo de fuga: Atletismo/Acrobacia/Furtividade vs CD 14 (sucesso = +1 zona, falha = −1).</span></span>
+      </div>
+      <div style="margin-top:.4rem;font-size:.72rem;color:var(--text-muted)">0 = capturado · 5 = escapou (role para se esconder)</div>
+    </div>
+
     <!-- ROLAGENS CRÍTICAS (d100) -->
     <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Rolagens Críticas (d100)</div>
@@ -13543,7 +13557,7 @@ function coletarDados() {
     'aa-guardiao-resistencia','aa-guardiao-vitalidade','aa-guardiao-fortaleza',
     'aa-catalisador-fortalecimento','aa-catalisador-sustentacao','aa-catalisador-supressao',
     // combate (trackers do combate lapidado)
-    'morrendo','torre-ticks','major-wound-texto',
+    'morrendo','torre-ticks','major-wound-texto','fuga-distancia',
     'cond-avareado-val','cond-sangrando-val','cond-envenenado-val','cond-agarrdo-val',
     'cond-exausto-val','cond-corrompido-val','cond-enlouquecido-val','cond-enfraquecido-val',
     // sessões e XP
@@ -14324,6 +14338,21 @@ function resetMorrendo() {
   if (el) el.value = 0;
   const res = document.getElementById('recovery-result');
   if (res) res.textContent = '';
+  salvarLocal();
+}
+function _salvarClampFuga() {
+  _clampInput('fuga-distancia', 0, 5);
+  salvarLocal();
+}
+function mudarFugaDistancia(delta) {
+  const el = document.getElementById('fuga-distancia');
+  if (!el) return;
+  el.value = Math.max(0, Math.min(5, (parseInt(el.value, 10) || 0) + delta));
+  salvarLocal();
+}
+function resetFugaDistancia() {
+  const el = document.getElementById('fuga-distancia');
+  if (el) el.value = 3;
   salvarLocal();
 }
 function rolarRecovery() {
@@ -21699,6 +21728,64 @@ document.addEventListener('DOMContentLoaded', () => {
                 • Após sair do alcance, role <strong>Furtividade vs Percepção dos perseguidores</strong>.<br>
                 • <strong>Sucesso</strong> = escondido. Risco de evento noturno (ver acampamento) permanece.<br>
                 • <strong>Falha</strong> = rastreado — os perseguidores voltam em 1d4 horas (ou na próxima noite).
+            </div>
+
+            <h4>Obstáculos e Terreno</h4>
+            <p>Quando o grupo cruza um obstáculo durante a fuga, role na tabela abaixo (ou o Mestre escolhe):</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>1d10</th><th>Obstáculo</th><th>Efeito</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1–2</td><td><strong>Escombros / entulho</strong></td><td><strong>Atletismo CD 12</strong>. Falha = perde 1 zona. Sucesso = Vantagem no próximo passo.</td></tr>
+                        <tr><td>3–4</td><td><strong>Corredor estreito / viela</strong></td><td><strong>Acrobacia CD 12</strong>. Falha = preso (perde 1 zona). Perseguidores grandes têm Desvantagem.</td></tr>
+                        <tr><td>5–6</td><td><strong>Névoa densa</strong></td><td><strong>Navegação ou Percepção CD 14</strong>. Falha = desorientado (perde 1 zona + risco +1 Corrupção). Vantagem a quem foge.</td></tr>
+                        <tr><td>7–8</td><td><strong>Monstros menores</strong></td><td><strong>Furtividade CD 14</strong>. Falha = combate curto (1 rodada) ou +1 tick.</td></tr>
+                        <tr><td>9–10</td><td><strong>Armadilha da Torre</strong></td><td><strong>Percepção CD 14</strong>. Falha = 1d6 dano + perde 1 zona. Sucesso = pode usá-la contra o perseguidor.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Eventos de Perseguição</h4>
+            <p>A cada <strong>2 passos</strong> de fuga, role na tabela abaixo para dar vida à perseguição:</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>1d10</th><th>Evento</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1–2</td><td><strong>Perseguidor tropeça</strong> — você ganha +1 zona grátis.</td></tr>
+                        <tr><td>3–4</td><td><strong>Obstáculo à frente</strong> — role na tabela de Obstáculos/Terreno.</td></tr>
+                        <tr><td>5–6</td><td><strong>A Torre interfere</strong> — +1 tick no Relógio de Atenção e o ambiente muda.</td></tr>
+                        <tr><td>7–8</td><td><strong>Aliado/NPC aparece</strong> — ajuda ou atrapalha (Mestre decide).</td></tr>
+                        <tr><td>9–10</td><td><strong>Perseguidor se divide</strong> — escolha uma rota.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Terreno por Ambiente</h4>
+            <div class="system-card">
+                <strong>Torre:</strong> escadas = <strong>Atletismo</strong>; salões = <strong>Desvantagem</strong>; portas = ação, custa 1 zona.<br><br>
+                <strong>Névoa:</strong> <strong>Navegação ou Percepção</strong>; <strong>Salvaguarda de Alma</strong> a cada 2 turnos ou <strong>+1 Corrupção</strong>.<br><br>
+                <strong>Ruínas:</strong> <strong>Atletismo ou Acrobacia</strong>; <strong>Vantagem</strong> com o traço Andarilho das Ruínas.<br><br>
+                <strong>Cidadela:</strong> <strong>Furtividade ou Enganação</strong>; multidão = cobertura ou atrapalha (Mestre decide).
+            </div>
+
+            <h4>Deslocamento na Fuga</h4>
+            <div class="system-card">
+                • <strong>Correr</strong> (deslocamento base 8) é o padrão da fuga.<br>
+                • <strong>Andar</strong> = Desvantagem.<br>
+                • <strong>Deslocamento maior que o perseguidor</strong> = Vantagem (ou +1 zona a cada 2 passos).<br>
+                • <strong>Ramo Deslocamento</strong> (Árvore da Alma): Velocidade Sobre-humana = Vantagem permanente; Fruto do Passo Fantasma = 1×/fuga reposiciona sem teste; Flor do Deslocamento = 1×/fuga escapa sem rolar.<br>
+                • <strong>Mestre da Mobilidade</strong> = Vantagem.<br>
+                • <strong>Agarrado</strong> (Deslocamento 0) = não pode fugir.
+            </div>
+
+            <h4>Custo Temático da Fuga</h4>
+            <div class="system-card">
+                • <strong>Fuga prolongada</strong> (3+ passos) consome <strong>1 provisão</strong>.<br>
+                • <strong>Névoa prolongada</strong> (4 turnos) = <strong>−1 de Sanidade</strong>.
             </div>
 
             <div class="lore-box">
