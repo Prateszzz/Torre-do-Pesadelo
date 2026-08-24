@@ -11986,13 +11986,27 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       <div class="field-group">
         <label>Núcleo Absorvido (atual/máx)</label>
         <div style="display:flex;gap:.4rem;align-items:center">
-          <input type="text" id="f-nucleo" value="${''}" ${isObs ? 'readonly' : ''} oninput="salvarLocal()" title="Formato: atual/máximo — os botões +/− ajustam os núcleos absorvidos" style="flex:1;min-width:0${isObs ? ';cursor:default;opacity:.85' : (isAdm ? ';border-color:rgba(180,140,30,.3)' : '')}">
+          <input type="text" id="f-nucleo" value="${''}" ${isObs ? 'readonly' : ''} oninput="salvarLocal();atualizarEspiralAscensao()" title="Formato: atual/máximo — os botões +/− ajustam os núcleos absorvidos" style="flex:1;min-width:0${isObs ? ';cursor:default;opacity:.85' : (isAdm ? ';border-color:rgba(180,140,30,.3)' : '')}">
           <button type="button" onclick="ajustarNucleos(-1)" title="− Núcleo (subtrai 1 dos absorvidos)" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.55rem .85rem;font-family:inherit;font-size:.95rem;cursor:pointer;transition:all .2s;flex-shrink:0;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
           <button type="button" onclick="ajustarNucleos(1)" title="+ Núcleo (adiciona 1 aos absorvidos)" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.55rem .85rem;font-family:inherit;font-size:.95rem;cursor:pointer;transition:all .2s;flex-shrink:0;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
         </div>
         <small style="display:block;margin-top:.3rem;color:var(--text-muted);font-size:.68rem;letter-spacing:.3px;line-height:1.45">Botões +/− ajustam os núcleos absorvidos — alimentam o ranking (Lendas das Torres).</small>
       </div>
       ${fieldGroup('Progressão do Núcleo','f-nucleo-prog')}
+    </div>
+
+    <!-- ESPIRAL DE ASCENSÃO -->
+    <div id="espiral-ascensao" style="margin-top:.75rem;padding:.7rem .8rem;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02);font-size:.78rem">
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+        <span style="color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;font-size:.65rem">Espiral de Ascensão</span>
+        <span><strong style="color:var(--accent-light)">Classificação</strong> <span id="ascensao-classificacao">Velado</span></span>
+        <span><strong style="color:var(--gold-light)">Energia</strong> <span id="ascensao-energia">0 / 100</span></span>
+        <span style="display:flex;gap:.3rem;align-items:center">
+          <button type="button" onclick="mudarAscensao(-1)" title="− Nível de Ascensão" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.3rem .6rem;font-family:inherit;font-size:.8rem;cursor:pointer;line-height:1" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">−</button>
+          <button type="button" onclick="mudarAscensao(1)" title="+ Nível de Ascensão" style="background:none;border:1px solid var(--accent);color:var(--accent-light);padding:.3rem .6rem;font-family:inherit;font-size:.8rem;cursor:pointer;line-height:1" onmouseover="this.style.background='rgba(var(--deep-rgb), .15)'" onmouseout="this.style.background='none'">+</button>
+        </span>
+      </div>
+      <div id="ascensao-aviso" style="display:none;margin-top:.4rem;color:var(--warn);font-weight:600">Novo Despertar disponível — aceite ou negligencie (ver painel Poder → Despertares).</div>
     </div>
     <div class="field-row cols-2">
       ${fieldGroup('Como Você Despertou','f-como-despertou')}
@@ -15136,6 +15150,55 @@ function ajustarNucleos(delta) {
   salvarLocal();
 }
 
+// ─── ESPIRAL DE ASCENSÃO (display na ficha) ───
+// Classificações e energia necessária por nível (tabela do livro).
+const _ASCENSAO_NIVEIS = [
+  { nome:'Velado', energia:0 },
+  { nome:'Desperto', energia:100 },
+  { nome:'Inflamado', energia:300 },
+  { nome:'Gravado', energia:800 },
+  { nome:'Manifesto', energia:1500 },
+  { nome:'Ungido', energia:3000 },
+  { nome:'Arauto', energia:6000 },
+  { nome:'Eclipse', energia:11000 },
+  { nome:'Abissal', energia:18000 },
+  { nome:'Transcendente', energia:30000 },
+  { nome:'Trono Vazio', energia:null }
+];
+
+// Ajusta o "atual" de f-nucleo (nível de Ascensão) e atualiza o display.
+function mudarAscensao(delta) {
+  const el = document.getElementById('f-nucleo');
+  if (!el || el.readOnly) return;
+  const raw = String(el.value || '').trim();
+  const partes = raw.split('/');
+  let atual = parseInt(partes[0], 10) || 0;
+  const max = partes.length > 1 ? (parseInt(partes[1], 10) || 0) : 0;
+  atual = Math.max(0, Math.min(10, atual + (delta || 0)));
+  el.value = atual + '/' + max;
+  atualizarEspiralAscensao();
+  salvarLocal();
+}
+
+// Atualiza classificação, energia e aviso de Despertar no display.
+function atualizarEspiralAscensao() {
+  const el = document.getElementById('f-nucleo');
+  if (!el) return;
+  const raw = String(el.value || '').trim();
+  const partes = raw.split('/');
+  const atual = Math.max(0, Math.min(10, parseInt(partes[0], 10) || 0));
+  const nivel = _ASCENSAO_NIVEIS[atual] || _ASCENSAO_NIVEIS[0];
+  const cls = document.getElementById('ascensao-classificacao');
+  if (cls) cls.textContent = nivel.nome;
+  const energia = document.getElementById('ascensao-energia');
+  if (energia) {
+    const prox = _ASCENSAO_NIVEIS[atual + 1];
+    energia.textContent = atual >= 10 ? '—' : (nivel.energia + ' / ' + (prox ? prox.energia : '—'));
+  }
+  const aviso = document.getElementById('ascensao-aviso');
+  if (aviso) aviso.style.display = atual >= 1 ? 'inline' : 'none';
+}
+
 async function carregarDados(targetUser) {
   const u = targetUser || usuarioAtual;
   if (!u || !personagemAtual) return;
@@ -15338,6 +15401,8 @@ function preencherCampos(d) {
     atualizarResumoCorrupcao();
     // Três Pilares do Poder (display + p-max automático)
     if (typeof atualizarPilaresPoder === 'function') atualizarPilaresPoder();
+    // Espiral de Ascensão (classificação + energia + aviso)
+    if (typeof atualizarEspiralAscensao === 'function') atualizarEspiralAscensao();
   }, 50);
 }
 
@@ -17267,6 +17332,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <ul>
             <li><a href="#alma-fragmentada">Alma Fragmentada</a></li>
             <li><a href="#evolucao-poder">Evolução do Poder</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#transformacao-usuario">A Transformação do Usuário</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ganhos-profundos">Ganhos Profundos do Despertar</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#nucleo-desperta">O Núcleo Desperta</a></li>
             <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
             <li><a href="#tecnicas-habilidades">Criação de Técnicas e Habilidades</a></li>
             <li><a href="#arvore-alma">A Árvore da Alma</a></li>
@@ -17420,6 +17490,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#alma-fragmentada">Alma Fragmentada</a></li>
                             <li><a href="#evolucao-poder">Evolução do Poder</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#transformacao-usuario">A Transformação do Usuário</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ganhos-profundos">Ganhos Profundos do Despertar</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#nucleo-desperta">O Núcleo Desperta</a></li>
                             <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
                             <li><a href="#tecnicas-habilidades">Criação de Técnicas e Habilidades</a></li>
                             <li><a href="#arvore-alma">A Árvore da Alma</a></li>
@@ -18767,65 +18842,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 Evoluir o poder é evoluir a si mesmo. Quanto mais você compreende quem realmente é… mais forte (e mais perigosa) sua alma se torna.
             </div>
 
-            <h3>As Três Formas de Desbloquear Técnicas</h3>
-            <p>Existem três caminhos para ganhar novas técnicas — e eles se somam.</p>
+            <h3 id="desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</h3>
+            <p>Um Despertar não é apenas uma expansão conceitual — ele também <strong>desbloqueia técnicas</strong>. Existem três formas de ganhar novas técnicas, e todas se somam:</p>
             <div class="system-card">
                 <strong>Forma 1 — Ascensão (Despertares):</strong><br><br>
-                Cada nível de Ascensão (0–10) libera 1 Despertar. Cada Despertar libera um <strong>trio de técnicas</strong>:<br>
-                • <strong>1 técnica no pico</strong> (tier = nível da Ascensão, livre — pode ser qualquer coisa)<br>
-                • <strong>1 suplementar</strong> (tier − 1)<br>
-                • <strong>1 livre</strong> (tier − 1)<br><br>
-                <em>Exemplo:</em> Ascensão Nv 3 → 1 técnica tier 3 + 1 suplementar tier 2 + 1 livre tier 2.
+                Cada nível de Ascensão (0–10) libera <strong>1 Despertar</strong>. Cada Despertar libera um <strong>trio de técnicas</strong>:<br>
+                • <strong>1 técnica no pico</strong> (tier = nível da Ascensão) — a técnica livre, pode ser qualquer coisa (não necessariamente ofensiva).<br>
+                • <strong>1 suplementar</strong> (tier = nível da Ascensão − 1).<br>
+                • <strong>1 livre</strong> (tier = nível da Ascensão − 1).<br><br>
+                <em>Exemplo:</em> Ascensão Nv 3 → 1 técnica tier 3 (livre) + 1 suplementar tier 2 + 1 livre tier 2.
             </div>
             <div class="system-card">
-                <strong>Forma 2 — Up de nível (XP):</strong><br><br>
-                Cada subida de Nível (1–20) libera <strong>outro trio de técnicas</strong>, no mesmo tier da Ascensão atual.
+                <strong>Forma 2 — Up de Nível (XP):</strong><br><br>
+                Cada subida de Nível (1–20) libera <strong>outro trio de técnicas</strong>, mas no <strong>mesmo tier da Ascensão atual</strong> do personagem.<br><br>
+                <em>Exemplo:</em> Ascensão Nv 3 + subiu de nível → 1 técnica tier 3 + 1 suplementar tier 2 + 1 livre tier 2.
             </div>
             <div class="system-card">
-                <strong>Forma 3 — Desenvolvimento espontâneo:</strong><br><br>
-                Independente de nível — o jogador pode desenvolver <strong>1 técnica espontaneamente</strong> em momentos de pico e cenas lendárias (o Mestre concede quando a cena merece).
+                <strong>Forma 3 — Desenvolvimento Espontâneo:</strong><br><br>
+                Independente de nível, o jogador pode desenvolver <strong>1 técnica</strong> espontaneamente durante sessões e narrações, em <strong>momentos de pico de desenvolvimento</strong> e <strong>cenas lendárias</strong> (atuações e desenvolvimento muito bons do personagem). Concedido pelo Mestre como recompensa narrativa. A técnica espontânea pode ser de qualquer tier até o limite do personagem.
             </div>
 
-            <h3>Aceitar vs Negligenciar</h3>
-            <p>Nem todo Despertar é bem-vindo. Quando um Despertar se manifesta, você escolhe como responder.</p>
+            <h3 id="aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</h3>
+            <p>Quando o Despertar ocorre (ao subir de Ascensão), o jogador <strong>escolhe</strong> o que fazer com ele:</p>
             <div class="system-card">
                 <strong>Aceitar:</strong><br>
-                Você paga o <strong>custo temático</strong> (−2 Sanidade máx, +1 Corrupção, +1 Atenção, ou Relacionamento −1 nível) e recebe a <strong>transformação completa</strong> do Despertar.
+                Você paga o <strong>custo temático</strong> (−2 de Sanidade máxima, +1 de Corrupção, +1 de Atenção da Torre, ou Relacionamento −1 nível — o mesmo menu dos Traços da Alma) e recebe a <strong>transformação completa</strong>: o trio de técnicas + a transformação estética + <strong>1 ganho profundo</strong> (ver <a href="#ganhos-profundos">Ganhos Profundos do Despertar</a>).
             </div>
             <div class="system-card">
                 <strong>Negligenciar:</strong><br>
-                O Despertar fica <strong>adormecido</strong> — sem efeito, sem custo e sem transformação. Você pode aceitá-lo depois, a qualquer momento, pagando o custo. <em>A Torre insiste.</em>
+                O Despertar fica <strong>adormecido</strong>: sem efeito mecânico, sem custo, sem transformação. O personagem vai contra a corrupção e se mantém mais humano. O jogador pode <strong>aceitar depois</strong> a qualquer momento (pagando o custo temático). Negligenciar repetidamente pode gerar tensão narrativa — a Torre insiste.
+            </div>
+            <div class="lore-box">
+                <strong>A Torre sempre cobra:</strong> todo poder tem um preço. Mas você pode escolher <strong>quando</strong> pagar. Negligenciar um Despertar é uma forma de resistência — e a Torre não gosta de ser ignorada.
             </div>
 
-            <h3>Transformação do Usuário</h3>
-            <p>Um Despertar aceito não muda só o poder — muda você.</p>
+            <h3 id="transformacao-usuario">A Transformação do Usuário</h3>
+            <p>O Despertar é bem mais que ganho de poder: <strong>o poder se transforma e o usuário também, assim como o seu núcleo</strong>.</p>
             <div class="system-card">
-                <strong>Transformação:</strong><br><br>
-                • <strong>Estética:</strong> marcas, olhos, aura, forma do poder — o corpo reflete a evolução.<br>
-                • <strong>Técnicas:</strong> as técnicas podem se transformar junto com o conceito.<br>
-                • <strong>Conexão com Marcas da Corrupção:</strong> quando o custo pago for Corrupção, a transformação se conecta às <a href="#corrupcao-marcas">Marcas da Corrupção</a> — o corpo carrega a marca do que foi pago.
+                <strong>Estética:</strong> o personagem pode mudar — marcas, olhos, aura, forma do poder. Registre a transformação na ficha. A transformação pode incluir os <strong>ganhos profundos</strong> (ver <a href="#ganhos-profundos">Ganhos Profundos do Despertar</a>).<br><br>
+                <strong>Técnicas:</strong> podem se transformar — renomear/reflavor com o mesmo efeito, ou efeito evoluído.<br><br>
+                <strong>Conexão com a Corrupção:</strong> quando o custo de aceitar for Corrupção, a transformação estética conecta-se às <strong>Marcas da Corrupção</strong> (tabela d12 da seção <a href="#sanidade">Sanidade e Corrupção</a>).
+            </div>
+            <div class="lore-box">
+                <strong>Exemplo — Manipulação de Espadas:</strong> no 1º Despertar, o controle fica mais preciso. A técnica "Corte" vira <strong>"Corte Preciso"</strong> — mesmo efeito, nova forma. O usuário pode ganhar marcas finas nos braços, como cicatrizes de lâmina, conectadas à sua Corrupção.
             </div>
 
-            <h3>Ganhos Profundos</h3>
-            <p>Cada Despertar aceito concede, além do trio de técnicas, <strong>1 ganho profundo</strong> escolhido de um menu:</p>
+            <h3 id="ganhos-profundos">Ganhos Profundos do Despertar</h3>
+            <p>Cada Despertar <strong>aceito</strong> concede, além do trio de técnicas, <strong>1 ganho profundo</strong> escolhido de um menu — o jogador escolhe 1 por Despertar:</p>
             <div class="system-card">
                 <strong>Menu de Ganhos Profundos:</strong><br><br>
-                • <strong>1. Nova Manifestação</strong> — o poder ganha um uso novo e temático (Utilização registrada de graça, categoria ≤ limite do nível).<br>
-                • <strong>2. Transformação Estética Marcante</strong> — aura, olhos, forma do poder mudam visivelmente (conecta com as <a href="#corrupcao-marcas">Marcas da Corrupção</a> se o custo for Corrupção).<br>
-                • <strong>3. Voz do Núcleo</strong> — o poder ganha uma "voz"/instinto próprio: 1×/cena, o Mestre pode dar uma dica temática (ou o poder se manifesta sem comando em perigo).<br>
-                • <strong>4. Dado Temático</strong> — +1 dado em testes temáticos do poder (ex.: +1d4 em testes de Alma/Intelecto relacionados à Manifestação).<br>
-                • <strong>5. Ressonância</strong> — o poder ressoa com a <a href="#arvore-alma">Árvore da Alma</a>: 1 Ramo escolhido ganha +1 ponto.
+                <strong>1. Nova Manifestação</strong> — o poder ganha um uso novo e temático (uma Utilização registrada de graça, categoria ≤ limite do nível).<br><br>
+                <strong>2. Transformação Estética Marcante</strong> — aura, olhos, forma do poder mudam visivelmente (registrado na ficha; conecta com as Marcas da Corrupção se o custo for Corrupção).<br><br>
+                <strong>3. Voz do Núcleo</strong> — o poder ganha uma "voz"/instinto próprio: 1×/cena, o Mestre pode dar uma dica temática do poder (ou o poder se manifesta sem comando em momento de perigo).<br><br>
+                <strong>4. Dado Temático</strong> — +1 dado em testes temáticos do poder (ex.: +1d4 em testes de Alma/Intelecto relacionados à Manifestação).<br><br>
+                <strong>5. Ressonância</strong> — o poder ressoa com a <a href="#arvore-alma">Árvore da Alma</a>: 1 Ramo escolhido ganha +1 ponto (ou o equivalente em Pontos da Alma).
+            </div>
+            <div class="lore-box">
+                <strong>A Torre sempre cobra:</strong> mas o que ela devolve pode ser maior que o preço. Cada Despertar aceito é uma negociação — e os ganhos profundos são o troco que você escolhe.
             </div>
 
-            <h3>O Núcleo Desperta</h3>
-            <p>A partir do <strong>3º Despertar aceito</strong>, o Núcleo desperta — o jogador escolhe uma forma:</p>
+            <h3 id="nucleo-desperta">O Núcleo Desperta</h3>
+            <p>A partir do <strong>3º Despertar aceito</strong>, o Núcleo do personagem pode "despertar" uma característica própria:</p>
             <div class="system-card">
-                <strong>Formas do Núcleo Desperto:</strong><br><br>
-                • <strong>Voz</strong> — o poder manifesta-se sem comando 1×/cena (age por instinto em perigo).<br>
-                • <strong>Marca permanente</strong> — uma marca visível no corpo, conectada à <a href="#corrupcao-marcas">Corrupção</a> se o custo for Corrupção.<br>
-                • <strong>Presença</strong> — o poder emana presença: ganchos narrativos e reações do mundo ao seu redor.
+                <strong>O Núcleo desperta automaticamente no 3º Despertar aceito</strong> — o jogador escolhe a forma:<br><br>
+                • <strong>Voz:</strong> o poder ganha voz/instinto — manifesta-se sem comando em momentos de perigo (1×/cena).<br>
+                • <strong>Marca:</strong> deixa uma marca permanente (conectada à Corrupção se o custo for Corrupção).<br>
+                • <strong>Presença:</strong> o personagem sente o Núcleo como uma presença — ganchos narrativos; o Mestre pode usar para tensão.<br><br>
+                A partir daí, cada Despertar adicional pode aprofundar a escolha (ex.: a voz fala mais, a marca cresce).
             </div>
-            <p>Despertares adicionais aprofundam a forma escolhida — a voz fica mais clara, a marca mais forte, a presença mais pesada.</p>
+            <div class="lore-box">
+                <strong>Seu Núcleo não é mais só seu</strong> — e isso pode ser tanto um presente quanto um preço. Ele sussurra, marca e observa. A Torre sempre cobra — mas agora ela tem com quem conversar.
+            </div>
         </section>
 
         <section id="poder-mente-corpo">
@@ -19966,9 +20053,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <tr><td>2</td><td>Inflamado</td><td>300</td><td>Seu corpo começa a suportar energia além do normal. Sonhos com a Torre se tornam comuns.</td></tr>
                     <tr><td>3</td><td>Gravado</td><td>800</td><td>Sua Alma recebe marcas permanentes. Sua presença já incomoda humanos normais.</td></tr>
                     <tr><td>4</td><td>Manifesto</td><td>1.500</td><td>Seu Aspecto desperta. Você deixa de ser "apenas humano" aos olhos do mundo.</td></tr>
-                    <tr><td>5</td><td>Ungido</td><td>3.000</td><td>Seu núcleo recebe aceitação superior. Um novo Despertar de Poder ocorre ao alcançar este nível.</td></tr>
+                    <tr><td>5</td><td>Ungido</td><td>3.000</td><td>Seu núcleo recebe aceitação superior. Um novo Despertar de Poder ocorre ao alcançar este Nível de Ascensão — liberando um trio de técnicas (ver <a href="#desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</a>).</td></tr>
                     <tr><td>6</td><td>Arauto</td><td>6.000</td><td>Sua simples presença afeta o ambiente. Monstros mais fracos sentem medo ou reverência.</td></tr>
-                    <tr><td>7</td><td>Eclipse</td><td>11.000</td><td>Sua humanidade começa a se tornar secundária. Mais um Despertar de Poder se manifesta neste estágio.</td></tr>
+                    <tr><td>7</td><td>Eclipse</td><td>11.000</td><td>Sua humanidade começa a se tornar secundária. Mais um Despertar de Poder se manifesta neste estágio — você pode aceitá-lo ou negligenciá-lo (ver <a href="#aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</a>).</td></tr>
                     <tr><td>8</td><td>Abissal</td><td>18.000</td><td>Você já não é mais considerado humano por ninguém que tenha sensibilidade. Sua existência transcende parcialmente o mundo material.</td></tr>
                     <tr><td>9</td><td>Transcendente</td><td>30.000</td><td>Você atingiu uma forma superior de existência. Poucos humanos já chegaram aqui.</td></tr>
                     <tr><td>10</td><td>Trono Vazio</td><td>—</td><td>Nível lendário. Nunca foi alcançado de forma confirmada. Requer condições extraordinárias.</td></tr>
