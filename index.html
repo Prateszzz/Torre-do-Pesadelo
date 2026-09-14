@@ -17575,9 +17575,13 @@ function filtrarSidebar(termoRaw) {
 
 function irParaFicha() {
   document.getElementById('landing-screen').style.display = 'none';
-  // Se já está logado (token Firebase persistido), vai direto para a ficha
-  // do próprio personagem — sem passar pela tela de login.
-  if (usuarioAtual) {
+  // auth.currentUser é síncrono (disponível imediatamente se há token
+  // persistido), ao contrário de usuarioAtual que depende do Firestore async.
+  const fbUser = window.auth?.currentUser;
+  if (fbUser && !fbUser.isAnonymous) {
+    // Usuário com sessão persistida: pula login e vai direto para a ficha.
+    // Se usuarioAtual ainda não foi preenchido (restaurarSessao ainda rodando),
+    // chama irParaMinhaFicha que ativa o primeiro personagem automaticamente.
     document.getElementById('app').style.display = 'block';
     _toggleTabbar(true);
     setTimeout(() => irParaMinhaFicha(), 150);
