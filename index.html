@@ -17575,17 +17575,22 @@ function filtrarSidebar(termoRaw) {
 
 function irParaFicha() {
   document.getElementById('landing-screen').style.display = 'none';
-  // auth.currentUser é síncrono (disponível imediatamente se há token
-  // persistido), ao contrário de usuarioAtual que depende do Firestore async.
+  // Tenta usar auth.currentUser (síncrono) primeiro. Se não estiver disponível
+  // (Firebase ainda inicializando), cai para usuarioAtual após pequeno atraso.
   const fbUser = window.auth?.currentUser;
   if (fbUser && !fbUser.isAnonymous) {
-    // Usuário com sessão persistida: pula login e vai direto para a ficha.
-    // Se usuarioAtual ainda não foi preenchido (restaurarSessao ainda rodando),
-    // chama irParaMinhaFicha que ativa o primeiro personagem automaticamente.
+    // Sessão Firebase persistida detectada imediatamente
+    document.getElementById('app').style.display = 'block';
+    _toggleTabbar(true);
+    setTimeout(() => irParaMinhaFicha(), 150);
+  } else if (usuarioAtual) {
+    // Sessão já restaurada via restaurarSessao()
     document.getElementById('app').style.display = 'block';
     _toggleTabbar(true);
     setTimeout(() => irParaMinhaFicha(), 150);
   } else {
+    // Nenhuma sessão detectada — mostra login. Após login, tentarLogin()
+    // navega automaticamente para a ficha do personagem.
     document.getElementById('login-screen').style.display = 'flex';
   }
 }
