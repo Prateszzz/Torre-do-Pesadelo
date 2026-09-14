@@ -17576,11 +17576,11 @@ function filtrarSidebar(termoRaw) {
 function irParaFicha() {
   document.getElementById('landing-screen').style.display = 'none';
   // Se já está logado (token Firebase persistido), vai direto para a ficha
-  // sem passar pela tela de login.
+  // do próprio personagem — sem passar pela tela de login.
   if (usuarioAtual) {
     document.getElementById('app').style.display = 'block';
     _toggleTabbar(true);
-    setTimeout(() => navTo('ficha'), 150);
+    setTimeout(() => irParaMinhaFicha(), 150);
   } else {
     document.getElementById('login-screen').style.display = 'flex';
   }
