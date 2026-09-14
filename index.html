@@ -4312,6 +4312,195 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
   box-shadow: none !important;
 }
 
+/* ═══ LIVRO DO MESTRE — CSS PRÓPRIO ═══ */
+/* Prefixado com #livro-mestre para evitar conflito com o Livro do Jogador */
+
+#livro-mestre .highlight { background: rgba(var(--deep-rgb), .13); padding: .05em .4em; border-radius: 3px; color: #f5c2c2; }
+#livro-mestre .key-term { color: var(--accent-light); font-weight: 600; border-bottom: 1px dotted var(--accent); }
+#livro-mestre .section-divider { height: 2px; background: linear-gradient(to right, transparent, var(--accent), transparent); margin: 2.8rem 0; opacity: .35; }
+
+/* Sumário 2 colunas */
+#livro-mestre .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: stretch; }
+#livro-mestre .sumario-side-panel { background: #242030; border: 1px solid #3a3548; border-radius: 6px; padding: 1.3rem 1.4rem; font-size: .88rem; color: #c5c5d1; display: flex; flex-direction: column; gap: 1.1rem; }
+#livro-mestre .sumario-side-panel h4 { color: var(--accent); font-size: 1rem; margin-bottom: .8rem; padding-bottom: .4rem; border-bottom: 1px solid #2a2a32; }
+#livro-mestre .sumario-side-panel ul { list-style: none; padding: 0; margin: 0; }
+#livro-mestre .sumario-side-panel li { padding: .3rem 0; border-bottom: 1px solid #222228; font-size: .85rem; line-height: 1.3; }
+#livro-mestre .sumario-side-panel li:last-child { border-bottom: none; }
+#livro-mestre .sumario-side-panel .warning { background: var(--deep-t12); border-left: 3px solid var(--accent); padding: .6rem .75rem; margin-top: auto; font-size: .82rem; color: #d4a3a3; line-height: 1.35; }
+#livro-mestre .sumario-content a { display: block; padding: .12rem 0; }
+#livro-mestre .sumario-side-panel .sumario-destaques a { color: var(--accent-light); text-decoration: none; border-bottom: 1px solid rgba(var(--accent-rgb), .25); transition: color .2s, border-color .2s; }
+#livro-mestre .sumario-side-panel .sumario-destaques a::before { content: "→ "; color: var(--gold-light); opacity: .7; }
+#livro-mestre .sumario-side-panel .sumario-destaques a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+#livro-mestre .sumario-side-panel .sumario-ref li { font-size: .8rem; }
+
+/* Blocos do sumário */
+#livro-mestre .sumario-content .sumario-bloco { margin-bottom: 1.4rem; }
+#livro-mestre .sumario-content h3 { color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem; }
+#livro-mestre .sumario-content ul { list-style: none; padding-left: 1rem; line-height: 1.65; margin: 0; }
+#livro-mestre #livro-mestre-sumario > h2 { text-align: center; color: var(--accent); font-size: 1.6rem; margin-bottom: 1.2rem; letter-spacing: 1px; }
+#livro-mestre #livro-mestre-sumario > p { text-align: center; max-width: 700px; margin: 0 auto 1.5rem; color: #a8a8b3; font-size: 0.95rem; }
+
+/* Conteúdo do livro: tipografia ajustada ao sistema existente */
+#livro-mestre p { margin-bottom: 1.05rem; color: #d4d4dc; }
+#livro-mestre h1 { font-size: 2.7rem; margin: 2.6rem 0 1rem; }
+#livro-mestre h2 { font-size: 1.9rem; margin: 2.2rem 0 .8rem; }
+#livro-mestre h3 { font-size: 1.4rem; margin: 1.7rem 0 .6rem; }
+#livro-mestre h4 { font-size: 1.2rem; margin: 1.4rem 0 .5rem; color: #d8d8e0; }
+
+/* Responsivo do sumário */
+@media (max-width:1024px) {
+  #livro-mestre .sumario-content { grid-template-columns: 1fr; }
+  #livro-mestre .sumario-side-panel { margin-top: 1rem; font-size: .82rem; }
+  #livro-mestre .sumario-side-panel li { font-size: .8rem; }
+}
+@media (max-width:640px) {
+  #livro-mestre .sumario-content { font-size: .92rem; }
+  #livro-mestre .sumario-content ul { columns: 1 !important; }
+}
+
+/* HERO DO LIVRO DO MESTRE */
+#livro-mestre .livro-hero {
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 3rem 1rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+  background: linear-gradient(180deg, transparent 0%, rgba(168,43,43,.04) 100%);
+}
+#livro-mestre .livro-hero-content { max-width: 700px; }
+#livro-mestre .livro-hero-symbol {
+  width: 58px; height: 58px; margin: 0 auto 1.3rem;
+  border: 2px solid var(--accent); position: relative;
+}
+#livro-mestre .livro-hero-symbol-v {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 38px; background: var(--accent);
+}
+#livro-mestre .livro-hero-symbol-h {
+  position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+  width: 18px; height: 3px; background: var(--accent);
+}
+#livro-mestre .livro-hero h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.3rem, 7vw, 3.6rem); letter-spacing: -1.5px;
+  color: #f5f5f7; margin: 0; line-height: 1.1;
+}
+#livro-mestre .livro-hero-subtitle {
+  font-size: 1.05rem; color: var(--silver); letter-spacing: 3.5px;
+  text-transform: uppercase; margin: .4rem 0 1.4rem;
+}
+#livro-mestre .livro-hero-tags { color: var(--text-muted); margin-bottom: .4rem; }
+#livro-mestre .livro-hero-aviso { font-size: .85rem; color: var(--text-ghost); margin: 0; }
+@media (max-width:640px) {
+  #livro-mestre .livro-hero { padding: 2.2rem 1rem 1.8rem; }
+  #livro-mestre .livro-hero-subtitle { letter-spacing: 2px; font-size: .92rem; }
+}
+
+/* SIDEBAR FLUTUANTE DO LIVRO DO MESTRE */
+#livro-mestre-backdrop {
+  position: fixed; inset: 0; z-index: 350; background: rgba(0,0,0,.45);
+  opacity: 0; pointer-events: none; transition: opacity .35s ease;
+}
+#livro-mestre-backdrop.show { opacity: 1; pointer-events: auto; }
+
+#livro-mestre-arrow-btn {
+  position: fixed; top: 50%; left: 0; transform: translateY(-50%);
+  z-index: 410; width: 30px; height: 68px;
+  background: linear-gradient(135deg, rgba(28,26,34,.95), rgba(60,18,18,.85));
+  border: 1px solid rgba(var(--accent-rgb), .45); border-left: none;
+  border-radius: 0 12px 12px 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-light); font-size: 1.05rem; cursor: pointer;
+  box-shadow: 3px 0 16px rgba(0,0,0,.55), 0 0 14px var(--accent-t08);
+  transition: left .38s cubic-bezier(.22,.85,.32,1.1), background .25s, color .25s, box-shadow .25s;
+}
+#livro-mestre-arrow-btn:hover { background: var(--accent); color: #fff; box-shadow: 3px 0 18px rgba(0,0,0,.6), 0 0 20px var(--accent-t35); }
+#livro-mestre-arrow-btn .arrow-ic { display: inline-block; transition: transform .38s cubic-bezier(.22,.85,.32,1.1); }
+#livro-mestre-arrow-btn.open .arrow-ic { transform: rotate(180deg); }
+
+#livro-mestre-sidebar {
+  position: fixed !important; top: 0; left: 0; bottom: 0;
+  width: 290px; max-width: 86vw;
+  height: 100vh !important; max-height: 100vh !important;
+  background: linear-gradient(165deg, rgba(20,18,24,.99) 0%, rgba(12,10,14,.99) 55%, rgba(9,8,11,1) 100%) !important;
+  border-right: 1px solid rgba(var(--accent-rgb), .28);
+  box-shadow: 6px 0 36px rgba(0,0,0,.65), inset -1px 0 0 rgba(255,255,255,.03);
+  transform: translateX(-100%);
+  transition: transform .38s cubic-bezier(.22,.85,.32,1.1);
+  z-index: 400 !important;
+  padding: 4.5rem 1.1rem 1.5rem !important;
+  overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--accent-t40) transparent;
+}
+#livro-mestre-sidebar.open { transform: translateX(0); }
+#livro-mestre-sidebar::-webkit-scrollbar { width: 5px; }
+#livro-mestre-sidebar::-webkit-scrollbar-track { background: transparent; }
+#livro-mestre-sidebar::-webkit-scrollbar-thumb { background: var(--accent-t40); border-radius: 3px; }
+#livro-mestre-sidebar::-webkit-scrollbar-thumb:hover { background: rgba(var(--accent-rgb), .65); }
+
+/* Conteúdo ocupa a largura toda */
+#livro-mestre-layout { display: block !important; }
+#livro-mestre-content { max-width: 900px; margin: 0 auto; }
+@media (min-width: 1024px) {
+  #livro-mestre-content { padding-left: 4.5rem !important; }
+}
+
+/* REMOÇÃO TOTAL DE SOMBRAS */
+body:has(#livro-mestre[style*="display: block"]) #tp-scene,
+body:has(#livro-mestre[style*="display: block"]) #tp-atmosphere,
+body:has(#livro-mestre[style*="display: block"]) .tp-eye {
+  display: none !important;
+}
+
+#livro-mestre h1, #livro-mestre h2, #livro-mestre h3, #livro-mestre h4 {
+  text-shadow: none !important;
+}
+
+#livro-mestre .system-card,
+#livro-mestre .lore-box,
+#livro-mestre .table-wrapper,
+#livro-mestre table,
+#livro-mestre .sumario-content,
+#livro-mestre .sumario-side-panel,
+#livro-mestre .livro-hero,
+#livro-mestre #livro-mestre-sidebar,
+#livro-mestre #livro-mestre-arrow-btn {
+  box-shadow: none !important;
+}
+
+/* TOPBAR ESTILIZADA DO LIVRO DO MESTRE */
+#livro-mestre-topbar {
+  position: sticky; top: 0; z-index: 300;
+  background: rgba(10,9,13,.92); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: .55rem 1.25rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+#livro-mestre-topbar .livro-topbar-voltar {
+  background: none; border: none; color: var(--text-muted); cursor: pointer;
+  font-size: .82rem; display: flex; align-items: center; gap: .3rem;
+  padding: .3rem .6rem; transition: color .2s; flex-shrink: 0;
+}
+#livro-mestre-topbar .livro-topbar-voltar:hover { color: var(--accent-light); }
+#livro-mestre-topbar .livro-topbar-titulo {
+  font-family: 'Playfair Display', serif; font-size: 1rem;
+  color: var(--gold-light); flex: 1; text-align: center;
+}
+#livro-mestre-topbar .livro-topbar-badge {
+  font-size: .68rem; color: var(--text-muted); flex-shrink: 0;
+  border: 1px solid var(--accent-t35); padding: .2rem .5rem;
+  border-radius: var(--r-sm); text-transform: uppercase; letter-spacing: .5px;
+}
+#livro-mestre-topbar .livro-topbar-tools {
+  display: none; flex-shrink: 0;
+}
+
+/* Sidebar header/footer do Mestre */
+#livro-mestre .livro-sidebar-header { font-family:'Playfair Display',serif;font-size:.95rem;color:var(--accent-light);margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:2px solid var(--accent); }
+#livro-mestre .livro-sidebar-links { list-style:none;padding:0;margin:0 0 .6rem; }
+#livro-mestre .livro-sidebar-footer { margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border); }
+#livro-mestre .livro-sidebar-sair { width:100%;display:flex;align-items:center;justify-content:center;gap:.45rem;background:rgba(var(--deep-rgb), .1);border:1px solid var(--accent-t35);color:var(--accent-light);padding:.6rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;border-radius:4px;transition:background .2s,border-color .2s; }
+#livro-mestre .livro-sidebar-sair:hover { background:rgba(var(--deep-rgb), .22);border-color:var(--accent-light); }
+
 /* ═══════════════════════════════════════════════════════════════════
    FRENTE 3 — NAVEGAÇÃO MOBILE REFINADA
    Melhorias aditivas (só sobrescrevem propriedades pontuais) para uma
@@ -4555,6 +4744,18 @@ body:has(#livro-jogador[style*="display: block"]) .tp-eye {
     @media (max-width:1024px) {
       /* Drawer flutuante é a única estratégia mobile; regra estática removida. */
       #livro-sidebar { position: fixed !important; }
+    }
+
+    /* Sidebar e links do Livro do Mestre */
+    #livro-mestre-sidebar a.active { color:#fff; background:var(--accent); font-weight:600; border-radius:4px; }
+    #livro-mestre-sidebar a { color:#d4d2de; text-decoration:none; display:block; padding:.38rem .55rem; border-radius:4px; font-size:.93rem; transition:color .2s,background .2s; }
+    #livro-mestre-sidebar a:hover { color:#fff; background:rgba(var(--deep-rgb), .18); }
+    #livro-mestre-sidebar .toc-label { font-size:.7rem; text-transform:uppercase; letter-spacing:1.5px; color:#e8696e; margin:.9rem 0 .3rem; display:block; padding-left:.4rem; border-left:3px solid #e8696e; font-weight:600; }
+    #livro-mestre-content a { color: var(--accent-light); text-decoration: none; border-bottom: 1px solid rgba(var(--accent-rgb), .3); transition: color .2s, border-color .2s; }
+    #livro-mestre-content a:hover { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+    #livro-mestre-content a:visited { color: var(--accent-light); }
+    @media (max-width:1024px) {
+      #livro-mestre-sidebar { position: fixed !important; }
     }
   </style></head>
 <body>
@@ -17251,6 +17452,10 @@ function navTo(id) {
   if (livro && livro.style.display !== 'none' && typeof fecharLivro === 'function') {
     fecharLivro();
   }
+  const livroMestre = document.getElementById('livro-mestre');
+  if (livroMestre && livroMestre.style.display !== 'none' && typeof fecharLivroMestre === 'function') {
+    fecharLivroMestre();
+  }
   document.getElementById('sidebar').classList.remove('open');
   const arrow = document.getElementById('sidebar-arrow-btn');
   const backdrop = document.getElementById('sidebar-backdrop');
@@ -17277,6 +17482,10 @@ function tabNav(id, btn) {
   const livro = document.getElementById('livro-jogador');
   if (livro && livro.style.display !== 'none' && typeof fecharLivro === 'function') {
     fecharLivro();
+  }
+  const livroMestre = document.getElementById('livro-mestre');
+  if (livroMestre && livroMestre.style.display !== 'none' && typeof fecharLivroMestre === 'function') {
+    fecharLivroMestre();
   }
   // Fecha sidebar se aberta
   document.getElementById('sidebar')?.classList.remove('open');
@@ -17457,7 +17666,6 @@ function _atualizarVisibilidadeLivroMestre() {
 }
 
 function abrirLivroMestre() {
-  // Bloqueio por role: só GM/ADM acessam.
   if (roleAtual !== 'gm' && roleAtual !== 'adm') {
     alert('Acesso restrito ao Mestre. Este conteúdo é exclusivo do GM/ADM.');
     return;
@@ -17467,24 +17675,34 @@ function abrirLivroMestre() {
   const app = document.getElementById('app');
   if (app) app.style.display = 'none';
   livro.style.display = 'block';
-  window.scrollTo(0, 0);
-  // Inicializa links internos do Livro do Mestre (scroll suave).
-  livro.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', function(e) {
-      e.preventDefault();
-      const id = this.getAttribute('href').slice(1);
-      const el = document.getElementById(id);
-      if (el) {
-        const top = el.getBoundingClientRect().top + window.scrollY - 60;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }
+  livro.scrollTo(0, 0);
+  document.body.classList.add('livro-aberto');
+  _toggleAtmosferaLivro(true);
+  // GM tools (modo editor)
+  const gmTools = document.getElementById('livro-gm-tools-mestre');
+  if (gmTools) gmTools.style.display = (roleAtual === 'gm' || roleAtual === 'adm') ? 'flex' : 'none';
+  _inicializarLinksLivroMestre();
+  _livroMestreSidebarResponsiva();
+  _injetarNavLivroMestre();
+  _inicializarProgressoLeituraMestre();
+  _garantirIdsBlocosLivroMestre();
+  _aplicarBlocosLivroMestre();
+  if (roleAtual === 'gm' || roleAtual === 'adm') _ativarEdicaoBlocosLivroMestre();
+  _livroMestreScrollspy();
+  // Se não tem usuário logado, tenta carregar blocos da nuvem
+  if (!usuarioAtual) {
+    aguardarFirebase().then(() => {
+      _carregarBlocosLivroMestreNuvem().then(() => _aplicarBlocosLivroMestre());
     });
-  });
+  }
 }
 
 function fecharLivroMestre() {
   const livro = document.getElementById('livro-mestre');
   if (livro) livro.style.display = 'none';
+  fecharLivroMestreSidebar();
+  document.body.classList.remove('livro-aberto');
+  _toggleAtmosferaLivro(false);
   if (usuarioAtual && usuarioAtual !== null) {
     document.getElementById('app').style.display = 'block';
   } else {
@@ -17492,6 +17710,273 @@ function fecharLivroMestre() {
   }
   window.scrollTo(0, 0);
 }
+
+// ═══════════════════════════════════════════════════════════
+// LIVRO DO MESTRE — TECNOLOGIA (drawer, nav, progresso, editor)
+// ═══════════════════════════════════════════════════════════
+
+function toggleLivroMestreSidebar() {
+  const sidebar = document.getElementById('livro-mestre-sidebar');
+  const backdrop = document.getElementById('livro-mestre-backdrop');
+  const arrow = document.getElementById('livro-mestre-arrow-btn');
+  const isOpen = sidebar && sidebar.classList.contains('open');
+  if (sidebar) sidebar.classList.toggle('open', !isOpen);
+  if (backdrop) backdrop.classList.toggle('show', !isOpen);
+  if (arrow) {
+    arrow.classList.toggle('open', !isOpen);
+    const ic = arrow.querySelector('.arrow-ic');
+    if (ic) ic.textContent = isOpen ? '▶' : '◀';
+  }
+}
+
+function fecharLivroMestreSidebar() {
+  const sidebar = document.getElementById('livro-mestre-sidebar');
+  const backdrop = document.getElementById('livro-mestre-backdrop');
+  const arrow = document.getElementById('livro-mestre-arrow-btn');
+  if (sidebar) sidebar.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('show');
+  if (arrow) {
+    arrow.classList.remove('open');
+    const ic = arrow.querySelector('.arrow-ic');
+    if (ic) ic.textContent = '▶';
+  }
+}
+
+function _livroMestreSidebarResponsiva() {
+  const backdrop = document.getElementById('livro-mestre-backdrop');
+  if (backdrop && !backdrop._mestreListener) {
+    backdrop._mestreListener = true;
+    backdrop.addEventListener('click', fecharLivroMestreSidebar);
+  }
+  if (window.innerWidth <= 1024) fecharLivroMestreSidebar();
+}
+
+function _inicializarLinksLivroMestre() {
+  const livro = document.getElementById('livro-mestre');
+  if (!livro) return;
+  livro.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      fecharLivroMestreSidebar();
+      if (el) {
+        const elRect = el.getBoundingClientRect();
+        const containerRect = livro.getBoundingClientRect();
+        const top = elRect.top - containerRect.top + livro.scrollTop - 64;
+        livro.scrollTo({ top, behavior: 'smooth' });
+      }
+    }, { once: false });
+  });
+}
+
+function _livroMestreScrollspy() {
+  const livro = document.getElementById('livro-mestre');
+  if (!livro || livro.style.display === 'none') return;
+  const links = livro.querySelectorAll('#livro-mestre-sidebar a[href^="#"]');
+  let current = '';
+  livro.querySelectorAll('section[id]').forEach(s => {
+    const elRect = s.getBoundingClientRect();
+    const containerRect = livro.getBoundingClientRect();
+    if (elRect.top - containerRect.top <= 80) current = s.id;
+  });
+  links.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+
+const _LIVRO_MESTRE_SECOES = ['introducao-mestre','verdade-torres','criacao-monstros','geracao-torres','sanidade-corrupcao-avancada','surtos-decenais','faccoes-secretas','barmans-mestre','ferramentas-mestre','apendices-mestre'];
+const _LIVRO_MESTRE_PARTES = {
+  'introducao-mestre':'I · Introdução',
+  'verdade-torres':'II · A Verdade',
+  'criacao-monstros':'III · Criação de Monstros',
+  'geracao-torres':'IV · Geração de Torres',
+  'sanidade-corrupcao-avancada':'V · Sanidade e Corrupção',
+  'surtos-decenais':'VI · Surtos Decenais',
+  'faccoes-secretas':'VII · Facções Secretas',
+  'barmans-mestre':'Barmans',
+  'ferramentas-mestre':'VIII · Ferramentas',
+  'apendices-mestre':'IX · Apêndices'
+};
+
+function _injetarNavLivroMestre() {
+  const livro = document.getElementById('livro-mestre');
+  if (!livro) return;
+  _LIVRO_MESTRE_SECOES.forEach((id, i) => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    if (sec.querySelector('.livro-nav')) return;
+    const parte = _LIVRO_MESTRE_PARTES[id] || '';
+    const titulo = sec.querySelector('h1,h2')?.textContent || '';
+    if (parte) {
+      const bc = document.createElement('div');
+      bc.className = 'livro-breadcrumb';
+      bc.textContent = parte + ' → ' + titulo;
+      sec.insertBefore(bc, sec.firstChild);
+    }
+    const prev = i > 0 ? _LIVRO_MESTRE_SECOES[i - 1] : null;
+    const next = i < _LIVRO_MESTRE_SECOES.length - 1 ? _LIVRO_MESTRE_SECOES[i + 1] : null;
+    if (prev || next) {
+      const nav = document.createElement('div');
+      nav.className = 'livro-nav';
+      let html = '';
+      if (prev) html += '<a href="#' + prev + '" class="livro-nav-btn">← Anterior</a>';
+      if (next) html += '<a href="#' + next + '" class="livro-nav-btn">Próximo →</a>';
+      nav.innerHTML = html;
+      sec.appendChild(nav);
+    }
+  });
+}
+
+function _inicializarProgressoLeituraMestre() {
+  const livro = document.getElementById('livro-mestre');
+  if (!livro) return;
+  let bar = document.getElementById('livro-mestre-progresso');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'livro-mestre-progresso';
+    bar.style.cssText = 'position:sticky;top:0;left:0;height:3px;background:var(--gold);z-index:50;transition:width .15s;width:0';
+    livro.insertBefore(bar, livro.firstChild);
+  }
+  let btn = document.getElementById('livro-mestre-scroll-top');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'livro-mestre-scroll-top';
+    btn.textContent = '↑';
+    btn.title = 'Voltar ao topo';
+    btn.onclick = () => livro.scrollTo({ top: 0, behavior: 'smooth' });
+    btn.style.cssText = 'display:none;position:fixed;bottom:2rem;right:2rem;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.1rem;cursor:pointer;z-index:950;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.5)';
+    document.body.appendChild(btn);
+  }
+  const atualizar = () => {
+    const max = livro.scrollHeight - livro.clientHeight;
+    const pct = max > 0 ? Math.min(100, (livro.scrollTop / max) * 100) : 0;
+    bar.style.width = pct + '%';
+    btn.style.display = livro.scrollTop > 400 ? 'flex' : 'none';
+  };
+  livro.addEventListener('scroll', atualizar, { passive: true });
+  atualizar();
+}
+
+// ─── Editor GM do Livro do Mestre ───
+let _livroMestreModoEditor = false;
+const _livroMestreStorageKey = 'tp_blocos_livro_mestre';
+let _blocosLivroMestre = _parseJSONSafe(localStorage.getItem(_livroMestreStorageKey), {});
+
+function toggleModoEditorLivroMestre() {
+  _livroMestreModoEditor = !_livroMestreModoEditor;
+  const btn = document.getElementById('btn-livro-editor-mestre');
+  const livro = document.getElementById('livro-mestre');
+  if (!livro) return;
+  if (_livroMestreModoEditor) {
+    livro.classList.add('modo-editor-livro');
+    if (btn) btn.innerHTML = icone('close','ic-sm') + ' Sair do Editor';
+    _ativarEdicaoBlocosLivroMestre();
+  } else {
+    livro.classList.remove('modo-editor-livro');
+    if (btn) btn.innerHTML = icone('edit','ic-sm') + ' Modo Editor';
+  }
+}
+
+function _garantirIdsBlocosLivroMestre() {
+  const livro = document.getElementById('livro-mestre');
+  if (!livro) return;
+  const seletores = ['#livro-mestre-content p', '#livro-mestre-content h1', '#livro-mestre-content h2',
+                     '#livro-mestre-content h3', '#livro-mestre-content .lore-box',
+                     '#livro-mestre-content .system-card'];
+  seletores.forEach(sel => {
+    livro.querySelectorAll(sel).forEach((el, i) => {
+      if (!el.id) el.id = 'livro-mestre-bloco-' + sel.replace(/[^a-z0-9]/gi,'_') + '_' + i;
+    });
+  });
+}
+
+function _ativarEdicaoBlocosLivroMestre() {
+  const livro = document.getElementById('livro-mestre');
+  if (!livro || (roleAtual !== 'gm' && roleAtual !== 'adm')) return;
+  _garantirIdsBlocosLivroMestre();
+  const seletores = ['#livro-mestre-content p', '#livro-mestre-content h1', '#livro-mestre-content h2',
+                     '#livro-mestre-content h3', '#livro-mestre-content .lore-box',
+                     '#livro-mestre-content .system-card'];
+  seletores.forEach(sel => {
+    livro.querySelectorAll(sel).forEach((el) => {
+      if (!el.id) el.id = 'livro-mestre-bloco-' + sel.replace(/[^a-z0-9]/gi,'_') + '_auto';
+      if (el.classList.contains('bloco-editavel')) return;
+      el.classList.add('bloco-editavel');
+      if (!el.querySelector('.btn-editar-bloco')) {
+        const btn = document.createElement('button');
+        btn.className = 'btn-editar-bloco';
+        btn.innerHTML = icone('edit','ic-sm') + ' Editar';
+        btn.onclick = (e) => { e.stopPropagation(); abrirModalBlocoLivroMestre(el.id); };
+        el.appendChild(btn);
+      }
+    });
+  });
+}
+
+function abrirModalBlocoLivroMestre(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const html = el.innerHTML.replace(/<button class="btn-editar-bloco".*?<\/button>/s, '').trim();
+  abrirModalBloco(id, html, salvarBlocoLivroMestre);
+}
+
+function salvarBlocoLivroMestre(id, novoHTML) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = novoHTML;
+  if (!el.querySelector('.btn-editar-bloco')) {
+    const btn = document.createElement('button');
+    btn.className = 'btn-editar-bloco';
+    btn.innerHTML = icone('edit','ic-sm') + ' Editar';
+    btn.onclick = (e) => { e.stopPropagation(); abrirModalBlocoLivroMestre(id); };
+    el.appendChild(btn);
+  }
+  _blocosLivroMestre[id] = el.innerHTML;
+  localStorage.setItem(_livroMestreStorageKey, JSON.stringify(_blocosLivroMestre));
+  _salvarBlocosLivroMestreNuvem();
+}
+
+async function _salvarBlocosLivroMestreNuvem() {
+  if (!window.db || !window.setDoc || !window.doc) return;
+  try {
+    await window.setDoc(window.doc(window.db, 'blocos', 'livro_mestre'), {
+      blocos: JSON.stringify(_blocosLivroMestre),
+      ts: Date.now()
+    });
+  } catch(e) { console.warn('[Livro Mestre] Erro ao salvar blocos:', e); }
+}
+
+async function _carregarBlocosLivroMestreNuvem() {
+  if (!window.db || !window.getDoc || !window.doc) return;
+  try {
+    const snap = await window.getDoc(window.doc(window.db, 'blocos', 'livro_mestre'));
+    if (snap.exists()) {
+      const dados = JSON.parse(snap.data().blocos || '{}');
+      _blocosLivroMestre = { ..._blocosLivroMestre, ...dados };
+      localStorage.setItem(_livroMestreStorageKey, JSON.stringify(_blocosLivroMestre));
+    }
+  } catch(e) { console.warn('[Livro Mestre] Erro ao carregar blocos:', e); }
+}
+
+function _aplicarBlocosLivroMestre() {
+  Object.entries(_blocosLivroMestre).forEach(([id, html]) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  });
+}
+
+// Scrollspy do Mestre no container (listener dedicado)
+function _livroMestreScrollspyHandler() {
+  const livro = document.getElementById('livro-mestre');
+  if (!livro || livro.style.display === 'none') return;
+  _livroMestreScrollspy();
+}
+// Registra o listener uma vez (o handler checa se o Mestre está visível)
+document.addEventListener('DOMContentLoaded', () => {
+  const livro = document.getElementById('livro-mestre');
+  if (livro) livro.addEventListener('scroll', _livroMestreScrollspyHandler, { passive: true });
+});
 
 function voltarParaLanding() {
   document.getElementById('login-screen').style.display = 'none';
@@ -23107,26 +23592,225 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- LIVRO DO MESTRE &#8212; acesso restrito a GM/ADM -->
 <div id="livro-mestre" style="display:none;position:fixed;inset:0;z-index:900;background:#0a0a0d;overflow-y:auto">
-  <div style="position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:.75rem;padding:.7rem 1.2rem;background:rgba(10,10,13,.95);border-bottom:1px solid var(--border)">
-    <button onclick="fecharLivroMestre()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.45rem .8rem;font-family:inherit;font-size:.82rem;cursor:pointer;border-radius:4px" onmouseover="this.style.borderColor='var(--accent-light)';this.style.color='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">&#8592; Voltar</button>
-    <span style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--accent-light);letter-spacing:1px">Livro do Mestre</span>
-    <span style="font-size:.68rem;color:var(--text-muted);margin-left:auto">Acesso restrito &#8212; GM/ADM</span>
+
+  <!-- TOPBAR -->
+  <div id="livro-mestre-topbar">
+    <button class="livro-topbar-voltar" onclick="fecharLivroMestre()" aria-label="Voltar">
+      <svg class="ic ic-sm"><use href="#ic-arrow-left"></use></svg> Voltar
+    </button>
+    <span class="livro-topbar-titulo">Torre do Pesadelo • Livro do Mestre</span>
+    <span class="livro-topbar-badge">Acesso restrito — GM/ADM</span>
+    <div id="livro-gm-tools-mestre" class="livro-topbar-tools"></div>
   </div>
-  <div style="display:flex;max-width:1200px;margin:0 auto">
-    <aside id="livro-mestre-sidebar" style="width:230px;flex-shrink:0;padding:1.2rem 1rem;border-right:1px solid var(--border);position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto">
-<div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--accent-light);margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:2px solid var(--accent)">&#205;ndice do Mestre</div>
-      <a href="#introducao-mestre" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">I. Introdu&#231;&#227;o para o Mestre</a>
-      <a href="#verdade-torres" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">II. A Verdade por Tr&#225;s das Torres</a>
-      <a href="#criacao-monstros" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">III. Cria&#231;&#227;o de Monstros</a>
-      <a href="#geracao-torres" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">IV. Gera&#231;&#227;o de Torres e Andares</a>
-      <a href="#sanidade-corrupcao-avancada" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">V. Sanidade e Corrup&#231;&#227;o Avan&#231;adas</a>
-      <a href="#surtos-decenais" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">VI. Os Surtos Decenais</a>
-      <a href="#faccoes-secretas" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">VII. Fac&#231;&#245;es Secretas</a>
-      <a href="#barmans-mestre" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">Barmans &#8212; Segredos e Gera&#231;&#227;o</a>
-      <a href="#ferramentas-mestre" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">VIII. Ferramentas do Mestre</a>
-      <a href="#apendices-mestre" style="color:#d4d2de;text-decoration:none;display:block;padding:.38rem .55rem;border-radius:4px;font-size:.9rem">IX. Ap&#234;ndices</a>
+
+  <!-- Drawer: botão de seta + backdrop -->
+  <button id="livro-mestre-arrow-btn" title="Abrir/fechar índice" onclick="toggleLivroMestreSidebar()" aria-label="Índice do Livro do Mestre">
+    <span class="arrow-ic">▶</span>
+  </button>
+  <div id="livro-mestre-backdrop" onclick="toggleLivroMestreSidebar()"></div>
+
+  <!-- Layout: sidebar flutuante + conteúdo -->
+  <div id="livro-mestre-layout">
+
+    <!-- Sidebar do Livro do Mestre -->
+    <aside id="livro-mestre-sidebar">
+      <div class="livro-sidebar-header">Índice do Mestre</div>
+
+      <ul class="livro-sidebar-links">
+        <li><a href="#livro-mestre-sumario">→ Sumário Interativo</a></li>
+      </ul>
+
+      <span class="toc-label">I. Introdução</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#introducao-mestre">Introdução para o Mestre</a></li>
+      </ul>
+
+      <span class="toc-label">II. A Verdade</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#verdade-torres">A Verdade por Trás das Torres</a></li>
+      </ul>
+
+      <span class="toc-label">III. Criação de Monstros</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#criacao-monstros">Criação e Gestão de Monstros</a></li>
+      </ul>
+
+      <span class="toc-label">IV. Geração de Torres</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#geracao-torres">Geração de Torres e Andares</a></li>
+      </ul>
+
+      <span class="toc-label">V. Sanidade e Corrupção</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#sanidade-corrupcao-avancada">Sanidade e Corrupção Avançadas</a></li>
+      </ul>
+
+      <span class="toc-label">VI. Surtos Decenais</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#surtos-decenais">Os Surtos Decenais</a></li>
+      </ul>
+
+      <span class="toc-label">VII. Facções Secretas</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#faccoes-secretas">Facções Secretas</a></li>
+      </ul>
+
+      <span class="toc-label">Barmans</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#barmans-mestre">Barmans — Segredos e Geração</a></li>
+      </ul>
+
+      <span class="toc-label">VIII. Ferramentas</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#ferramentas-mestre">Ferramentas do Mestre</a></li>
+      </ul>
+
+      <span class="toc-label">IX. Apêndices</span>
+      <ul class="livro-sidebar-links">
+        <li><a href="#apendices-mestre">Apêndices</a></li>
+      </ul>
+
+      <div class="livro-sidebar-footer">
+        <button class="livro-sidebar-sair" onclick="fecharLivroMestre()">
+          <svg class="ic ic-sm"><use href="#ic-arrow-left"></use></svg> Sair do Livro
+        </button>
+      </div>
     </aside>
-    <div id="livro-mestre-content" style="flex:1;padding:2rem 2.5rem 5rem;max-width:900px;overflow-x:hidden">
+
+    <!-- Conteúdo do Livro -->
+    <div id="livro-mestre-content">
+
+      <!-- HERO -->
+      <header class="livro-hero">
+        <div class="livro-hero-content">
+          <div class="livro-hero-symbol">
+            <div class="livro-hero-symbol-v"></div>
+            <div class="livro-hero-symbol-h"></div>
+          </div>
+          <h1>TORRE DO PESADELO</h1>
+          <p class="livro-hero-subtitle">Livro do Mestre</p>
+          <p class="livro-hero-tags">Segredos • GM • Ferramentas</p>
+          <p class="livro-hero-aviso">Acesso restrito — Contém segredos do Mestre.</p>
+        </div>
+      </header>
+
+      <!-- SUMÁRIO INTERATIVO -->
+      <section id="livro-mestre-sumario">
+        <h2>Sumário</h2>
+        <p>
+          Este é o <strong>Livro do Mestre</strong> de <em>Torre do Pesadelo</em>.
+          Contém segredos do mundo, regras avançadas e ferramentas para conduzir campanhas.
+        </p>
+
+        <div class="sumario-content">
+          <!-- Coluna esquerda: índice tradicional -->
+          <div>
+
+            <div class="sumario-bloco">
+              <h3>I. Introdução</h3>
+              <ul>
+                <li><a href="#introducao-mestre">Introdução para o Mestre</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>II. A Verdade</h3>
+              <ul>
+                <li><a href="#verdade-torres">A Verdade por Trás das Torres</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>III. Criação de Monstros</h3>
+              <ul>
+                <li><a href="#criacao-monstros">Criação e Gestão de Monstros</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>IV. Geração de Torres</h3>
+              <ul>
+                <li><a href="#geracao-torres">Geração de Torres e Andares</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>V. Sanidade e Corrupção</h3>
+              <ul>
+                <li><a href="#sanidade-corrupcao-avancada">Sanidade e Corrupção Avançadas</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>VI. Surtos Decenais</h3>
+              <ul>
+                <li><a href="#surtos-decenais">Os Surtos Decenais</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>VII. Facções Secretas</h3>
+              <ul>
+                <li><a href="#faccoes-secretas">Facções Secretas</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>Barmans</h3>
+              <ul>
+                <li><a href="#barmans-mestre">Barmans — Segredos e Geração</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>VIII. Ferramentas</h3>
+              <ul>
+                <li><a href="#ferramentas-mestre">Ferramentas do Mestre</a></li>
+              </ul>
+            </div>
+
+            <div class="sumario-bloco">
+              <h3>IX. Apêndices</h3>
+              <ul>
+                <li><a href="#apendices-mestre">Apêndices</a></li>
+              </ul>
+            </div>
+
+          </div>
+
+          <!-- Coluna direita: painel lateral -->
+          <div class="sumario-side-panel">
+            <div>
+              <h4>Panorama do Mestre</h4>
+              <p>O Mestre é o guardião do tom e da tensão. Ele não compete contra os jogadores, mas constrói um mundo cruel, belo e implacável que os force a tomar decisões difíceis.</p>
+            </div>
+            <div>
+              <h4>Sistemas em Destaque</h4>
+              <ul class="sumario-destaques">
+                <li><a href="#criacao-monstros">Criação de Monstros</a></li>
+                <li><a href="#geracao-torres">Geração de Torres</a></li>
+                <li><a href="#sanidade-corrupcao-avancada">Sanidade e Corrupção</a></li>
+                <li><a href="#surtos-decenais">Surtos Decenais</a></li>
+                <li><a href="#barmans-mestre">Barmans</a></li>
+                <li><a href="#apendices-mestre">Apêndices</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Referência Rápida</h4>
+              <ul class="sumario-ref">
+                <li>CD de monstro = 10 + Tier + Modificador</li>
+                <li>PV = (Vigor + Alma) × (2 + ⌊Tier ÷ 2⌋)</li>
+                <li>Multiplicador de Qualidade: ×1 a ×12</li>
+                <li>Atenção da Torre: reage às ações dos Despertos</li>
+              </ul>
+            </div>
+            <div class="warning">
+              <strong>Aviso:</strong> este conteúdo é exclusivo do Mestre. Revelar segredos aos jogadores sem planejamento reduz o impacto do horror e do mistério.
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="introducao-mestre">
             <h1>I. Introdução para o Mestre</h1>
 
