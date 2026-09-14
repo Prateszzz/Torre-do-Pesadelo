@@ -17678,8 +17678,11 @@ function fecharLivro() {
 // ─── LIVRO DO MESTRE (acesso restrito a GM/ADM) ───
 // Mostra/oculta o botão "Livro do Mestre" na sidebar conforme o role.
 function _atualizarVisibilidadeLivroMestre() {
+  // Mantém o botão sempre visível na sidebar (para GM/adm clicarem quando quiserem),
+  // mas o painel GM em si só abre quando o usuário clicar explicitamente.
+  // Antes o display dependia de roleAtual; agora sempre visível.
   const btn = document.getElementById('sb-livro-mestre');
-  if (btn) btn.style.display = (roleAtual === 'gm' || roleAtual === 'adm') ? '' : 'none';
+  if (btn) btn.style.display = 'block';
 }
 
 function abrirLivroMestre() {
@@ -17695,9 +17698,11 @@ function abrirLivroMestre() {
   livro.scrollTo(0, 0);
   document.body.classList.add('livro-aberto');
   _toggleAtmosferaLivro(true);
-  // GM tools (modo editor)
-  const gmTools = document.getElementById('livro-gm-tools-mestre');
-  if (gmTools) gmTools.style.display = (roleAtual === 'gm' || roleAtual === 'adm') ? 'flex' : 'none';
+  // GM tools (modo editor) — removido o display automático.
+  // O painel do GM só fica visível se o usuário abrir o livro e usar as
+  // ferramentas explicitamente; assim não interfere na leitura da ficha.
+  // const gmTools = document.getElementById('livro-gm-tools-mestre');
+  // if (gmTools) gmTools.style.display = (roleAtual === 'gm' || roleAtual === 'adm') ? 'flex' : 'none';
   _inicializarLinksLivroMestre();
   _livroMestreSidebarResponsiva();
   _injetarNavLivroMestre();
