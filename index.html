@@ -4493,6 +4493,24 @@ body:has(#livro-mestre[style*="display: block"]) .tp-eye {
 #livro-mestre-topbar .livro-topbar-tools {
   display: none; flex-shrink: 0;
 }
+#livro-mestre-topbar .livro-topbar-btn {
+  background:rgba(var(--deep-rgb), .12);
+  border:1px solid var(--accent-t35);
+  color:var(--accent-light);
+  padding:.3rem .8rem;
+  font-family:inherit;
+  font-size:.76rem;
+  cursor:pointer;
+  transition:all .2s;
+  border-radius:var(--r-sm);
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+}
+#livro-mestre-topbar .livro-topbar-btn:hover {
+  background:rgba(var(--deep-rgb), .22);
+  border-color:var(--accent-light);
+}
 
 /* Sidebar header/footer do Mestre */
 #livro-mestre .livro-sidebar-header { font-family:'Playfair Display',serif;font-size:.95rem;color:var(--accent-light);margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:2px solid var(--accent); }
@@ -17698,11 +17716,10 @@ function abrirLivroMestre() {
   livro.scrollTo(0, 0);
   document.body.classList.add('livro-aberto');
   _toggleAtmosferaLivro(true);
-  // GM tools (modo editor) — removido o display automático.
-  // O painel do GM só fica visível se o usuário abrir o livro e usar as
-  // ferramentas explicitamente; assim não interfere na leitura da ficha.
-  // const gmTools = document.getElementById('livro-gm-tools-mestre');
-  // if (gmTools) gmTools.style.display = (roleAtual === 'gm' || roleAtual === 'adm') ? 'flex' : 'none';
+  // GM tools (modo editor) — visível apenas para GM/ADM (o livro em si já
+  // é restrito a esses papéis, mas mantemos a checagem por segurança).
+  const gmTools = document.getElementById('livro-gm-tools-mestre');
+  if (gmTools) gmTools.style.display = (roleAtual === 'gm' || roleAtual === 'adm') ? 'flex' : 'none';
   _inicializarLinksLivroMestre();
   _livroMestreSidebarResponsiva();
   _injetarNavLivroMestre();
@@ -17994,10 +18011,15 @@ function _livroMestreScrollspyHandler() {
   if (!livro || livro.style.display === 'none') return;
   _livroMestreScrollspy();
 }
-// Registra o listener uma vez (o handler checa se o Mestre está visível)
+// Registra os listeners uma vez (o handler checa se o Mestre está visível).
+// O listener de janela é um fallback defensivo: se o livro estiver em modo
+// de rolagem de página (em vez do container próprio), o scrollspy continua
+// funcionando; quando o container próprio rola, o handler simplesmente
+// recalcula sem efeito colateral.
 document.addEventListener('DOMContentLoaded', () => {
   const livro = document.getElementById('livro-mestre');
   if (livro) livro.addEventListener('scroll', _livroMestreScrollspyHandler, { passive: true });
+  window.addEventListener('scroll', _livroMestreScrollspyHandler, { passive: true });
 });
 
 function voltarParaLanding() {
@@ -23622,7 +23644,11 @@ document.addEventListener('DOMContentLoaded', () => {
     </button>
     <span class="livro-topbar-titulo">Torre do Pesadelo • Livro do Mestre</span>
     <span class="livro-topbar-badge">Acesso restrito — GM/ADM</span>
-    <div id="livro-gm-tools-mestre" class="livro-topbar-tools"></div>
+    <div id="livro-gm-tools-mestre" class="livro-topbar-tools">
+      <button id="btn-livro-editor-mestre" class="livro-topbar-btn" onclick="toggleModoEditorLivroMestre()">
+        <svg class="ic ic-sm"><use href="#ic-edit"></use></svg> Modo Editor
+      </button>
+    </div>
   </div>
 
   <!-- Drawer: botão de seta + backdrop -->
@@ -23645,51 +23671,111 @@ document.addEventListener('DOMContentLoaded', () => {
       <span class="toc-label">I. Introdução</span>
       <ul class="livro-sidebar-links">
         <li><a href="#introducao-mestre">Introdução para o Mestre</a></li>
+        <li><a href="#filosofia-mestre" style="padding-left:.6rem">A Filosofia de Torre do Pesadelo</a></li>
+        <li><a href="#papel-mestre" style="padding-left:.6rem">O Papel do Mestre</a></li>
+        <li><a href="#como-usar-livro-mestre" style="padding-left:.6rem">Como Usar Este Livro</a></li>
+        <li><a href="#tom-temas-centrais" style="padding-left:.6rem">Tom e Temas Centrais</a></li>
+        <li><a href="#responsabilidade-narrativa" style="padding-left:.6rem">Responsabilidade Narrativa</a></li>
       </ul>
 
       <span class="toc-label">II. A Verdade</span>
       <ul class="livro-sidebar-links">
         <li><a href="#verdade-torres">A Verdade por Trás das Torres</a></li>
+        <li><a href="#natureza-torres" style="padding-left:.6rem">O que Realmente São as Torres</a></li>
+        <li><a href="#origem-nevoa" style="padding-left:.6rem">A Origem da Névoa e dos Monstros</a></li>
+        <li><a href="#natureza-torre-pesadelo" style="padding-left:.6rem">A Natureza da Torre do Pesadelo</a></li>
+        <li><a href="#segredos-guardias" style="padding-left:.6rem">Os Segredos das Quatro Guardiãs</a></li>
       </ul>
 
       <span class="toc-label">III. Criação de Monstros</span>
       <ul class="livro-sidebar-links">
         <li><a href="#criacao-monstros">Criação e Gestão de Monstros</a></li>
+        <li><a href="#filosofia-monstros" style="padding-left:.6rem">A Filosofia dos Monstros</a></li>
+        <li><a href="#pilares-criacao-monstros" style="padding-left:.6rem">Os Pilares da Criação de Monstros</a></li>
+        <li><a href="#criando-monstro-passo-a-passo" style="padding-left:.6rem">Criando um Monstro Passo a Passo</a></li>
+        <li><a href="#geracao-rapida-monstros" style="padding-left:.6rem">Tabelas de Geração Rápida</a></li>
+        <li><a href="#monstros-tipo-torre" style="padding-left:.6rem">Monstros por Tipo de Torre</a></li>
+        <li><a href="#monstros-personagens" style="padding-left:.6rem">Monstros como Personagens</a></li>
+        <li><a href="#devoracao" style="padding-left:.6rem">A Devoração</a></li>
+        <li><a href="#exemplos-monstros" style="padding-left:.6rem">Exemplos de Monstros Prontos</a></li>
+        <li><a href="#bestiario-tiers" style="padding-left:.6rem">Bestiário dos Tiers</a></li>
       </ul>
 
       <span class="toc-label">IV. Geração de Torres</span>
       <ul class="livro-sidebar-links">
         <li><a href="#geracao-torres">Geração de Torres e Andares</a></li>
+        <li><a href="#filosofia-geracao-torres" style="padding-left:.6rem">A Filosofia da Geração de Torres</a></li>
+        <li><a href="#estrutura-andar" style="padding-left:.6rem">Estrutura Básica de um Andar</a></li>
+        <li><a href="#geracao-andares" style="padding-left:.6rem">Sistema de Geração de Andares</a></li>
+        <li><a href="#tabelas-salas-ambientes" style="padding-left:.6rem">Tabelas de Salas e Ambientes</a></li>
+        <li><a href="#eventos-perigos-andar" style="padding-left:.6rem">Eventos e Perigos por Andar</a></li>
+        <li><a href="#andares-especiais" style="padding-left:.6rem">Andares Especiais</a></li>
       </ul>
 
       <span class="toc-label">V. Sanidade e Corrupção</span>
       <ul class="livro-sidebar-links">
         <li><a href="#sanidade-corrupcao-avancada">Sanidade e Corrupção Avançadas</a></li>
+        <li><a href="#dualidade-alma" style="padding-left:.6rem">A Dualidade da Alma</a></li>
+        <li><a href="#sanidade-avancada" style="padding-left:.6rem">Sanidade — Efeitos Avançados</a></li>
+        <li><a href="#corrupcao-avancada" style="padding-left:.6rem">Corrupção — Efeitos Avançados</a></li>
+        <li><a href="#interacao-sanidade-corrupcao" style="padding-left:.6rem">Interação entre Sanidade e Corrupção</a></li>
+        <li><a href="#torre-catalisador" style="padding-left:.6rem">A Torre como Catalisador</a></li>
+        <li><a href="#atencao-torre" style="padding-left:.6rem">Atenção da Torre</a></li>
+        <li><a href="#relacionamentos-apego" style="padding-left:.6rem">Relacionamentos e Apego sob Pressão</a></li>
+        <li><a href="#quando-personagem-se-perde" style="padding-left:.6rem">Quando o Personagem se Perde</a></li>
       </ul>
 
       <span class="toc-label">VI. Surtos Decenais</span>
       <ul class="livro-sidebar-links">
         <li><a href="#surtos-decenais">Os Surtos Decenais</a></li>
+        <li><a href="#o-que-sao-surtos" style="padding-left:.6rem">O que são os Surtos Decenais</a></li>
+        <li><a href="#mecanicas-surtos" style="padding-left:.6rem">Mecânicas dos Surtos</a></li>
+        <li><a href="#preparando-surto" style="padding-left:.6rem">Preparando um Surto</a></li>
+        <li><a href="#consequencias-surtos" style="padding-left:.6rem">Consequências em Larga Escala</a></li>
+        <li><a href="#surtos-foco-campanha" style="padding-left:.6rem">Surtos como Foco de Campanha</a></li>
+        <li><a href="#ferramentas-surtos" style="padding-left:.6rem">Ferramentas e Tabelas</a></li>
+        <li><a href="#exemplos-surtos" style="padding-left:.6rem">Exemplos de Surtos</a></li>
       </ul>
 
       <span class="toc-label">VII. Facções Secretas</span>
       <ul class="livro-sidebar-links">
         <li><a href="#faccoes-secretas">Facções Secretas</a></li>
+        <li><a href="#jogo-faccoes" style="padding-left:.6rem">O Jogo das Facções</a></li>
+        <li><a href="#principais-faccoes" style="padding-left:.6rem">As Principais Facções do Mundo</a></li>
+        <li><a href="#face-oculta-faccoes" style="padding-left:.6rem">A Face Oculta de Cada Facção</a></li>
+        <li><a href="#faccoes-despertos" style="padding-left:.6rem">Facções e os Despertos</a></li>
+        <li><a href="#conflitos-faccoes" style="padding-left:.6rem">Conflitos e Intrigas entre Facções</a></li>
+        <li><a href="#usando-faccoes-campanha" style="padding-left:.6rem">Usando as Facções em Campanha</a></li>
+        <li><a href="#segredos-faccoes-avancado" style="padding-left:.6rem">Segredos de Nível Avançado</a></li>
       </ul>
 
       <span class="toc-label">Barmans</span>
       <ul class="livro-sidebar-links">
         <li><a href="#barmans-mestre">Barmans — Segredos e Geração</a></li>
+        <li><a href="#geracao-barmans" style="padding-left:.6rem">Sistema Completo de Geração de Barmans</a></li>
+        <li><a href="#rede-barmans" style="padding-left:.6rem">A Rede dos Barmans</a></li>
+        <li><a href="#tabelas-rumores-barmans" style="padding-left:.6rem">Tabelas de Rumores</a></li>
+        <li><a href="#usando-barmans-campanha" style="padding-left:.6rem">Usando Barmans em Campanha</a></li>
       </ul>
 
       <span class="toc-label">VIII. Ferramentas</span>
       <ul class="livro-sidebar-links">
         <li><a href="#ferramentas-mestre">Ferramentas do Mestre</a></li>
+        <li><a href="#construindo-sessoes" style="padding-left:.6rem">Construindo Sessões</a></li>
+        <li><a href="#gerenciando-horror-tensao" style="padding-left:.6rem">Gerenciando o Horror e a Tensão</a></li>
+        <li><a href="#morte-personagens" style="padding-left:.6rem">Lidando com a Morte de Personagens</a></li>
+        <li><a href="#equilibrio-progressao" style="padding-left:.6rem">Equilíbrio e Progressão</a></li>
+        <li><a href="#planejamento-campanhas-longas" style="padding-left:.6rem">Planejamento de Campanhas Longas</a></li>
       </ul>
 
       <span class="toc-label">IX. Apêndices</span>
       <ul class="livro-sidebar-links">
         <li><a href="#apendices-mestre">Apêndices</a></li>
+        <li><a href="#tabelas-referencia-rapida" style="padding-left:.6rem">Tabelas de Referência Rápida</a></li>
+        <li><a href="#exemplos-monstros-adicionais" style="padding-left:.6rem">Exemplos de Monstros Prontos (Adicionais)</a></li>
+        <li><a href="#exemplos-andares-adicionais" style="padding-left:.6rem">Exemplos de Andares Prontos (Adicionais)</a></li>
+        <li><a href="#exemplos-npcs" style="padding-left:.6rem">Exemplos de NPCs Importantes</a></li>
+        <li><a href="#geradores-rapidos" style="padding-left:.6rem">Geradores Rápidos</a></li>
       </ul>
 
       <div class="livro-sidebar-footer">
@@ -23732,6 +23818,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>I. Introdução</h3>
               <ul>
                 <li><a href="#introducao-mestre">Introdução para o Mestre</a></li>
+                <li><a href="#filosofia-mestre">A Filosofia de Torre do Pesadelo</a></li>
+                <li><a href="#papel-mestre">O Papel do Mestre</a></li>
+                <li><a href="#como-usar-livro-mestre">Como Usar Este Livro</a></li>
+                <li><a href="#tom-temas-centrais">Tom e Temas Centrais</a></li>
+                <li><a href="#responsabilidade-narrativa">Responsabilidade Narrativa</a></li>
               </ul>
             </div>
 
@@ -23739,6 +23830,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>II. A Verdade</h3>
               <ul>
                 <li><a href="#verdade-torres">A Verdade por Trás das Torres</a></li>
+                <li><a href="#natureza-torres">O que Realmente São as Torres</a></li>
+                <li><a href="#origem-nevoa">A Origem da Névoa e dos Monstros</a></li>
+                <li><a href="#natureza-torre-pesadelo">A Natureza da Torre do Pesadelo</a></li>
+                <li><a href="#segredos-guardias">Os Segredos das Quatro Guardiãs</a></li>
               </ul>
             </div>
 
@@ -23746,6 +23841,15 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>III. Criação de Monstros</h3>
               <ul>
                 <li><a href="#criacao-monstros">Criação e Gestão de Monstros</a></li>
+                <li><a href="#filosofia-monstros">A Filosofia dos Monstros</a></li>
+                <li><a href="#pilares-criacao-monstros">Os Pilares da Criação de Monstros</a></li>
+                <li><a href="#criando-monstro-passo-a-passo">Criando um Monstro Passo a Passo</a></li>
+                <li><a href="#geracao-rapida-monstros">Tabelas de Geração Rápida</a></li>
+                <li><a href="#monstros-tipo-torre">Monstros por Tipo de Torre</a></li>
+                <li><a href="#monstros-personagens">Monstros como Personagens</a></li>
+                <li><a href="#devoracao">A Devoração</a></li>
+                <li><a href="#exemplos-monstros">Exemplos de Monstros Prontos</a></li>
+                <li><a href="#bestiario-tiers">Bestiário dos Tiers</a></li>
               </ul>
             </div>
 
@@ -23753,6 +23857,12 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>IV. Geração de Torres</h3>
               <ul>
                 <li><a href="#geracao-torres">Geração de Torres e Andares</a></li>
+                <li><a href="#filosofia-geracao-torres">A Filosofia da Geração de Torres</a></li>
+                <li><a href="#estrutura-andar">Estrutura Básica de um Andar</a></li>
+                <li><a href="#geracao-andares">Sistema de Geração de Andares</a></li>
+                <li><a href="#tabelas-salas-ambientes">Tabelas de Salas e Ambientes</a></li>
+                <li><a href="#eventos-perigos-andar">Eventos e Perigos por Andar</a></li>
+                <li><a href="#andares-especiais">Andares Especiais</a></li>
               </ul>
             </div>
 
@@ -23760,6 +23870,14 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>V. Sanidade e Corrupção</h3>
               <ul>
                 <li><a href="#sanidade-corrupcao-avancada">Sanidade e Corrupção Avançadas</a></li>
+                <li><a href="#dualidade-alma">A Dualidade da Alma</a></li>
+                <li><a href="#sanidade-avancada">Sanidade — Efeitos Avançados</a></li>
+                <li><a href="#corrupcao-avancada">Corrupção — Efeitos Avançados</a></li>
+                <li><a href="#interacao-sanidade-corrupcao">Interação entre Sanidade e Corrupção</a></li>
+                <li><a href="#torre-catalisador">A Torre como Catalisador</a></li>
+                <li><a href="#atencao-torre">Atenção da Torre</a></li>
+                <li><a href="#relacionamentos-apego">Relacionamentos e Apego sob Pressão</a></li>
+                <li><a href="#quando-personagem-se-perde">Quando o Personagem se Perde</a></li>
               </ul>
             </div>
 
@@ -23767,6 +23885,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>VI. Surtos Decenais</h3>
               <ul>
                 <li><a href="#surtos-decenais">Os Surtos Decenais</a></li>
+                <li><a href="#o-que-sao-surtos">O que são os Surtos Decenais</a></li>
+                <li><a href="#mecanicas-surtos">Mecânicas dos Surtos</a></li>
+                <li><a href="#preparando-surto">Preparando um Surto</a></li>
+                <li><a href="#consequencias-surtos">Consequências em Larga Escala</a></li>
+                <li><a href="#surtos-foco-campanha">Surtos como Foco de Campanha</a></li>
+                <li><a href="#ferramentas-surtos">Ferramentas e Tabelas</a></li>
+                <li><a href="#exemplos-surtos">Exemplos de Surtos</a></li>
               </ul>
             </div>
 
@@ -23774,6 +23899,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>VII. Facções Secretas</h3>
               <ul>
                 <li><a href="#faccoes-secretas">Facções Secretas</a></li>
+                <li><a href="#jogo-faccoes">O Jogo das Facções</a></li>
+                <li><a href="#principais-faccoes">As Principais Facções do Mundo</a></li>
+                <li><a href="#face-oculta-faccoes">A Face Oculta de Cada Facção</a></li>
+                <li><a href="#faccoes-despertos">Facções e os Despertos</a></li>
+                <li><a href="#conflitos-faccoes">Conflitos e Intrigas entre Facções</a></li>
+                <li><a href="#usando-faccoes-campanha">Usando as Facções em Campanha</a></li>
+                <li><a href="#segredos-faccoes-avancado">Segredos de Nível Avançado</a></li>
               </ul>
             </div>
 
@@ -23781,6 +23913,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>Barmans</h3>
               <ul>
                 <li><a href="#barmans-mestre">Barmans — Segredos e Geração</a></li>
+                <li><a href="#geracao-barmans">Sistema Completo de Geração de Barmans</a></li>
+                <li><a href="#rede-barmans">A Rede dos Barmans</a></li>
+                <li><a href="#tabelas-rumores-barmans">Tabelas de Rumores</a></li>
+                <li><a href="#usando-barmans-campanha">Usando Barmans em Campanha</a></li>
               </ul>
             </div>
 
@@ -23788,6 +23924,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>VIII. Ferramentas</h3>
               <ul>
                 <li><a href="#ferramentas-mestre">Ferramentas do Mestre</a></li>
+                <li><a href="#construindo-sessoes">Construindo Sessões</a></li>
+                <li><a href="#gerenciando-horror-tensao">Gerenciando o Horror e a Tensão</a></li>
+                <li><a href="#morte-personagens">Lidando com a Morte de Personagens</a></li>
+                <li><a href="#equilibrio-progressao">Equilíbrio e Progressão</a></li>
+                <li><a href="#planejamento-campanhas-longas">Planejamento de Campanhas Longas</a></li>
               </ul>
             </div>
 
@@ -23795,6 +23936,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3>IX. Apêndices</h3>
               <ul>
                 <li><a href="#apendices-mestre">Apêndices</a></li>
+                <li><a href="#tabelas-referencia-rapida">Tabelas de Referência Rápida</a></li>
+                <li><a href="#exemplos-monstros-adicionais">Exemplos de Monstros Prontos (Adicionais)</a></li>
+                <li><a href="#exemplos-andares-adicionais">Exemplos de Andares Prontos (Adicionais)</a></li>
+                <li><a href="#exemplos-npcs">Exemplos de NPCs Importantes</a></li>
+                <li><a href="#geradores-rapidos">Geradores Rápidos</a></li>
               </ul>
             </div>
 
@@ -23836,14 +23982,14 @@ document.addEventListener('DOMContentLoaded', () => {
       <section id="introducao-mestre">
             <h1>I. Introdução para o Mestre</h1>
 
-            <h2>A Filosofia de Torre do Pesadelo</h2>
+            <h2 id="filosofia-mestre">A Filosofia de Torre do Pesadelo</h2>
             <p><em>Torre do Pesadelo</em> é um jogo sobre o preço do poder e a fragilidade da humanidade diante do desconhecido. É um jogo de <strong>dark fantasy com forte ênfase em horror, sobrevivência e consequências</strong>.</p>
 
             <p>Os jogadores interpretam <strong>Despertos</strong> — humanos que manifestaram o poder de sua Alma e que precisam escalar torres cada vez mais perigosas para garantir a sobrevivência da humanidade. Cada andar vencido traz poder, mas também aproxima o personagem da corrupção, da loucura ou da perda de sua própria humanidade.</p>
 
             <p>Este não é um jogo de heróis que salvam o mundo com facilidade. É um jogo sobre pessoas quebradas que continuam subindo porque parar significa a morte de todos.</p>
 
-            <h2>O Papel do Mestre</h2>
+            <h2 id="papel-mestre">O Papel do Mestre</h2>
             <p>Como Mestre, você é o guardião do tom e da tensão do jogo. Seu trabalho não é “derrotar” os jogadores, mas sim criar um mundo cruel, belo e implacável que os force a tomar decisões difíceis.</p>
 
             <p>Você deve:</p>
@@ -23854,7 +24000,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Usar a Torre como uma entidade quase viva que observa, testa e corrompe.</li>
             </ul>
 
-            <h2>Como Usar Este Livro</h2>
+            <h2 id="como-usar-livro-mestre">Como Usar Este Livro</h2>
             <p>Este Livro do Mestre contém todo o material que os jogadores não devem ter acesso. Ele inclui:</p>
             <ul>
                 <li>Segredos do mundo e da natureza das Torres</li>
@@ -23866,7 +24012,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Recomenda-se que você leia este livro inteiro antes de mestrar pela primeira vez, especialmente os capítulos de <strong>Sanidade e Corrupção</strong> e <strong>Ferramentas do Mestre</strong>.</p>
 
-            <h2>Tom e Temas Centrais</h2>
+            <h2 id="tom-temas-centrais">Tom e Temas Centrais</h2>
             <p>Os temas principais de <em>Torre do Pesadelo</em> são:</p>
             <ul>
                 <li><strong>O custo do poder</strong> — Quanto mais você sobe, menos humano você se torna.</li>
@@ -23875,7 +24021,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><strong>Esperança em meio ao horror</strong> — Mesmo em um mundo tão sombrio, ainda existe espaço para momentos de beleza, sacrifício e resistência.</li>
             </ul>
 
-            <h2>Responsabilidade Narrativa</h2>
+            <h2 id="responsabilidade-narrativa">Responsabilidade Narrativa</h2>
             <p>Este é um jogo que lida com temas pesados: trauma, corrupção, perda, loucura, violência e desespero. Antes de começar uma campanha, converse abertamente com seus jogadores sobre:</p>
             <ul>
                 <li>Quais temas são bem-vindos</li>
@@ -23895,12 +24041,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Esta seção contém informações que os jogadores não devem ter acesso no início da campanha. Revele com cuidado e apenas quando os personagens tiverem meios de descobrir essas verdades.</p>
 
-            <h2>O que Realmente São as Torres</h2>
+            <h2 id="natureza-torres">O que Realmente São as Torres</h2>
             <p>As Torres não são simplesmente "portais" ou "masmorras". Elas são <strong>manifestações físicas de uma entidade colossal</strong> que existe em um plano adjacente à realidade.</p>
 
             <p>Cada Torre é um "dedo" dessa entidade. Quando ela se moveu brevemente há centenas de anos, esses dedos ficaram fincados em nosso mundo. O que chamamos de "Névoa" é o fluido vital dessa entidade vazando para a nossa realidade.</p>
 
-            <h2>A Origem da Névoa e dos Monstros</h2>
+            <h2 id="origem-nevoa">A Origem da Névoa e dos Monstros</h2>
             <p>A Névoa é o <strong>sistema imunológico</strong> da entidade. Quando algo a "incomoda" (como Despertos subindo andares ou absorvendo núcleos em grande escala), a Névoa se intensifica e gera monstros para eliminar a ameaça — exatamente como o corpo gera glóbulos brancos.</p>
 
             <p>Monstros não "vivem" nas Torres. Eles são gerados pela Névoa como resposta imune.</p>
@@ -23910,14 +24056,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Hoje, o que resta não é uma civilização. São grupos de sobreviventes que ainda não perceberam que estão vivendo dentro do corpo de um ser que, um dia, pode acordar completamente.</p>
 
-            <h2>A Natureza da Torre do Pesadelo</h2>
+            <h2 id="natureza-torre-pesadelo">A Natureza da Torre do Pesadelo</h2>
             <p>A Torre do Pesadelo é o dedo principal da entidade — onde sua consciência está mais próxima da superfície. É por isso que ela "nota" quem sobe com tanta intensidade. Quanto mais alto um Desperto vai, maior o risco de a entidade começar a sonhar com ele.</p>
 
             <div class="lore-box" style="margin-top: 2rem;">
                 <strong>Aviso ao Mestre:</strong> Essas revelações devem ser entregues aos jogadores de forma gradual e impactante. Revelar tudo de uma vez destrói o mistério e o horror que sustentam o jogo.
             </div>
 
-            <h2>Os Segredos das Quatro Guardiãs</h2>
+            <h2 id="segredos-guardias">Os Segredos das Quatro Guardiãs</h2>
             <p>Cada uma das quatro Torres Guardiãs representa um aspecto diferente da entidade que as gerou:</p>
             <ul>
                 <li><strong>Carmesim</strong>: O aspecto da fome, transformação física e mutação. É o dedo que "digere" e reconstrói o que a entidade consome.</li>
@@ -24005,12 +24151,12 @@ document.addEventListener('DOMContentLoaded', () => {
       <section id="criacao-monstros">
             <h1>III. Criação e Gestão de Monstros</h1>
 
-            <h2>3.1 A Filosofia dos Monstros em Torre do Pesadelo</h2>
+            <h2 id="filosofia-monstros">3.1 A Filosofia dos Monstros em Torre do Pesadelo</h2>
             <p>Monstros não são criaturas aleatórias. Eles são manifestações da entidade que originou as Torres — respostas imunes ou fragmentos corrompidos de almas que foram consumidas.</p>
 
             <p>Enquanto os Despertos ascendem através do autoconhecimento e do domínio de sua própria Alma, os monstros seguem o caminho oposto: eles degeneram, perdem a individualidade e se tornam extensões da vontade da entidade. Quanto mais alto o tier de um monstro, mais ele se aproxima de ser um "órgão" ou "célula" da entidade maior.</p>
 
-            <h2>3.2 Os Pilares da Criação de Monstros</h2>
+            <h2 id="pilares-criacao-monstros">3.2 Os Pilares da Criação de Monstros</h2>
             <p>Todo monstro é definido principalmente por dois eixos:</p>
 
             <div class="system-card">
@@ -24022,10 +24168,198 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             
-<h2>3.3 Criando um Monstro Passo a Passo</h2>
+<h2 id="criando-monstro-passo-a-passo">3.3 Criando um Monstro Passo a Passo</h2>
 
             
-<h2>3.11 — Bestiário dos Tiers</h2>
+<h2 id="geracao-rapida-monstros">3.4 Tabelas de Geração Rápida</h2>
+
+            <h3>Tabela de Aparência (1d20)</h3>
+            <div class="system-card">
+                1–3: Carne viva e pulsante<br>
+                4–6: Estruturas ósseas expostas<br>
+                7–9: Sombras e formas indefinidas<br>
+                10–12: Cristais negros crescendo no corpo<br>
+                13–15: Múltiplos membros e bocas<br>
+                16–18: Pele translúcida com órgãos visíveis<br>
+                19–20: Combinação de dois ou mais dos acima
+            </div>
+
+            <h3>Tabela de Comportamento (1d20)</h3>
+            <div class="system-card">
+                1–4: Agressivo e direto<br>
+                5–8: Emboscador e paciente<br>
+                9–12: Inteligente e tático<br>
+                13–16: Sádico e provocador<br>
+                17–19: Covarde e oportunista<br>
+                20: Comportamento alienígena (imprevisível)
+            </div>
+
+            <h2 id="monstros-tipo-torre">3.5 Monstros por Tipo de Torre</h2>
+
+            <h3>Torres Comuns / Menores</h3>
+            <p>Monstros mais "primitivos" e instintivos. Foco em fome, agressividade e adaptação básica.</p>
+
+            <h3>Torre Carmesim</h3>
+            <p>Monstros com forte tema de carne, mutação e regeneração. Muitos possuem habilidades de metamorfose e drenagem de vitalidade.</p>
+
+            <h3>Torre do Eco</h3>
+            <p>Monstros ligados a som, memória e ilusão. Muitos atacam através de desorientação e repetição de padrões.</p>
+
+            <h3>Torre Onírica</h3>
+            <p>Monstros que manipulam percepção, sonhos e realidade subjetiva. São os mais perigosos mentalmente.</p>
+
+            <h3>Torre Gélida</h3>
+            <p>Monstros de exaustão, vazio e desesperança. Muitos causam efeitos de lentidão, drenagem de vontade e frio existencial.</p>
+
+            <h3>Torre do Pesadelo</h3>
+            <p>Monstros de elite e únicos. Geralmente possuem inteligência elevada, poderes de múltiplas Guardiãs ou habilidades completamente alienígenas.</p>
+
+            <h2 id="monstros-personagens">3.7 Monstros como Personagens</h2>
+            <p>Monstros de alta qualidade (especialmente A e S) podem ser tratados como personagens completos:</p>
+            <ul>
+                <li>Eles podem falar, negociar ou manipular.</li>
+                <li>Alguns ainda guardam fragmentos de memória de quando eram humanos.</li>
+                <li>Podem ter objetivos próprios (vingança, ascensão, proteção de algo, etc.).</li>
+            </ul>
+
+            <h2 id="devoracao">3.9 A Devoração — Absorção de Núcleos de Outros Despertos</h2>
+
+            <p>Este é o ato mais proibido e mais tentador que existe entre os Despertos. Não é apenas matar. É <strong>colher a essência completa de outra alma humana que desperto</strong> — roubar não o poder de uma besta, mas a soma de tudo que ela lutou, sacrificou e se tornou.</p>
+
+            <p>A Torre não pune quem comete a Devoração. Pelo contrário: ela observa com interesse renovado. Quando um Desperto devora outro, a entidade por trás das Torres sente algo que se aproxima de... satisfação.</p>
+
+            <h3>Condições para a Absorção</h3>
+            <p>Para que a energia de um núcleo humano possa ser colhida, o Desperto-alvo deve estar morto ou morrendo (0 PV e incapaz de resistir). O núcleo deve ser fisicamente acessado e "reclamado" dentro de poucos minutos — preferencialmente com intenção clara e foco. Absorções acidentais ou caóticas em meio ao combate rendem menos energia e mais consequências ruins.</p>
+
+            <p>Alguns métodos aumentam a eficiência (rituais específicos, uso de certos artefatos proibidos, ou a presença de traços como Fome da Alma + Sede de Poder no absorvedor). Outros diminuem drasticamente (vítima era aliada próxima, morte "limpa" e misericordiosa, ou o absorvedor está emocionalmente destruído no momento).</p>
+
+            <h3>Cálculo da Energia Recebida</h3>
+            <p>A energia obtida é <strong>diretamente proporcional ao que a vítima já acumulou</strong> em sua jornada de Ascensão — exatamente como o jogador pediu. Não é o poder de um monstro. É o peso de uma vida inteira de escolhas nas Torres.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nível da Vítima</th>
+                            <th>Classificação</th>
+                            <th>Energia Base (o que ela já tinha)</th>
+                            <th>Ganho Típico (combate)</th>
+                            <th>Ganho Ritual (focado)</th>
+                            <th>Corrupção Base Infligida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2</td><td>Inflamado</td><td>300</td><td>180–260</td><td>240–340</td><td>+6</td></tr>
+                        <tr><td>3</td><td>Gravado</td><td>800</td><td>520–720</td><td>680–920</td><td>+9</td></tr>
+                        <tr><td>4</td><td>Manifesto</td><td>1.500</td><td>1.050–1.350</td><td>1.300–1.750</td><td>+12</td></tr>
+                        <tr><td>5</td><td>Ungido</td><td>3.000</td><td>2.200–2.800</td><td>2.700–3.600</td><td>+18</td></tr>
+                        <tr><td>6</td><td>Arauto</td><td>6.000</td><td>4.400–5.600</td><td>5.400–7.200</td><td>+24</td></tr>
+                        <tr><td>7</td><td>Eclipse</td><td>11.000</td><td>8.200–10.400</td><td>9.800–13.000</td><td>+30</td></tr>
+                        <tr><td>8</td><td>Abissal</td><td>18.000</td><td>13.500–17.000</td><td>16.000–21.000</td><td>+40</td></tr>
+                        <tr><td>9</td><td>Transcendente</td><td>30.000</td><td>22.000–28.000</td><td>26.000–35.000</td><td>+55</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Modificadores de Circunstância (aplique um ou mais):</strong></p>
+            <ul>
+                <li>Vítima possuía alta Corrupção própria (+15% a +35% de energia extra, mas +50% de Corrupção infligida ao absorvedor).</li>
+                <li>Método ritualístico ou preparado (ferramentas, tempo, local simbólico): +20% a +35% de eficiência.</li>
+                <li>Vítima era aliada próxima, amante ou membro do grupo: eficiência cai 30–50%, mas o custo psicológico e de Sanidade dobra. O Vestígio será muito mais forte e hostil.</li>
+                <li>Absorvedor possui Fome da Alma + Sede de Poder: +10% energia, mas +1 nível permanente de Corrupção (irreversível sem intervenção extrema).</li>
+                <li>Ato cometido em desespero total ou para salvar o grupo: o Mestre pode reduzir ligeiramente a Corrupção, mas nunca remove o Vestígio nem a Marca.</li>
+            </ul>
+
+            <div class="system-card">
+                <strong>Importante para o Mestre:</strong> Um único núcleo humano de nível 5+ pode catapultar um personagem vários níveis de Ascensão de uma vez só. Isso <em>quebra</em> a premissa central do jogo (progressão lenta através de muitos monstros). Use com extrema parcimônia. A maioria das campanhas deve tratar isso como evento cataclísmico, não como "opção viável de farming".
+            </div>
+
+            <h3>O Vestígio da Alma Devorada</h3>
+            <p>Você não absorve apenas poder. Você absorve <em>uma parte dela</em>. A alma da vítima não desaparece limpa — ela deixa um fragmento que agora vive dentro de você.</p>
+
+            <p>Role ou escolha 1d8 no momento da absorção (ou role novamente em momentos dramáticos futuros):</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>d8</th><th>Vestígio</th><th>Efeito Mecânico e Narrativo</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td><strong>A Voz Constante</strong></td><td>A vítima comenta suas ações, zomba de suas fraquezas ou dá "conselhos" com a voz dela. Em testes sociais importantes, role 1d4: em 1 você sofre desvantagem (ela está te distraindo ou te traindo).</td></tr>
+                        <tr><td>2</td><td><strong>Memórias Intrusas</strong></td><td>Em momentos de descanso ou alta tensão, você revive fragmentos da vida da vítima (amores perdidos, traumas, vitórias). Faça um teste de Sanidade CD 14 ou perca 1d4 de Sanidade por sessão em que isso acontecer.</td></tr>
+                        <tr><td>3</td><td><strong>Impulso Hostil</strong></td><td>Quando você está com Sanidade abaixo de 50% ou Corrupção alta, role Salvaguarda de Alma CD 16. Falha: por 1 rodada você age como se a vítima ainda estivesse no controle (pode atacar aliados, recusar ajudar alguém que ela odiava, etc.).</td></tr>
+                        <tr><td>4</td><td><strong>Eco de Poder</strong></td><td>Raro e perigoso. Uma vez por incursão, quando você usaria um Despertar, você pode "emprestar" um fragmento de poder que a vítima possuía (Mestre define). Ganhe um bônus forte, mas role Sanidade CD 18 ou sofra 2d6 de dano psíquico + 1 nível de Corrupção.</td></tr>
+                        <tr><td>5</td><td><strong>Rejeição Corporal</strong></td><td>Seu corpo rejeita parcialmente a essência roubada. Você sofre -1 em testes de Vigor e perde 1d4 de STA no início de cada cena de combate até realizar um ritual de "digestão" (que exige tempo, risco e mais Corrupção).</td></tr>
+                        <tr><td>6</td><td><strong>Lealdade Dividida</strong></td><td>Em situações que envolvam antigos aliados ou inimigos da vítima, você sente um impulso forte de ajudá-los ou puni-los. Teste de Alma CD 15 para resistir. Falhas repetidas podem gerar novas Complicações ou Perigos do Apego.</td></tr>
+                        <tr><td>7</td><td><strong>O Presente Envenenado</strong></td><td>Você ganha permanentemente +1 em um atributo em que a vítima era forte (Mestre escolhe). Porém, toda vez que usa esse atributo em momento crítico, role Sanidade CD 13 ou ganhe 1 de Corrupção (a essência dela está "vazando").</td></tr>
+                        <tr><td>8</td><td><strong>A Alma Não se Cala</strong></td><td>O Vestígio é excepcionalmente forte. Além de um efeito acima, a vítima pode, uma vez por campanha (ou quando o Mestre julgar dramático), assumir temporariamente o controle do seu corpo por 1d4 rodadas em uma cena crítica. Isso quase sempre causa tragédia.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>A Marca da Devoração e o Mundo</h3>
+            <p>Quem comete a Devoração carrega uma marca espiritual que nunca some completamente.</p>
+            <ul>
+                <li><strong>Detecção:</strong> Qualquer Desperto com Alma 14+ ou com Despertares relacionados a percepção/alma (ex: Sentido do Fluxo, Olhar Penetrante avançado) sente "algo errado" em você. Testes de Enganação contra outros Despertos sofrem desvantagem grave.</li>
+                <li><strong>Relacionamentos:</strong> Qualquer Relação de nível "Amigo" ou superior é imediatamente destruída ou transformada em "Trauma" / "Ódio". Aliados próximos podem tentar te matar ou te abandonar para sempre.</li>
+                <li><strong>Atenção da Torre:</strong> Surtos Decenais e eventos dentro de torres começam a te mirar pessoalmente com mais frequência. A entidade te considera "interessante".</li>
+                <li><strong>Isolamento Social:</strong> Cidadelas e facções que descobrem o ato te caçam ou te banem. Apenas os mais desesperados ou corruptos ainda lidam com você.</li>
+            </ul>
+
+            <div class="lore-box">
+                <strong>Conselho de Mestre:</strong> A Devoração deve ser tratada como um botão de autodestruição narrativa. É o momento em que um personagem (PC ou NPC) cruza a linha final entre "humano lutando contra a escuridão" e "a escuridão agora usa o corpo dele". Use para criar vilões trágicos memoráveis, para destruir grupos inteiros de jogadores, ou para um arco de redenção (quase) impossível. Nunca deixe barato.
+            </div>
+
+            <h2 id="exemplos-monstros">3.10 Exemplos de Monstros Prontos</h2>
+
+            <div class="system-card">
+                <strong>Exemplo 1: Rastejante Carniceiro (Tier 2 - Qualidade C ×2)</strong><br>
+                <strong>Estatísticas:</strong> Vigor 14 (+2), Alma 10 (+0), Intelecto 10 (+0), Força 14 (+2), Destreza 13 (+1).<br>
+                • <strong>PV = 20 + (14 × 3) + (10 + 2 × 2) × (2 − 1) = 20 + 42 + 14 = 76</strong> ×2 (Qualidade C) = <strong>152 PV</strong>.<br>
+                • <strong>STA = 20 + (10 × 2 + 10) + (6 + 0 + 0) × (2 − 1) = 20 + 30 + 6 = 56</strong> ×2 (Qualidade C) = <strong>112 STA</strong>.<br>
+                • <strong>PE = (⌊2÷2⌋ + 2) × (0 + 0 + 1) = 3 × 1 = 3</strong> ×2 (Qualidade C) = <strong>6 PE</strong>.<br>
+                • <strong>CD base = 10 + 2 + mod (Força +2)</strong> = 14.<br>
+                • <strong>RD 2 contra cortante/perfurante</strong> (Pele Espessa).<br>
+                <strong>Aparência:</strong> Corpo alongado de carne e ossos, múltiplas pernas, boca vertical na barriga.<br>
+                <strong>Comportamento:</strong> Emboscador. Prefere atacar alvos isolados.<br>
+                <strong>Habilidades:</strong><br>
+                • Mordida Devoradora (dano <strong>cortante</strong>): Causa dano + drena 1d4 de STA.<br>
+                • Pele Espessa: Reduz dano de ataques físicos em 2 (RD fixa).<br>
+                <strong>Recompensa:</strong> Núcleo de Qualidade C + pequena chance de Runa Fraturada.
+            </div>
+
+            <div class="system-card">
+                <strong>Exemplo 2: Eco de Lamento (Tier 4 - Qualidade B ×4)</strong><br>
+                <strong>Estatísticas:</strong> Vigor 12 (+1), Alma 16 (+3), Intelecto 14 (+2), Carisma 15 (+2).<br>
+                • <strong>PV = 20 + (12 × 3) + (10 + 1 × 2) × (4 − 1) = 20 + 36 + 36 = 92</strong> ×4 (Qualidade B) = <strong>368 PV</strong>.<br>
+                • <strong>STA = 20 + (16 × 2 + 14) + (6 + 3 + 2) × (4 − 1) = 20 + 46 + 33 = 99</strong> ×4 (Qualidade B) = <strong>396 STA</strong>.<br>
+                • <strong>PE = (⌊4÷2⌋ + 2) × (3 + 2 + 1) = 4 × 6 = 24</strong> ×4 (Qualidade B) = <strong>96 PE</strong>.<br>
+                • <strong>CD base = 10 + 4 + mod (Alma +3)</strong> = 17.<br>
+                <strong>Aparência:</strong> Figura humanaide feita de sombras e vozes sobrepostas.<br>
+                <strong>Comportamento:</strong> Sádico. Gosta de separar o grupo e atacar a mente.<br>
+                <strong>Habilidades:</strong><br>
+                • Lamento Ecoante (dano <strong>de Alma</strong>): Todos em médio alcance devem fazer Salvaguarda de Alma (CD 15) ou perder 1d6 de Sanidade.<br>
+                • Repetição: Copia a última ação de um jogador (ataque ou poder) contra outro alvo.<br>
+                <strong>Recompensa:</strong> Núcleo de Qualidade B + chance de Runa Viva.
+            </div>
+
+            <div class="system-card">
+                <strong>Exemplo 3: Vigia do Vazio (Tier 6 - Qualidade A ×7)</strong><br>
+                <strong>Estatísticas:</strong> Vigor 18 (+4), Alma 16 (+3), Intelecto 15 (+2), Força 16 (+3).<br>
+                • <strong>PV = 20 + (18 × 3) + (10 + 4 × 2) × (6 − 1) = 20 + 54 + 90 = 164</strong> ×7 (Qualidade A) = <strong>1.148 PV</strong>.<br>
+                • <strong>STA = 20 + (16 × 2 + 15) + (6 + 3 + 2) × (6 − 1) = 20 + 47 + 55 = 122</strong> ×7 (Qualidade A) = <strong>854 STA</strong>.<br>
+                • <strong>PE = (⌊6÷2⌋ + 2) × (3 + 2 + 1) = 5 × 6 = 30</strong> ×7 (Qualidade A) = <strong>210 PE</strong>.<br>
+                • <strong>CD base = 10 + 6 + mod (Alma +3)</strong> = 19.<br>
+                • <strong>RD 5 contra fogo</strong> (carapaça vítrea).<br>
+                <strong>Aparência:</strong> Enorme ser com múltiplos olhos e boca que parece "absorver" a luz ao redor.<br>
+                <strong>Comportamento:</strong> Estratégico e paciente. Age como guardião de algo importante.<br>
+                <strong>Habilidades:</strong><br>
+                • Olhar do Vazio (dano <strong>de Alma/psíquico</strong>): Causa dano + drena 1d4 de PE.<br>
+                • Campo de Exaustão: Todos em curto alcance sofrem desvantagem em testes de Vigor (condição <strong>Enfraquecido X</strong>).<br>
+                • Fase de Desespero (ao chegar a 50% PV): Invoca 1d4+1 Vigias Menores.<br>
+                <strong>Recompensa:</strong> Núcleo de Qualidade A + Runa Viva garantida + possível informação importante sobre o andar.
+            </div>
+
+            
+<h2 id="bestiario-tiers">3.11 — Bestiário dos Tiers</h2>
             <p>Um acervo de 22 monstros prontos, dos Tiers 1 a 4, organizados por faixa de ameaça. Cada ficha usa a matemática de monstros (M1) com atributos próprios — note que os números variam de criatura para criatura conforme Vigor, Alma e Intelecto de cada uma.</p>
 
             <div class="system-card">
@@ -24797,12 +25131,12 @@ document.addEventListener('DOMContentLoaded', () => {
       <section id="geracao-torres">
             <h1>IV. Geração de Torres e Andares</h1>
 
-            <h2>4.1 A Filosofia da Geração de Torres</h2>
+            <h2 id="filosofia-geracao-torres">4.1 A Filosofia da Geração de Torres</h2>
             <p>As Torres não são dungeons estáticas. Elas são organismos semi-vivos, manifestações de uma entidade muito maior. Por isso, cada andar tem uma “personalidade” própria e reage à presença dos Despertos.</p>
 
             <p>Como Mestre, seu objetivo não é apenas preencher salas com monstros. É criar um ambiente que <strong>sinta</strong> que está sendo invadido. Quanto mais tempo os jogadores permanecem em um andar, mais a Torre deve reagir (aumentando o risco, alterando o ambiente, enviando mais monstros ou distorcendo a realidade).</p>
 
-            <h2>4.2 Estrutura Básica de um Andar</h2>
+            <h2 id="estrutura-andar">4.2 Estrutura Básica de um Andar</h2>
             <p>A maioria dos andares segue uma estrutura semelhante:</p>
             <ul>
                 <li><strong>Entrada</strong> – Ponto de chegada (escada, portal, buraco, etc.).</li>
@@ -24833,7 +25167,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Pelo menos um segredo relevante para a campanha.</li>
             </ul>
 
-            <h2>4.4 Tabelas de Geração de Salas e Ambientes</h2>
+            <h2 id="tabelas-salas-ambientes">4.4 Tabelas de Geração de Salas e Ambientes</h2>
 
             <h3>Tipo de Sala (1d20)</h3>
             <div class="table-wrapper">
@@ -24871,7 +25205,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
             </div>
 
-            <h2>4.5 Eventos e Perigos por Andar</h2>
+            <h2 id="eventos-perigos-andar">4.5 Eventos e Perigos por Andar</h2>
 
             <h3>Eventos Menores (1d20)</h3>
             <div class="system-card">
@@ -24895,7 +25229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Alguém (ou algo) começa a seguir o grupo.</li>
             </ul>
 
-            <h2>4.6 Andares Especiais</h2>
+            <h2 id="andares-especiais">4.6 Andares Especiais</h2>
             <ul>
                 <li><strong>Andares de Chefe (Boss Floors):</strong> Sempre têm um monstro ou entidade poderosa protegendo a saída.</li>
                 <li><strong>Andares de Evento:</strong> O andar inteiro é dominado por um grande acontecimento (anomalia, surto localizado, manifestação da Torre).</li>
@@ -25065,7 +25399,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <section id="sanidade-corrupcao-avancada">
             <h1>V. Sanidade e Corrupção – Regras Avançadas</h1>
 
-            <h2>5.1 A Dualidade da Alma</h2>
+            <h2 id="dualidade-alma">5.1 A Dualidade da Alma</h2>
             <p>Sanidade e Corrupção não são apenas dois recursos separados. Elas representam forças opostas dentro da Alma do Desperto:</p>
             <ul>
                 <li><strong>Sanidade</strong> → A capacidade de manter a coesão mental, emocional e existencial. É o que ancora o personagem na sua humanidade.</li>
@@ -25074,7 +25408,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Quando a Sanidade cai muito, a Corrupção avança mais facilmente (e vice-versa). Um personagem com Sanidade muito baixa fica mais vulnerável a mutações e à influência da Torre.</p>
 
-            <h2>5.2 Sanidade – Efeitos Avançados</h2>
+            <h2 id="sanidade-avancada">5.2 Sanidade – Efeitos Avançados</h2>
 
             <h3>Tabela de Efeitos de Sanidade (Avançada)</h3>
             <div class="table-wrapper">
@@ -25129,7 +25463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>8 – Quebra Total:</strong> O personagem perde permanentemente 1d4 pontos de Sanidade máxima e ganha um transtorno grave (Mestre define).
             </div>
 
-            <h2>5.3 Corrupção – Efeitos Avançados</h2>
+            <h2 id="corrupcao-avancada">5.3 Corrupção – Efeitos Avançados</h2>
 
             <h3>Estágios de Corrupção (Avançado)</h3>
             <div class="table-wrapper">
@@ -25184,7 +25518,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>20:</strong> Mutação grave (Mestre cria algo único e impactante)
             </div>
 
-            <h2>5.4 A Interação entre Sanidade e Corrupção</h2>
+            <h2 id="interacao-sanidade-corrupcao">5.4 A Interação entre Sanidade e Corrupção</h2>
             <p>Os dois sistemas se alimentam mutuamente:</p>
             <ul>
                 <li>Quando a Sanidade cai abaixo de 50%, o personagem ganha +1 de Corrupção toda vez que falhar em uma Salvaguarda de Alma.</li>
@@ -25192,7 +25526,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Eventos que causam perda de Sanidade podem acelerar a Corrupção (e vice-versa).</li>
             </ul>
 
-            <h2>5.5 A Torre como Catalisador</h2>
+            <h2 id="torre-catalisador">5.5 A Torre como Catalisador</h2>
             <p>A Torre do Pesadelo e as Guardiãs aceleram esses processos:</p>
             <ul>
                 <li>Em andares profundos, testes de Sanidade e Alma são feitos com desvantagem.</li>
@@ -25353,7 +25687,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p><strong>Dica de Mestre:</strong> Não role mecanicamente toda vez. Às vezes basta descrever que "a Torre parece mais pesada esta noite". O sistema existe para dar peso real às decisões de tempo.</p>
 
-            <h2>5.6 Relacionamentos e Apego sob Pressão</h2>
+            <h2 id="relacionamentos-apego">5.6 Relacionamentos e Apego sob Pressão</h2>
             <p>Laços emocionais são uma das poucas coisas que ainda valem a pena defender neste mundo — e exatamente por isso a Torre os odeia. O sistema de relacionamentos é uma ferramenta poderosa de drama, tensão e tragédia. Use-o com cuidado e sempre com consentimento dos jogadores.</p>
 
             <h3>Níveis de Relacionamento (Mecânica para o Mestre)</h3>
@@ -25415,7 +25749,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p><strong>Aviso importante:</strong> Nunca force um relacionamento romântico ou íntimo entre personagens de jogadores sem consentimento explícito e contínuo de todos os envolvidos. Laços platônicos, de amizade profunda ou de "família encontrada" são tão válidos e trágicos quanto os românticos.</p>
 
-            <h2>5.7 Quando o Personagem se Perde</h2>
+            <h2 id="quando-personagem-se-perde">5.7 Quando o Personagem se Perde</h2>
             <p>Quando um personagem atinge 0 de Sanidade ou 12+ de Corrupção, ele está à beira de se perder completamente. O Mestre pode:</p>
             <ul>
                 <li>Transformá-lo em um antagonista (o jogador pode interpretá-lo temporariamente ou criar um novo personagem).</li>
@@ -25444,12 +25778,12 @@ document.addEventListener('DOMContentLoaded', () => {
 <section id="surtos-decenais">
             <h1>VI. Os Surtos Decenais</h1>
 
-            <h2>6.1 O que são os Surtos Decenais</h2>
+            <h2 id="o-que-sao-surtos">6.1 O que são os Surtos Decenais</h2>
             <p>Os Surtos Decenais são eventos cataclísmicos que ocorrem a cada dez anos. Nesses momentos, as Torres liberam uma quantidade massiva de monstros em uma única onda, proporcional ao maior progresso já alcançado pela humanidade em qualquer torre.</p>
 
             <p>Do ponto de vista do Mestre, os Surtos são uma das ferramentas mais poderosas para criar pressão narrativa e senso de urgência. Eles transformam a ascensão de "algo que os jogadores querem fazer" em "algo que eles precisam fazer".</p>
 
-            <h2>6.2 Mecânicas dos Surtos Decenais</h2>
+            <h2 id="mecanicas-surtos">6.2 Mecânicas dos Surtos Decenais</h2>
 
             <h3>Como Funciona o Surto</h3>
             <p>A força de um Surto é determinada pelo <strong>maior andar já alcançado por qualquer grupo de Despertos</strong> em qualquer torre do mundo.</p>
@@ -25491,7 +25825,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
             </div>
 
-            <h2>6.3 Preparando um Surto como Mestre</h2>
+            <h2 id="preparando-surto">6.3 Preparando um Surto como Mestre</h2>
 
             <h3>Fases de um Surto</h3>
             <p>Um Surto geralmente tem três fases:</p>
@@ -25508,7 +25842,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Use o Surto para forçar escolhas difíceis nos jogadores (salvar uma cidade ou tentar impedir o Surto na fonte?).</li>
             </ul>
 
-            <h2>6.4 Consequências em Larga Escala</h2>
+            <h2 id="consequencias-surtos">6.4 Consequências em Larga Escala</h2>
             <p>Um Surto não afeta apenas os jogadores. Ele muda o mundo:</p>
             <ul>
                 <li>Regiões inteiras podem ser perdidas para a Névoa ou para monstros.</li>
@@ -25517,7 +25851,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>O moral da humanidade pode cair drasticamente (o que aumenta a dificuldade de recrutar novos Despertos).</li>
             </ul>
 
-            <h2>6.5 Surtos como Foco de Campanha</h2>
+            <h2 id="surtos-foco-campanha">6.5 Surtos como Foco de Campanha</h2>
             <p>Os Surtos são excelentes para estruturar campanhas longas. Algumas ideias:</p>
             <ul>
                 <li><strong>Campanha de Defesa:</strong> Os jogadores são responsáveis por proteger uma região ou cidadela durante o Surto.</li>
@@ -25526,7 +25860,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><strong>Campanha de Contra-ataque:</strong> Após um Surto devastador, os jogadores lideram uma expedição para retaliar contra as Torres.</li>
             </ul>
 
-            <h2>6.6 Ferramentas e Tabelas</h2>
+            <h2 id="ferramentas-surtos">6.6 Ferramentas e Tabelas</h2>
 
             <h3>Tabela de Intensidade do Surto</h3>
             <div class="system-card">
@@ -25556,7 +25890,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><strong>Surto Reverso:</strong> Algo dentro da Torre "puxa" pessoas para dentro.</li>
             </ul>
 
-            <h2>6.8 Exemplos de Surtos</h2>
+            <h2 id="exemplos-surtos">6.8 Exemplos de Surtos</h2>
 
             <div class="system-card">
                 <strong>Exemplo 1: O Surto de 47 A.T. (Após as Torres)</strong><br>
@@ -25578,12 +25912,12 @@ document.addEventListener('DOMContentLoaded', () => {
 <section id="faccoes-secretas">
             <h1>VII. Facções e Política (Segredos)</h1>
 
-            <h2>7.1 O Jogo das Facções</h2>
+            <h2 id="jogo-faccoes">7.1 O Jogo das Facções</h2>
             <p>No mundo atual, o verdadeiro poder não vem de títulos ou bandeiras. Ele vem de <strong>influência</strong>, <strong>recursos</strong> e da capacidade de controlar Despertos.</p>
 
             <p>As facções são os verdadeiros senhores do mundo pós-Torres. Elas competem por território, conhecimento sobre as Torres, e — acima de tudo — por Despertos poderosos. Para o Mestre, as facções são uma das melhores ferramentas para criar intriga, dilemas morais e consequências de longo prazo.</p>
 
-            <h2>7.2 As Principais Facções do Mundo</h2>
+            <h2 id="principais-faccoes">7.2 As Principais Facções do Mundo</h2>
 
             <div class="system-card">
                 <strong>A Irmandade do Vazio</strong><br>
@@ -25625,7 +25959,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><strong>Fraternidade Gélida:</strong> Seu verdadeiro objetivo não é proteger a humanidade, mas preparar o caminho para o "despertar final" da entidade.</li>
             </ul>
 
-            <h2>7.4 Facções e os Despertos</h2>
+            <h2 id="faccoes-despertos">7.4 Facções e os Despertos</h2>
             <p>Para as facções, os Despertos são simultaneamente:</p>
             <ul>
                 <li><strong>Ferramentas</strong> — Usados para subir torres e trazer recursos.</li>
@@ -25635,7 +25969,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Muitas facções mantêm "programas de recrutamento" que são, na prática, formas sofisticadas de escravidão ou lavagem cerebral.</p>
 
-            <h2>7.5 Conflitos e Intrigas entre Facções</h2>
+            <h2 id="conflitos-faccoes">7.5 Conflitos e Intrigas entre Facções</h2>
             <p>As facções raramente entram em guerra aberta (os Surtos já são problema suficiente). Em vez disso, elas travam:</p>
             <ul>
                 <li>Guerras de influência e propaganda</li>
@@ -25645,7 +25979,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Manipulação de Despertos contra facções rivais</li>
             </ul>
 
-            <h2>7.6 Usando as Facções em Campanha</h2>
+            <h2 id="usando-faccoes-campanha">7.6 Usando as Facções em Campanha</h2>
             <p>As facções são excelentes ferramentas narrativas. Algumas formas de usá-las:</p>
             <ul>
                 <li><strong>Como patronos:</strong> Oferecem recursos, informação e proteção em troca de serviços perigosos.</li>
@@ -25667,7 +26001,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>Favores e Dívidas</h3>
             <p>Facções raramente dão algo de graça. Sempre existe uma dívida envolvida. Use isso para criar tensão dramática quando a facção vier cobrar.</p>
 
-            <h2>7.8 Segredos de Nível Avançado</h2>
+            <h2 id="segredos-faccoes-avancado">7.8 Segredos de Nível Avançado</h2>
             <p>Conforme os jogadores sobem de nível e ganham influência, eles podem descobrir verdades ainda mais sombrias:</p>
             <ul>
                 <li>Algumas facções já tentaram "negociar" diretamente com a entidade por trás das Torres.</li>
@@ -25700,7 +26034,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Usados com inteligência, os Barmans transformam a campanha de "os jogadores vão até a Torre" para "o mundo reage ao que os jogadores estão fazendo". Eles são ouvidos, bocas e, às vezes, lâminas nas sombras.</p>
 
-            <h2>1. Sistema Completo de Geração de Barmans</h2>
+            <h2 id="geracao-barmans">1. Sistema Completo de Geração de Barmans</h2>
 
             <p>Siga os passos abaixo para criar um Barman memorável e perigoso em poucos minutos.</p>
 
@@ -25801,7 +26135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
             </div>
 
-            <h2>2. A Rede dos Barmans</h2>
+            <h2 id="rede-barmans">2. A Rede dos Barmans</h2>
 
             <p>Os Barmans não são isolados. Existe uma rede informal (e às vezes mortal) entre eles. Informações importantes viajam de cidade em cidade através de mensageiros, símbolos riscados em paredes, ou até através de clientes que nem sabem que estão carregando mensagens.</p>
 
@@ -25812,7 +26146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 • Alguns Barmans lendários são considerados "Vozes Antigas". Quando uma Voz Antiga fala, a Rede inteira escuta.
             </div>
 
-            <h2>3. Tabelas de Rumores para o Mestre</h2>
+            <h2 id="tabelas-rumores-barmans">3. Tabelas de Rumores para o Mestre</h2>
 
             <h3>Rumores Comuns (qualquer Barman)</h3>
             <ul>
@@ -25835,7 +26169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Que existe uma forma de "roubar" a Torre... e que alguém já conseguiu.</li>
             </ul>
 
-            <h2>4. Usando Barmans em Campanha (Conselhos Práticos)</h2>
+            <h2 id="usando-barmans-campanha">4. Usando Barmans em Campanha (Conselhos Práticos)</h2>
 
             <div class="system-card">
                 <strong>Como Barmans geram tensão e drama:</strong><br><br>
@@ -25854,7 +26188,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <section id="ferramentas-mestre">
             <h1>VIII. Ferramentas do Mestre</h1>
 
-            <h2>8.1 Construindo Sessões em Torre do Pesadelo</h2>
+            <h2 id="construindo-sessoes">8.1 Construindo Sessões em Torre do Pesadelo</h2>
             <p>Uma sessão típica de Torre do Pesadelo deve equilibrar três elementos principais: Exploração, Tensão e Consequências.</p>
 
             <div class="system-card">
@@ -25866,7 +26200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Evite fazer sessões inteiramente de combate. O horror e a tensão funcionam melhor quando os jogadores têm tempo de sentir o peso do ambiente e das escolhas que fizeram.</p>
 
-            <h2>8.2 Gerenciando o Horror e a Tensão</h2>
+            <h2 id="gerenciando-horror-tensao">8.2 Gerenciando o Horror e a Tensão</h2>
 
             <h3>Princípios Fundamentais</h3>
             <ul>
@@ -25883,7 +26217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Use os próprios jogadores contra eles (alucinações, paranoia, visões da pessoa amada se corrompendo).</li>
             </ul>
 
-            <h2>8.3 Lidando com a Morte de Personagens</h2>
+            <h2 id="morte-personagens">8.3 Lidando com a Morte de Personagens</h2>
             <p>A morte em Torre do Pesadelo deve ser significativa. Evite mortes aleatórias ou por "azar de rolagem".</p>
 
             <div class="system-card">
@@ -25896,7 +26230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Quando um personagem morre, aproveite o momento. Deixe os outros jogadores sentirem o peso. Não corra para "colocar um novo personagem" imediatamente. A dor e o luto também fazem parte do jogo.</p>
 
-            <h2>8.4 Equilíbrio e Progressão</h2>
+            <h2 id="equilibrio-progressao">8.4 Equilíbrio e Progressão</h2>
 
             <h3>Recompensas</h3>
             <p>Em Torre do Pesadelo, recompensas nunca devem ser "grátis". Sempre existe um custo:</p>
@@ -25914,7 +26248,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li>Se um jogador está interpretando muito bem o custo emocional da Corrupção, considere dar a ele um pequeno benefício temporário como "recompensa" narrativa.</li>
             </ul>
 
-            <h2>8.5 Planejamento de Campanhas Longas</h2>
+            <h2 id="planejamento-campanhas-longas">8.5 Planejamento de Campanhas Longas</h2>
 
             <h3>O Relógio dos Surtos</h3>
             <p>Os Surtos Decenais são sua melhor ferramenta para criar urgência em campanhas longas. Use-os como um prazo claro:</p>
@@ -25992,7 +26326,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <section id="apendices-mestre">
             <h1>IX. Apêndices</h1>
 
-            <h2>9.1 Tabelas de Referência Rápida</h2>
+            <h2 id="tabelas-referencia-rapida">9.1 Tabelas de Referência Rápida</h2>
 
             <h3>Resumo de Ações em Combate</h3>
             <div class="system-card">
@@ -26015,7 +26349,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Efeitos:</strong> A partir de 3 pontos: +1 Força/Vigor e desvantagem em Salvaguardas de Alma. A partir de 6: poderes corruptos + penalidades sociais. A partir de 9: mutações visíveis e perda de humanidade.
             </div>
 
-            <h2>9.2 Exemplos de Monstros Prontos (Adicionais)</h2>
+            <h2 id="exemplos-monstros-adicionais">9.2 Exemplos de Monstros Prontos (Adicionais)</h2>
 
             <div class="system-card">
                 <strong>Exemplo 4: Sussurrador Onírico (Tier 5 - Qualidade B ×4)</strong><br>
@@ -26045,7 +26379,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Recompensa:</strong> Núcleo de Qualidade A + Runa Ascendida com chance.
             </div>
 
-            <h2>9.3 Exemplos de Andares Prontos (Adicionais)</h2>
+            <h2 id="exemplos-andares-adicionais">9.3 Exemplos de Andares Prontos (Adicionais)</h2>
 
             <div class="system-card">
                 <strong>Exemplo 3 – Andar 31 (Torre do Eco)</strong><br>
@@ -26065,7 +26399,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Segredo:</strong> O andar está “testando” o grupo. Se eles resistirem bem às visões, podem ganhar uma pista importante sobre a entidade.
             </div>
 
-            <h2>9.4 Exemplos de NPCs Importantes</h2>
+            <h2 id="exemplos-npcs">9.4 Exemplos de NPCs Importantes</h2>
 
             <div class="system-card">
                 <strong>Exemplo 1: Lira Voss, “A Que Não Subiu”</strong><br>
@@ -26192,7 +26526,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <em>Regra curta de propósito — para jogos maiores, role cena por cena em vez de rodada a rodada.</em>
             </div>
 
-            <h2>9.5 Geradores Rápidos</h2>
+            <h2 id="geradores-rapidos">9.5 Geradores Rápidos</h2>
 
             <h3>Gerador de Rumores (1d10)</h3>
             <div class="system-card">
