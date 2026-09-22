@@ -27302,7 +27302,26 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- PWA: registro do service worker (offline/instalável) -->
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      // Atualização automática: quando um novo SW é encontrado, pede para ele
+      // assumir o controle e recarrega a página para servir a versão mais recente.
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+          }
+        });
+      });
+    }).catch(() => {});
+    // Quando o novo SW assume o controle, recarrega uma única vez.
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
   }
 
   // ─── INSTALAR APP (PWA) ───
