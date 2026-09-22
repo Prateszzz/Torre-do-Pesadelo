@@ -10631,7 +10631,7 @@ function _aplicarEstadoAccordionPersonagens() {
   });
 }
 
-async function ativarPersonagem(nome) {
+async function ativarPersonagem(nome, abrirAccordion = true) {
   if (personagemAtual) salvarLocal(); // salva o atual antes
   // Fecha o modal de Personalização se estava aberto para o personagem
   // ANTERIOR — ele não é filho de #ficha-content, então sobreviveria à
@@ -10653,9 +10653,9 @@ async function ativarPersonagem(nome) {
     _restaurarFichaExpandidos();
     _aplicarEstadoFichaExpand();
   }
-  renderizarPersonagensAccordion();
-  abrirAccordionPersonagem(nome);
-  renderizarPersonagensNaSidebar();
+renderizarPersonagensAccordion();
+if (abrirAccordion) abrirAccordionPersonagem(nome);
+renderizarPersonagensNaSidebar();
   await inicializarFotos(); // await garante que as fotos carregam antes de renderizar o hero
   // scroll para a ficha
   setTimeout(() => { document.getElementById('ficha')?.scrollIntoView({behavior:'smooth'}); }, 100);
@@ -10855,7 +10855,7 @@ async function irParaMinhaFicha() {
   if (!personagemAtual) {
     const lista = getListaPersonagens();
     if (lista.length > 0) {
-      await ativarPersonagem(lista[0]);
+      await ativarPersonagem(lista[0], false);
     }
   }
   setTimeout(() => {
