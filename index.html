@@ -10631,7 +10631,7 @@ function _aplicarEstadoAccordionPersonagens() {
   });
 }
 
-async function ativarPersonagem(nome, abrirAccordion = true) {
+async function ativarPersonagem(nome, abrirAccordion = true, rolarParaFicha = true) {
   if (personagemAtual) salvarLocal(); // salva o atual antes
   // Fecha o modal de Personalização se estava aberto para o personagem
   // ANTERIOR — ele não é filho de #ficha-content, então sobreviveria à
@@ -10656,9 +10656,11 @@ async function ativarPersonagem(nome, abrirAccordion = true) {
 renderizarPersonagensAccordion();
 if (abrirAccordion) abrirAccordionPersonagem(nome);
 renderizarPersonagensNaSidebar();
-  await inicializarFotos(); // await garante que as fotos carregam antes de renderizar o hero
-  // scroll para a ficha
+await inicializarFotos(); // await garante que as fotos carregam antes de renderizar o hero
+// scroll para a ficha (opcional — o fluxo da landing pode ficar no topo)
+if (rolarParaFicha) {
   setTimeout(() => { document.getElementById('ficha')?.scrollIntoView({behavior:'smooth'}); }, 100);
+}
 }
 
 // Modal de confirmação antes de excluir
@@ -10850,14 +10852,15 @@ async function navFichaPersonagem(nome) {
 // Atalho "Minha Ficha" da Sidebar: vai DIRETO para a ficha ativa.
 // Garante que existe um personagem carregado (ativa o primeiro da lista, se necessário),
 // sem abrir menus, seletores ou exigir clique em "Ativar Ficha".
-async function irParaMinhaFicha() {
+async function irParaMinhaFicha(rolarParaFicha = true) {
   document.getElementById('sidebar').classList.remove('open');
   if (!personagemAtual) {
     const lista = getListaPersonagens();
     if (lista.length > 0) {
-      await ativarPersonagem(lista[0], false);
+      await ativarPersonagem(lista[0], false, rolarParaFicha);
     }
   }
+  if (!rolarParaFicha) return;
   setTimeout(() => {
     const el = document.getElementById('ficha');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -17600,12 +17603,14 @@ function irParaFicha() {
     // Sessão Firebase persistida detectada imediatamente
     document.getElementById('app').style.display = 'block';
     _toggleTabbar(true);
-    setTimeout(() => irParaMinhaFicha(), 150);
+    // Fica no topo (hero com "Instalar App" e "Acessar Minha Ficha") —
+    // não rola até a seção da ficha.
+    setTimeout(() => { irParaMinhaFicha(false); window.scrollTo({ top: 0, behavior: 'auto' }); }, 150);
   } else if (usuarioAtual) {
     // Sessão já restaurada via restaurarSessao()
     document.getElementById('app').style.display = 'block';
     _toggleTabbar(true);
-    setTimeout(() => irParaMinhaFicha(), 150);
+    setTimeout(() => { irParaMinhaFicha(false); window.scrollTo({ top: 0, behavior: 'auto' }); }, 150);
   } else {
     // Nenhuma sessão detectada — mostra login. Após login, tentarLogin()
     // navega automaticamente para a ficha do personagem.
