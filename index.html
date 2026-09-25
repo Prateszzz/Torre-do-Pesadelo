@@ -11790,7 +11790,7 @@ const TRACOS_ALMA = {
     { nome:'Predador Silencioso', custo:3, cat:1, desc:'Emboscada: primeiro ataque/poder +1d6; criaturas não alertadas têm desvantagem para detectá-lo.' },
     // ── 2 · Sobrevivência & Exploração ──
     { nome:'Explorador da Névoa', custo:2, cat:2, desc:'Vantagem em Navegação na Névoa/desorientação; eventos aleatórios hostis reduzidos em 1 nível.' },
-    { nome:'Afinidade com uma Torre Guardiã', custo:4, cat:2, desc:'Escolha uma Torre Guardiã (Carmesim, Eco, Onírica ou Gélida). Dentro dela: −2 na dificuldade de testes de Sobrevivência e Navegação + Vantagem em 1 salvaguarda por incursão. Em qualquer outra torre, 1×/incursão sente ecos da Guardiã escolhida e recebe uma dica do Mestre.' },
+    { nome:'Afinidade com uma torre periférica', custo:4, cat:2, desc:'Escolha uma torre periférica (Baranov, Deserto ou uma das demais regiões). Dentro dela: −2 na dificuldade de testes de Sobrevivência e Navegação + Vantagem em 1 salvaguarda por incursão. Em qualquer outra torre, 1×/incursão sente ecos da torre escolhida e recebe uma dica do Mestre.' },
     { nome:'Caçador de Anomalias', custo:2, cat:2, desc:'Vantagem para rastrear, identificar ou prever criaturas corrompidas ou anômalas.' },
     { nome:'Fôlego da Alma', custo:2, cat:2, desc:'Prende a respiração por até 10 minutos; metade da penalidade em Névoa densa; +2 em Salvaguardas de Vigor contra gases, fumaça e venenos inalados.' },
     { nome:'Sentidos Aguçados', custo:1, cat:2, desc:'Escolha um sentido: vantagem em Percepção que o use.' },
@@ -17896,13 +17896,13 @@ function _livroSidebarResponsiva() {
 
 // ── NAVEGAÇÃO DO LIVRO (breadcrumb + anterior/próximo) ──
 // Ordem das seções (mesma do sumário) e mapeamento para as partes I–IX.
-const _LIVRO_SECOES = ['intro','torre-pesadelo','guardias','torre-disputas','mundo-fora','nevoa','geopolitica','despertos','criacao','atributos','aparencia','tracos-alma','alma-fragmentada','poder-mente-corpo','arvore-alma','utilizacao-manifestacao','rituais','ascensao','sessoes-xp','surtos','economia','mecanico','combate','sobrecarga','recuperacao','sobrevivencia','sanidade','relacionamentos'];
+const _LIVRO_SECOES = ['intro','torre-pesadelo','torre-disputas','mundo-fora','nevoa','geopolitica','despertos','criacao','atributos','aparencia','tracos-alma','alma-fragmentada','poder-mente-corpo','arvore-alma','utilizacao-manifestacao','rituais','ascensao','sessoes-xp','surtos','economia','mecanico','combate','sobrecarga','recuperacao','sobrevivencia','sanidade','relacionamentos'];
 const _LIVRO_PARTES = {
-  intro:'I · O Mundo', 'torre-pesadelo':'I · O Mundo', guardias:'I · O Mundo', 'torre-disputas':'I · O Mundo', 'mundo-fora':'I · O Mundo', nevoa:'I · O Mundo', geopolitica:'I · O Mundo', despertos:'I · O Mundo',
+  intro:'I · O Mundo', 'torre-pesadelo':'I · O Mundo', 'torre-disputas':'I · O Mundo', 'mundo-fora':'I · O Mundo', nevoa:'I · O Mundo', geopolitica:'I · O Mundo', despertos:'I · O Mundo',
   criacao:'II · Criação', atributos:'II · Criação', aparencia:'II · Criação', 'tracos-alma':'II · Criação',
   'alma-fragmentada':'III · Sistema de Poder', 'poder-mente-corpo':'III · Sistema de Poder', 'arvore-alma':'III · Sistema de Poder', 'utilizacao-manifestacao':'III · Sistema de Poder', rituais:'III · Sistema de Poder',
   ascensao:'IV · Progressão', 'sessoes-xp':'IV · Progressão', surtos:'IV · Progressão',
-  economia:'V · Economia',
+  economia:'V · Periféricanomia',
   mecanico:'VI · Regras de Jogo', combate:'VI · Regras de Jogo', sobrecarga:'VI · Regras de Jogo', recuperacao:'VI · Regras de Jogo',
   sobrevivencia:'VII · Sobrevivência',
   sanidade:'VIII · Sanidade e Corrupção',
@@ -18289,8 +18289,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#regioes-torres">As Sete Regiões e Torres</a></li>
 <li><a href="#regiao-baranov" style="padding-left:.8rem">Torre de Baranov — Norte</a></li>
                 <li><a href="#nekrion" style="padding-left:.8rem">Nékrion — Deus do Último Silêncio</a></li>
-                <li><a href="#regiao-deserto" style="padding-left:.8rem">Torre do Deserto — Nordeste</a></li>
-            <li><a href="#guardias">As Quatro Torres Guardiãs</a></li>
+<li><a href="#regiao-deserto" style="padding-left:.8rem">Torre do Deserto — Nordeste</a></li>
             <li><a href="#torre-disputas">A Torre das Disputas</a></li>
             <li><a href="#mundo-fora">O Mundo Fora das Torres</a></li>
             <li><a href="#nevoa">A Névoa e o Mundo Exterior</a></li>
@@ -18449,7 +18448,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li><a href="#regiao-baranov" style="padding-left:.8rem">Torre de Baranov — Norte</a></li>
                             <li><a href="#nekrion" style="padding-left:.8rem">Nékrion — Deus do Último Silêncio</a></li>
                             <li><a href="#regiao-deserto" style="padding-left:.8rem">Torre do Deserto — Nordeste</a></li>
-                            <li><a href="#guardias">As Quatro Torres Guardiãs</a></li>
                             <li><a href="#torre-disputas">A Torre das Disputas</a></li>
                             <li><a href="#mundo-fora">O Mundo Fora das Torres</a></li>
                             <li><a href="#nevoa">A Névoa e o Mundo Exterior</a></li>
@@ -18576,7 +18574,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>Panorama do Mundo</h4>
                     <ul>
                         <li><strong>Torres conhecidas:</strong> Centenas espalhadas pelo mundo. Apenas uma fração foi explorada além do 20º andar.</li>
-                        <li><strong>Guardiãs:</strong> Todas permanecem ativas. Nenhuma foi silenciada até hoje.</li>
+                        <li><strong>As Sete Regiões:</strong> Seis torres periféricas cercam a Torre do Pesadelo — cada uma com seu próprio domínio, cultura e ameaça.</li>
                         <li><strong>Ameaça atual:</strong> Crescente. Os Surtos estão chegando mais cedo e com mais força.</li>
                         <li><strong>Facções dominantes:</strong> Irmandade do Vazio, Consórcio Carmesim, Ordem do Eco, Círculo Onírico e a Fraternidade Gélida.</li>
                     </ul>
@@ -18626,7 +18624,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <section id="intro">
             <h1>O Mundo de Torre do Pesadelo</h1>
             <p>O mundo não acabou em uma explosão nuclear. Ele acabou quando as Torres surgiram.</p>
-            <p>Milhares de torres apareceram simultaneamente pelo planeta, alterando a geografia, destruindo ecossistemas e mudando completamente a realidade conhecida. No centro de tudo ergue-se a <strong>Torre do Pesadelo</strong>, cercada pelas quatro Torres Guardiãs.</p>
+            <p>Milhares de torres apareceram simultaneamente pelo planeta, alterando a geografia, destruindo ecossistemas e mudando completamente a realidade conhecida. No centro de tudo ergue-se a <strong>Torre do Pesadelo</strong>, cercada pelas seis torres periféricas das grandes regiões.</p>
             
             <div class="lore-box">
                 As torres liberam criaturas, corrompem territórios e transformam regiões inteiras em zonas hostis. Grande parte do planeta tornou-se inabitável.<br><br>
@@ -18896,27 +18894,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </section>
 
-        <!-- GUARDIÃS -->
-        <section id="guardias">
-            <h2>As Quatro Torres Guardiãs</h2>
-            <p>As Torres Guardiãs são quatro torres gigantescas posicionadas ao redor da Torre do Pesadelo. Elas estão entre os maiores desafios conhecidos pela humanidade e são consideradas <strong>extremamente letais</strong> mesmo em seus andares iniciais.</p>
-            <p>Em termos de dificuldade, os andares iniciais de uma Torre Guardiã são equivalentes a andares 15+ de torres menores comuns. Andares intermediários e profundos de uma Guardiã rivalizam ou superam os desafios encontrados na Torre do Pesadelo em profundidades médias.</p>
-            <p>Por isso, ser forte em uma torre não significa dominar outra. Muitos Despertos acreditam que as Guardiãs existem para obrigar guerreiros a expandirem suas builds e superarem suas limitações.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Torre</th><th>Tema Principal</th><th>Descrição</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>Carmesim</strong></td><td>Carne, mutação, agressividade</td><td>Sobrevivência brutal e transformação física.</td></tr>
-                        <tr><td><strong>do Eco</strong></td><td>Som, percepção, desorientação</td><td>Precisão, ilusão auditiva e caos sensorial.</td></tr>
-                        <tr><td><strong>Onírica</strong></td><td>Desconhecido, instabilidade, psicológico</td><td>Fenômenos mentais e pesadelos manifestos.</td></tr>
-                        <tr><td><strong>Gélida</strong></td><td>Vazio, exaustão, persistência</td><td>Ambientes extremos e esgotamento existencial.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p>Poucos sobreviveram o suficiente para entendê-las por completo. Mas todos concordam: nenhuma Guardiã testa apenas força bruta.</p>
-        </section>
-
         <section id="torre-disputas">
             <h2>A Torre das Disputas</h2>
 
@@ -19099,7 +19076,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>O que quer:</strong> poder, recursos e controle das rotas de núcleos.<br>
                 <strong>O que oferece:</strong> equipamento de qualidade, contratos lucrativos e proteção armada. O Consórcio paga bem — e paga rápido.<br>
                 <strong>O que cobra:</strong> resultados — e material de pesquisa das Torres. O Consórcio não perdoa dívidas nem fracassos.<br>
-                <strong>Gancho:</strong> um contrato para capturar um monstro vivo da Torre Carmesim.
+                <strong>Gancho:</strong> um contrato para capturar um monstro vivo da torre periférica.
             </div>
             <div class="system-card">
                 <strong>Como se alinhar:</strong><br>
@@ -19125,7 +19102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>O que quer:</strong> artefatos, segredos e registros das Torres.<br>
                 <strong>O que oferece:</strong> informação, treinamento e acesso a arquivos. A Ordem sabe coisas que ninguém mais sabe.<br>
                 <strong>O que cobra:</strong> artefatos e segredos que você encontrar — nem sempre os que você quer entregar.<br>
-                <strong>Gancho:</strong> uma expedição para recuperar um diário perdido na Torre do Eco.
+                <strong>Gancho:</strong> uma expedição para recuperar um diário perdido na torre periférica.
             </div>
             <div class="system-card">
                 <strong>Como se alinhar:</strong><br>
@@ -19148,7 +19125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>4. O Círculo Onírico</h3>
             <div class="system-card">
                 <strong>O que é:</strong> místicos e estudiosos da mente e dos sonhos.<br>
-                <strong>O que quer:</strong> compreender a Torre Onírica e o que ela esconde.<br>
+                <strong>O que quer:</strong> compreender a torre periférica e o que ela esconde.<br>
                 <strong>O que oferece:</strong> conhecimento mental, rituais e leituras de sonho. O Círculo entende a mente como ninguém.<br>
                 <strong>O que cobra:</strong> sonhos e memórias — e você nunca sabe o que eles levam.<br>
                 <strong>Gancho:</strong> um membro quer que você "sonhe" com um andar antes de entrar nele.
@@ -19167,7 +19144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="system-card">
                 <strong>Missões e Riscos:</strong><br>
-                • Missões: explorar sonhos, investigar a Torre Onírica, recuperar memórias perdidas.<br>
+                • Missões: explorar sonhos, investigar a torre periférica, recuperar memórias perdidas.<br>
                 • Riscos: o Círculo pode levar mais do que você ofereceu; sonhos podem se tornar pesadelos reais.
             </div>
 
@@ -19642,14 +19619,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="system-card">
                 <strong>6. Fugitivo do Culto do Olho</strong><br><br>
-                <strong>Vida Anterior:</strong> Você nasceu dentro (ou foi recrutado por) um dos muitos cultos que acreditam que a Torre do Pesadelo (ou uma das Guardiãs) é uma divindade que deve ser servida, aplacada ou compreendida através de sacrifício e submissão. Você viu rituais, viu pessoas se entregarem voluntariamente, viu o que acontece quando a Torre "aceita" a oferta. Você fugiu. A maioria não consegue.<br><br>
+                <strong>Vida Anterior:</strong> Você nasceu dentro (ou foi recrutado por) um dos muitos cultos que acreditam que a Torre do Pesadelo (ou uma das torres periféricas) é uma divindade que deve ser servida, aplacada ou compreendida através de sacrifício e submissão. Você viu rituais, viu pessoas se entregarem voluntariamente, viu o que acontece quando a Torre "aceita" a oferta. Você fugiu. A maioria não consegue.<br><br>
                 <strong>Benefício de Competência:</strong> Treinado em <strong>Vontade</strong> (grátis). <strong>Percepção CD 12 identifica o estágio 3+ de Corrupção em humanos</strong> — você reconhece o que o Culto ensinou a ver. Vantagem em reconhecer símbolos de culto, armadilhas conceituais e comportamento de monstros "inteligentes".<br><br>
                 <strong>Benefício de Mundo:</strong> 1× por cena, teste de <strong>Intelecto ou Alma CD 14</strong> para "ler" uma área fortemente corrompida e receber uma dica curta do Mestre sobre o que a Torre quer dali.<br><br>
                 <strong>Custo / Gancho:</strong> Você começa com <strong>2 pontos de Sanidade a menos</strong> (o peso do que viu). O Culto não esquece — agentes, marcas ou fragmentos podem te encontrar. Muitos cultistas ainda te consideram "escolhido" e querem te trazer de volta — vivo ou como oferenda.<br><br>
                 <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>algoz do Culto</strong> — o executor que te recrutou (ou te marcou). Ele sabe que você fugiu e não desistiu.<br><br>
                 <strong>Traços Sugeridos:</strong> Visão da Torre, Alma Instável, Fragmento de Outro, Visões da Queda, Marca do Olho, Eco Mental, Alma de Aço (com o custo adicional).<br><br>
                 <strong>Como Jogar:</strong> Jogue o medo paranoico de quem fugiu de um culto: você reconhece símbolos onde ninguém vê, desconfia de gentilezas e sabe que o Culto nunca esquece. Gancho de cena: um símbolo do Olho aparece marcado na porta do seu abrigo — alguém sabe que você está aqui. Gancho de cena: um cultista arrependido procura você pedindo ajuda para fugir, e pode ser uma armadilha.<br>
-                <strong>Conexões:</strong> Sua marca conecta-se ao sistema de Corrupção e à Atenção da Torre; o Culto do Olho dialoga com as facções do Livro do Mestre e com os segredos das Guardiãs.
+                <strong>Conexões:</strong> Sua marca conecta-se ao sistema de Corrupção e à Atenção da Torre; o Culto do Olho dialoga com as facções do Livro do Mestre e com os segredos das torres periféricas.
             </div>
 
             <div class="system-card">
@@ -19685,7 +19662,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Relacionamento Inicial (Nv 1):</strong> seu <strong>antigo mentor</strong> — o estudioso que te ensinou o ofício e desapareceu em uma expedição (contato vivo ou dívida de pesquisa).<br><br>
                 <strong>Traços Sugeridos:</strong> Visão da Torre, Mente Focada, Herança Ancestral, Sentido do Fluxo, Visões da Queda, Marca do Olho, Equilíbrio Interno.<br><br>
                 <strong>Como Jogar:</strong> Jogue a curiosidade que beira a obsessão: você anota tudo, pergunta demais e se perde em pensamento no pior momento. Gancho de cena: um fragmento de diário menciona o nome do seu mentor desaparecido — e um andar que ninguém mapeou. Gancho de cena: alguém oferece acesso a uma ruína proibida em troca de um favor que pode custar sua sanidade.<br>
-                <strong>Conexões:</strong> Seu conhecimento conecta-se ao sistema de História e às lendas das Quatro Guardiãs; a busca pelo mentor dialoga com Relacionamentos e com os segredos da Ascensão e da Devoração.
+                <strong>Conexões:</strong> Seu conhecimento conecta-se ao sistema de História e às lendas das torres periféricas; a busca pelo mentor dialoga com Relacionamentos e com os segredos da Ascensão e da Devoração.
             </div>
 
             <div class="system-card">
@@ -19721,7 +19698,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Relacionamento Inicial (Nv 1):</strong> o <strong>toque que o marcou</strong> — um mistério: algo da Torre se comunicou com você e ainda pode voltar (contato com o desconhecido).<br><br>
                 <strong>Traços Sugeridos:</strong> Sentido do Fluxo, Visão da Torre, Fome da Alma, Alma Instável, Marca do Olho, Renascimento Parcial, Fragmento de Outro, Alma de Aço.<br><br>
                 <strong>Como Jogar:</strong> Jogue a sensação de ser observado: você sente a Torre como quem sente uma cicatriz, e às vezes a marca arde sem motivo. Gancho de cena: a marca que você carrega começa a brilhar perto de um objeto que a Torre quer. Gancho de cena: outro "marcado" procura você — e ele sabe mais sobre o toque do que você.<br>
-                <strong>Conexões:</strong> Sua marca conecta-se ao sistema de Atenção da Torre e à Corrupção; o toque que o despertou dialoga com as Guardiãs e com os mistérios da Ascensão.
+                <strong>Conexões:</strong> Sua marca conecta-se ao sistema de Atenção da Torre e à Corrupção; o toque que o despertou dialoga com as torres periféricas e com os mistérios da Ascensão.
             </div>
 
             <div class="system-card">
@@ -20123,7 +20100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </thead>
                     <tbody>
                         <tr><td>2</td><td>Explorador da Névoa</td><td>Vantagem em testes de <strong>Navegação</strong> (perícia) para cruzar a Névoa ou resistir a desorientação. Além disso, a chance de eventos aleatórios hostis enquanto viaja na Névoa é reduzida em 1 nível. <em>(Difere do antecedente Mensageiro da Névoa: o traço reduz eventos hostis; o antecedente dá Vantagem em encontros e +1 provisão inicial.)</em></td></tr>
-                        <tr><td>4</td><td>Afinidade com uma Torre Guardiã</td><td>Escolha uma Torre Guardiã (Carmesim, Eco, Onírica ou Gélida). Dentro dela: −2 na dificuldade de testes de Sobrevivência e Navegação + Vantagem em 1 salvaguarda por incursão. Em qualquer outra torre, 1×/incursão você sente ecos da Guardiã escolhida e recebe uma dica do Mestre.</td></tr>
+                        <tr><td>4</td><td>Afinidade com uma torre periférica</td><td>Escolha uma torre periférica (Baranov, Deserto ou uma das demais regiões). Dentro dela: −2 na dificuldade de testes de Sobrevivência e Navegação + Vantagem em 1 salvaguarda por incursão. Em qualquer outra torre, 1×/incursão você sente ecos da torre escolhida e recebe uma dica do Mestre.</td></tr>
                         <tr><td>2</td><td>Caçador de Anomalias</td><td>Você tem vantagem em testes para rastrear, identificar ou prever o comportamento de criaturas corrompidas ou anômalas.</td></tr>
                         <tr><td>2</td><td>Fôlego da Alma</td><td>Prende a respiração por até 10 minutos; metade da penalidade em Névoa densa; +2 em Salvaguardas de Vigor contra gases, fumaça e venenos inalados.</td></tr>
                         <tr><td>1</td><td>Sentidos Aguçados</td><td>Escolha um sentido (visão, audição ou olfato). Você ganha vantagem em testes de Percepção que usem esse sentido.</td></tr>
@@ -21609,7 +21586,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <ul>
                 <li><strong>O Surto do Silêncio (há 47 anos)</strong>: Nenhuma onda de monstros invadiu as cidadelas. Em vez disso, as pessoas começaram a enlouquecer. Milhares se suicidaram ou se mataram entre si antes que o fenômeno fosse entendido.</li>
-                <li><strong>O Surto Carmesim (há 87 anos)</strong>: A Torre Carmesim liberou uma quantidade absurda de monstros de carne. Três cidadelas inteiras foram perdidas em menos de dois meses.</li>
+                <li><strong>O Surto Carmesim (há 87 anos)</strong>: A torre periférica liberou uma quantidade absurda de monstros de carne. Três cidadelas inteiras foram perdidas em menos de dois meses.</li>
                 <li><strong>O Grande Eclipse (há 127 anos)</strong>: O maior Surto registrado. Dizem que a escuridão durou treze dias e que monstros do tamanho de fortalezas caminharam pela superfície.</li>
             </ul>
 
@@ -21985,10 +21962,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="system-card">
             <strong>Materiais de Torres</strong><br><br>
-            <strong>Cristal de Eco (Torre do Eco)</strong>: Permite que o item armazene e reproduza sons. Muito usado em armas que “gritam” ou armaduras que emitem ruídos desorientadores.<br><br>
+            <strong>Cristal de Eco (torre periférica)</strong>: Permite que o item armazene e reproduza sons. Muito usado em armas que “gritam” ou armaduras que emitem ruídos desorientadores.<br><br>
             <strong>Carne Viva Carmesim</strong>: Dá propriedades de regeneração ao equipamento (pode curar o usuário lentamente, mas o item precisa “se alimentar” ocasionalmente).<br><br>
-            <strong>Gelo Eterno (Torre Gélida)</strong>: Torna o item extremamente resistente ao calor e dá chance de causar lentidão ou congelamento.<br><br>
-            <strong>Fragmento Onírico (Torre Onírica)</strong>: Permite que o item afete mentes (sonhos, ilusões leves, resistência a efeitos mentais).<br><br>
+            <strong>Gelo Eterno (torre periférica)</strong>: Torna o item extremamente resistente ao calor e dá chance de causar lentidão ou congelamento.<br><br>
+            <strong>Fragmento Onírico (torre periférica)</strong>: Permite que o item afete mentes (sonhos, ilusões leves, resistência a efeitos mentais).<br><br>
             <strong>Pedra de Vazio</strong> (rara, encontrada em andares muito profundos): Torna o item mais difícil de detectar magicamente e pode “engolir” parte de magias ou poderes inimigos.
         </div>
 
@@ -22281,8 +22258,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <tbody>
                         <tr><td>Fácil</td><td>12</td><td>Ação simples sob pressão leve</td></tr>
                         <tr><td>Moderada</td><td>16</td><td>Desafio comum dentro de uma torre menor</td></tr>
-                        <tr><td>Difícil</td><td>20</td><td>Andares intermediários de torres comuns ou andares iniciais de uma Guardiã</td></tr>
-                        <tr><td>Muito Difícil</td><td>24</td><td>Andares profundos de torres comuns ou andares intermediários de uma Torre Guardiã</td></tr>
+                        <tr><td>Difícil</td><td>20</td><td>Andares intermediários de torres comuns ou andares iniciais de uma torre periférica</td></tr>
+                        <tr><td>Muito Difícil</td><td>24</td><td>Andares profundos de torres comuns ou andares intermediários de uma torre periférica</td></tr>
                         <tr><td>Extrema</td><td>28</td><td>Andares altos da Torre do Pesadelo (acima do 25º–30º andar)</td></tr>
                         <tr><td>Quase Impossível</td><td>32</td><td>Enfrentar Ruínas, Calamidades ou andares muito profundos da Torre do Pesadelo</td></tr>
                     </tbody>
@@ -22794,7 +22771,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="lore-box">
                 <strong>Hierarquia de Dificuldade das Torres (referência importante):</strong><br><br>
                 • <strong>Torres menores / comuns:</strong> Andares 1–12 são considerados acessíveis para grupos iniciantes a intermediários. Andares 13–20 já são muito perigosos.<br>
-                • <strong>Torres Guardiãs (Carmesim, do Eco, Onírica e Gélida):</strong> Extremamente letais. Mesmo seus andares iniciais equivalem a andares 15+ de torres comuns. Andares intermediários (a partir do 8º–10º) são considerados desafios lendários para a maioria dos Despertos.<br>
+                • <strong>Torres periféricas (as seis regiões — Baranov, Deserto e as demais):</strong> Extremamente letais. Mesmo seus andares iniciais equivalem a andares 15+ de torres comuns. Andares intermediários (a partir do 8º–10º) são considerados desafios lendários para a maioria dos Despertos.<br>
                 • <strong>Torre do Pesadelo:</strong> O maior e mais temido desafio da humanidade. Com 100 andares, ela é o objetivo final. Andares acima de 25–30 já são raros de serem alcançados. Ninguém jamais chegou ao topo.
             </div>
 
@@ -23732,7 +23709,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <li><a href="#natureza-torres" style="padding-left:.6rem">O que Realmente São as Torres</a></li>
         <li><a href="#origem-nevoa" style="padding-left:.6rem">A Origem da Névoa e dos Monstros</a></li>
         <li><a href="#natureza-torre-pesadelo" style="padding-left:.6rem">A Natureza da Torre do Pesadelo</a></li>
-        <li><a href="#segredos-guardias" style="padding-left:.6rem">Os Segredos das Quatro Guardiãs</a></li>
+        <li><a href="#segredos-guardias" style="padding-left:.6rem">As Torres Periféricas</a></li>
       </ul>
 
       <span class="toc-label">III. Criação de Monstros</span>
@@ -23883,7 +23860,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <li><a href="#natureza-torres">O que Realmente São as Torres</a></li>
                 <li><a href="#origem-nevoa">A Origem da Névoa e dos Monstros</a></li>
                 <li><a href="#natureza-torre-pesadelo">A Natureza da Torre do Pesadelo</a></li>
-                <li><a href="#segredos-guardias">Os Segredos das Quatro Guardiãs</a></li>
+                <li><a href="#segredos-guardias">As Torres Periféricas</a></li>
               </ul>
             </div>
 
@@ -24115,16 +24092,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Aviso ao Mestre:</strong> Essas revelações devem ser entregues aos jogadores de forma gradual e impactante. Revelar tudo de uma vez destrói o mistério e o horror que sustentam o jogo.
             </div>
 
-            <h2 id="segredos-guardias">Os Segredos das Quatro Guardiãs</h2>
-            <p>Cada uma das quatro Torres Guardiãs representa um aspecto diferente da entidade que as gerou:</p>
-            <ul>
-                <li><strong>Carmesim</strong>: O aspecto da fome, transformação física e mutação. É o dedo que "digere" e reconstrói o que a entidade consome.</li>
-                <li><strong>do Eco</strong>: O aspecto da memória distorcida, ilusão e percepção. É o dedo que "lembra" e deforma o que já foi absorvido.</li>
-                <li><strong>Onírica</strong>: O aspecto dos sonhos, realidades subjetivas e loucura. É onde a entidade "sonha" com possibilidades e pesadelos.</li>
-                <li><strong>Gélida</strong>: O aspecto do vazio, esquecimento e exaustão existencial. É o dedo que "descarta" o que não tem mais utilidade.</li>
-            </ul>
+            <h2 id="segredos-guardias">As Torres Periféricas (Notas para o Mestre)</h2>
+            <p>As seis torres periféricas — Baranov (Norte), Deserto (Nordeste) e as demais regiões — são manifestações da mesma entidade que gerou a Torre do Pesadelo. Cada uma representa um aspecto diferente dessa entidade, moldado pelo território que a cerca.</p>
 
-            <p>Subir todas as quatro Guardiãs até seus andares mais profundos pode ter consequências catastróficas — ou revelar algo que a humanidade não está preparada para saber.</p>
+            <p>Subir todas as torres periféricas até seus andares mais profundos pode ter consequências catastróficas — ou revelar algo que a humanidade não está preparada para saber.</p>
 
             <h2>A Torre das Disputas (Notas para o Mestre)</h2>
             <p>A Torre das Disputas é uma das poucas torres que opera com regras claras e um “governante” consciente. O Boss Final não é um monstro comum — é uma entidade que se alimenta de conflito de alta qualidade. Ele não deseja a destruição da humanidade, mas sim encontrar (ou criar) o oponente perfeito.</p>
@@ -24251,20 +24222,20 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>Torres Comuns / Menores</h3>
             <p>Monstros mais "primitivos" e instintivos. Foco em fome, agressividade e adaptação básica.</p>
 
-            <h3>Torre Carmesim</h3>
+            <h3>torre periférica</h3>
             <p>Monstros com forte tema de carne, mutação e regeneração. Muitos possuem habilidades de metamorfose e drenagem de vitalidade.</p>
 
-            <h3>Torre do Eco</h3>
+            <h3>torre periférica</h3>
             <p>Monstros ligados a som, memória e ilusão. Muitos atacam através de desorientação e repetição de padrões.</p>
 
-            <h3>Torre Onírica</h3>
+            <h3>torre periférica</h3>
             <p>Monstros que manipulam percepção, sonhos e realidade subjetiva. São os mais perigosos mentalmente.</p>
 
-            <h3>Torre Gélida</h3>
+            <h3>torre periférica</h3>
             <p>Monstros de exaustão, vazio e desesperança. Muitos causam efeitos de lentidão, drenagem de vontade e frio existencial.</p>
 
             <h3>Torre do Pesadelo</h3>
-            <p>Monstros de elite e únicos. Geralmente possuem inteligência elevada, poderes de múltiplas Guardiãs ou habilidades completamente alienígenas.</p>
+            <p>Monstros de elite e únicos. Geralmente possuem inteligência elevada, poderes de múltiplas torres periféricas ou habilidades completamente alienígenas.</p>
 
             <h2 id="monstros-personagens">3.7 Monstros como Personagens</h2>
             <p>Monstros de alta qualidade (especialmente A e S) podem ser tratados como personagens completos:</p>
@@ -24460,7 +24431,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Larva Sussurrante</strong> — Tier 1 · Qualidade D (×1) · Onírica<br>
+                <strong>Larva Sussurrante</strong> — Tier 1 · Qualidade D (×1) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>50</strong> · STA <strong>58</strong> · PE <strong>6</strong> · CA <strong>10</strong> · CD <strong>10</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (10 × 3) = 50 · STA = 20 + (13 × 2 + 12) = 58 · PE = 2 × (1 + 1 + 1) = 6 · CD = 10 + 1 + 1</em><br>
                 <strong>Aparência:</strong> Uma figura encolhida e envolta em trapos molhados, com um rosto que muda a cada piscada. Sussurra nomes que o grupo ainda não ouviu.<br>
@@ -24468,11 +24439,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Sussurro de Nome</strong> (Ofensiva Nv 1, 2 PE, CD 10): Dano de Alma + o alvo deve passar em Salvaguarda de Alma ou perde 1 de Sanidade.<br>
                 • <strong>Rosto Múltiplo</strong> (Suplementar Nv 0, 1 PE): Copia por 1 rodada o rosto de um aliado próximo, causando desvantagem em testes sociais contra ele.<br>
-                <strong>Recompensa:</strong> Núcleo de Larva + fragmento onírico pequeno (material da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Larva + fragmento onírico pequeno (material da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Espinho de Gelo</strong> — Tier 1 · Qualidade C (×2) · Gélida<br>
+                <strong>Espinho de Gelo</strong> — Tier 1 · Qualidade C (×2) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>112</strong> · STA <strong>104</strong> · PE <strong>4</strong> · CA <strong>12</strong> · CD <strong>9</strong> · RD 2 contra frio · Dano: frio<br>
                 <em>PV = 20 + (12 × 3) = 56, ×2 = 112 · STA = 20 + (12 × 2 + 8) = 52, ×2 = 104 · PE = 2 × (1 − 1 + 1) = 2, ×2 = 4 · CD = 10 + 1 + 0</em><br>
                 <strong>Aparência:</strong> Uma forma humana feita de gelo opaco e espinhos afiados, movendo-se com rangidos secos. Onde pisa, deixa marcas de geada.<br>
@@ -24480,13 +24451,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Projétil de Gelo</strong> (Ofensiva Nv 1, 2 PE, CD 9): Dano de frio à distância + o alvo sofre 1 nível de Exaustão se falhar em Vigor.<br>
                 • <strong>Espinhos Rasteiros</strong> (Suplementar Nv 0, 1 PE): Terreno difícil em 1 zona por 1d4 rodadas.<br>
-                <strong>Recompensa:</strong> Núcleo de Larva + lasca de Gelo Eterno (material da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Larva + lasca de Gelo Eterno (material da torre periférica).
             </div>
             <h3>Tier 2 — Rastejante (níveis 3–4)</h3>
             <p>Adaptações ofensivas e táticas simples — os primeiros monstros que caçam em grupo.</p>
 
             <div class="system-card">
-                <strong>Rastejante de Carne</strong> — Tier 2 · Qualidade C (×2) · Carmesim<br>
+                <strong>Rastejante de Carne</strong> — Tier 2 · Qualidade C (×2) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>154</strong> · STA <strong>116</strong> · PE <strong>6</strong> · CA <strong>14</strong> · CD <strong>12</strong> · RD 3 contra cortante · Dano: contundente<br>
                 <em>PV = 20 + (15 × 3) + (10 + 2 × 2) × 1 = 79, ×2 = 158 · STA = 20 + (12 × 2 + 8) + (6 + 1 − 1) × 1 = 58, ×2 = 116 · PE = 3 × (1 − 1 + 1) = 3, ×2 = 6 · CD = 10 + 2 + 2</em><br>
                 <strong>Aparência:</strong> Uma pilha ambulante de músculo exposto e pele que não fecha, com braços desproporcionais. Cheira a sangue velho e carne queimada.<br>
@@ -24495,11 +24466,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Esmagamento de Carne</strong> (Ofensiva Nv 2, 4 PE, CD 12): Dano contundente alto + o alvo é empurrado 1 zona.<br>
                 • <strong>Regeneração Pálida</strong> (Passiva Nv 1): Recupera 1d6 de PV no início do turno até ser atingido por fogo.<br>
                 • <strong>Marca da Carne</strong> (Suplementar Nv 0, 2 PE): Marca um alvo — o Rastejante de Carne o prioriza até o fim do combate.<br>
-                <strong>Recompensa:</strong> Núcleo de Rastejante (3 Esp) + Carne Viva (material exclusivo da Torre Carmesim).
+                <strong>Recompensa:</strong> Núcleo de Rastejante (3 Esp) + Carne Viva (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Eco de Passos</strong> — Tier 2 · Qualidade B (×4) · Eco<br>
+                <strong>Eco de Passos</strong> — Tier 2 · Qualidade B (×4) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>264</strong> · STA <strong>280</strong> · PE <strong>48</strong> · CA <strong>13</strong> · CD <strong>12</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (12 × 3) + (10 + 1 × 2) × 1 = 68, ×4 = 272 · STA = 20 + (14 × 2 + 13) + (6 + 2 + 1) × 1 = 70, ×4 = 280 · PE = 3 × (2 + 1 + 1) = 12, ×4 = 48 · CD = 10 + 2 + 2</em><br>
                 <strong>Aparência:</strong> Uma silhueta translúcida que repete os movimentos do grupo um instante depois, como um eco andando. Não tem rosto — apenas uma ausência.<br>
@@ -24507,7 +24478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Réplica</strong> (Ofensiva Nv 2, 6 PE, CD 12): Copia a última técnica usada contra ele, devolvendo-a a outro alvo.<br>
                 • <strong>Descompasso</strong> (Suplementar Nv 1, 3 PE): Um aliado tem desvantagem no próximo teste (vê seu eco errado).<br>
-                <strong>Recompensa:</strong> Núcleo de Rastejante + Cristal de Eco (material exclusivo da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Rastejante + Cristal de Eco (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24523,7 +24494,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Sombra Faminta</strong> — Tier 2 · Qualidade C (×2) · Onírica<br>
+                <strong>Sombra Faminta</strong> — Tier 2 · Qualidade C (×2) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>122</strong> · STA <strong>128</strong> · PE <strong>12</strong> · CA <strong>12</strong> · CD <strong>11</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (11 × 3) + (10 + 0) × 1 = 63, ×2 = 126 · STA = 20 + (13 × 2 + 11) + (6 + 1 + 0) × 1 = 64, ×2 = 128 · PE = 3 × (1 + 0 + 1) = 6, ×2 = 12 · CD = 10 + 2 + 1</em><br>
                 <strong>Aparência:</strong> Uma mancha escura que se move por baixo das sombras, com duas fendas pálidas no lugar de olhos. Distorce o que toca.<br>
@@ -24531,11 +24502,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Toque Faminto</strong> (Ofensiva Nv 1, 4 PE, CD 11): Dano de Alma + drena 1d4 de PE do alvo.<br>
                 • <strong>Passo pela Sombra</strong> (Defensiva Nv 1, 3 PE): Teleporta 1 zona e ganha vantagem no próximo ataque.<br>
-                <strong>Recompensa:</strong> Núcleo de Rastejante + Sombra Condensada (material da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Rastejante + Sombra Condensada (material da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Geada Errante</strong> — Tier 2 · Qualidade C (×2) · Gélida<br>
+                <strong>Geada Errante</strong> — Tier 2 · Qualidade C (×2) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>138</strong> · STA <strong>118</strong> · PE <strong>6</strong> · CA <strong>13</strong> · CD <strong>11</strong> · RD 3 contra frio · Dano: frio<br>
                 <em>PV = 20 + (13 × 3) + (10 + 1 × 2) × 1 = 71, ×2 = 142 · STA = 20 + (12 × 2 + 9) + (6 + 1 − 1) × 1 = 59, ×2 = 118 · PE = 3 × (1 − 1 + 1) = 3, ×2 = 6 · CD = 10 + 2 + 1</em><br>
                 <strong>Aparência:</strong> Um manto de geada que caminha sozinho, com uma fome silenciosa. Deixa o ar mais frio ao redor.<br>
@@ -24543,13 +24514,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Rajada Gélida</strong> (Ofensiva Nv 1, 3 PE, CD 11): Dano de frio em área (1 zona) + desacelera (movimento reduzido).<br>
                 • <strong>Fome de Calor</strong> (Passiva Nv 0): Monstros e pessoas a 1 zona sofrem 1 nível de Exaustão se falharem em Vigor ao fim do turno.<br>
-                <strong>Recompensa:</strong> Núcleo de Rastejante + Gelo Eterno (material exclusivo da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Rastejante + Gelo Eterno (material exclusivo da torre periférica).
             </div>
             <h3>Tier 3 — Disforme (níveis 5–6)</h3>
             <p>Anatomia colapsando, mutações aleatórias — cada Disforme é um erro único da Torre.</p>
 
             <div class="system-card">
-                <strong>Disforme de Carne</strong> — Tier 3 · Qualidade C (×2) · Carmesim<br>
+                <strong>Disforme de Carne</strong> — Tier 3 · Qualidade C (×2) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>192</strong> · STA <strong>128</strong> · PE <strong>6</strong> · CA <strong>15</strong> · CD <strong>13</strong> · RD 4 contra cortante · Dano: contundente/necrose<br>
                 <em>PV = 20 + (16 × 3) + (10 + 3 × 2) × 2 = 100, ×2 = 200 · STA = 20 + (12 × 2 + 8) + (6 + 1 − 1) × 2 = 64, ×2 = 128 · PE = 3 × (1 − 1 + 1) = 3, ×2 = 6 · CD = 10 + 3 + 2</em><br>
                 <strong>Aparência:</strong> Uma massa de carne com vários rostos afogados na superfície, braços que nascem e caem conforme se move. Sua forma muda a cada rodada.<br>
@@ -24558,11 +24529,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Esmagamento Carnal</strong> (Ofensiva Nv 3, 6 PE, CD 13): Dano contundente alto + o alvo fica Caído.<br>
                 • <strong>Rostos Afogados</strong> (Suplementar Nv 2, 5 PE): Todos em 1 zona devem passar em Salvaguarda de Alma (CD 13) ou sofrem 1d4 de Sanidade (os rostos gritam).<br>
                 • <strong>Regeneração Voraz</strong> (Passiva Nv 1): Recupera 1d8 de PV por rodada, mas recebe o dobro de dano de fogo.<br>
-                <strong>Recompensa:</strong> Núcleo de Disforme (7 Esp) + Coração de Monstro (material exclusivo da Torre Carmesim).
+                <strong>Recompensa:</strong> Núcleo de Disforme (7 Esp) + Coração de Monstro (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Cantora de Ecos</strong> — Tier 3 · Qualidade B (×4) · Eco<br>
+                <strong>Cantora de Ecos</strong> — Tier 3 · Qualidade B (×4) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>304</strong> · STA <strong>352</strong> · PE <strong>72</strong> · CA <strong>12</strong> · CD <strong>14</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (12 × 3) + (10 + 1 × 2) × 2 = 80, ×4 = 320 · STA = 20 + (16 × 2 + 14) + (6 + 3 + 2) × 2 = 88, ×4 = 352 · PE = 3 × (3 + 2 + 1) = 18, ×4 = 72 · CD = 10 + 3 + 3</em><br>
                 <strong>Aparência:</strong> Uma figura esguia com a boca aberta num grito contínuo e silencioso. De sua garganta escorrem vozes de pessoas que já morreram no andar.<br>
@@ -24571,11 +24542,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Grito dos Mortos</strong> (Ofensiva Nv 3, 8 PE, CD 14): Todos em 1 zona fazem Salvaguarda de Alma ou perdem 1d6 de Sanidade.<br>
                 • <strong>Voz do Aliado</strong> (Suplementar Nv 2, 6 PE): Imita a voz de um aliado para dar uma ordem falsa (teste de Intelecto para notar).<br>
                 • <strong>Coro do Andar</strong> (Passiva Nv 1): Enquanto estiver viva, eventos aleatórios do andar têm +1 de risco.<br>
-                <strong>Recompensa:</strong> Núcleo de Disforme + Cristal de Eco (material exclusivo da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Disforme + Cristal de Eco (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Pesadelo Andarilho</strong> — Tier 3 · Qualidade B (×4) · Onírica<br>
+                <strong>Pesadelo Andarilho</strong> — Tier 3 · Qualidade B (×4) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>304</strong> · STA <strong>348</strong> · PE <strong>60</strong> · CA <strong>12</strong> · CD <strong>14</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (12 × 3) + (10 + 1 × 2) × 2 = 80, ×4 = 320 · STA = 20 + (17 × 2 + 13) + (6 + 3 + 1) × 2 = 87, ×4 = 348 · PE = 3 × (3 + 1 + 1) = 15, ×4 = 60 · CD = 10 + 3 + 3</em><br>
                 <strong>Aparência:</strong> Uma forma humanoide cujo rosto muda para os maiores medos de quem o observa. Caminha lentamente, mas nunca está onde deveria.<br>
@@ -24584,7 +24555,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Forma do Medo</strong> (Suplementar Nv 3, 8 PE, CD 14): Um alvo vê seu maior medo — deve passar em Salvaguarda de Alma ou fica Amedrontado 2 por 1d4 rodadas.<br>
                 • <strong>Passo Onírico</strong> (Defensiva Nv 2, 6 PE): Teleporta até 2 zonas em qualquer direção.<br>
                 • <strong>Pesadelo Compartilhado</strong> (Ofensiva Nv 2, 6 PE): Dois alvos fazem Salvaguarda de Alma ou perdem 1d4 de Sanidade.<br>
-                <strong>Recompensa:</strong> Núcleo de Disforme + Fragmento Onírico (material exclusivo da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Disforme + Fragmento Onírico (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24600,7 +24571,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Muda de Gelo</strong> — Tier 3 · Qualidade C (×2) · Gélida<br>
+                <strong>Muda de Gelo</strong> — Tier 3 · Qualidade C (×2) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>172</strong> · STA <strong>136</strong> · PE <strong>12</strong> · CA <strong>13</strong> · CD <strong>12</strong> · RD 4 contra frio · Dano: frio<br>
                 <em>PV = 20 + (14 × 3) + (10 + 2 × 2) × 2 = 90, ×2 = 180 · STA = 20 + (12 × 2 + 10) + (6 + 1 + 0) × 2 = 68, ×2 = 136 · PE = 3 × (1 + 0 + 1) = 6, ×2 = 12 · CD = 10 + 3 + 1</em><br>
                 <strong>Aparência:</strong> Uma casca de gelo vazia com a forma de um grande predador, animada por uma luz azulada interna. Rachaduras se reparam sozinhas.<br>
@@ -24608,7 +24579,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Garra de Gelo</strong> (Ofensiva Nv 2, 5 PE, CD 12): Dano de frio + o alvo fica Enfraquecido 1 (desvantagem em Força/Vigor).<br>
                 • <strong>Explosão de Geada</strong> (Defensiva Nv 1, 4 PE): Quando reduzido a 50% PV, libera uma onda de frio em 1 zona (Salvaguarda de Vigor).<br>
-                <strong>Recompensa:</strong> Núcleo de Disforme + Gelo Eterno (material exclusivo da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Disforme + Gelo Eterno (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24640,7 +24611,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Mãe de Carne</strong> — Tier 4 · Qualidade A (×7) · Carmesim<br>
+                <strong>Mãe de Carne</strong> — Tier 4 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>875</strong> · STA <strong>623</strong> · PE <strong>112</strong> · CA <strong>15</strong> · CD <strong>15</strong> · RD 5 contra contundente · Dano: necrose<br>
                 <em>PV = 20 + (19 × 3) + (10 + 4 × 2) × 3 = 131, ×7 = 917 · STA = 20 + (15 × 2 + 12) + (6 + 2 + 1) × 3 = 89, ×7 = 623 · PE = 4 × (2 + 1 + 1) = 16, ×7 = 112 · CD = 10 + 4 + 3</em><br>
                 <strong>Aparência:</strong> Uma colina de carne pulsante com um rosto central e braços de parto que geram crias. Cada ferida que sofre libera mais criaturas.<br>
@@ -24649,11 +24620,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Parto de Crias</strong> (Suplementar Nv 3, 10 PE, CD 15): Gera 1d4 Rastejantes de Carne ao longo de 2 rodadas.<br>
                 • <strong>Grito de Parto</strong> (Ofensiva Nv 3, 8 PE): Todos em 1 zona fazem Salvaguarda de Alma ou ficam Amedrontados 1.<br>
                 • <strong>Regeneração de Carne</strong> (Passiva Nv 2): Recupera 2d6 de PV por rodada; dano de fogo é dobrado contra ela.<br>
-                <strong>Recompensa:</strong> Núcleo de Carnífice + Coração de Monstro (material exclusivo da Torre Carmesim).
+                <strong>Recompensa:</strong> Núcleo de Carnífice + Coração de Monstro (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Diretor de Ecos</strong> — Tier 4 · Qualidade A (×7) · Eco<br>
+                <strong>Diretor de Ecos</strong> — Tier 4 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>623</strong> · STA <strong>777</strong> · PE <strong>224</strong> · CA <strong>13</strong> · CD <strong>16</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (13 × 3) + (10 + 1 × 2) × 3 = 95, ×7 = 665 · STA = 20 + (18 × 2 + 16) + (6 + 4 + 3) × 3 = 111, ×7 = 777 · PE = 4 × (4 + 3 + 1) = 32, ×7 = 224 · CD = 10 + 4 + 4</em><br>
                 <strong>Aparência:</strong> Uma figura alta de mil vozes sobrepostas, com um "maestro" de braços longos regendo o silêncio do andar. O som morre perto dele.<br>
@@ -24662,11 +24633,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Regência</strong> (Suplementar Nv 3, 10 PE, CD 16): Todos os Ecos aliados agem imediatamente após ele, fora de ordem.<br>
                 • <strong>Silêncio Absoluto</strong> (Ofensiva Nv 3, 8 PE): Em 1 zona, poderes baseados em som falham por 1 rodada; criaturas que dependem de audição ficam cegas.<br>
                 • <strong>Eco do Passado</strong> (Suplementar Nv 2, 6 PE): Reapresenta a última técnica usada por um aliado, contra outro alvo.<br>
-                <strong>Recompensa:</strong> Núcleo de Carnífice + Cristal de Eco refinado (material exclusivo da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Carnífice + Cristal de Eco refinado (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Senhor dos Sonhos</strong> — Tier 4 · Qualidade A (×7) · Onírica<br>
+                <strong>Senhor dos Sonhos</strong> — Tier 4 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>532</strong> · STA <strong>798</strong> · PE <strong>224</strong> · CA <strong>12</strong> · CD <strong>16</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (12 × 3) + (10 + 1 × 2) × 3 = 92, ×7 = 644 · STA = 20 + (19 × 2 + 17) + (6 + 4 + 3) × 3 = 114, ×7 = 798 · PE = 4 × (4 + 3 + 1) = 32, ×7 = 224 · CD = 10 + 4 + 4</em><br>
                 <strong>Aparência:</strong> Uma figura nobre e coroada que existe apenas em pesadelos, com um manto feito de olhos sonolentos. Sua voz entra nos sonhos dos Despertos.<br>
@@ -24675,11 +24646,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Sonho Aprisionante</strong> (Ofensiva Nv 3, 10 PE, CD 16): Um alvo deve passar em Salvaguarda de Alma ou dorme por 1d4 rodadas (acorda ao sofrer dano).<br>
                 • <strong>Visão de Horror</strong> (Ofensiva Nv 2, 8 PE): Um alvo perde 1d6 de Sanidade (metade em sucesso).<br>
                 • <strong>Reino Interior</strong> (Suplementar Nv 3, 10 PE): Arrasta até 3 criaturas para um pesadelo compartilhado por 2 rodadas (fora do combate físico).<br>
-                <strong>Recompensa:</strong> Núcleo de Carnífice + Fragmento Onírico refinado (material exclusivo da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Carnífice + Fragmento Onírico refinado (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Caçador do Gelo</strong> — Tier 4 · Qualidade A (×7) · Gélida<br>
+                <strong>Caçador do Gelo</strong> — Tier 4 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>770</strong> · STA <strong>616</strong> · PE <strong>112</strong> · CA <strong>17</strong> · CD <strong>14</strong> · RD 5 contra frio · Dano: frio/cortante<br>
                 <em>PV = 20 + (16 × 3) + (10 + 3 × 2) × 3 = 116, ×7 = 812 · STA = 20 + (14 × 2 + 13) + (6 + 2 + 1) × 3 = 88, ×7 = 616 · PE = 4 × (2 + 1 + 1) = 16, ×7 = 112 · CD = 10 + 4 + 2</em><br>
                 <strong>Aparência:</strong> Um predador enorme coberto de placas de gelo azul, com hálito de geada e olhos sem pupila. Rastros de gelo se formam onde passa.<br>
@@ -24688,7 +24659,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Garra Glacial</strong> (Ofensiva Nv 3, 8 PE, CD 14): Dano de frio + o alvo fica Enfraquecido 2 (desvantagem grave em Força/Vigor).<br>
                 • <strong>Tempestade de Gelo</strong> (Ofensiva Nv 2, 8 PE): Dano de frio em área (2 zonas) + terreno difícil por 1d4 rodadas.<br>
                 • <strong>Instinto de Perseguição</strong> (Passiva Nv 2): Imune a Exaustão; conhece a localização de presas feridas no andar.<br>
-                <strong>Recompensa:</strong> Núcleo de Carnífice + Gelo Eterno em bloco (material exclusivo da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Carnífice + Gelo Eterno em bloco (material exclusivo da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24708,7 +24679,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Crueldade consciente e manipulação psicológica — os primeiros monstros que sabem o que estão fazendo.</p>
 
             <div class="system-card">
-                <strong>Profano da Carne</strong> — Tier 5 · Qualidade B (×4) · Carmesim<br>
+                <strong>Profano da Carne</strong> — Tier 5 · Qualidade B (×4) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>508</strong> · STA <strong>384</strong> · PE <strong>64</strong> · CA <strong>16</strong> · CD <strong>16</strong> · RD 4 contra cortante · Dano: contundente/necrose<br>
                 <em>PV = 20 + (17 × 3) + (10 + 3 × 2) × 4 = 135, ×4 = 540 · STA = 20 + (14 × 2 + 12) + (6 + 2 + 1) × 4 = 96, ×4 = 384 · PE = 4 × (2 + 1 + 1) = 16, ×4 = 64 · CD = 10 + 5 + 3</em><br>
                 <strong>Aparência:</strong> Uma figura que um dia foi humana, agora coberta por músculos transplantados de dezenas de vítimas. Sorri com dentes de outro ser.<br>
@@ -24717,11 +24688,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Enxerto de Carne</strong> (Suplementar Nv 3, 8 PE, CD 16): Rouba 1d6 de PV de um alvo e adiciona à própria reserva (máx. +20 PV temporário).<br>
                 • <strong>Colheita</strong> (Ofensiva Nv 4, 10 PE): Dano cortante + o alvo fica Sangrando 3 até ser tratado.<br>
                 • <strong>Coleção Viva</strong> (Passiva Nv 2): Ganha +1 de dano para cada "peça" que carrega (máx. +5).<br>
-                <strong>Recompensa:</strong> Núcleo de Profano (30 Esp) + Carne Viva em bloco (matéria rara da Torre Carmesim).
+                <strong>Recompensa:</strong> Núcleo de Profano (30 Esp) + Carne Viva em bloco (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Intérprete de Ecos</strong> — Tier 5 · Qualidade B (×4) · Eco<br>
+                <strong>Intérprete de Ecos</strong> — Tier 5 · Qualidade B (×4) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>348</strong> · STA <strong>496</strong> · PE <strong>128</strong> · CA <strong>13</strong> · CD <strong>17</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (13 × 3) + (10 + 1 × 2) × 4 = 107, ×4 = 428 · STA = 20 + (18 × 2 + 16) + (6 + 4 + 3) × 4 = 124, ×4 = 496 · PE = 4 × (4 + 3 + 1) = 32, ×4 = 128 · CD = 10 + 5 + 4</em><br>
                 <strong>Aparência:</strong> Uma figura de muitas bocas sobrepostas, cada uma sussurrando uma frase diferente. Interpreta a Torre para quem ouve — e cobra caro.<br>
@@ -24730,11 +24701,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Tradução Distorcida</strong> (Suplementar Nv 3, 10 PE, CD 17): Um aliado recebe uma "dica" falsa sobre o andar — desvantagem no próximo teste de conhecimento.<br>
                 • <strong>Voz da Torre</strong> (Ofensiva Nv 4, 12 PE): Todos em 2 zonas fazem Salvaguarda de Alma ou perdem 1d6 de Sanidade.<br>
                 • <strong>Intérprete</strong> (Passiva Nv 3): Pode ler runas e padrões da Torre com sucesso garantido.<br>
-                <strong>Recompensa:</strong> Núcleo de Profano + Cristal de Eco denso (matéria rara da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Profano + Cristal de Eco denso (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Tecelão de Pesadelos</strong> — Tier 5 · Qualidade B (×4) · Onírica<br>
+                <strong>Tecelão de Pesadelos</strong> — Tier 5 · Qualidade B (×4) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>304</strong> · STA <strong>508</strong> · PE <strong>128</strong> · CA <strong>12</strong> · CD <strong>17</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (12 × 3) + (10 + 1 × 2) × 4 = 104, ×4 = 416 · STA = 20 + (19 × 2 + 17) + (6 + 4 + 3) × 4 = 127, ×4 = 508 · PE = 4 × (4 + 3 + 1) = 32, ×4 = 128 · CD = 10 + 5 + 4</em><br>
                 <strong>Aparência:</strong> Uma aranha de fios de sonho, tecendo névoa prateada entre os dedos. Cada fio carrega um fragmento de pesadelo roubado.<br>
@@ -24742,11 +24713,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Teia Onírica</strong> (Suplementar Nv 3, 8 PE, CD 17): Cria uma zona de teia — quem entra faz Salvaguarda de Alma ou fica Enredado (Agarrado 2).<br>
                 • <strong>Pesadelo Costurado</strong> (Ofensiva Nv 4, 12 PE): Um alvo revive seu pior sonho — perde 1d8 de Sanidade (metade em sucesso).<br>
-                <strong>Recompensa:</strong> Núcleo de Profano + fios de sonho (matéria rara da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Profano + fios de sonho (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Carrasco de Gelo</strong> — Tier 5 · Qualidade B (×4) · Gélida<br>
+                <strong>Carrasco de Gelo</strong> — Tier 5 · Qualidade B (×4) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>448</strong> · STA <strong>396</strong> · PE <strong>64</strong> · CA <strong>17</strong> · CD <strong>16</strong> · RD 6 contra frio · Dano: frio/cortante<br>
                 <em>PV = 20 + (16 × 3) + (10 + 3 × 2) × 4 = 132, ×4 = 528 · STA = 20 + (15 × 2 + 13) + (6 + 2 + 1) × 4 = 99, ×4 = 396 · PE = 4 × (2 + 1 + 1) = 16, ×4 = 64 · CD = 10 + 5 + 3</em><br>
                 <strong>Aparência:</strong> Um executor de gelo com machado de geada e um capuz de neve eterna. Executa com movimentos lentos e inevitáveis.<br>
@@ -24755,7 +24726,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Machado de Geada</strong> (Ofensiva Nv 4, 10 PE, CD 16): Dano de frio alto + o alvo fica Enfraquecido 2.<br>
                 • <strong>Sentença</strong> (Suplementar Nv 3, 10 PE): Marca um alvo — o Carrasco o persegue até o fim do combate, ignorando outros.<br>
                 • <strong>Couraça Glacial</strong> (Passiva Nv 2): RD 6 contra frio; imune a Exaustão.<br>
-                <strong>Recompensa:</strong> Núcleo de Profano + Gelo Eterno esculpido (matéria rara da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Profano + Gelo Eterno esculpido (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24771,7 +24742,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Mestre das Vozes</strong> — Tier 5 · Qualidade A (×7) · Eco<br>
+                <strong>Mestre das Vozes</strong> — Tier 5 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>658</strong> · STA <strong>966</strong> · PE <strong>280</strong> · CA <strong>13</strong> · CD <strong>18</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (14 × 3) + (10 + 2 × 2) × 4 = 118, ×7 = 826 · STA = 20 + (20 × 2 + 18) + (6 + 5 + 4) × 4 = 138, ×7 = 966 · PE = 4 × (5 + 4 + 1) = 40, ×7 = 280 · CD = 10 + 5 + 5</em><br>
                 <strong>Aparência:</strong> Uma figura alta cujo rosto é uma colmeia de bocas, cada uma cantando uma nota diferente. O coro que produz é a própria voz da Torre.<br>
@@ -24780,14 +24751,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Coro de Comando</strong> (Suplementar Nv 4, 12 PE, CD 18): Todos os aliados Ecos agem imediatamente, fora de ordem.<br>
                 • <strong>Nota Perfeita</strong> (Ofensiva Nv 4, 12 PE): Um alvo deve passar em Salvaguarda de Alma ou fica Atordoado 1 rodada.<br>
                 • <strong>Mil Vozes</strong> (Passiva Nv 3): Impossível surpreendê-lo; percebe qualquer criatura a 3 zonas.<br>
-                <strong>Recompensa:</strong> Núcleo de Profano + Cristal de Eco vivo (matéria muito rara da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Profano + Cristal de Eco vivo (matéria muito rara da torre periférica).
             </div>
 
             <h3>Tier 6 — Aberrante (níveis 13–14)</h3>
             <p>Estruturas demoníacas incompletas que distorcem o ambiente ao redor.</p>
 
             <div class="system-card">
-                <strong>Aberrante de Carne</strong> — Tier 6 · Qualidade A (×7) · Carmesim<br>
+                <strong>Aberrante de Carne</strong> — Tier 6 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.015</strong> · STA <strong>749</strong> · PE <strong>140</strong> · CA <strong>16</strong> · CD <strong>18</strong> · RD 6 contra cortante · Dano: necrose/contundente<br>
                 <em>PV = 20 + (19 × 3) + (10 + 4 × 2) × 5 = 167, ×7 = 1.169 · STA = 20 + (15 × 2 + 12) + (6 + 2 + 1) × 5 = 107, ×7 = 749 · PE = 5 × (2 + 1 + 1) = 20, ×7 = 140 · CD = 10 + 6 + 4</em><br>
                 <strong>Aparência:</strong> Uma montanha de carne em movimento constante, com centenas de membros crescendo e murchando. O chão ao redor fica úmido de sangue.<br>
@@ -24796,11 +24767,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Avalanche de Carne</strong> (Ofensiva Nv 4, 14 PE, CD 18): Dano necrótico em área (2 zonas).<br>
                 • <strong>Absorção</strong> (Suplementar Nv 4, 12 PE): Absorve um cadáver na zona — recupera 3d6 de PV e gera 1 Rastejante de Carne.<br>
                 • <strong>Regeneração Incontrolável</strong> (Passiva Nv 3): Recupera 3d6 de PV por rodada; fogo o fere em dobro.<br>
-                <strong>Recompensa:</strong> Núcleo de Aberrante (55 Esp) + Coração de Monstro gigante (matéria rara da Torre Carmesim).
+                <strong>Recompensa:</strong> Núcleo de Aberrante (55 Esp) + Coração de Monstro gigante (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Diretor de Silêncio</strong> — Tier 6 · Qualidade A (×7) · Eco<br>
+                <strong>Diretor de Silêncio</strong> — Tier 6 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>735</strong> · STA <strong>980</strong> · PE <strong>280</strong> · CA <strong>14</strong> · CD <strong>18</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (15 × 3) + (10 + 2 × 2) × 5 = 135, ×7 = 945 · STA = 20 + (19 × 2 + 17) + (6 + 4 + 3) × 5 = 140, ×7 = 980 · PE = 5 × (4 + 3 + 1) = 40, ×7 = 280 · CD = 10 + 6 + 4</em><br>
                 <strong>Aparência:</strong> Uma figura imóvel em cuja presença o som morre. Pássaros param de cantar a 2 zonas de distância.<br>
@@ -24808,11 +24779,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Vácuo Sonoro</strong> (Suplementar Nv 4, 14 PE, CD 18): Em 2 zonas, todo som falha por 2 rodadas — poderes auditivos e comunicação silenciosa.<br>
                 • <strong>Golpe do Nada</strong> (Ofensiva Nv 4, 12 PE): Dano de Alma + o alvo fica Surdo até ser curado.<br>
-                <strong>Recompensa:</strong> Núcleo de Aberrante + Cristal de Eco absoluto (matéria rara da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Aberrante + Cristal de Eco absoluto (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Arquétipo Onírico</strong> — Tier 6 · Qualidade A (×7) · Onírica<br>
+                <strong>Arquétipo Onírico</strong> — Tier 6 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>623</strong> · STA <strong>1.001</strong> · PE <strong>350</strong> · CA <strong>13</strong> · CD <strong>19</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (13 × 3) + (10 + 1 × 2) × 5 = 119, ×7 = 833 · STA = 20 + (20 × 2 + 18) + (6 + 5 + 4) × 5 = 143, ×7 = 1.001 · PE = 5 × (5 + 4 + 1) = 50, ×7 = 350 · CD = 10 + 6 + 5</em><br>
                 <strong>Aparência:</strong> A forma ideal de um medo — para cada observador, é diferente. Move-se como um sonho: sem passos.<br>
@@ -24820,19 +24791,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Medo Ideal</strong> (Ofensiva Nv 5, 16 PE, CD 19): Um alvo enfrenta a forma ideal de seu medo — Salvaguarda de Alma ou fica Amedrontado 3 por 1d4 rodadas.<br>
                 • <strong>Roubo de Sonho</strong> (Suplementar Nv 4, 14 PE): Rouba 1d4 de Sanidade de um alvo adormecido (sem acordá-lo).<br>
-                <strong>Recompensa:</strong> Núcleo de Aberrante + Fragmento Onírico puro (matéria rara da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Aberrante + Fragmento Onírico puro (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Muralha de Gelo</strong> — Tier 6 · Qualidade A (×7) · Gélida<br>
+                <strong>Muralha de Gelo</strong> — Tier 6 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.050</strong> · STA <strong>847</strong> · PE <strong>210</strong> · CA <strong>18</strong> · CD <strong>18</strong> · RD 8 contra frio · Dano: frio<br>
                 <em>PV = 20 + (20 × 3) + (10 + 5 × 2) × 5 = 180, ×7 = 1.260 · STA = 20 + (16 × 2 + 14) + (6 + 3 + 2) × 5 = 121, ×7 = 847 · PE = 5 × (3 + 2 + 1) = 30, ×7 = 210 · CD = 10 + 6 + 4</em><br>
                 <strong>Aparência:</strong> Uma fortaleza ambulante de gelo, com torres e portões esculpidos em sua própria carne congelada. A temperatura cai 2 zonas ao redor.<br>
-                <strong>Comportamento:</strong> Guardião territorial. Protege algo que a Torre Gélida valoriza.<br>
+                <strong>Comportamento:</strong> Guardião territorial. Protege algo que a torre periférica valoriza.<br>
                 <strong>Habilidades:</strong><br>
                 • <strong>Queda de Blocos</strong> (Ofensiva Nv 4, 14 PE, CD 18): Dano de frio em área + terreno difícil permanente na zona.<br>
                 • <strong>Portões Fechados</strong> (Defensiva Nv 4, 12 PE): Reduz todo dano recebido em 5 por 1d4 rodadas (RD total 8).<br>
-                <strong>Recompensa:</strong> Núcleo de Aberrante + bloco de Gelo Eterno colossal (matéria rara da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Aberrante + bloco de Gelo Eterno colossal (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24848,7 +24819,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Senhora dos Ecos Perdidos</strong> — Tier 6 · Qualidade S (×12) · Eco<br>
+                <strong>Senhora dos Ecos Perdidos</strong> — Tier 6 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.260</strong> · STA <strong>1.872</strong> · PE <strong>600</strong> · CA <strong>15</strong> · CD <strong>19</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (15 × 3) + (10 + 2 × 2) × 5 = 135, ×12 = 1.620 · STA = 20 + (21 × 2 + 19) + (6 + 5 + 4) × 5 = 156, ×12 = 1.872 · PE = 5 × (5 + 4 + 1) = 50, ×12 = 600 · CD = 10 + 6 + 5</em><br>
                 <strong>Aparência:</strong> Uma rainha de mil ecos — cada memória perdida do andar assume uma forma ao seu redor. Fala com todas as vozes que já morreram ali.<br>
@@ -24857,13 +24828,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Eco das Perdas</strong> (Ofensiva Nv 5, 18 PE, CD 19): Todos em 2 zonas revivem uma perda — Salvaguarda de Alma ou perdem 1d8 de Sanidade.<br>
                 • <strong>Roubo de Memória</strong> (Suplementar Nv 5, 16 PE): Rouba permanentemente 1 Técnica de um alvo até o fim da incursão.<br>
                 • <strong>Cortejo de Ecos</strong> (Passiva Nv 3): Cada eco aliado vivo concede +1 em CD de suas técnicas.<br>
-                <strong>Recompensa:</strong> Núcleo de Aberrante + Cristal de Eco primordial (matéria rara da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Aberrante + Cristal de Eco primordial (matéria rara da torre periférica).
             </div>
             <h3>Tier 7 — Ruína (níveis 15–16)</h3>
             <p>Corrupção passiva ao redor — a própria presença destes monstros degrada o ambiente.</p>
 
             <div class="system-card">
-                <strong>Ruína de Carne</strong> — Tier 7 · Qualidade A (×7) · Carmesim<br>
+                <strong>Ruína de Carne</strong> — Tier 7 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.211</strong> · STA <strong>924</strong> · PE <strong>210</strong> · CA <strong>16</strong> · CD <strong>19</strong> · RD 8 contra cortante · Dano: necrose<br>
                 <em>PV = 20 + (19 × 3) + (10 + 4 × 2) × 6 = 185, ×7 = 1.295 · STA = 20 + (16 × 2 + 14) + (6 + 3 + 2) × 6 = 132, ×7 = 924 · PE = 5 × (3 + 2 + 1) = 30, ×7 = 210 · CD = 10 + 7 + 4</em><br>
                 <strong>Aparência:</strong> Uma ruína viva de carne — torres de músculo, catedrais de osso e janelas que são bocas. Cresce lentamente em direção ao grupo.<br>
@@ -24871,11 +24842,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Fome de Estrutura</strong> (Suplementar Nv 4, 16 PE, CD 19): Consome o ambiente em 2 zonas — vira terreno difícil e recupera 3d6 de PV.<br>
                 • <strong>Janelas que Falam</strong> (Ofensiva Nv 4, 14 PE): Todos em 2 zonas fazem Salvaguarda de Alma ou perdem 1d6 de Sanidade.<br>
-                <strong>Recompensa:</strong> Núcleo de Ruína (110 Esp) + Coração de Monstro colossal (matéria rara da Torre Carmesim).
+                <strong>Recompensa:</strong> Núcleo de Ruína (110 Esp) + Coração de Monstro colossal (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>O Lamento</strong> — Tier 7 · Qualidade A (×7) · Eco<br>
+                <strong>O Lamento</strong> — Tier 7 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>959</strong> · STA <strong>1.176</strong> · PE <strong>350</strong> · CA <strong>13</strong> · CD <strong>20</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (15 × 3) + (10 + 2 × 2) × 6 = 149, ×7 = 1.043 · STA = 20 + (20 × 2 + 18) + (6 + 5 + 4) × 6 = 168, ×7 = 1.176 · PE = 5 × (5 + 4 + 1) = 50, ×7 = 350 · CD = 10 + 7 + 5</em><br>
                 <strong>Aparência:</strong> Uma névoa sonora que chora em todas as vozes de todos os que morreram no andar. Não tem corpo — apenas o som do luto.<br>
@@ -24883,11 +24854,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Coro Fúnebre</strong> (Ofensiva Nv 4, 18 PE, CD 20): Todos em 3 zonas fazem Salvaguarda de Alma ou perdem 1d8 de Sanidade e ficam Abalados.<br>
                 • <strong>Eco do Golpe</strong> (Defensiva Nv 4, 14 PE): Sempre que sofrer dano, devolve metade como dano de Alma ao agressor.<br>
-                <strong>Recompensa:</strong> Núcleo de Ruína + Cristal de Eco choroso (matéria rara da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Ruína + Cristal de Eco choroso (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Mãe dos Pesadelos</strong> — Tier 7 · Qualidade A (×7) · Onírica<br>
+                <strong>Mãe dos Pesadelos</strong> — Tier 7 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>938</strong> · STA <strong>1.197</strong> · PE <strong>350</strong> · CA <strong>13</strong> · CD <strong>20</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (14 × 3) + (10 + 2 × 2) × 6 = 146, ×7 = 1.022 · STA = 20 + (21 × 2 + 19) + (6 + 5 + 4) × 6 = 171, ×7 = 1.197 · PE = 5 × (5 + 4 + 1) = 50, ×7 = 350 · CD = 10 + 7 + 5</em><br>
                 <strong>Aparência:</strong> Uma figura maternal coberta de olhos fechados, embalando um bebê de sombra. Quem a vê sente uma tristeza profunda e sem nome.<br>
@@ -24895,11 +24866,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Canção de Ninar</strong> (Suplementar Nv 4, 16 PE, CD 20): Todos em 2 zonas adormecem se falharem em Salvaguarda de Alma (acordam ao sofrer dano).<br>
                 • <strong>Berço de Sombra</strong> (Ofensiva Nv 5, 20 PE): Um alvo adormecido perde 2d6 de Sanidade ao "sonhar" com a Mãe.<br>
-                <strong>Recompensa:</strong> Núcleo de Ruína + Fragmento Onírico materno (matéria rara da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Ruína + Fragmento Onírico materno (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Ruína Errante</strong> — Tier 7 · Qualidade A (×7) · Gélida<br>
+                <strong>Ruína Errante</strong> — Tier 7 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.190</strong> · STA <strong>945</strong> · PE <strong>210</strong> · CA <strong>18</strong> · CD <strong>18</strong> · RD 8 contra frio · Dano: frio<br>
                 <em>PV = 20 + (18 × 3) + (10 + 4 × 2) × 6 = 182, ×7 = 1.274 · STA = 20 + (17 × 2 + 15) + (6 + 3 + 2) × 6 = 135, ×7 = 945 · PE = 5 × (3 + 2 + 1) = 30, ×7 = 210 · CD = 10 + 7 + 3</em><br>
                 <strong>Aparência:</strong> Uma catástrofe congelada que se move — uma geleira ambulante com ruínas de cidadelas presas em seu corpo. O frio que exala mata plantas.<br>
@@ -24907,7 +24878,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Era Glacial</strong> (Ofensiva Nv 4, 18 PE, CD 18): 3 zonas viram terreno difícil congelado por 1d4 rodadas + dano de frio.<br>
                 • <strong>Pulso do Vazio</strong> (Passiva Nv 3): Ao final de cada rodada, todos a 2 zonas ganham 1 nível de Exaustão (Salvaguarda de Vigor reduz).<br>
-                <strong>Recompensa:</strong> Núcleo de Ruína + Gelo Eterno com ruínas fundidas (matéria rara da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Ruína + Gelo Eterno com ruínas fundidas (matéria rara da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24926,7 +24897,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Existências próximas de calamidades naturais — quase impossíveis de conter.</p>
 
             <div class="system-card">
-                <strong>Arcaico de Carne</strong> — Tier 8 · Qualidade A (×7) · Carmesim<br>
+                <strong>Arcaico de Carne</strong> — Tier 8 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.442</strong> · STA <strong>1.022</strong> · PE <strong>252</strong> · CA <strong>18</strong> · CD <strong>20</strong> · RD 10 contra cortante · Dano: necrose<br>
                 <em>PV = 20 + (20 × 3) + (10 + 5 × 2) × 7 = 220, ×7 = 1.540 · STA = 20 + (17 × 2 + 15) + (6 + 3 + 2) × 7 = 146, ×7 = 1.022 · PE = 6 × (3 + 2 + 1) = 36, ×7 = 252 · CD = 10 + 8 + 4</em><br>
                 <strong>Aparência:</strong> Uma montanha de carne com um coração exposto do tamanho de uma casa, batendo em ritmo próprio. O ar ao redor fica vermelho.<br>
@@ -24935,11 +24906,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>Batimento do Coração</strong> (Suplementar Nv 4, 20 PE, CD 20): Pulso de energia — todos em 3 zonas fazem Salvaguarda de Vigor ou sofrem 2d6 de dano necrótico.<br>
                 • <strong>Fúria Carnal</strong> (Ofensiva Nv 5, 18 PE): Dano necrótico massivo em 1 zona.<br>
                 • <strong>Regeneração Arcaica</strong> (Passiva Nv 3): Recupera 4d6 de PV por rodada; somente fogo ou dano de Alma interrompe.<br>
-                <strong>Recompensa:</strong> Núcleo de Arcaico (200 Esp) + Coração de Monstro ancestral (matéria lendária da Torre Carmesim).
+                <strong>Recompensa:</strong> Núcleo de Arcaico (200 Esp) + Coração de Monstro ancestral (matéria lendária da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>O Primeiro Grito</strong> — Tier 8 · Qualidade S (×12) · Eco<br>
+                <strong>O Primeiro Grito</strong> — Tier 8 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.992</strong> · STA <strong>2.436</strong> · PE <strong>864</strong> · CA <strong>15</strong> · CD <strong>22</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (16 × 3) + (10 + 3 × 2) × 7 = 180, ×12 = 2.160 · STA = 20 + (22 × 2 + 20) + (6 + 6 + 5) × 7 = 203, ×12 = 2.436 · PE = 6 × (6 + 5 + 1) = 72, ×12 = 864 · CD = 10 + 8 + 6</em><br>
                 <strong>Aparência:</strong> O som primordial que deu origem ao Eco — uma onda de voz congelada no ar, com forma humana apenas por hábito. Todo silêncio é ele contendo a respiração.<br>
@@ -24947,11 +24918,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>O Primeiro Som</strong> (Ofensiva Nv 5, 24 PE, CD 22): Dano de Alma em área (3 zonas) + surdez em todos que falharem.<br>
                 • <strong>Repetição Eterna</strong> (Defensiva Nv 5, 20 PE): Copia a última técnica usada contra ele e a devolve ampliada (+1 dado).<br>
-                <strong>Recompensa:</strong> Núcleo de Arcaico + a primeira nota (matéria lendária da Torre do Eco).
+                <strong>Recompensa:</strong> Núcleo de Arcaico + a primeira nota (matéria lendária da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Arquétipo Primordial do Sonho</strong> — Tier 8 · Qualidade S (×12) · Onírica<br>
+                <strong>Arquétipo Primordial do Sonho</strong> — Tier 8 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.788</strong> · STA <strong>2.472</strong> · PE <strong>864</strong> · CA <strong>13</strong> · CD <strong>22</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (15 × 3) + (10 + 2 × 2) × 7 = 163, ×12 = 1.956 · STA = 20 + (23 × 2 + 21) + (6 + 6 + 5) × 7 = 206, ×12 = 2.472 · PE = 6 × (6 + 5 + 1) = 72, ×12 = 864 · CD = 10 + 8 + 6</em><br>
                 <strong>Aparência:</strong> A forma que todos os sonhos reconhecem como "o início" — uma presença enorme e difusa, mais sentida do que vista. Dormir perto dele é sonhar com o próprio sonho.<br>
@@ -24959,11 +24930,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Sonho do Início</strong> (Suplementar Nv 5, 24 PE, CD 22): Todos que dormem a 3 zonas entram em um sonho compartilhado que dura 1d6 horas reais.<br>
                 • <strong>Despertar Traumático</strong> (Ofensiva Nv 5, 22 PE): Acordar de seu sonho custa 2d6 de Sanidade (metade em sucesso de Alma).<br>
-                <strong>Recompensa:</strong> Núcleo de Arcaico + a primeira imagem do sonho (matéria lendária da Torre Onírica).
+                <strong>Recompensa:</strong> Núcleo de Arcaico + a primeira imagem do sonho (matéria lendária da torre periférica).
             </div>
 
             <div class="system-card">
-                <strong>Glaciar Errante</strong> — Tier 8 · Qualidade A (×7) · Gélida<br>
+                <strong>Glaciar Errante</strong> — Tier 8 · Qualidade A (×7) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>1.463</strong> · STA <strong>1.141</strong> · PE <strong>336</strong> · CA <strong>19</strong> · CD <strong>20</strong> · RD 10 contra frio · Dano: frio<br>
                 <em>PV = 20 + (21 × 3) + (10 + 5 × 2) × 7 = 223, ×7 = 1.561 · STA = 20 + (18 × 2 + 16) + (6 + 4 + 3) × 7 = 163, ×7 = 1.141 · PE = 6 × (4 + 3 + 1) = 48, ×7 = 336 · CD = 10 + 8 + 4</em><br>
                 <strong>Aparência:</strong> Uma geleira viva que devora cidades — quilômetros de gelo antigo movendo-se em câmera lenta. Ventos de -60° o acompanham.<br>
@@ -24971,7 +24942,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Habilidades:</strong><br>
                 • <strong>Congelamento em Massa</strong> (Ofensiva Nv 5, 20 PE, CD 20): Todos em 4 zonas fazem Salvaguarda de Vigor ou ficam Enfraquecidos 3 e Exaustos 1.<br>
                 • <strong>Coração de Gelo</strong> (Suplementar Nv 4, 18 PE): Revela um ponto fraco — ataques ali ignoram RD de frio por 1d4 rodadas.<br>
-                <strong>Recompensa:</strong> Núcleo de Arcaico + Gelo Eterno com mil anos (matéria lendária da Torre Gélida).
+                <strong>Recompensa:</strong> Núcleo de Arcaico + Gelo Eterno com mil anos (matéria lendária da torre periférica).
             </div>
 
             <div class="system-card">
@@ -24990,22 +24961,22 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Ameaças continentais — exigem exércitos ou heróis lendários.</p>
 
             <div class="system-card">
-                <strong>Calamidade de Carne</strong> — Tier 9 · Qualidade S (×12) · Carmesim<br>
+                <strong>Calamidade de Carne</strong> — Tier 9 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.952</strong> · STA <strong>2.148</strong> · PE <strong>576</strong> · CA <strong>19</strong> · CD <strong>22</strong> · RD 12 contra cortante · Dano: necrose<br>
                 <em>PV = 20 + (22 × 3) + (10 + 6 × 2) × 8 = 262, ×12 = 3.144 · STA = 20 + (19 × 2 + 17) + (6 + 4 + 3) × 8 = 179, ×12 = 2.148 · PE = 6 × (4 + 3 + 1) = 48, ×12 = 576 · CD = 10 + 9 + 5</em><br>
-                <strong>Aparência:</strong> Um continente de carne em movimento — a Torre Carmesim cuspindo seu coração. Cidades inteiras cabem dentro dele.<br>
+                <strong>Aparência:</strong> Um continente de carne em movimento — a torre periférica cuspindo seu coração. Cidades inteiras cabem dentro dele.<br>
                 <strong>Comportamento:</strong> Devora tudo em seu caminho, sem consciência e sem limite.<br>
                 <strong>Habilidades:</strong><br>
                 • <strong>Fome Continental</strong> (Ofensiva Nv 5, 26 PE, CD 22): Dano necrótico em 4 zonas + absorve cadáveres (recupera 5d6 de PV).<br>
                 • <strong>Coração Exposto</strong> (Suplementar Nv 5, 22 PE): O núcleo fica visível — sofre +100% de dano nele, mas pode explodir (dano em área).<br>
-                <strong>Recompensa:</strong> Núcleo de Calamidade (350 Esp) + o coração da própria Torre Carmesim (matéria lendária).
+                <strong>Recompensa:</strong> Núcleo de Calamidade (350 Esp) + o coração da própria torre periférica (matéria lendária).
             </div>
 
             <div class="system-card">
-                <strong>Eco do Fim</strong> — Tier 9 · Qualidade S (×12) · Eco<br>
+                <strong>Eco do Fim</strong> — Tier 9 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.196</strong> · STA <strong>2.676</strong> · PE <strong>864</strong> · CA <strong>15</strong> · CD <strong>23</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (17 × 3) + (10 + 3 × 2) × 8 = 199, ×12 = 2.388 · STA = 20 + (23 × 2 + 21) + (6 + 6 + 5) × 8 = 223, ×12 = 2.676 · PE = 6 × (6 + 5 + 1) = 72, ×12 = 864 · CD = 10 + 9 + 6</em><br>
-                <strong>Aparência:</strong> O último som que a Torre do Eco emitirá — um grito que não termina, ouvido simultaneamente em todos os andares.<br>
+                <strong>Aparência:</strong> O último som que a torre periférica emitirá — um grito que não termina, ouvido simultaneamente em todos os andares.<br>
                 <strong>Comportamento:</strong> Anuncia o fim. Quanto mais próximo, mais forte o eco.<br>
                 <strong>Habilidades:</strong><br>
                 • <strong>Último Grito</strong> (Ofensiva Nv 5, 30 PE, CD 23): Todos em todas as zonas ouvem — 2d8 de dano de Alma + surdez.<br>
@@ -25014,7 +24985,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Calamidade Onírica</strong> — Tier 9 · Qualidade S (×12) · Onírica<br>
+                <strong>Calamidade Onírica</strong> — Tier 9 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.160</strong> · STA <strong>2.904</strong> · PE <strong>1.008</strong> · CA <strong>15</strong> · CD <strong>24</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (16 × 3) + (10 + 3 × 2) × 8 = 196, ×12 = 2.352 · STA = 20 + (24 × 2 + 22) + (6 + 7 + 6) × 8 = 242, ×12 = 2.904 · PE = 6 × (7 + 6 + 1) = 84, ×12 = 1.008 · CD = 10 + 9 + 7</em><br>
                 <strong>Aparência:</strong> Um pesadelo do tamanho de uma cidade, sobreposto à realidade. Quem o vê por muito tempo esquece qual mundo é o verdadeiro.<br>
@@ -25029,10 +25000,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Entidades que desafiam a compreensão. Use com extrema cautela — as estatísticas são avisos, não limites.</p>
 
             <div class="system-card">
-                <strong>Inominável de Carne</strong> — Tier 10 · Qualidade S (×12) · Carmesim<br>
+                <strong>Inominável de Carne</strong> — Tier 10 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>3.228</strong> · STA <strong>2.556</strong> · PE <strong>840</strong> · CA <strong>21</strong> · CD <strong>24</strong> · RD 12 contra contundente · Dano: necrose<br>
                 <em>PV = 20 + (23 × 3) + (10 + 6 × 2) × 9 = 287, ×12 = 3.444 · STA = 20 + (20 × 2 + 18) + (6 + 5 + 4) × 9 = 213, ×12 = 2.556 · PE = 7 × (5 + 4 + 1) = 70, ×12 = 840 · CD = 10 + 10 + 6</em><br>
-                <strong>Aparência:</strong> Uma parte da Torre Carmesim que decidiu andar sozinha. É feita de tudo que já foi absorvido — incluindo coisas que deveriam ter ficado esquecidas.<br>
+                <strong>Aparência:</strong> Uma parte da torre periférica que decidiu andar sozinha. É feita de tudo que já foi absorvido — incluindo coisas que deveriam ter ficado esquecidas.<br>
                 <strong>Comportamento:</strong> É a Torre. Não tem objetivo além de existir.<br>
                 <strong>Habilidades:</strong><br>
                 • <strong>Absorção Total</strong> (Ofensiva Nv 5, 32 PE, CD 24): Consome tudo em 4 zonas — 3d8 de dano necrótico e o ambiente vira carne.<br>
@@ -25041,7 +25012,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>O Silêncio Absoluto</strong> — Tier 10 · Qualidade S (×12) · Eco<br>
+                <strong>O Silêncio Absoluto</strong> — Tier 10 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.616</strong> · STA <strong>3.132</strong> · PE <strong>1.176</strong> · CA <strong>16</strong> · CD <strong>25</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (18 × 3) + (10 + 4 × 2) × 9 = 236, ×12 = 2.832 · STA = 20 + (24 × 2 + 22) + (6 + 7 + 6) × 9 = 261, ×12 = 3.132 · PE = 7 × (7 + 6 + 1) = 98, ×12 = 1.176 · CD = 10 + 10 + 7</em><br>
                 <strong>Aparência:</strong> O fim de todo som — uma presença que apaga música, vozes e memórias de sons. Caminha em silêncio absoluto.<br>
@@ -25053,7 +25024,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>O Último Sonho</strong> — Tier 10 · Qualidade S (×12) · Onírica<br>
+                <strong>O Último Sonho</strong> — Tier 10 · Qualidade S (×12) · Periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.364</strong> · STA <strong>3.168</strong> · PE <strong>1.176</strong> · CA <strong>15</strong> · CD <strong>25</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (17 × 3) + (10 + 3 × 2) × 9 = 215, ×12 = 2.580 · STA = 20 + (25 × 2 + 23) + (6 + 7 + 6) × 9 = 264, ×12 = 3.168 · PE = 7 × (7 + 6 + 1) = 98, ×12 = 1.176 · CD = 10 + 10 + 7</em><br>
                 <strong>Aparência:</strong> O sonho final de toda a humanidade — um lugar belo e calmo onde ninguém acorda. Existir nele é a maior tentação da Torre.<br>
@@ -25065,10 +25036,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <h3>Chefes Únicos</h3>
-            <p>Um chefe por Guardiã, mais o guardião do limiar da Torre do Pesadelo. Cada um possui fases de combate, uma fraqueza descobrível e uma recompensa lendária.</p>
+            <p>Um chefe por torre periférica, mais o guardião do limiar da Torre do Pesadelo. Cada um possui fases de combate, uma fraqueza descobrível e uma recompensa lendária.</p>
 
             <div class="system-card">
-                <strong>Senhor da Carne</strong> — Tier 8 · Qualidade S (×12) · Chefe da Torre Carmesim<br>
+                <strong>Senhor da Carne</strong> — Tier 8 · Qualidade S (×12) · Chefe da torre periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.508</strong> · STA <strong>1.956</strong> · PE <strong>576</strong> · CA <strong>19</strong> · CD <strong>21</strong> · RD 10 contra cortante · Dano: necrose/contundente<br>
                 <em>PV = 20 + (21 × 3) + (10 + 5 × 2) × 7 = 223, ×12 = 2.676 · STA = 20 + (18 × 2 + 16) + (6 + 4 + 3) × 7 = 163, ×12 = 1.956 · PE = 6 × (4 + 3 + 1) = 48, ×12 = 576 · CD = 10 + 8 + 5</em><br>
                 <strong>Aparência:</strong> Um rei de carne que governa um reino de músculo e osso. Sua coroa é feita de vértebras; seu manto, de pele esticada.<br>
@@ -25080,10 +25051,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>O Eco Original</strong> — Tier 9 · Qualidade S (×12) · Chefe da Torre do Eco<br>
+                <strong>O Eco Original</strong> — Tier 9 · Qualidade S (×12) · Chefe da torre periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.196</strong> · STA <strong>2.676</strong> · PE <strong>864</strong> · CA <strong>15</strong> · CD <strong>23</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (17 × 3) + (10 + 3 × 2) × 8 = 199, ×12 = 2.388 · STA = 20 + (23 × 2 + 21) + (6 + 6 + 5) × 8 = 223, ×12 = 2.676 · PE = 6 × (6 + 5 + 1) = 72, ×12 = 864 · CD = 10 + 9 + 6</em><br>
-                <strong>Aparência:</strong> O primeiro som que a Torre do Eco emitiu — um eco que nunca foi original, repetido infinitamente até ganhar vontade própria.<br>
+                <strong>Aparência:</strong> O primeiro som que a torre periférica emitiu — um eco que nunca foi original, repetido infinitamente até ganhar vontade própria.<br>
                 <strong>Comportamento:</strong> Repete o grupo. Cada ação que vocês tomam, ele toma depois.<br>
                 <strong>Fase 1 — A Repetição (100–51% PV):</strong> Copia as ações do grupo com um turno de atraso. Habilidades: <strong>Espelho</strong> (Defensiva Nv 4, 16 PE — devolve a última técnica usada), <strong>Refrão</strong> (Ofensiva Nv 4, 18 PE, CD 23).<br>
                 <strong>Fase 2 — A Distorção (50–0% PV):</strong> Ao perder 50% do PV, o eco se corrompe e <strong>repete as últimas ações do grupo de forma distorcida e letal</strong>. Habilidades: <strong>Eco Amplificado</strong> (Ofensiva Nv 5, 24 PE), <strong>Repetição Quebrada</strong> (Suplementar Nv 5 — duplica um efeito aliado contra o próprio grupo).<br>
@@ -25092,7 +25063,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>A Sombra que Sonha</strong> — Tier 9 · Qualidade S (×12) · Chefe da Torre Onírica<br>
+                <strong>A Sombra que Sonha</strong> — Tier 9 · Qualidade S (×12) · Chefe da torre periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.160</strong> · STA <strong>2.904</strong> · PE <strong>1.008</strong> · CA <strong>15</strong> · CD <strong>24</strong> · RD — · Dano: Alma<br>
                 <em>PV = 20 + (16 × 3) + (10 + 3 × 2) × 8 = 196, ×12 = 2.352 · STA = 20 + (24 × 2 + 22) + (6 + 7 + 6) × 8 = 242, ×12 = 2.904 · PE = 6 × (7 + 6 + 1) = 84, ×12 = 1.008 · CD = 10 + 9 + 7</em><br>
                 <strong>Aparência:</strong> Uma sombra que sonha a si mesma — cada piscada, sua forma muda. Em um momento é uma figura, no outro, um abismo.<br>
@@ -25104,7 +25075,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>O Silêncio que Anda</strong> — Tier 9 · Qualidade S (×12) · Chefe da Torre Gélida<br>
+                <strong>O Silêncio que Anda</strong> — Tier 9 · Qualidade S (×12) · Chefe da torre periférica<br>
                 <strong>Estatísticas:</strong> PV <strong>2.724</strong> · STA <strong>2.376</strong> · PE <strong>720</strong> · CA <strong>20</strong> · CD <strong>22</strong> · RD 12 contra frio · Dano: frio<br>
                 <em>PV = 20 + (21 × 3) + (10 + 5 × 2) × 8 = 243, ×12 = 2.916 · STA = 20 + (20 × 2 + 18) + (6 + 5 + 4) × 8 = 198, ×12 = 2.376 · PE = 6 × (5 + 4 + 1) = 60, ×12 = 720 · CD = 10 + 9 + 5</em><br>
                 <strong>Aparência:</strong> O silêncio que congela — uma figura de geada tão completa que não emite som, calor ou vida. Onde ele passa, o mundo para.<br>
@@ -25122,9 +25093,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Aparência:</strong> O que guarda a porta para o topo da Torre do Pesadelo — uma figura de todas as Torres ao mesmo tempo, com um rosto que é uma porta. Nunca foi vencido.<br>
                 <strong>Comportamento:</strong> Perfeito, paciente e absoluto. Não desperdiça nada.<br>
                 <strong>Fase 1 — O Porteiro (100–67% PV):</strong> Testa o grupo. Habilidades: <strong>Chave Mestra</strong> (Ofensiva Nv 5, 24 PE, CD 24), <strong>Porta Fechada</strong> (Defensiva Nv 5 — reduz todo dano em 8 por 1d4 rodadas).<br>
-                <strong>Fase 2 — O Limiar (66–34% PV):</strong> Ao perder 33%, abre o limiar: invoca ecos das quatro Guardiãs (uma habilidade de cada). Habilidades: <strong>Coro das Guardiãs</strong> (Ofensiva Nv 5, 28 PE), <strong>Limiar Aberto</strong> (Suplementar Nv 5 — 1d4 criaturas de tiers 6–7 surgem).<br>
+                <strong>Fase 2 — O Limiar (66–34% PV):</strong> Ao perder 33%, abre o limiar: invoca ecos das torres periféricas (uma habilidade de cada). Habilidades: <strong>Coro das torres periféricas</strong> (Ofensiva Nv 5, 28 PE), <strong>Limiar Aberto</strong> (Suplementar Nv 5 — 1d4 criaturas de tiers 6–7 surgem).<br>
                 <strong>Fase 3 — O Guardião (33–0% PV):</strong> Ao perder 66%, abandona a forma: torna-se a própria porta. Habilidades: <strong>Porta do Fim</strong> (Ofensiva Nv 5, 36 PE, CD 24 — pode reduzir um alvo a 0 PV diretamente se falhar em Alma), <strong>Última Palavra</strong> (Passiva — uma vez por combate, retorna de 0 PV com 25% do PV).<br>
-                <strong>Fraqueza:</strong> a <strong>chave</strong> — um fragmento das quatro Guardiãs (ou um Despertar específico) cancela sua RD por 1d4 rodadas. Perícia: História + Religião CD 24.<br>
+                <strong>Fraqueza:</strong> a <strong>chave</strong> — um fragmento das torres periféricas (ou um Despertar específico) cancela sua RD por 1d4 rodadas. Perícia: História + Religião CD 24.<br>
                 <strong>Recompensa Lendária:</strong> Núcleo de Inominável + a chave do limiar + <strong>Runa Ascendida garantida</strong> + acesso ao andar 51.
             </div>
 
@@ -25139,22 +25110,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td><strong>Tier 2</strong> (Rastejante)</td><td>Núcleo de Rastejante (3 Esp)</td><td>Escamas, dentes, ferrões e fluidos corrompidos</td><td>8% (Fraturada)</td></tr>
                         <tr><td><strong>Tier 3</strong> (Disforme)</td><td>Núcleo de Disforme (7 Esp)</td><td>Mutações estáveis, fragmentos de carapaça, essência residual</td><td>10% (Fraturada ou Viva)</td></tr>
                         <tr><td><strong>Tier 4</strong> (Carnífice)</td><td>Núcleo de Carnífice (15 Esp)</td><td>Coração de Monstro, presas maiores, placas de armadura natural</td><td>15% (Viva)</td></tr>
-                        <tr><td><strong>Tier 5+</strong> (Profano+)</td><td>Núcleo do tier (30+ Esp)</td><td>Materiais raros de cada Guardiã, fragmentos de runas, essência pura</td><td>20%+ (Viva ou Ascendida)</td></tr>
+                        <tr><td><strong>Tier 5+</strong> (Profano+)</td><td>Núcleo do tier (30+ Esp)</td><td>Materiais raros de cada torre periférica, fragmentos de runas, essência pura</td><td>20%+ (Viva ou Ascendida)</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <h3>Drop por Torre Guardiã</h3>
-            <p>Cada Guardiã imprime sua natureza nos monstros que gera — e nos materiais que eles carregam. Conecte estes drops às regras de Forja do Livro do Jogador.</p>
+            <h3>Drop por torre periférica</h3>
+            <p>Cada torre periférica imprime sua natureza nos monstros que gera — e nos materiais que eles carregam. Conecte estes drops às regras de Forja do Livro do Jogador.</p>
 
             <div class="table-wrapper">
                 <table>
                     <thead><tr><th>Torre</th><th>Material exclusivo</th><th>Onde encontrar</th><th>Uso típico na Forja</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>Carmesim</strong></td><td>Carne Viva · Coração de Monstro</td><td>Rastejantes e Disformes de Carne; Mãe de Carne</td><td>Itens que regeneram PV, armas de necrose</td></tr>
-                        <tr><td><strong>do Eco</strong></td><td>Cristal de Eco</td><td>Ecos, Cantoras e Diretores</td><td>Runas de som, armas que devolvem efeitos</td></tr>
-                        <tr><td><strong>Onírica</strong></td><td>Fragmento Onírico</td><td>Larvas Sussurrantes, Pesadelos e Senhores dos Sonhos</td><td>Itens de ilusão, proteção mental</td></tr>
-                        <tr><td><strong>Gélida</strong></td><td>Gelo Eterno</td><td>Espinhos, Geadas e Caçadores do Gelo</td><td>Armas de frio, armaduras contra Exaustão</td></tr>
+                        <tr><td><strong>Periférica (tema de carne)</strong></td><td>Carne Viva · Coração de Monstro</td><td>Rastejantes e Disformes de Carne; Mãe de Carne</td><td>Itens que regeneram PV, armas de necrose</td></tr>
+                        <tr><td><strong>Periférica (tema de som)</strong></td><td>Cristal de Eco</td><td>Ecos, Cantoras e Diretores</td><td>Runas de som, armas que devolvem efeitos</td></tr>
+                        <tr><td><strong>Periférica (tema de sonho)</strong></td><td>Fragmento Onírico</td><td>Larvas Sussurrantes, Pesadelos e Senhores dos Sonhos</td><td>Itens de ilusão, proteção mental</td></tr>
+                        <tr><td><strong>Periférica (tema de gelo)</strong></td><td>Gelo Eterno</td><td>Espinhos, Geadas e Caçadores do Gelo</td><td>Armas de frio, armaduras contra Exaustão</td></tr>
                         <tr><td><strong>Comuns</strong></td><td>Materiais genéricos (ossos, peles, metais)</td><td>Todos os tiers de torres menores</td><td>Itens básicos e melhorias universais</td></tr>
                     </tbody>
                 </table>
@@ -25293,10 +25264,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="system-card">
                 <strong>Torres Comuns / Menores:</strong> Mais “orgânicas” e instintivas. Perigos mais diretos (monstros, armadilhas físicas).<br><br>
-                <strong>Torre Carmesim:</strong> Muita carne, mutação e regeneração. O ambiente pode tentar “absorver” os jogadores.<br><br>
-                <strong>Torre do Eco:</strong> Foco em som, repetição e memória. Ilusões e ecos são comuns.<br><br>
-                <strong>Torre Onírica:</strong> A mais perigosa mentalmente. Sonhos, alucinações e realidade subjetiva.<br><br>
-                <strong>Torre Gélida:</strong> Exaustão, vazio e desesperança. O ambiente drena vontade e energia.<br><br>
+                <strong>torre periférica:</strong> Muita carne, mutação e regeneração. O ambiente pode tentar “absorver” os jogadores.<br><br>
+                <strong>torre periférica:</strong> Foco em som, repetição e memória. Ilusões e ecos são comuns.<br><br>
+                <strong>torre periférica:</strong> A mais perigosa mentalmente. Sonhos, alucinações e realidade subjetiva.<br><br>
+                <strong>torre periférica:</strong> Exaustão, vazio e desesperança. O ambiente drena vontade e energia.<br><br>
                 <strong>Torre do Pesadelo:</strong> Combinação dos piores aspectos das outras + anomalias únicas. Os andares mais profundos podem quebrar as regras da realidade.
             </div>
 
@@ -25348,7 +25319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>20:</strong> A torre "marca" um jogador (Corrupção +1 ou atenção da torre).
             </div>
 
-            <h3>Torre Carmesim</h3>
+            <h3>torre periférica</h3>
             <div class="system-card">
                 <strong>1:</strong> Paredes de carne pulsando — o andar está "vivo".<br>
                 <strong>2:</strong> Chuva de sangue ou tecido orgânico cai do teto.<br>
@@ -25372,7 +25343,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>20:</strong> A torre tenta "absorver" o grupo (teste de resistência ou fuga).
             </div>
 
-            <h3>Torre do Eco</h3>
+            <h3>torre periférica</h3>
             <div class="system-card">
                 <strong>1:</strong> Um som se repete — o mesmo ruído, sempre igual.<br>
                 <strong>2:</strong> Eco de uma conversa antiga (pista ou aviso).<br>
@@ -25396,7 +25367,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>20:</strong> A torre "grava" o grupo — eles ouvem os próprios passos ecoando para sempre.
             </div>
 
-            <h3>Torre Onírica</h3>
+            <h3>torre periférica</h3>
             <div class="system-card">
                 <strong>1:</strong> O andar muda de forma quando ninguém está olhando.<br>
                 <strong>2:</strong> Um jogador tem uma visão (sonho lúcido parcial).<br>
@@ -25420,7 +25391,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>20:</strong> A torre entra no sonho do grupo (Sanidade em risco).
             </div>
 
-            <h3>Torre Gélida</h3>
+            <h3>torre periférica</h3>
             <div class="system-card">
                 <strong>1:</strong> Frio cortante — Exaustão se acumula.<br>
                 <strong>2:</strong> Geada cobre tudo — superfícies escorregadias.<br>
@@ -25502,11 +25473,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>Característica:</strong> Muitos corredores parecem ruas antigas. Névoa leve constante.<br>
                 <strong>Evento Principal:</strong> À meia-noite (dentro do jogo), o andar “repete” uma noite de massacre que aconteceu ali há décadas.<br>
                 <strong>Chefe:</strong> Um monstro que era o líder de uma facção antiga, agora completamente corrompido.<br>
-                <strong>Segredo:</strong> Um diário de um Desperto que descobriu algo importante sobre as Guardiãs.
+                <strong>Segredo:</strong> Um diário de um Desperto que descobriu algo importante sobre as torres periféricas.
             </div>
 
             <div class="system-card">
-                <strong>Exemplo 2 – Andar 19 (Torre Carmesim)</strong><br>
+                <strong>Exemplo 2 – Andar 19 (torre periférica)</strong><br>
                 <strong>Tema:</strong> “O andar que está tentando digerir quem entra.”<br>
                 <strong>Característica:</strong> Paredes de carne pulsante. O ar é úmido e cheira a sangue.<br>
                 <strong>Evento Principal:</strong> O andar tenta “absorver” o grupo lentamente (perda gradual de STA).<br>
@@ -25560,7 +25531,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 8. <strong>Equipamento</strong> — item de rank E–D (ver Forja).<br>
                 9. <strong>Poções</strong> — 1d4 consumíveis (cura, STA, antídoto).<br>
                 10. <strong>Núcleo com runa</strong> — o tesouro mais desejado (e mais perigoso).<br>
-                11. <strong>Fragmento de entidade</strong> — material raro de torre Guardiã.<br>
+                11. <strong>Fragmento de entidade</strong> — material raro de torre periférica.<br>
                 12. <strong>Tesouro misto</strong> — role 2× e combine.
             </div>
 
@@ -25586,7 +25557,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="table-wrapper">
                 <table>
-                    <thead><tr><th>1d20</th><th>Torres Comuns</th><th>Carmesim</th><th>Eco</th><th>Onírica</th><th>Gélida</th></tr></thead>
+                    <thead><tr><th>1d20</th><th>Torres Comuns</th><th>Periférica (carne)</th><th>Periférica (som)</th><th>Periférica (sonho)</th><th>Periférica (gelo)</th></tr></thead>
                     <tbody>
                         <tr><td>1–5</td><td>1d3 Larvas</td><td>Rastejante de Carne</td><td>Eco de Passos</td><td>Larva Sussurrante</td><td>Espinho de Gelo</td></tr>
                         <tr><td>6–9</td><td>Rastejador de Névoa</td><td>Disforme de Carne</td><td>Cantora de Ecos</td><td>Sombra Faminta</td><td>Geada Errante</td></tr>
@@ -25601,7 +25572,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2>4.18 Andares Prontos Extras</h2>
 
             <div class="system-card">
-                <strong>Andar 15 (Torre Onírica)</strong><br>
+                <strong>Andar 15 (torre periférica)</strong><br>
                 <strong>Tema:</strong> "O andar que sonha com você."<br>
                 <strong>Característica:</strong> Cada cômodo muda sutilmente conforme os medos do grupo. Salas parecem mais longas no fim do dia.<br>
                 <strong>Armadilha:</strong> Ilusão de abismo (4.14, item 12) na ponte principal.<br>
@@ -25752,7 +25723,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </ul>
 
             <h2 id="torre-catalisador">5.5 A Torre como Catalisador</h2>
-            <p>A Torre do Pesadelo e as Guardiãs aceleram esses processos:</p>
+            <p>A Torre do Pesadelo e as torres periféricas aceleram esses processos:</p>
             <ul>
                 <li>Em andares profundos, testes de Sanidade e Alma são feitos com desvantagem.</li>
                 <li>Alguns andares ou eventos podem forçar testes automáticos de Sanidade/Corrupção.</li>
@@ -26153,19 +26124,19 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 <strong>O Consórcio Carmesim</strong><br>
                 <em>Imagem pública:</em> Maior força militar e econômica do mundo.<br>
-                <em>Verdade:</em> Estão obcecados em capturar e estudar monstros da Torre Carmesim. Realizam experimentos proibidos com Corrupção, tentando criar "super-soldados".
+                <em>Verdade:</em> Estão obcecados em capturar e estudar monstros da torre periférica. Realizam experimentos proibidos com Corrupção, tentando criar "super-soldados".
             </div>
 
             <div class="system-card">
                 <strong>A Ordem do Eco</strong><br>
                 <em>Imagem pública:</em> Guardiões do conhecimento e da história.<br>
-                <em>Verdade:</em> Buscam artefatos e segredos dentro das Torres (especialmente a Torre do Eco). Muitos de seus membros mais antigos estão lentamente perdendo a sanidade por causa do que descobriram.
+                <em>Verdade:</em> Buscam artefatos e segredos dentro das Torres (especialmente a torre periférica). Muitos de seus membros mais antigos estão lentamente perdendo a sanidade por causa do que descobriram.
             </div>
 
             <div class="system-card">
                 <strong>O Círculo Onírico</strong><br>
                 <em>Imagem pública:</em> Místicos e estudiosos da mente e dos sonhos.<br>
-                <em>Verdade:</em> Acreditam que a Torre Onírica é a chave para compreender (ou controlar) a entidade por trás das Torres. Realizam rituais perigosos e estão dispostos a sacrificar qualquer coisa em nome do conhecimento.
+                <em>Verdade:</em> Acreditam que a torre periférica é a chave para compreender (ou controlar) a entidade por trás das Torres. Realizam rituais perigosos e estão dispostos a sacrificar qualquer coisa em nome do conhecimento.
             </div>
 
             <div class="system-card">
@@ -26544,7 +26515,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td>2</td><td>Rastreador da Névoa</td><td>Vantagem em Sobrevivência/Navegação na Névoa; 1×/incursão segue um rastro com precisão.</td></tr>
                         <tr><td>3</td><td>Olhos da Névoa</td><td>Enxerga através de névoa leve e ilusões menores; vantagem em Percepção na Névoa.</td></tr>
                         <tr><td>4</td><td>Andarilho das Ruínas</td><td>Vantagem em ruínas e andares abandonados; 1×/incursão revela uma rota segura.</td></tr>
-                        <tr><td>5</td><td>Afinidade com uma Torre Guardiã</td><td>−2 na dificuldade de Sobrevivência/Navegação na torre escolhida.</td></tr>
+                        <tr><td>5</td><td>Afinidade com uma torre periférica</td><td>−2 na dificuldade de Sobrevivência/Navegação na torre escolhida.</td></tr>
                         <tr><td>6</td><td>Caçador de Anomalias</td><td>Vantagem para rastrear, identificar ou prever criaturas corrompidas.</td></tr>
                         <tr><td>7</td><td>Sentidos Aguçados</td><td>Vantagem em Percepção com um sentido escolhido (visão, audição ou olfato).</td></tr>
                         <tr><td>8</td><td>Visão no Escuro</td><td>Enxerga com clareza no escuro total; vantagem para detectar ameaças no escuro.</td></tr>
@@ -26694,7 +26665,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2 id="exemplos-andares-adicionais">9.3 Exemplos de Andares Prontos (Adicionais)</h2>
 
             <div class="system-card">
-                <strong>Exemplo 3 – Andar 31 (Torre do Eco)</strong><br>
+                <strong>Exemplo 3 – Andar 31 (torre periférica)</strong><br>
                 <strong>Tema:</strong> “O andar que repete o que já aconteceu.”<br>
                 <strong>Característica:</strong> Sons e eventos se repetem em loops de 10-15 minutos.<br>
                 <strong>Evento Principal:</strong> O andar começa a repetir um combate que os jogadores já travaram antes, mas com pequenas distorções letais.<br>
@@ -26716,14 +26687,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 <strong>Exemplo 1: Lira Voss, “A Que Não Subiu”</strong><br>
                 <strong>Facção:</strong> Ex-membro da Ordem do Eco.<br>
-                <strong>Segredo:</strong> Chegou ao andar 47 da Torre do Eco e viu algo que a fez parar de subir para sempre. Agora ela tenta impedir que outros cheguem tão longe.<br>
+                <strong>Segredo:</strong> Chegou ao andar 47 da torre periférica e viu algo que a fez parar de subir para sempre. Agora ela tenta impedir que outros cheguem tão longe.<br>
                 <strong>Uso:</strong> Pode ser aliada, antagonista ou fonte de informação perigosa.
             </div>
 
             <div class="system-card">
                 <strong>Exemplo 2: Marechal Kael Dorn</strong><br>
                 <strong>Facção:</strong> Consórcio Carmesim (alto escalão).<br>
-                <strong>Segredo:</strong> Já está com 9 pontos de Corrupção e esconde mutações sob a armadura. Planeja usar os Despertos como “material” para um experimento de fusão com a Torre Carmesim.<br>
+                <strong>Segredo:</strong> Já está com 9 pontos de Corrupção e esconde mutações sob a armadura. Planeja usar os Despertos como “material” para um experimento de fusão com a torre periférica.<br>
                 <strong>Uso:</strong> Patrono traiçoeiro clássico.
             </div>
 
@@ -26844,13 +26815,13 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 1. “Dizem que alguém chegou ao andar 60 da Torre do Pesadelo... e voltou diferente.”<br>
                 2. “A Irmandade do Vazio está sacrificando Despertos para ‘acalmar’ a Torre.”<br>
-                3. “Tem um andar na Torre Gélida onde o tempo anda para trás.”<br>
+                3. “Tem um andar na torre periférica onde o tempo anda para trás.”<br>
                 4. “O Consórcio Carmesim capturou um monstro que fala.”<br>
                 5. “Se você subir sozinho, a Torre te ‘testa’ de forma diferente.”<br>
                 6. “Existe uma facção secreta de Despertos que quer acordar a entidade de propósito.”<br>
                 7. “O último Surto não foi natural. Alguém causou ele.”<br>
-                8. “Tem um Desperto lendário que vive dentro da Torre do Eco há 40 anos.”<br>
-                9. “As Guardiãs estão ‘se comunicando’ entre si.”<br>
+                8. “Tem um Desperto lendário que vive dentro da torre periférica há 40 anos.”<br>
+                9. “As torres periféricas estão ‘se comunicando’ entre si.”<br>
                 10. “Se você absorver núcleos demais, a Torre começa a te chamar pelo nome.”
             </div>
 
@@ -26993,7 +26964,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <h4>Chefe</h4>
             <div class="system-card">
-                <strong>Rastejante de Carne</strong> — Tier 2 · Qualidade C (×2) · Carmesim<br>
+                <strong>Rastejante de Carne</strong> — Tier 2 · Qualidade C (×2) · Periférica<br>
                 <strong>Atributos:</strong> Vig 14 (+2) · Des 13 (+1) · For 14 (+2) · Alm 10 (+0) · Int 10 (+0).<br>
                 • <strong>PV</strong> = 20 + 42 + 14 = 76, ×2 = <strong>152</strong> · <strong>STA</strong> = 20 + (10×2+10) + 6 = 56, ×2 = <strong>112</strong> · <strong>PE</strong> = 3 × 1 = 3, ×2 = <strong>6</strong>.<br>
                 • <strong>CA</strong> 14 (pele grossa) · <strong>CD</strong> = 10 + 2 + 2 = 14 · <strong>RD</strong> 3 contra cortante.<br>
@@ -27013,11 +26984,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <h3>One-Shot 2 — "O Andar que Esqueceu"</h3>
-            <p><em>Exploração de torre Onírica · Tier 2–3 · 1 sessão</em></p>
+            <p><em>Exploração de torre periférica (tema de sonho) · Tier 2–3 · 1 sessão</em></p>
 
             <h4>Premissa</h4>
             <div class="system-card">
-                Um andar da Torre Onírica "esqueceu" o que era. O grupo entra para recuperar um artefato encomendado pelo Círculo Onírico — e descobre que o andar está se apagando, sala por sala, junto com quem está dentro.
+                Um andar da torre periférica "esqueceu" o que era. O grupo entra para recuperar um artefato encomendado pelo Círculo Onírico — e descobre que o andar está se apagando, sala por sala, junto com quem está dentro.
             </div>
 
             <h4>Mapa Textual</h4>
@@ -27031,9 +27002,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <h4>Encontros</h4>
             <div class="system-card">
-                • <strong>1 Larva Sussurrante</strong> (Bestiário — Tier 1, Onírica) espreita na biblioteca (Sussurro de Nome — perda de Sanidade).<br>
-                • <strong>1 Sombra Faminta</strong> (Tier 2, Onírica) patrulha o corredor que muda (Toque Faminto — drena PE).<br>
-                • <strong>1 Pesadelo Andarilho</strong> (Tier 3, Onírica) guarda o salão do eco (Forma do Medo — Amedrontado 2).
+                • <strong>1 Larva Sussurrante</strong> (Bestiário — Tier 1, periférica) espreita na biblioteca (Sussurro de Nome — perda de Sanidade).<br>
+                • <strong>1 Sombra Faminta</strong> (Tier 2, periférica) patrulha o corredor que muda (Toque Faminto — drena PE).<br>
+                • <strong>1 Pesadelo Andarilho</strong> (Tier 3, periférica) guarda o salão do eco (Forma do Medo — Amedrontado 2).
             </div>
 
             <h4>Armadilha e Segredo</h4>
@@ -27049,7 +27020,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <h4>Chefe</h4>
             <div class="system-card">
-                <strong>Pesadelo Andarilho</strong> — Tier 3 · Qualidade B (×4) · Onírica<br>
+                <strong>Pesadelo Andarilho</strong> — Tier 3 · Qualidade B (×4) · Periférica<br>
                 <strong>Atributos:</strong> Vig 15 (+2) · Des 14 (+2) · For 12 (+1) · Alm 16 (+3) · Int 13 (+1).<br>
                 • <strong>PV</strong> = 20 + 45 + 28 = 93, ×4 = <strong>372</strong> · <strong>STA</strong> = 20 + (16×2+13) + 20 = 85, ×4 = <strong>340</strong> · <strong>PE</strong> = 3 × 5 = 15, ×4 = <strong>60</strong>.<br>
                 • <strong>CA</strong> 12 · <strong>CD</strong> = 10 + 3 + 3 = 16 · <strong>RD</strong> — · Dano: Alma.<br>
@@ -27061,11 +27032,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="system-card">
                 <strong>Sucesso total:</strong> o grupo recupera o artefato, derrota o Pesadelo Andarilho e o andar "lembra" o que era — estabilizando-se. O Círculo Onírico paga bem; o Eco descansa. A memória do Desperto, porém, agora vive no grupo.<br>
                 <strong>Sucesso com custo:</strong> o artefato é recuperado, mas o andar continua se apagando — ou alguém ficou preso na memória. O Círculo paga menos; o Eco se perde. <em>Custo embutido:</em> 1d6 de Sanidade (o andar mexe com a mente) + 1 Corrupção para quem tocou o artefato.<br>
-                <strong>Falha com fuga:</strong> o grupo escapa pelo corredor que muda, sem artefato e com o andar mais apagado do que antes. O Círculo Onírico não paga — e quer saber o que o grupo viu. A Torre Onírica agora sonha com eles.
+                <strong>Falha com fuga:</strong> o grupo escapa pelo corredor que muda, sem artefato e com o andar mais apagado do que antes. O Círculo Onírico não paga — e quer saber o que o grupo viu. A torre periférica agora sonha com eles.
             </div>
 
             <div class="lore-box">
-                <strong>A Torre Onírica cobra:</strong> qualquer desfecho inclui custo mínimo — <strong>1d6 de Sanidade</strong> por personagem (o andar mexe com a mente) e <strong>+1 Corrupção</strong> para quem tocou o artefato ou absorveu núcleos oníricos sem preparação. Andares que esquecem também esquecem de devolver quem entra.
+                <strong>A torre periférica cobra:</strong> qualquer desfecho inclui custo mínimo — <strong>1d6 de Sanidade</strong> por personagem (o andar mexe com a mente) e <strong>+1 Corrupção</strong> para quem tocou o artefato ou absorveu núcleos oníricos sem preparação. Andares que esquecem também esquecem de devolver quem entra.
             </div>
         </section>
     </div>
