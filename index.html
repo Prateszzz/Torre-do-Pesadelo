@@ -3749,7 +3749,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-hero-foto-placeholder {
     width: 104px; height: 104px; border-radius: 50%;
   }
-  .ficha-hero-nome { font-size: 1.55rem; line-height: 1.15; }
+  .ficha-hero-nome { font-size: 1.55rem; line-height: 1.15; word-break: break-word; overflow-wrap: anywhere; }
   .ficha-hero-alcunha { font-size: .8rem; }
   .ficha-hero-poder { font-size: .78rem; letter-spacing: 2px; }
   .ficha-hero-recursos { gap: .4rem; }
@@ -3988,6 +3988,24 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 
   .personagem-header { min-height: 48px; }
   .pericias-slot { min-height: 46px; }
+
+  /* ── GRIDS ESPECIAIS FORA de .ficha-panel-body ──
+     Reputação com facções (repeat(5,1fr)) e atributos inline no painel GM
+     (repeat(6,1fr)) precisam quebrar em mobile. */
+  [style*="grid-template-columns:repeat(5,1fr)"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: .5rem !important;
+  }
+  [style*="grid-template-columns:repeat(6,1fr)"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: .5rem !important;
+  }
+}
+@media (max-width:400px) {
+  [style*="grid-template-columns:repeat(5,1fr)"],
+  [style*="grid-template-columns:repeat(6,1fr)"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
 }
 
 
@@ -4024,13 +4042,14 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 
 /* Responsivo do sumário */
 @media (max-width:1024px) {
-  #livro-jogador .sumario-content { grid-template-columns: 1fr; }
+  /* !important necessário porque o sumário usa grid-template-columns inline (1fr 300px) */
+  #livro-jogador .sumario-content { grid-template-columns: 1fr !important; padding: 1.25rem !important; }
   /* O painel lateral empilha abaixo do índice (não some no celular) */
   #livro-jogador .sumario-side-panel { margin-top: 1rem; font-size: .82rem; }
   #livro-jogador .sumario-side-panel li { font-size: .8rem; }
 }
 @media (max-width:640px) {
-  #livro-jogador .sumario-content { font-size: .92rem; }
+  #livro-jogador .sumario-content { font-size: .92rem; padding: .9rem !important; }
   #livro-jogador .sumario-content ul { columns: 1 !important; }
 }
 
@@ -4519,6 +4538,20 @@ body:has(#livro-mestre[style*="display: block"]) .tp-eye {
 #livro-mestre .livro-sidebar-sair { width:100%;display:flex;align-items:center;justify-content:center;gap:.45rem;background:rgba(var(--deep-rgb), .1);border:1px solid var(--accent-t35);color:var(--accent-light);padding:.6rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;border-radius:4px;transition:background .2s,border-color .2s; }
 #livro-mestre .livro-sidebar-sair:hover { background:rgba(var(--deep-rgb), .22);border-color:var(--accent-light); }
 
+/* Topbar do Livro do Mestre em telas estreitas */
+@media (max-width:640px) {
+  #livro-mestre-topbar { padding: .5rem .75rem; gap: .5rem; flex-wrap: wrap; }
+  #livro-mestre-topbar .livro-topbar-voltar { padding: .3rem .5rem; font-size: .75rem; }
+  #livro-mestre-topbar .livro-topbar-titulo { font-size: .85rem; min-width: 0; }
+  #livro-mestre-topbar .livro-topbar-badge { font-size: .58rem; padding: .15rem .4rem; }
+}
+
+/* Topbar do Livro do Jogador em telas estreitas (vence padding/gap inline) */
+@media (max-width:640px) {
+  #livro-topbar { padding: .5rem .75rem !important; gap: .5rem !important; }
+  #livro-topbar span { font-size: .85rem; min-width: 0; }
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    FRENTE 3 — NAVEGAÇÃO MOBILE REFINADA
    Melhorias aditivas (só sobrescrevem propriedades pontuais) para uma
@@ -4529,8 +4562,12 @@ body:has(#livro-mestre[style*="display: block"]) .tp-eye {
      Os botões de menu/ranking que havia aqui são redundantes — a barra
      inferior (tabbar) já cobre essas ações. Centralizamos o logo e
      escondemos os botões laterais para um topo limpo. */
-  .topbar { justify-content:center; padding:.45rem .75rem; padding-top:calc(.45rem + var(--safe-top)); }
-  .topbar .topbar-menu-btn { display:none; }
+  .topbar { justify-content:center; padding:.45rem .75rem; padding-top:calc(.45rem + var(--safe-top)); gap:.35rem; }
+  /* Esconde menu hamburger e ranking (já acessíveis pela tabbar inferior),
+     mas mantém o botão de instalar app — ele é controlado por JS e só
+     aparece quando o navegador oferece a instalação (PWA). */
+  .topbar .topbar-menu-btn[onclick*="toggleSidebar"],
+  .topbar .topbar-menu-btn[onclick*="secao-ranking"] { display:none; }
   .topbar-logo { font-size:1rem; letter-spacing:1px; }
 
   /* Tabbar: toque mais tátil e estado ativo mais claro. */
@@ -4715,10 +4752,11 @@ body:has(#livro-mestre[style*="display: block"]) .tp-eye {
   }
 }
 @media (max-width:1023px) {
-  #livro-content { padding: 1.25rem 1rem calc(1.5rem + var(--safe-bottom)); }
+  /* !important para vencer o padding inline (2.5rem 3rem 5rem) de #livro-content */
+  #livro-content { padding: 1.25rem 1rem calc(1.5rem + var(--safe-bottom)) !important; }
 }
 @media (max-width:640px) {
-  #livro-content { padding: 1rem .85rem calc(1.25rem + var(--safe-bottom)); }
+  #livro-content { padding: 1rem .85rem calc(1.25rem + var(--safe-bottom)) !important; }
 }
 
 /* Overlays críticos: usáveis em telas pequenas */
@@ -17714,7 +17752,7 @@ function _inicializarProgressoLeituraMestre() {
     btn.textContent = '↑';
     btn.title = 'Voltar ao topo';
     btn.onclick = () => livro.scrollTo({ top: 0, behavior: 'smooth' });
-    btn.style.cssText = 'display:none;position:fixed;bottom:2rem;right:2rem;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.1rem;cursor:pointer;z-index:950;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.5)';
+    btn.style.cssText = 'display:none;position:fixed;bottom:calc(2rem + env(safe-area-inset-bottom,0px));right:2rem;width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.1rem;cursor:pointer;z-index:950;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.5)';
     document.body.appendChild(btn);
   }
   const atualizar = () => {
@@ -18130,7 +18168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .livro-nav-btn { display:inline-block; background:rgba(var(--deep-rgb), .12); border:1px solid var(--accent-t35); color:var(--accent-light); padding:.55rem 1.1rem; font-family:inherit; font-size:.85rem; border-radius:4px; text-decoration:none !important; transition:background .2s,border-color .2s; }
     .livro-nav-btn:hover { background:rgba(var(--deep-rgb), .22); border-color:var(--accent-light); color:var(--accent-light); }
     #livro-progresso { position:sticky; top:0; left:0; height:3px; width:0%; background:var(--accent); z-index:60; }
-    #livro-scroll-top { position:fixed; bottom:1.4rem; right:1.4rem; width:44px; height:44px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.1rem; cursor:pointer; display:none; align-items:center; justify-content:center; z-index:70; box-shadow:0 4px 14px rgba(0,0,0,.5); transition:background .2s; }
+    #livro-scroll-top { position:fixed; bottom:calc(1.4rem + var(--safe-bottom)); right:1.4rem; width:44px; height:44px; border-radius:50%; background:var(--accent); color:#fff; border:none; font-size:1.1rem; cursor:pointer; display:none; align-items:center; justify-content:center; z-index:70; box-shadow:0 4px 14px rgba(0,0,0,.5); transition:background .2s; }
     #livro-scroll-top:hover { background:var(--accent-light); }
     @media (max-width:1024px) {
       /* Drawer flutuante é a única estratégia mobile; regra estática removida. */
