@@ -3766,9 +3766,9 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-panel-body { padding: .9rem .8rem; }
 
   /* ── #FICHA-CONTENT COMO COLUNA ÚNICA ORDENÁVEL ──
-     Ordem mobile: Personagens > Hero > Ficha Base > Atributos > Poder >
-     Recursos de Combate > Armas > Combate > Corrupção & Atenção >
-     Árvore da Alma > Utilizações > Traços da Alma > Perícias >
+     Ordem mobile: Personagens > Hero > Ficha Base > Atributos > Perícias >
+     Poder > Árvore da Alma > Utilizações > Recursos de Combate > Armas >
+     Combate > Rituais > Corrupção & Atenção > Traços da Alma >
      Sessões e XP > Acampamento > Forja e Barmans > Relacionamentos >
      Inventário > Pets > Aparência > Lore > Grimório */
   #ficha-content {
@@ -3781,11 +3781,13 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #painel-personagens          { order: 1; }
   #ficha-hero-dinamico          { order: 2; }
 
-  /* Nova ordem das seções — espelha a ordem do HTML */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 3; }       /* Ficha Base   */
-  #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 3.5; }            /* Atributos    */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 4; }  /* Poder        */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-rituais) { order: 4.05; }  /* Rituais */
+  /* Nova ordem das seções — espelha a ordem do HTML reorganizado */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 3; }                 /* Ficha Base   */
+  #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 4; }                     /* Atributos    */
+  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 5; }      /* Perícias     */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 6; }           /* Poder        */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 7; }          /* Árvore da Alma */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 8; }     /* Utilizações Registradas */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
   .ficha-layout-cols {
@@ -3794,35 +3796,33 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-col-left, .ficha-col-right {
     display: contents;
   }
-  .ficha-col-left .ficha-panel  { order: 4.1; } /* Recursos de Combate */
-  .ficha-col-right .ficha-panel { order: 4.2; } /* Armas */
+  .ficha-col-left .ficha-panel  { order: 9; } /* Recursos de Combate */
+  .ficha-col-right .ficha-panel { order: 10; } /* Armas */
 
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 4.3; }       /* Combate (trackers) */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 4.4; }   /* Corrupção & Atenção */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 4.5; }        /* Árvore da Alma */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 4.6; }   /* Utilizações Registradas */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 4.7; }       /* Traços da Alma */
-  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 4.8; }    /* Perícias */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 11; }        /* Combate (trackers) */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-rituais) { order: 12; }        /* Rituais */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 13; }      /* Corrupção & Atenção */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 14; }         /* Traços da Alma */
 
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 4.9; }       /* Sessões e XP */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 5.1; }   /* Acampamento */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 5.2; }          /* Forja e Barmans */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 5.3; } /* Relacionamentos */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 15; }        /* Sessões e XP */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 16; }    /* Acampamento */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 17; }          /* Forja e Barmans */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 18; } /* Relacionamentos */
 
   /* Inventário */
-  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 6; }
+  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 19; }
 
   /* Pets & Montarias */
-  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 7; }
+  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 20; }
 
   /* Aparência */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 8; }
+  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 21; }
 
   /* Lore */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 9; }
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 22; }
 
   /* Grimório dos Despertos — Perfil Público */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-grimorio) { order: 10; }
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-grimorio) { order: 23; }
 
   .save-bar { order: 100; }
 
@@ -12382,6 +12382,18 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
 </div><!-- /ficha-full-row atributos -->
 
 
+<!-- PERÍCIAS — logo após Atributos, largura total -->
+  <div class="ficha-panel ficha-full-row" style="margin-bottom:1rem">
+    <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('pericias')" id="toggle-pericias">
+      <span class="ficha-expand-seta" id="seta-pericias">▶</span> Perícias
+    </div>
+    <div class="ficha-expand-area" id="area-pericias">
+    <div class="ficha-panel-body" id="pericias-panel-body">
+      <!-- gerado por buildPericias() -->
+    </div>
+    </div>
+  </div>
+
 <!-- PODER — barra grande expansível igual à Lore -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('poder')" id="toggle-poder">
@@ -12518,6 +12530,92 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div id="tecnicas-lista"></div>
   </div>
   </div>
+</div>
+
+<!-- ÁRVORE DA ALMA — aspecto escolhido e níveis por aspecto -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('arvore')" id="toggle-arvore">
+    <span class="ficha-expand-seta" id="seta-arvore">▶</span> Árvore da Alma
+  </div>
+  <div class="ficha-expand-area" id="area-arvore">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap">
+      <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Aspecto escolhido</span>
+      <select id="aa-aspecto" onchange="atualizarArvoreResumo()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none">
+        <option value="">— Escolha seu Aspecto —</option>
+        <option value="belico">⚔️ Bélico</option>
+        <option value="lucido">🧠 Lúcido</option>
+        <option value="resiliente">🛡️ Resiliente</option>
+        <option value="perceptivo">👁️ Perceptivo</option>
+      </select>
+      <span style="font-size:.78rem;color:var(--text-muted)">Nível do Aspecto: <strong id="aa-total-gasto" style="color:var(--silver)">0</strong>/10</span>
+    </div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">1 Aspecto por personagem · evolui nos níveis 2, 4, 6, 8, 10, 11, 12, 13, 14 e 15 · o nível 10 (Ápice) exige missão especial · clique em ⓘ para ver os 10 níveis do Aspecto</p>
+
+    <!-- BÉLICO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">⚔️ Bélico</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-belico" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico')" title="Ver os 10 níveis do Aspecto Bélico" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+
+    <!-- LÚCIDO -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">🧠 Lúcido</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-lucido" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('lucido')" title="Ver os 10 níveis do Aspecto Lúcido" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-lucido" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+
+    <!-- RESILIENTE -->
+    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">🛡️ Resiliente</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-resiliente" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('resiliente')" title="Ver os 10 níveis do Aspecto Resiliente" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-resiliente" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+
+    <!-- PERCEPTIVO -->
+    <div>
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">👁️ Perceptivo</div>
+      <div class="field-row cols-3">
+        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-perceptivo" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('perceptivo')" title="Ver os 10 níveis do Aspecto Perceptivo" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-perceptivo" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /area-arvore -->
+</div>
+
+<!-- UTILIZAÇÕES REGISTRADAS — linhas dinâmicas de utilização de técnicas/poderes -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('utilizacoes')" id="toggle-utilizacoes">
+    <span class="ficha-expand-seta" id="seta-utilizacoes">▶</span> Utilizações Registradas
+  </div>
+  <div class="ficha-expand-area" id="area-utilizacoes">
+  <div class="ficha-panel-body">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+      <div class="ficha-panel-title" style="font-size:.72rem;padding:.4rem 0">Utilizações</div>
+      <div style="display:flex;gap:.4rem">
+        <button onclick="addUtilizacao()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Utilização</button>
+      </div>
+    </div>
+    <div class="table-wrapper"><table>
+      <thead><tr><th style="min-width:140px">Nome</th><th style="min-width:110px">Categoria</th><th style="min-width:120px">Característica</th><th style="min-width:110px">Custo Inicial</th><th style="min-width:110px">Manutenção</th><th>Descrição</th><th style="width:30px"></th></tr></thead>
+      <tbody id="util-tbody">
+        <tr>
+          <td data-label="Nome"><input type="text" id="util1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
+          <td data-label="Categoria"><input type="text" id="util1-categoria" placeholder="Simples/Média/Alta/..." oninput="salvarLocal()"></td>
+          <td data-label="Característica"><input type="text" id="util1-caracteristica" placeholder="Controle/Expansão/..." oninput="salvarLocal()"></td>
+          <td data-label="Custo Inicial"><input type="text" id="util1-custo" placeholder="Ex: 22 Stamina" oninput="salvarLocal()"></td>
+          <td data-label="Manutenção"><input type="text" id="util1-manut" placeholder="Ex: 10 Stamina" oninput="salvarLocal()"></td>
+          <td data-label="Descrição"><input type="text" id="util1-desc" placeholder="Descrição..." oninput="salvarLocal()"></td>
+          <td><button onclick="removerUtilizacaoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+  </div><!-- /area-utilizacoes -->
 </div>
 
 <!-- LAYOUT DE DUAS COLUNAS (desktop): Recursos | Armas -->
@@ -12695,43 +12793,6 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
 
 </div><!-- /ficha-layout-cols -->
 
-<!-- RITUAIS — execução de rituais com círculos, custos e falhas -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('rituais')" id="toggle-rituais">
-    <span class="ficha-expand-seta" id="seta-rituais">▶</span> Rituais
-    <span class="ficha-expand-resumo" id="resumo-rituais"></span>
-  </div>
-  <div class="ficha-expand-area" id="area-rituais">
-  <div class="ficha-panel-body">
-    <div class="field-row cols-2">
-      <div class="field-group">
-        <label>Ritual <span class="info-btn" style="font-size:.6rem">ⓘ<span class="tooltip">Círculos 1–5. CD = 10 + Círculo × 2 (C1=12, C2=14, C3=16, C4=18, C5=20). C3+ exige Maestria em Feitiçaria; C5 exige Especialização. Teste: d20 + mod Alma (ou bônus de Feitiçaria).</span></span></label>
-        <select id="select-ritual" onchange="atualizarResumoRitual()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
-          <option value="">Escolher ritual...</option>
-          ${_opcoesRituais()}
-        </select>
-        <div id="ritual-resumo" style="margin-top:.4rem;font-size:.75rem;color:var(--text-muted);line-height:1.5"></div>
-      </div>
-      <div class="field-group">
-        <label>Custo em Espíritos (opcional — ajuste)</label>
-        <input type="number" id="rit-custo-esp" min="0" value="75" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
-        <div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap">
-          <button onclick="executarRitual()" style="background:var(--accent);border:none;color:#fff;padding:.55rem 1.1rem;font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Executar Ritual</button>
-          <button onclick="limparResultadoRitual()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-size:.78rem;cursor:pointer;font-family:inherit" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">Limpar</button>
-        </div>
-        <div id="ritual-resultado" style="margin-top:.5rem;font-size:.8rem;min-height:1.2em;font-weight:bold"></div>
-      </div>
-    </div>
-    <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.4rem">Histórico de Rituais</div>
-      <div id="rit-historico-lista" style="font-size:.75rem;color:var(--text-muted);line-height:1.6"></div>
-      <input type="hidden" id="rit-ultimo">
-      <input type="hidden" id="rit-historico">
-    </div>
-  </div>
-  </div>
-</div>
-
 <!-- COMBATE — trackers do combate lapidado (decisões C4, C8, C9) -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('combate')" id="toggle-combate">
@@ -12876,6 +12937,43 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div><!-- /area-combate -->
 </div>
 
+<!-- RITUAIS — execução de rituais com círculos, custos e falhas -->
+<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
+  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('rituais')" id="toggle-rituais">
+    <span class="ficha-expand-seta" id="seta-rituais">▶</span> Rituais
+    <span class="ficha-expand-resumo" id="resumo-rituais"></span>
+  </div>
+  <div class="ficha-expand-area" id="area-rituais">
+  <div class="ficha-panel-body">
+    <div class="field-row cols-2">
+      <div class="field-group">
+        <label>Ritual <span class="info-btn" style="font-size:.6rem">ⓘ<span class="tooltip">Círculos 1–5. CD = 10 + Círculo × 2 (C1=12, C2=14, C3=16, C4=18, C5=20). C3+ exige Maestria em Feitiçaria; C5 exige Especialização. Teste: d20 + mod Alma (ou bônus de Feitiçaria).</span></span></label>
+        <select id="select-ritual" onchange="atualizarResumoRitual()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%">
+          <option value="">Escolher ritual...</option>
+          ${_opcoesRituais()}
+        </select>
+        <div id="ritual-resumo" style="margin-top:.4rem;font-size:.75rem;color:var(--text-muted);line-height:1.5"></div>
+      </div>
+      <div class="field-group">
+        <label>Custo em Espíritos (opcional — ajuste)</label>
+        <input type="number" id="rit-custo-esp" min="0" value="75" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.55rem .7rem;font-family:inherit;font-size:.9rem;outline:none;width:100%" oninput="salvarLocal()">
+        <div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap">
+          <button onclick="executarRitual()" style="background:var(--accent);border:none;color:#fff;padding:.55rem 1.1rem;font-family:'Playfair Display',serif;font-size:.85rem;cursor:pointer;letter-spacing:1px;transition:background .2s" onmouseover="this.style.background='var(--accent-light)'" onmouseout="this.style.background='var(--accent)'">Executar Ritual</button>
+          <button onclick="limparResultadoRitual()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.5rem .8rem;font-size:.78rem;cursor:pointer;font-family:inherit" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">Limpar</button>
+        </div>
+        <div id="ritual-resultado" style="margin-top:.5rem;font-size:.8rem;min-height:1.2em;font-weight:bold"></div>
+      </div>
+    </div>
+    <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.4rem">Histórico de Rituais</div>
+      <div id="rit-historico-lista" style="font-size:.75rem;color:var(--text-muted);line-height:1.6"></div>
+      <input type="hidden" id="rit-ultimo">
+      <input type="hidden" id="rit-historico">
+    </div>
+  </div>
+  </div>
+</div>
+
 <!-- CORRUPÇÃO & ATENÇÃO DA TORRE — estágios, relógio e sanidade -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('corrupcao')" id="toggle-corrupcao">
@@ -12926,92 +13024,6 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div>
 </div>
 
-<!-- ÁRVORE DA ALMA — aspecto escolhido e níveis por aspecto -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('arvore')" id="toggle-arvore">
-    <span class="ficha-expand-seta" id="seta-arvore">▶</span> Árvore da Alma
-  </div>
-  <div class="ficha-expand-area" id="area-arvore">
-  <div class="ficha-panel-body">
-    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap">
-      <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Aspecto escolhido</span>
-      <select id="aa-aspecto" onchange="atualizarArvoreResumo()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none">
-        <option value="">— Escolha seu Aspecto —</option>
-        <option value="belico">⚔️ Bélico</option>
-        <option value="lucido">🧠 Lúcido</option>
-        <option value="resiliente">🛡️ Resiliente</option>
-        <option value="perceptivo">👁️ Perceptivo</option>
-      </select>
-      <span style="font-size:.78rem;color:var(--text-muted)">Nível do Aspecto: <strong id="aa-total-gasto" style="color:var(--silver)">0</strong>/10</span>
-    </div>
-    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">1 Aspecto por personagem · evolui nos níveis 2, 4, 6, 8, 10, 11, 12, 13, 14 e 15 · o nível 10 (Ápice) exige missão especial · clique em ⓘ para ver os 10 níveis do Aspecto</p>
-
-    <!-- BÉLICO -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">⚔️ Bélico</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-belico" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico')" title="Ver os 10 níveis do Aspecto Bélico" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- LÚCIDO -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">🧠 Lúcido</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-lucido" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('lucido')" title="Ver os 10 níveis do Aspecto Lúcido" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-lucido" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- RESILIENTE -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">🛡️ Resiliente</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-resiliente" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('resiliente')" title="Ver os 10 níveis do Aspecto Resiliente" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-resiliente" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- PERCEPTIVO -->
-    <div>
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">👁️ Perceptivo</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-perceptivo" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('perceptivo')" title="Ver os 10 níveis do Aspecto Perceptivo" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-perceptivo" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-  </div>
-  </div><!-- /area-arvore -->
-</div>
-
-<!-- UTILIZAÇÕES REGISTRADAS — linhas dinâmicas de utilização de técnicas/poderes -->
-<div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
-  <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('utilizacoes')" id="toggle-utilizacoes">
-    <span class="ficha-expand-seta" id="seta-utilizacoes">▶</span> Utilizações Registradas
-  </div>
-  <div class="ficha-expand-area" id="area-utilizacoes">
-  <div class="ficha-panel-body">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
-      <div class="ficha-panel-title" style="font-size:.72rem;padding:.4rem 0">Utilizações</div>
-      <div style="display:flex;gap:.4rem">
-        <button onclick="addUtilizacao()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .7rem;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s" onmouseover="this.style.borderColor='var(--accent-light)'" onmouseout="this.style.borderColor='var(--border)'">+ Utilização</button>
-      </div>
-    </div>
-    <div class="table-wrapper"><table>
-      <thead><tr><th style="min-width:140px">Nome</th><th style="min-width:110px">Categoria</th><th style="min-width:120px">Característica</th><th style="min-width:110px">Custo Inicial</th><th style="min-width:110px">Manutenção</th><th>Descrição</th><th style="width:30px"></th></tr></thead>
-      <tbody id="util-tbody">
-        <tr>
-          <td data-label="Nome"><input type="text" id="util1-nome" placeholder="Nome..." oninput="salvarLocal()"></td>
-          <td data-label="Categoria"><input type="text" id="util1-categoria" placeholder="Simples/Média/Alta/..." oninput="salvarLocal()"></td>
-          <td data-label="Característica"><input type="text" id="util1-caracteristica" placeholder="Controle/Expansão/..." oninput="salvarLocal()"></td>
-          <td data-label="Custo Inicial"><input type="text" id="util1-custo" placeholder="Ex: 22 Stamina" oninput="salvarLocal()"></td>
-          <td data-label="Manutenção"><input type="text" id="util1-manut" placeholder="Ex: 10 Stamina" oninput="salvarLocal()"></td>
-          <td data-label="Descrição"><input type="text" id="util1-desc" placeholder="Descrição..." oninput="salvarLocal()"></td>
-          <td><button onclick="removerUtilizacaoEl(this)" style="background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:.15rem .3rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'" title="Remover linha">−</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-  </div>
-  </div><!-- /area-utilizacoes -->
-</div>
-
 <!-- TRAÇOS DA ALMA — seletor de traços positivos e fraquezas com Balance -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('tracos')" id="toggle-tracos">
@@ -13054,19 +13066,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div>
 </div>
 
-  <!-- PERÍCIAS — abaixo dos recursos e armas, largura total -->
-  <div class="ficha-panel ficha-full-row" style="margin-bottom:1rem">
-    <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('pericias')" id="toggle-pericias">
-      <span class="ficha-expand-seta" id="seta-pericias">▶</span> Perícias
-    </div>
-    <div class="ficha-expand-area" id="area-pericias">
-    <div class="ficha-panel-body" id="pericias-panel-body">
-      <!-- gerado por buildPericias() -->
-    </div>
-    </div>
-  </div>
-
-<!-- SESSÕES E XP — sistema de sessões e experiência (capítulo #sessoes-xp) -->
+  <!-- SESSÕES E XP — sistema de sessões e experiência (capítulo #sessoes-xp) -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('sessoes')" id="toggle-sessoes">
     <span class="ficha-expand-seta" id="seta-sessoes">▶</span> Sessões e XP
@@ -18685,7 +18685,35 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="section-divider"></div>
 
         <!-- TORRE DO PESADELO -->
-        <section id="torre-pesadelo">
+        
+
+        <!-- AS SETE REGIÕES E TORRES -->
+        <section id="regioes-torres">
+            <h2>As Sete Regiões e Torres</h2>
+            <p>O mundo pós-Torres não é um território único. Ele é dividido por <strong>sete grandes domínios</strong> — cada um moldado por uma torre principal, um clima extremo e uma civilização que aprendeu a sobreviver de um jeito próprio. No centro de tudo está a <strong>Torre do Pesadelo</strong>; ao redor dela, seis regiões disputam poder, recursos e a atenção da Torre.</p>
+
+            <p>Cada região tem sua própria cultura, política, economia e ameaça. Conhecer o domínio onde você pisa é tão importante quanto conhecer os monstros que o habitam — porque cada povo deste mundo aprendeu a transformar sua maior fraqueza em sua maior força.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>#</th><th>Região / Torre</th><th>Tema</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>I</strong></td><td><strong>Torre do Pesadelo</strong></td><td>O centro do mundo. 100 andares. O objetivo final da humanidade.</td><td>Detalhada</td></tr>
+                        <tr><td><strong>II</strong></td><td><strong>Torre de Baranov</strong> — Norte</td><td>Frio extremo, cidades subterrâneas, mineração e a Morte.</td><td>Detalhada</td></tr>
+                        <tr><td><strong>III</strong></td><td><strong>Torre do Deserto</strong> — Nordeste</td><td>Mistério, dunas, facções e o desconhecido.</td><td>Detalhada</td></tr>
+                        <tr><td><strong>IV</strong></td><td><strong>Torre do Conhecimento</strong> — Sul</td><td>Noite eterna, Lua, conhecimento sagrado e mistérios celestes.</td><td>Detalhada</td></tr>
+                        <tr><td><strong>V</strong></td><td><strong>Torre do Tempo</strong> — Oeste</td><td>Tempo quebrado, Cúpulas, Grandes Famílias e anomalias temporais.</td><td>Detalhada</td></tr>
+                        <tr><td><strong>VI</strong></td><td><strong>Torre da Vida</strong> — Leste</td><td>Fertilidade extrema, Explosões de Vida e a vida que não para.</td><td>Detalhada</td></tr>
+                        <tr><td><strong>VII</strong></td><td><strong>Torre da Ordem</strong> — Central</td><td>A maior cidade do mundo, o Conselho Mundial e a civilização que não para.</td><td>Detalhada</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>Nota de desenvolvimento:</strong> este capítulo está completo. As sete regiões/torres principais — Torre do Pesadelo, Baranov (Norte), Deserto (Nordeste), Conhecimento (Sul), Tempo (Oeste), Vida (Leste) e Ordem (Central) — estão todas detalhadas, cada uma com sua própria torre, cultura e identidade.
+            </div>
+
+            <section id="torre-pesadelo">
             <h2>I. Torre do Pesadelo — O Centro do Mundo</h2>
 
             <p><em>"Se o mundo pós-Rompimento é um lugar de ruínas, a Terra do Pesadelo é onde as ruínas aprenderam a caçar."</em></p>
@@ -18955,88 +18983,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>O motivo é simples: durante uma crise envolvendo criaturas, Névoa ou uma ameaça de grande escala, não existe tempo para decisões burocráticas. O exército assume o controle e todas as outras estruturas passam a trabalhar sob suas ordens. O Comando da Barreira possui fama de ser extremamente rígido justamente por isso — em uma emergência, não existe discussão sobre quem deveria fazer o quê. Existe uma cadeia de comando.</p>
 
-            <h4>Os Aspectos de Barreira</h4>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Aspecto</th><th>Estrelas</th></tr></thead>
-                    <tbody>
-                        <tr><td>⚔️ Poder Militar</td><td>⭐⭐⭐⭐⭐</td></tr>
-                        <tr><td>📜 Poder Político</td><td>⭐</td></tr>
-                        <tr><td>🎭 Cultura</td><td>⭐⭐</td></tr>
-                        <tr><td>🪙 Economia</td><td>⭐⭐</td></tr>
-                        <tr><td>🛡️ Defesa</td><td>⭐</td></tr>
-                        <tr><td>👁️ Inteligência</td><td>⭐⭐</td></tr>
-                        <tr><td>🧪 Misticismo & Tecnologia</td><td>⭐</td></tr>
-                        <tr><td>🪵 Logística & Infraestrutura</td><td>⭐⭐</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="lore-box">
-                <strong>TOTAL: ⭐16</strong><br><br>
-                O maior destaque de Barreira é seu poder militar — os próprios combatentes são a principal linha de defesa, e as criaturas perigosas dificilmente conseguem sequer chegar à cidade. A cidade possui pouca influência política externa, quase não depende de muralhas e fortificações, e sua cultura foi moldada pela sobrevivência e pela proximidade com a Terra do Pesadelo.<br><br>
-                <strong>"Eles não construíram uma muralha porque não precisam de uma. A muralha são as próprias pessoas."</strong>
-            </div>
-
-            <h4>Os NPCs Mais Importantes de Barreira</h4>
-            <p>Os quatorze NPCs abaixo formam o núcleo humano da cidade. Alguns possuem cargos oficiais; outros existem fora da estrutura governamental, mas sua influência os torna indispensáveis para compreender Barreira.</p>
-
-            <div class="system-card">
-                <strong>1. O Regente — Augusto Veyron</strong> — Poder: <strong>Domínio Territorial</strong>. Estabelece uma área sob seu domínio e percebe tudo que acontece dentro dela; quanto maior a área, menor a precisão. Em Barreira, sua Manifestação é especialmente poderosa porque ele conhece e utiliza a própria estrutura da cidade para ampliar seu alcance. Calmo, inteligente e pragmático, raramente demonstra autoridade através de ameaças — ele simplesmente espera que as pessoas entendam as consequências de suas decisões.
-            </div>
-
-            <div class="system-card">
-                <strong>2. A Comandante do Exército — Helena Voss</strong> — Poder: <strong>Fortificação</strong>. Aumenta drasticamente a resistência de pessoas, estruturas e equipamentos dentro de uma área determinada; quanto mais conhece a estrutura que defende, mais eficiente é o poder. Rígida, disciplinada e extremamente direta, respeita profundamente os bons Slayers — mas, para ela, um Slayer talentoso continua sendo um civil até receber uma ordem oficial para atuar.
-            </div>
-
-            <div class="system-card">
-                <strong>3. O Mestre dos Slayers — Dante Arkwright</strong> — Poder: <strong>Predador</strong>. Analisa uma criatura e identifica rapidamente seus pontos vulneráveis, padrões de movimento e comportamento de combate; quanto mais tempo observa o alvo, mais informações obtém. Extrovertido, provocador e extremamente competitivo, adora Slayers talentosos e acredita que eles precisam aprender a pensar por conta própria — porque ninguém estará ao lado deles dentro da Terra do Pesadelo.
-            </div>
-
-            <div class="system-card">
-                <strong>4. A Diretora da Névoa — Mirela Soren</strong> — Poder: <strong>Cartografia</strong>. Percebe e registra alterações espaciais dentro de uma região, criando um mapa mental extremamente preciso; detecta mudanças recentes no ambiente, rotas utilizadas e regiões alteradas. Obsessivamente organizada, trata a Névoa como um problema matemático e pode perceber quando alguma coisa está errada antes de praticamente qualquer outra pessoa.
-            </div>
-
-            <div class="system-card">
-                <strong>5. O Presidente do Consórcio — Victor Halden</strong> — Poder: <strong>Avaliação</strong>. Compreende o valor, composição e utilidade potencial de um objeto ou recurso ao tocá-lo; quanto mais raro ou desconhecido o objeto, mais esforço é necessário. Carismático, elegante e extremamente ganancioso, não precisa ameaçar ninguém — prefere fazer a pessoa perceber que aceitar sua proposta é mais conveniente.
-            </div>
-
-            <div class="system-card">
-                <strong>6. O Diretor do Instituto de Dominação — Orfeu Keller</strong> — Poder: <strong>Laço Bestial</strong>. Estabelece uma conexão temporária com criaturas bestiais e compreende suas emoções, instintos e intenções — não é controle mental. Excêntrico e completamente apaixonado por criaturas, trata um monstro de três toneladas com a mesma tranquilidade que outra pessoa teria ao observar um cachorro.
-            </div>
-
-            <div class="system-card">
-                <strong>7. O Comandante do Corpo de Contenção — Rafael Draven</strong> — Poder: <strong>Anulação</strong>. Enfraquece temporariamente manifestações e habilidades dentro de uma área limitada; quanto mais poderosa a habilidade afetada, maior o esforço necessário. Silencioso, sério e extremamente paciente, é provavelmente o homem mais difícil de provocar em Barreira. Quando Rafael aparece, significa que a situação deixou de ser normal.
-            </div>
-
-            <div class="system-card">
-                <strong>8. A Capitã do Porto — Mara Bellini</strong> — Poder: <strong>Maré</strong>. Manipula grandes volumes de água em uma área limitada, podendo alterar correntes, criar ondas e controlar embarcações de maneira rudimentar. Barulhenta, divertida e extremamente sociável, conhece praticamente todo mundo que chega a Barreira e sabe imediatamente quando alguém está mentindo sobre o motivo de sua viagem.
-            </div>
-
-            <div class="system-card">
-                <strong>9. O Médico Principal — Dr. Elias Moreau</strong> — Poder: <strong>Cirurgia Vital</strong>. Manipula tecidos vivos com extrema precisão, acelerando procedimentos médicos e estabilizando ferimentos graves. Sarcástico, cansado e extremamente competente, não possui o menor interesse em saber se alguém é famoso, rico ou importante — se alguém chegar ferido, ele simplesmente trata.
-            </div>
-
-            <div class="system-card">
-                <strong>10. A Chefe da Segurança Interna — Lívia Crane</strong> — Poder: <strong>Restrição</strong>. Cria marcas de energia que limitam temporariamente os movimentos de uma pessoa; quanto mais a pessoa resiste, mais energia é necessária. Observadora, desconfiada e extremamente inteligente, seu trabalho é descobrir quem está mentindo.
-            </div>
-
-            <div class="system-card">
-                <strong>11. O Slayer Veterano — Caio Rask</strong> — Poder: <strong>Predação Adaptativa</strong>. Seu corpo desenvolve pequenas adaptações temporárias depois de sofrer repetidamente determinado tipo de ameaça. Relaxado, irresponsável e aparentemente burro, na prática é extremamente experiente — e costuma dizer coisas como "Relaxa. Se fosse pra matar a gente, já teria matado." Às vezes está certo. Às vezes não.
-            </div>
-
-            <div class="system-card">
-                <strong>12. A Domadora — Nadia Volkov</strong> — Poder: <strong>Comando Bestial</strong>. Sua voz pode impor ordens simples a criaturas bestiais que reconheçam sua autoridade. Fria com humanos, extremamente gentil com criaturas, possui uma relação quase maternal com elas e trata qualquer tentativa de machucá-las como uma ofensa pessoal.
-            </div>
-
-            <div class="system-card">
-                <strong>13. O Slayer Problemático — Dorian Vale</strong> — Poder: <strong>Ruptura</strong>. Concentra energia em ataques extremamente destrutivos capazes de romper defesas e estruturas. Arrogante, impulsivo e extremamente confiante, acredita que as regras existem principalmente para pessoas que não conseguem sobreviver sem elas. Seu nível e experiência fazem com que Barreira ainda o considere um recurso valioso.
-            </div>
-
-            <div class="system-card">
-                <strong>14. O Administrador do Registro — Samuel Orris</strong> — Poder: <strong>Registro Absoluto</strong>. Tudo que Samuel registra através de sua Manifestação não pode ser alterado sem que ele perceba. Extremamente tranquilo, educado e aparentemente comum, sabe exatamente quem entrou na Terra do Pesadelo, quando entrou, qual autorização possuía e se retornou.
-            </div>
-
             <h4>A Guilda Limiar do Sol</h4>
             <p>A <strong>Limiar do Sol</strong> é uma das principais guildas estabelecidas na região da Barreira. Por causa da proximidade com a Terra do Pesadelo, a guilda desenvolveu uma cultura muito voltada para exploração, proteção e contenção. O nome vem da própria ideia de que a Barreira representa o limite entre o mundo habitável e a região dominada pela Torre do Pesadelo — o ponto onde ainda existe luz antes de começar o território tomado pelo Pesadelo.</p>
 
@@ -19056,32 +19002,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 Barreira não sobreviveu apesar do perigo. Ela aprendeu a cobrar por ele — e a transformar cada ameaça que atravessa a fronteira em algo que mantém a cidade viva.
             </div>
         </section>
-
-        <!-- AS SETE REGIÕES E TORRES -->
-        <section id="regioes-torres">
-            <h2>As Sete Regiões e Torres</h2>
-            <p>O mundo pós-Torres não é um território único. Ele é dividido por <strong>sete grandes domínios</strong> — cada um moldado por uma torre principal, um clima extremo e uma civilização que aprendeu a sobreviver de um jeito próprio. No centro de tudo está a <strong>Torre do Pesadelo</strong>; ao redor dela, seis regiões disputam poder, recursos e a atenção da Torre.</p>
-
-            <p>Cada região tem sua própria cultura, política, economia e ameaça. Conhecer o domínio onde você pisa é tão importante quanto conhecer os monstros que o habitam — porque cada povo deste mundo aprendeu a transformar sua maior fraqueza em sua maior força.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>#</th><th>Região / Torre</th><th>Tema</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>I</strong></td><td><strong>Torre do Pesadelo</strong></td><td>O centro do mundo. 100 andares. O objetivo final da humanidade.</td><td>Detalhada</td></tr>
-                        <tr><td><strong>II</strong></td><td><strong>Torre de Baranov</strong> — Norte</td><td>Frio extremo, cidades subterrâneas, mineração e a Morte.</td><td>Detalhada</td></tr>
-                        <tr><td><strong>III</strong></td><td><strong>Torre do Deserto</strong> — Nordeste</td><td>Mistério, dunas, facções e o desconhecido.</td><td>Detalhada</td></tr>
-                        <tr><td><strong>IV</strong></td><td><strong>Torre do Conhecimento</strong> — Sul</td><td>Noite eterna, Lua, conhecimento sagrado e a Deusa que Sabe.</td><td>Detalhada</td></tr>
-                        <tr><td><strong>V</strong></td><td><strong>Torre do Tempo</strong> — Oeste</td><td>Tempo quebrado, Cúpulas, Grandes Famílias e o Deus do Tempo.</td><td>Detalhada</td></tr>
-                        <tr><td><strong>VI</strong></td><td><strong>Torre da Vida</strong> — Leste</td><td>Fertilidade extrema, Explosões de Vida e a Deusa que não deixa nada morrer.</td><td>Detalhada</td></tr>
-                        <tr><td><strong>VII</strong></td><td><strong>Torre da Ordem</strong> — Central</td><td>A maior cidade do mundo, o Conselho Mundial e a civilização que não para.</td><td>Detalhada</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="lore-box">
-                <strong>Nota de desenvolvimento:</strong> este capítulo está completo. As sete regiões/torres principais — Torre do Pesadelo, Baranov (Norte), Deserto (Nordeste), Conhecimento (Sul), Tempo (Oeste), Vida (Leste) e Ordem (Central) — estão todas detalhadas, cada uma com sua própria torre, cultura e divindade.
-            </div>
 
             <!-- ─────────── II. TORRE DE BARANOV ─────────── -->
             <h3 id="regiao-baranov">II. Torre de Baranov — O Domínio da Geada (Norte)</h3>
@@ -19284,10 +19204,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 Para os habitantes da região, conhecer significa estar preparado. Conhecer uma criatura significa saber como enfrentá-la. Conhecer uma doença significa poder tratá-la. Conhecer o passado significa evitar repetir seus erros. Conhecer as estrelas permite atravessar regiões desconhecidas. Conhecer a própria história permite preservar aquilo que ainda resta da humanidade.
             </div>
 
-            <p>Essa valorização do conhecimento também se manifesta na religião. A <strong>Deusa do Conhecimento</strong> é conhecida por muitos títulos, mas o mais comum é simplesmente <strong>Aquela que Sabe</strong>. Seus seguidores acreditam que o conhecimento concedido por ela permitiu que a humanidade preservasse aquilo que teria sido perdido após o fim do mundo.</p>
+            <p>Essa valorização do conhecimento também se manifesta na religião. A fé da região é dedicada à preservação do saber, e seus seguidores acreditam que o conhecimento permitiu que a humanidade preservasse aquilo que teria sido perdido após o fim do mundo.</p>
 
             <h4>O Akasha</h4>
-            <p>A maior dádiva associada à Deusa do Conhecimento é conhecida como <strong>Akasha</strong>. Aqueles que nascem na região — ou que são considerados dignos de recebê-la — podem manifestar uma conexão mental com o Akasha. Ele funciona como uma imensa biblioteca acessível diretamente pela mente, permitindo consultar informações sem a necessidade de carregar livros ou pergaminhos.</p>
+            <p>A maior dádiva da região é conhecida como <strong>Akasha</strong>. Aqueles que nascem na região — ou que são considerados dignos de recebê-la — podem manifestar uma conexão mental com o Akasha. Ele funciona como uma imensa biblioteca acessível diretamente pela mente, permitindo consultar informações sem a necessidade de carregar livros ou pergaminhos.</p>
 
             <div class="system-card">
                 <strong>Através dele, uma pessoa pode:</strong><br>
@@ -19390,7 +19310,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h4>O Conselho dos Cinco</h4>
             <p>A região é administrada pelo <strong>Conselho dos Cinco</strong>, formado por representantes das quatro grandes cidades e um representante das principais organizações científicas e industriais. Cada membro possui direito a voto, e decisões importantes são tomadas através de maioria.</p>
 
-            <p>O Conselho supervisiona questões como segurança, pesquisa, comércio, educação, exploração e relações entre as cidades. Embora a Deusa do Conhecimento seja reverenciada por toda a região, ela não participa diretamente das reuniões do Conselho.</p>
+            <p>O Conselho supervisiona questões como segurança, pesquisa, comércio, educação, exploração e relações entre as cidades. Embora a fé seja reverenciada por toda a região, ela não participa diretamente das reuniões do Conselho.</p>
 
             <div class="lore-box">
                 Existe uma frase tradicional para explicar essa separação:<br><br>
@@ -19414,7 +19334,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Poucos lugares do mundo são tão difíceis de compreender quanto a <strong>Região do Tempo</strong>. Ali, passado, presente e futuro não são conceitos tão distintos quanto deveriam ser. Estradas podem mudar de lugar durante a noite, construções podem envelhecer em poucas horas e, nas regiões mais instáveis, uma pessoa pode encontrar vestígios de acontecimentos que ocorreram décadas atrás como se tivessem acontecido naquele instante.</p>
 
-            <p>A região é governada pelo <strong>Deus do Tempo</strong>, uma das entidades responsáveis pela criação do mundo. Seu domínio não se limita à passagem das horas: ele também se estende ao espaço, à causalidade e à própria continuidade da existência.</p>
+            <p>A região é dominada por uma instabilidade temporal que desafia qualquer compreensão. A passagem das horas, o espaço, a causalidade e a própria continuidade da existência parecem obedecer a regras que mudam constantemente.</p>
 
             <p>A maior parte da população vive nas regiões relativamente estáveis, onde comunidades e famílias construíram formas de sobreviver às anomalias temporais. Quanto mais distante se está dos territórios habitados, porém, mais imprevisível se torna o mundo.</p>
 
@@ -19454,7 +19374,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="lore-box">
                 Existe, entretanto, uma regra conhecida por todos que se aventuram por elas: <strong>poderes sobrenaturais não funcionam dentro das Cúpulas</strong>. Por essa razão, aqueles que entram precisam depender de sua inteligência, treinamento, conhecimento e capacidade de adaptação.<br><br>
-                Pouco se sabe sobre a origem das Cúpulas. Algumas pessoas acreditam que sejam santuários históricos; outras as consideram prisões ou experimentos do Deus do Tempo. A verdade permanece desconhecida para a maioria da população.
+                Pouco se sabe sobre a origem das Cúpulas. Algumas pessoas acreditam que sejam santuários históricos; outras as consideram prisões ou experimentos de eras passadas. A verdade permanece desconhecida para a maioria da população.
             </div>
 
             <h4>A Torre do Tempo</h4>
@@ -19464,7 +19384,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="lore-box">
                 Até hoje, nenhuma expedição conhecida conseguiu avançar sequer vinte por cento daquilo que se acredita ser a extensão explorável da Torre. Quanto mais alguém tenta avançar, mais estranhos se tornam os fenômenos encontrados em seu interior. Há relatos de corredores que conduzem a épocas diferentes, criaturas que parecem conhecer acontecimentos futuros e aventureiros que encontraram versões alternativas de si mesmos.<br><br>
-                A Torre também é considerada o principal santuário do Deus do Tempo. Ninguém sabe exatamente o que existe em seus níveis mais profundos. E aqueles que tentam descobrir raramente retornam.
+                Ninguém sabe exatamente o que existe em seus níveis mais profundos. E aqueles que tentam descobrir raramente retornam.
             </div>
 
             <h4>Os Divergentes</h4>
@@ -19537,13 +19457,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <p>Mas quanto mais se aproxima do centro da região, mais difícil se torna distinguir aquilo que é simplesmente vida daquilo que já ultrapassou todos os limites naturais.</p>
 
-            <p>No coração desse território encontra-se a <strong>Torre da Vida</strong>, domínio de <strong>Elyra, Deusa da Vida</strong>, uma das Sete entidades que existiam antes do mundo moderno.</p>
+            <p>No coração desse território encontra-se a <strong>Torre da Vida</strong>, a fonte de toda a influência que transforma a região.</p>
 
-            <div class="system-card">
-                Elyra representa o nascimento, crescimento, regeneração, evolução, adaptação e continuidade. Antes de sua corrupção, acreditava que enquanto algo estivesse vivo, ainda existia uma possibilidade.<br><br>
-                Agora, sua crença se tornou outra: <strong>"A Vida deve continuar."</strong><br><br>
-                O problema é que, para Elyra, já não importa aquilo que precisa ser destruído, deformado ou transformado para que a vida continue.
-            </div>
+            
 
             <h4>As Terras da Aurora</h4>
             <p>As Terras da Aurora são uma das regiões mais férteis do mundo. A proximidade da Torre da Vida transformou profundamente o território, mas não da mesma maneira em todos os lugares. Existe uma espécie de transição gradual entre as áreas habitadas e os territórios dominados pela influência da Torre.</p>
@@ -19629,19 +19545,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="lore-box">
                 A própria construção parece viva. Suas paredes possuem características semelhantes a músculos, veias, ossos e tecidos orgânicos. Algumas portas assumem formas semelhantes a bocas. Corredores podem se reconstruir. Estruturas podem crescer ou mudar.<br><br>
-                A Torre não é apenas um lugar onde existem criaturas. Ela própria parece fazer parte do fenômeno biológico que domina a região.<br><br>
-                Em seu último andar encontra-se Elyra.
-            </div>
-
-            <h4>Elyra — Deusa da Vida</h4>
-            <p>Antes da corrupção, Elyra era uma das Sete. Era uma mulher calma, curiosa, paciente e extremamente observadora. Seu objetivo era compreender a vida em sua totalidade. Seu poder, <strong>Gênese Vital</strong>, permitia manipular processos biológicos, regenerar tecidos, reconstruir organismos, estimular crescimento, modificar corpos e acelerar processos naturais.</p>
-
-            <div class="system-card">
-                Sua filosofia era simples: <strong>"Enquanto algo estiver vivo, ainda existe uma possibilidade."</strong><br><br>
-                A Corrupção não apagou completamente aquilo que Elyra era. Ela apenas levou sua ideia ao extremo.<br><br>
-                Agora, para Elyra, a morte não representa descanso ou encerramento. Representa uma falha. A evolução não possui limite. A regeneração não deveria parar. A vida não deveria terminar.<br><br>
-                Seu objetivo não é simplesmente destruir o mundo. É fazer com que ele continue vivo, independentemente da forma que isso precise assumir.
-            </div>
+                A Torre não é apenas um lugar onde existem criaturas. Ela própria parece fazer parte do fenômeno biológico que domina a região.
+                </div>
 
             <h4>As Criaturas da Vida</h4>
             <p>As criaturas encontradas próximas à Torre apresentam uma característica em comum: <strong>adaptação</strong>. Uma criatura ferida pode desenvolver uma nova forma de defesa. Um organismo exposto a determinado ambiente pode modificar seu corpo para sobreviver.</p>
@@ -19651,25 +19556,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 • Outras conseguem reconstruir partes do corpo.<br>
                 • Existem criaturas que vivem em simbiose com plantas, fungos ou outros organismos.<br><br>
                 Quanto mais próxima da Torre, mais extrema se torna essa capacidade. Algumas criaturas já não parecem possuir uma forma definitiva. Elas simplesmente continuam mudando.
-            </div>
-
-            <h4>O Limite Vital</h4>
-            <p>O principal artefato relacionado à Deusa da Vida é conhecido como <strong>O Limite Vital</strong>. Sua existência representa justamente aquilo que Elyra perdeu. O artefato não representa a morte — representa o <strong>limite</strong>.</p>
-
-            <div class="system-card">
-                <strong>Sua capacidade fundamental é interromper processos sobrenaturais relacionados à vida:</strong><br>
-                • Regeneração;<br>
-                • Mutação;<br>
-                • Adaptação;<br>
-                • Crescimento acelerado;<br>
-                • Reconstrução;<br>
-                • Gênese Vital.<br><br>
-                Diante dele, existe uma regra simples: <strong>"Até aqui."</strong>
-            </div>
-
-            <div class="lore-box">
-                Contra Elyra, o artefato pode suprimir temporariamente sua Gênese Vital, impedindo que ela utilize suas capacidades divinas de regeneração, adaptação e criação. Somente após derrotar seu corpo e utilizar o artefato contra sua essência é possível transformá-la em um <strong>Núcleo da Gênese Vital</strong>.<br><br>
-                Enquanto esse Núcleo existir, Elyra ainda poderá retornar. Por isso, o Núcleo precisa ser destruído. Quando isso acontece, Elyra deixa de existir definitivamente e o Limite Vital desaparece junto com sua função.
             </div>
 
             <h4>A Vida nas Terras da Aurora</h4>
@@ -19685,7 +19571,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="lore-box">
                 Nas Terras da Aurora, a pergunta nunca foi apenas: "Como continuar vivo?"<br><br>
-                Com Elyra no coração da região, a pergunta se tornou:<br><br>
+                Nas profundezas da região, a pergunta se tornou:<br><br>
                 <strong>"Até onde a vida deve continuar?"</strong>
             </div>
 
@@ -19834,112 +19720,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="lore-box">
                 Isso é importante para a identidade da cidade. A Ordem não é apenas uma sede de governos e organizações. É uma sociedade real.<br><br>
                 O cidadão comum pode nunca conhecer o Líder Supremo. Pode nunca ver um dos grandes Despertos. Pode nunca entrar em uma Torre. Ainda assim, todos vivem dentro do sistema construído por essas instituições.
-            </div>
-
-            <h4>Os 16 Aspectos da Região</h4>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Aspecto</th><th>Estrelas</th></tr></thead>
-                    <tbody>
-                        <tr><td>⚔️ Poder Militar</td><td>⭐⭐⭐</td></tr>
-                        <tr><td>📜 Poder Político</td><td>⭐⭐</td></tr>
-                        <tr><td>🎭 Cultura</td><td>⭐</td></tr>
-                        <tr><td>🪙 Economia</td><td>⭐⭐⭐</td></tr>
-                        <tr><td>🛡️ Defesa</td><td>⭐⭐</td></tr>
-                        <tr><td>👁️ Inteligência</td><td>⭐</td></tr>
-                        <tr><td>🧪 Misticismo & Tecnologia</td><td>⭐⭐⭐⭐</td></tr>
-                        <tr><td>🪵 Logística & Infraestrutura</td><td>⭐</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="lore-box">
-                <strong>TOTAL: ⭐16</strong><br><br>
-                A distribuição representa uma cidade extremamente desenvolvida, mas com especializações claras. Misticismo e Tecnologia é sua maior concentração de excelência, enquanto Militar e Economia também possuem peso significativo.<br><br>
-                "A força de A Ordem não está em ser excepcional em tudo. Está em saber exatamente onde cada parte precisa funcionar."
-            </div>
-
-            <h4>Os 20 NPCs Mais Importantes de A Ordem</h4>
-            <p>Os vinte NPCs abaixo formam o núcleo humano da cidade. Alguns possuem cargos oficiais; outros existem fora da estrutura governamental, mas sua influência os torna indispensáveis para compreender A Ordem.</p>
-
-            <div class="system-card">
-                <strong>1. O Líder Supremo — Aurelian Veyr</strong> (58 anos) — Poder: <strong>Possibilidades</strong>. Enxerga futuros possíveis derivados de escolhas. Calmo e paciente, busca o futuro em que o preço humano seja aceitável.
-            </div>
-
-            <div class="system-card">
-                <strong>2. O Mestre da Guerra — General Valerian Draven</strong> (51 anos) — Poder: <strong>Vetores</strong>. Percebe e manipula direções de força: desvia golpes, redireciona projéteis, reorganiza movimentos. Em escala militar, faz formações inteiras funcionarem como um sistema coordenado.
-            </div>
-
-            <div class="system-card">
-                <strong>3. A Segunda Mais Forte — Seraphine</strong> (34 anos) — Poder: <strong>Precedência</strong>. Pode estabelecer que uma ação tenha precedência sobre outra — uma defesa antes de um impacto, um ataque antes de uma regeneração. Último recurso militar, reservada e fora da política.
-            </div>
-
-            <div class="system-card">
-                <strong>4. O Conselheiro da Política — Edric Valmont</strong> (63 anos) — Poder: <strong>Convergência</strong>. Identifica objetivos, interesses e pontos de convergência entre pessoas. Percebe quais propostas satisfazem interesses diferentes.
-            </div>
-
-            <div class="system-card">
-                <strong>5. A Conselheira da Cultura — Celeste Laurent</strong> (42 anos) — Poder: <strong>Impressão</strong>. Deixa impressões emocionais em pessoas, objetos e lugares. Uma música pode carregar coragem; um monumento pode despertar uma lembrança.
-            </div>
-
-            <div class="system-card">
-                <strong>6. O Conselheiro da Economia — Cassian Roth</strong> (47 anos) — Poder: <strong>Equivalência</strong>. Estabelece equivalências temporárias entre propriedades compatíveis (resistência, peso, quantidade, impacto). Reorganiza relações de valor.
-            </div>
-
-            <div class="system-card">
-                <strong>7. A Conselheira da Defesa — Mara Eisen</strong> (56 anos) — Poder: <strong>Fortificação</strong>. Cria camadas defensivas sucessivas em estruturas e pessoas. Quanto mais tempo para preparar, mais complexa a fortificação.
-            </div>
-
-            <div class="system-card">
-                <strong>8. O Conselheiro da Inteligência — Lucien Crowe</strong> (39 anos) — Poder: <strong>Ausência</strong>. Cria lacunas na percepção — a mente não consolida aquilo que percebe.
-            </div>
-
-            <div class="system-card">
-                <strong>9. A Conselheira de Misticismo e Tecnologia — Aurelia Morgen</strong> (45 anos) — Poder: <strong>Interface</strong>. Cria conexões temporárias entre sistemas diferentes: Núcleos a máquinas, criaturas a equipamentos, artefatos a outros objetos.
-            </div>
-
-            <div class="system-card">
-                <strong>10. O Conselheiro de Logística — Elias Morgenstern</strong> (49 anos) — Poder: <strong>Fluxo</strong>. Percebe e otimiza fluxos. Identifica gargalos, desperdícios e rotas vulneráveis. Enxerga a cidade como uma rede de circulação.
-            </div>
-
-            <div class="system-card">
-                <strong>11. A Médica-Chefe — Helena Ardent</strong> (52 anos) — Poder: <strong>Diagnóstico</strong>. Percebe o estado interno de organismos: doenças, toxinas, mutações, alterações de energia e interferências de Poder.
-            </div>
-
-            <div class="system-card">
-                <strong>12. O Arquivista-Chefe — Edmund Hale</strong> (71 anos) — Poder: <strong>Contexto</strong>. Quando observa uma informação, percebe conexões com outras que já conhece. Quanto maior seu acervo mental, mais poderoso se torna.
-            </div>
-
-            <div class="system-card">
-                <strong>13. O Comandante da Guarda Real — Alistair Crow</strong> (44 anos) — Poder: <strong>Juramento</strong>. Estabelece juramentos sobrenaturais. Um juramento de proteção faz seu corpo reagir automaticamente a ameaças. Quebrar o próprio juramento possui consequências graves.
-            </div>
-
-            <div class="system-card">
-                <strong>14. O Guardião da Torre — Magnus Rehn</strong> (48 anos) — Poder: <strong>Limite</strong>. Estabelece limites sobrenaturais: impedir entrada ou saída, limitar velocidade ou bloquear determinada energia. Comandante da Zona da Torre.
-            </div>
-
-            <div class="system-card">
-                <strong>15. O Grande Explorador — Rafael Orpheus</strong> (36 anos) — Poder: <strong>Improviso</strong>. Utiliza objetos, ambientes e circunstâncias de maneiras sobrenaturalmente eficientes. Não cria soluções: amplia sua capacidade de encontrá-las.
-            </div>
-
-            <div class="system-card">
-                <strong>16. A Grande Comerciante de Núcleos — Vespera Cain</strong> (43 anos) — Poder: <strong>Afinidade</strong>. Percebe compatibilidade entre coisas — se um Núcleo combina com uma arma, pessoa ou artefato.
-            </div>
-
-            <div class="system-card">
-                <strong>17. A Diplomata — Isolde Maren</strong> (40 anos) — Poder: <strong>Trégua</strong>. Cria uma área em que determinadas formas de hostilidade são temporariamente suprimidas, permitindo negociação mesmo entre pessoas hostis.
-            </div>
-
-            <div class="system-card">
-                <strong>18. O Homem do Submundo — Silas</strong> (idade desconhecida) — Poder: <strong>Rastro</strong>. Percebe rastros deixados por ações — movimentações, objetos, pessoas, energia e informações.
-            </div>
-
-            <div class="system-card">
-                <strong>19. O Pesquisador Impossível — Octavian Rook</strong> (61 anos) — Poder: <strong>Hipótese</strong>. Cria hipóteses sobrenaturais e pode testá-las através de manifestações limitadas. Transforma pesquisa em experimentação direta.
-            </div>
-
-            <div class="system-card">
-                <strong>20. O Homem que Voltou da Torre — Ezekiel</strong> (aparentemente 32 anos) — Poder: <strong>desconhecido</strong>. Entrou em uma Torre extremamente perigosa e voltou sozinho. Ninguém sabe quanto tempo passou para ele. Alguns acreditam que talvez não tenha sido a única coisa que voltou.
             </div>
 
             <h4>A Ordem como Centro do Mundo</h4>
@@ -21094,8 +20874,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td style="white-space:nowrap; font-weight:bold;">Zelador de Sepulcros</td><td>Você não era um caçador.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Pesquisador Corporativo</td><td>Você trabalhou para uma das grandes corporações científicas da região, onde aprendeu que conhecimento também é mercadoria.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Sobrevivente d? ?¿?¿??¿?¿?</td><td>Você descobriu algo que não deveria ter descoberto.</td></tr>
-                        <tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região do Tempo</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Soldado da Legião Lunar</td><td>Você foi treinado para proteger as cidades sob a luz da Lua.</td></tr>
+<tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região do Tempo</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Herdeiro dos Dessandre</td><td>Você nasceu entre os Pintores.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Herdeiro dos Prellati</td><td>Você cresceu cercado por livros, documentos e relatos contraditórios.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Filho dos Lumière</td><td>Você cresceu em meio à música.</td></tr>
@@ -21124,14 +20904,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td style="white-space:nowrap; font-weight:bold;">Sobrevivente do TimeFall</td><td>Você sobreviveu a um TimeFall particularmente severo.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Criança de Duas Eras</td><td>Sua infância foi marcada por uma situação que você nunca conseguiu explicar completamente.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Sobrevivente da Torre</td><td>Você participou de uma expedição à Torre do Tempo e retornou.</td></tr>
-                        <tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região do Pesadelo</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Colecionador de Anacronismos</td><td>Você aprendeu a sobreviver negociando objetos que não deveriam existir.</td></tr>
+<tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região do Pesadelo</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Slayer da Zona de Transição</td><td>Você cresceu em Barreira vendo pessoas atravessarem os portões em direção à Terra do Pesadelo e retornarem carregando Núcleos, materiais e história...</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Extrator de Núcleos</td><td>Você trabalhou recolhendo os restos das criaturas abatidas pelos Slayers.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Recruta do Comando</td><td>Você cresceu vendo o Comando da Barreira como uma das poucas coisas entre a cidade e tudo aquilo que existe além dela.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Domador da Barreira</td><td>Você cresceu perto das instalações do Instituto de Dominação.</td></tr>
-                        <tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região da Vida</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Filho do Porto</td><td>Você cresceu no porto de Barreira, onde mercadorias, Slayers, soldados, pesquisadores e aventureiros chegam e partem diariamente.</td></tr>
+<tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região da Vida</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Herdeiro da Casa Aurelius</td><td>Você nasceu dentro de uma das famílias mais influentes de Aurora Nova.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Técnico da Cidade Viva</td><td>Você trabalhou mantendo a infraestrutura biológica de Aurora Nova.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Pesquisador do Instituto</td><td>Você passou anos dentro do Instituto Científico estudando a natureza, os Núcleos, criaturas e formas de utilizar organismos vivos para produzir med...</td></tr>
@@ -21146,8 +20926,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td style="white-space:nowrap; font-weight:bold;">Sobrevivente do Teste da Fruta</td><td>Aos dez anos, você entrou sozinho na floresta para realizar o Teste da Fruta.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Caçador de Materiais Raros</td><td>Você passava dias ou semanas explorando áreas afastadas de Alba em busca de materiais que não podiam ser encontrados perto da comunidade.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Aprendiz do Guerreiro</td><td>Você foi treinado por um dos guerreiros experientes de Alba.</td></tr>
-                        <tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região da Ordem</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Sem-Raiz</td><td>Você nunca se encaixou completamente em Alba.</td></tr>
+<tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região da Ordem</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Filho da Cidade Dourada</td><td>Você nasceu e cresceu em A Ordem, no coração da maior cidade do mundo.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Aprendiz do Conselho</td><td>Você passou parte da juventude trabalhando ou estudando próximo das instituições administrativas de A Ordem.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Explorador da Torre</td><td>Você fazia parte de um grupo autorizado a explorar a região próxima à Torre de A Ordem.</td></tr>
@@ -21157,8 +20937,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td style="white-space:nowrap; font-weight:bold;">Cartógrafo do Mundo</td><td>Você trabalhou produzindo mapas para viajantes, comerciantes, militares e exploradores.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Diplomata das Regiões</td><td>Você cresceu em meio aos representantes estrangeiros que frequentam A Ordem.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Médico da Capital</td><td>Você estudou em uma das instituições médicas de A Ordem, onde teve contato com pacientes vindos de praticamente todas as regiões.</td></tr>
-                        <tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região do Deserto</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Funcionário das Grandes Instituições</td><td>Você passou anos trabalhando em uma das enormes instituições que fazem A Ordem funcionar.</td></tr>
+<tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região do Deserto</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Guia das Dunas Móveis</td><td>Você cresceu acompanhando caravanas e expedições através de um território que muda todos os dias.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Filho da Facção</td><td>Você nasceu dentro de uma das facções que disputam o Deserto.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Caçador de Minhocas</td><td>Você desce onde quase ninguém desce.</td></tr>
@@ -21173,8 +20953,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr><td style="white-space:nowrap; font-weight:bold;">Ferro-Velho das Dunas</td><td>O deserto engole mais do que cidades — engole tecnologia.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Mensageiro das Rotas</td><td>Você atravessa o Deserto levando mensagens que ninguém confia a mapas ou registros.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Órfão da Barreira</td><td>Você cresceu à sombra da Barreira que separa o Deserto do resto do mundo.</td></tr>
-                        <tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região de Baranov</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Sobrevivente da Corrupção</td><td>Você foi exposto à Corrupção do Deserto — e sobreviveu.</td></tr>
+<tr><td colspan="2" style="background:#2a2438; color:var(--accent); font-weight:bold; letter-spacing:1px;">Região de Baranov</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Vigilante de Baranov</td><td>Você é um dos poucos escolhidos para patrulhar a superfície congelada do Domínio da Geada.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Minerador das Profundezas</td><td>Você trabalha nas minas que fazem de Baranov a maior potência mineradora do mundo.</td></tr>
                         <tr><td style="white-space:nowrap; font-weight:bold;">Maquinista da Ferrovia Subterrânea</td><td>Você vive nas ferrovias que conectam as cidades subterrâneas de Baranov.</td></tr>
@@ -27306,9 +27086,280 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="lore-box">
-                <strong>As próximas divindades:</strong> as divindades das demais regiões (Conhecimento, Tempo, Deserto, Leste e Central) serão adicionadas a esta seção conforme forem reveladas — cada uma com seus domínios, vassalos e segredos. A estrutura desta seção já está preparada para recebê-las.
+                <h2 id="deusa-conhecimento">O Conhecimento — Aquela que Sabe</h2>
+            <p><strong>Aquela que Sabe</strong> — a Deusa do Conhecimento. Uma das maiores estudiosas de sua época, dedicou sua vida ao Conhecimento. Sua verdadeira habilidade estava em compreender: uma informação que para outra pessoa poderia significar uma coisa, para ela poderia revelar dezenas de outras possibilidades. Ela foi a única entre os Sete que enxergou o mesmo problema que Arthur — e foi quem mais facilmente entendeu suas conclusões. Os dois estudaram juntos e perceberam o perigo que a Corrupção representava.</p>
+
+            <div class="system-card">
+                <strong>Seu domínio envolve:</strong> Conhecimento · Sabedoria · Memória · Preservação · Compreensão · Revelação.<br><br>
+                <em>"Aquilo que o Akasha não conhece deve ser descoberto."</em>
             </div>
+
+            <h3>O Akasha</h3>
+            <p>A maior dádiva associada à Deusa do Conhecimento é o <strong>Akasha</strong> — uma imensa biblioteca acessível diretamente pela mente. Aqueles que nascem na região — ou que são considerados dignos de recebê-la — podem manifestar uma conexão mental com o Akasha, consultando informações sem a necessidade de carregar livros ou pergaminhos.</p>
+
+            <div class="system-card">
+                <strong>Através dele, uma pessoa pode:</strong><br>
+                • Pesquisar conhecimentos já registrados;<br>
+                • Consultar mapas;<br>
+                • Identificar criaturas conhecidas;<br>
+                • Traduzir idiomas;<br>
+                • Acessar informações históricas;<br>
+                • Entrar em contato com outras pessoas à distância.
+            </div>
+
+            <h2 id="deus-tempo">O Tempo — O Deus do Tempo</h2>
+            <p><strong>O Deus do Tempo</strong> — uma das entidades responsáveis pela criação do mundo. Seu domínio não se limita à passagem das horas: ele também se estende ao espaço, à causalidade e à própria continuidade da existência.</p>
+
+            <div class="system-card">
+                <strong>Seu domínio envolve:</strong> Tempo · Espaço · Causalidade · Continuidade · Passado · Presente · Futuro.<br><br>
+                <em>"Em qual tempo?"</em>
+            </div>
+
+            <h3>As Cúpulas</h3>
+            <p>As Quatro Cúpulas da região do Tempo são frequentemente associadas ao Deus do Tempo. Algumas pessoas acreditam que sejam santuários históricos; outras as consideram prisões ou experimentos do Deus do Tempo. A verdade permanece desconhecida para a maioria da população.</p>
+
+            <h3>A Torre do Tempo</h3>
+            <p>A Torre do Tempo é considerada o principal santuário do Deus do Tempo. Ninguém sabe exatamente o que existe em seus níveis mais profundos. E aqueles que tentam descobrir raramente retornam.</p>
+
+            <h2 id="elyra">A Vida — Elyra, a Deusa da Vida</h2>
+            <p><strong>Elyra</strong> — a Deusa da Vida. Antes da corrupção, era uma das Sete. Era uma mulher calma, curiosa, paciente e extremamente observadora. Seu objetivo era compreender a vida em sua totalidade. Seu poder, <strong>Gênese Vital</strong>, permitia manipular processos biológicos, regenerar tecidos, reconstruir organismos, estimular crescimento, modificar corpos e acelerar processos naturais.</p>
+
+            <div class="system-card">
+                <strong>Seu domínio envolve:</strong> Nascimento · Crescimento · Regeneração · Evolução · Adaptação · Continuidade.<br><br>
+                Sua filosofia era simples: <strong>"Enquanto algo estiver vivo, ainda existe uma possibilidade."</strong><br><br>
+                A Corrupção não apagou completamente aquilo que Elyra era. Ela apenas levou sua ideia ao extremo.<br><br>
+                Agora, para Elyra, a morte não representa descanso ou encerramento. Representa uma falha. A evolução não possui limite. A regeneração não deveria parar. A vida não deveria terminar.<br><br>
+                Seu objetivo não é simplesmente destruir o mundo. É fazer com que ele continue vivo, independentemente da forma que isso precise assumir.<br><br>
+                <em>"A Vida deve continuar."</em>
+            </div>
+
+            <h3>O Limite Vital</h3>
+            <p>O principal artefato relacionado à Deusa da Vida é conhecido como <strong>O Limite Vital</strong>. Sua existência representa justamente aquilo que Elyra perdeu. O artefato não representa a morte — representa o <strong>limite</strong>.</p>
+
+            <div class="system-card">
+                <strong>Sua capacidade fundamental é interromper processos sobrenaturais relacionados à vida:</strong><br>
+                • Regeneração;<br>
+                • Mutação;<br>
+                • Adaptação;<br>
+                • Crescimento acelerado;<br>
+                • Reconstrução;<br>
+                • Gênese Vital.<br><br>
+                Diante dele, existe uma regra simples: <strong>"Até aqui."</strong>
+            </div>
+
+            <div class="lore-box">
+                <strong>Como derrotar Elyra:</strong> contra Elyra, o artefato pode suprimir temporariamente sua Gênese Vital, impedindo que ela utilize suas capacidades divinas de regeneração, adaptação e criação. Somente após derrotar seu corpo e utilizar o artefato contra sua essência é possível transformá-la em um <strong>Núcleo da Gênese Vital</strong>.<br><br>
+                Enquanto esse Núcleo existir, Elyra ainda poderá retornar. Por isso, o Núcleo precisa ser destruído. Quando isso acontece, Elyra deixa de existir definitivamente e o Limite Vital desaparece junto com sua função.
+            </div>
+
+            
+
+            <strong>As próximas divindades:</strong> as divindades das regiões do Deserto e da Ordem (Central) serão adicionadas a esta seção conforme forem reveladas — cada uma com seus domínios, vassalos e segredos. A estrutura desta seção já está preparada para recebê-las.
+            </div>
+        </section><section id="regioes-detalhe">
+            <h1>II-C. As Regiões em Detalhe — NPCs e Aspectos</h1>
+
+            <p>Esta seção reúne os detalhes de campanha das regiões: os <strong>Aspectos</strong> (as estrelas de poder de cada região) e os <strong>NPCs mais importantes</strong> que movem a política, a economia e a segurança de cada cidade. São informações de apoio para o Mestre criar encontros, missões e conflitos com profundidade.</p>
+
+            <div class="lore-box">
+                <strong>Aviso ao Mestre:</strong> estes NPCs e Aspectos são material de campanha. Apresente-os aos jogadores conforme eles interagem com as regiões — não como uma lista de leitura. Cada NPC pode ser um aliado, um rival, um contratante ou uma ameaça, dependendo das escolhas do grupo.
+            </div>
+
+<h2>Os Aspectos de Barreira</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Aspecto</th><th>Estrelas</th></tr></thead>
+                    <tbody>
+                        <tr><td>⚔️ Poder Militar</td><td>⭐⭐⭐⭐⭐</td></tr>
+                        <tr><td>📜 Poder Político</td><td>⭐</td></tr>
+                        <tr><td>🎭 Cultura</td><td>⭐⭐</td></tr>
+                        <tr><td>🪙 Economia</td><td>⭐⭐</td></tr>
+                        <tr><td>🛡️ Defesa</td><td>⭐</td></tr>
+                        <tr><td>👁️ Inteligência</td><td>⭐⭐</td></tr>
+                        <tr><td>🧪 Misticismo & Tecnologia</td><td>⭐</td></tr>
+                        <tr><td>🪵 Logística & Infraestrutura</td><td>⭐⭐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>TOTAL: ⭐16</strong><br><br>
+                O maior destaque de Barreira é seu poder militar — os próprios combatentes são a principal linha de defesa, e as criaturas perigosas dificilmente conseguem sequer chegar à cidade. A cidade possui pouca influência política externa, quase não depende de muralhas e fortificações, e sua cultura foi moldada pela sobrevivência e pela proximidade com a Terra do Pesadelo.<br><br>
+                <strong>"Eles não construíram uma muralha porque não precisam de uma. A muralha são as próprias pessoas."</strong>
+            </div>
+
+            
+<h2>Os NPCs Mais Importantes de Barreira</h2>
+            <p>Os quatorze NPCs abaixo formam o núcleo humano da cidade. Alguns possuem cargos oficiais; outros existem fora da estrutura governamental, mas sua influência os torna indispensáveis para compreender Barreira.</p>
+
+            <div class="system-card">
+                <strong>1. O Regente — Augusto Veyron</strong> — Poder: <strong>Domínio Territorial</strong>. Estabelece uma área sob seu domínio e percebe tudo que acontece dentro dela; quanto maior a área, menor a precisão. Em Barreira, sua Manifestação é especialmente poderosa porque ele conhece e utiliza a própria estrutura da cidade para ampliar seu alcance. Calmo, inteligente e pragmático, raramente demonstra autoridade através de ameaças — ele simplesmente espera que as pessoas entendam as consequências de suas decisões.
+            </div>
+
+            <div class="system-card">
+                <strong>2. A Comandante do Exército — Helena Voss</strong> — Poder: <strong>Fortificação</strong>. Aumenta drasticamente a resistência de pessoas, estruturas e equipamentos dentro de uma área determinada; quanto mais conhece a estrutura que defende, mais eficiente é o poder. Rígida, disciplinada e extremamente direta, respeita profundamente os bons Slayers — mas, para ela, um Slayer talentoso continua sendo um civil até receber uma ordem oficial para atuar.
+            </div>
+
+            <div class="system-card">
+                <strong>3. O Mestre dos Slayers — Dante Arkwright</strong> — Poder: <strong>Predador</strong>. Analisa uma criatura e identifica rapidamente seus pontos vulneráveis, padrões de movimento e comportamento de combate; quanto mais tempo observa o alvo, mais informações obtém. Extrovertido, provocador e extremamente competitivo, adora Slayers talentosos e acredita que eles precisam aprender a pensar por conta própria — porque ninguém estará ao lado deles dentro da Terra do Pesadelo.
+            </div>
+
+            <div class="system-card">
+                <strong>4. A Diretora da Névoa — Mirela Soren</strong> — Poder: <strong>Cartografia</strong>. Percebe e registra alterações espaciais dentro de uma região, criando um mapa mental extremamente preciso; detecta mudanças recentes no ambiente, rotas utilizadas e regiões alteradas. Obsessivamente organizada, trata a Névoa como um problema matemático e pode perceber quando alguma coisa está errada antes de praticamente qualquer outra pessoa.
+            </div>
+
+            <div class="system-card">
+                <strong>5. O Presidente do Consórcio — Victor Halden</strong> — Poder: <strong>Avaliação</strong>. Compreende o valor, composição e utilidade potencial de um objeto ou recurso ao tocá-lo; quanto mais raro ou desconhecido o objeto, mais esforço é necessário. Carismático, elegante e extremamente ganancioso, não precisa ameaçar ninguém — prefere fazer a pessoa perceber que aceitar sua proposta é mais conveniente.
+            </div>
+
+            <div class="system-card">
+                <strong>6. O Diretor do Instituto de Dominação — Orfeu Keller</strong> — Poder: <strong>Laço Bestial</strong>. Estabelece uma conexão temporária com criaturas bestiais e compreende suas emoções, instintos e intenções — não é controle mental. Excêntrico e completamente apaixonado por criaturas, trata um monstro de três toneladas com a mesma tranquilidade que outra pessoa teria ao observar um cachorro.
+            </div>
+
+            <div class="system-card">
+                <strong>7. O Comandante do Corpo de Contenção — Rafael Draven</strong> — Poder: <strong>Anulação</strong>. Enfraquece temporariamente manifestações e habilidades dentro de uma área limitada; quanto mais poderosa a habilidade afetada, maior o esforço necessário. Silencioso, sério e extremamente paciente, é provavelmente o homem mais difícil de provocar em Barreira. Quando Rafael aparece, significa que a situação deixou de ser normal.
+            </div>
+
+            <div class="system-card">
+                <strong>8. A Capitã do Porto — Mara Bellini</strong> — Poder: <strong>Maré</strong>. Manipula grandes volumes de água em uma área limitada, podendo alterar correntes, criar ondas e controlar embarcações de maneira rudimentar. Barulhenta, divertida e extremamente sociável, conhece praticamente todo mundo que chega a Barreira e sabe imediatamente quando alguém está mentindo sobre o motivo de sua viagem.
+            </div>
+
+            <div class="system-card">
+                <strong>9. O Médico Principal — Dr. Elias Moreau</strong> — Poder: <strong>Cirurgia Vital</strong>. Manipula tecidos vivos com extrema precisão, acelerando procedimentos médicos e estabilizando ferimentos graves. Sarcástico, cansado e extremamente competente, não possui o menor interesse em saber se alguém é famoso, rico ou importante — se alguém chegar ferido, ele simplesmente trata.
+            </div>
+
+            <div class="system-card">
+                <strong>10. A Chefe da Segurança Interna — Lívia Crane</strong> — Poder: <strong>Restrição</strong>. Cria marcas de energia que limitam temporariamente os movimentos de uma pessoa; quanto mais a pessoa resiste, mais energia é necessária. Observadora, desconfiada e extremamente inteligente, seu trabalho é descobrir quem está mentindo.
+            </div>
+
+            <div class="system-card">
+                <strong>11. O Slayer Veterano — Caio Rask</strong> — Poder: <strong>Predação Adaptativa</strong>. Seu corpo desenvolve pequenas adaptações temporárias depois de sofrer repetidamente determinado tipo de ameaça. Relaxado, irresponsável e aparentemente burro, na prática é extremamente experiente — e costuma dizer coisas como "Relaxa. Se fosse pra matar a gente, já teria matado." Às vezes está certo. Às vezes não.
+            </div>
+
+            <div class="system-card">
+                <strong>12. A Domadora — Nadia Volkov</strong> — Poder: <strong>Comando Bestial</strong>. Sua voz pode impor ordens simples a criaturas bestiais que reconheçam sua autoridade. Fria com humanos, extremamente gentil com criaturas, possui uma relação quase maternal com elas e trata qualquer tentativa de machucá-las como uma ofensa pessoal.
+            </div>
+
+            <div class="system-card">
+                <strong>13. O Slayer Problemático — Dorian Vale</strong> — Poder: <strong>Ruptura</strong>. Concentra energia em ataques extremamente destrutivos capazes de romper defesas e estruturas. Arrogante, impulsivo e extremamente confiante, acredita que as regras existem principalmente para pessoas que não conseguem sobreviver sem elas. Seu nível e experiência fazem com que Barreira ainda o considere um recurso valioso.
+            </div>
+
+            <div class="system-card">
+                <strong>14. O Administrador do Registro — Samuel Orris</strong> — Poder: <strong>Registro Absoluto</strong>. Tudo que Samuel registra através de sua Manifestação não pode ser alterado sem que ele perceba. Extremamente tranquilo, educado e aparentemente comum, sabe exatamente quem entrou na Terra do Pesadelo, quando entrou, qual autorização possuía e se retornou.
+            </div>
+
+            
+<h2>Os 16 Aspectos da Região</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Aspecto</th><th>Estrelas</th></tr></thead>
+                    <tbody>
+                        <tr><td>⚔️ Poder Militar</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>📜 Poder Político</td><td>⭐⭐</td></tr>
+                        <tr><td>🎭 Cultura</td><td>⭐</td></tr>
+                        <tr><td>🪙 Economia</td><td>⭐⭐⭐</td></tr>
+                        <tr><td>🛡️ Defesa</td><td>⭐⭐</td></tr>
+                        <tr><td>👁️ Inteligência</td><td>⭐</td></tr>
+                        <tr><td>🧪 Misticismo & Tecnologia</td><td>⭐⭐⭐⭐</td></tr>
+                        <tr><td>🪵 Logística & Infraestrutura</td><td>⭐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lore-box">
+                <strong>TOTAL: ⭐16</strong><br><br>
+                A distribuição representa uma cidade extremamente desenvolvida, mas com especializações claras. Misticismo e Tecnologia é sua maior concentração de excelência, enquanto Militar e Economia também possuem peso significativo.<br><br>
+                "A força de A Ordem não está em ser excepcional em tudo. Está em saber exatamente onde cada parte precisa funcionar."
+            </div>
+
+            
+<h2>Os 20 NPCs Mais Importantes de A Ordem</h2>
+            <p>Os vinte NPCs abaixo formam o núcleo humano da cidade. Alguns possuem cargos oficiais; outros existem fora da estrutura governamental, mas sua influência os torna indispensáveis para compreender A Ordem.</p>
+
+            <div class="system-card">
+                <strong>1. O Líder Supremo — Aurelian Veyr</strong> (58 anos) — Poder: <strong>Possibilidades</strong>. Enxerga futuros possíveis derivados de escolhas. Calmo e paciente, busca o futuro em que o preço humano seja aceitável.
+            </div>
+
+            <div class="system-card">
+                <strong>2. O Mestre da Guerra — General Valerian Draven</strong> (51 anos) — Poder: <strong>Vetores</strong>. Percebe e manipula direções de força: desvia golpes, redireciona projéteis, reorganiza movimentos. Em escala militar, faz formações inteiras funcionarem como um sistema coordenado.
+            </div>
+
+            <div class="system-card">
+                <strong>3. A Segunda Mais Forte — Seraphine</strong> (34 anos) — Poder: <strong>Precedência</strong>. Pode estabelecer que uma ação tenha precedência sobre outra — uma defesa antes de um impacto, um ataque antes de uma regeneração. Último recurso militar, reservada e fora da política.
+            </div>
+
+            <div class="system-card">
+                <strong>4. O Conselheiro da Política — Edric Valmont</strong> (63 anos) — Poder: <strong>Convergência</strong>. Identifica objetivos, interesses e pontos de convergência entre pessoas. Percebe quais propostas satisfazem interesses diferentes.
+            </div>
+
+            <div class="system-card">
+                <strong>5. A Conselheira da Cultura — Celeste Laurent</strong> (42 anos) — Poder: <strong>Impressão</strong>. Deixa impressões emocionais em pessoas, objetos e lugares. Uma música pode carregar coragem; um monumento pode despertar uma lembrança.
+            </div>
+
+            <div class="system-card">
+                <strong>6. O Conselheiro da Economia — Cassian Roth</strong> (47 anos) — Poder: <strong>Equivalência</strong>. Estabelece equivalências temporárias entre propriedades compatíveis (resistência, peso, quantidade, impacto). Reorganiza relações de valor.
+            </div>
+
+            <div class="system-card">
+                <strong>7. A Conselheira da Defesa — Mara Eisen</strong> (56 anos) — Poder: <strong>Fortificação</strong>. Cria camadas defensivas sucessivas em estruturas e pessoas. Quanto mais tempo para preparar, mais complexa a fortificação.
+            </div>
+
+            <div class="system-card">
+                <strong>8. O Conselheiro da Inteligência — Lucien Crowe</strong> (39 anos) — Poder: <strong>Ausência</strong>. Cria lacunas na percepção — a mente não consolida aquilo que percebe.
+            </div>
+
+            <div class="system-card">
+                <strong>9. A Conselheira de Misticismo e Tecnologia — Aurelia Morgen</strong> (45 anos) — Poder: <strong>Interface</strong>. Cria conexões temporárias entre sistemas diferentes: Núcleos a máquinas, criaturas a equipamentos, artefatos a outros objetos.
+            </div>
+
+            <div class="system-card">
+                <strong>10. O Conselheiro de Logística — Elias Morgenstern</strong> (49 anos) — Poder: <strong>Fluxo</strong>. Percebe e otimiza fluxos. Identifica gargalos, desperdícios e rotas vulneráveis. Enxerga a cidade como uma rede de circulação.
+            </div>
+
+            <div class="system-card">
+                <strong>11. A Médica-Chefe — Helena Ardent</strong> (52 anos) — Poder: <strong>Diagnóstico</strong>. Percebe o estado interno de organismos: doenças, toxinas, mutações, alterações de energia e interferências de Poder.
+            </div>
+
+            <div class="system-card">
+                <strong>12. O Arquivista-Chefe — Edmund Hale</strong> (71 anos) — Poder: <strong>Contexto</strong>. Quando observa uma informação, percebe conexões com outras que já conhece. Quanto maior seu acervo mental, mais poderoso se torna.
+            </div>
+
+            <div class="system-card">
+                <strong>13. O Comandante da Guarda Real — Alistair Crow</strong> (44 anos) — Poder: <strong>Juramento</strong>. Estabelece juramentos sobrenaturais. Um juramento de proteção faz seu corpo reagir automaticamente a ameaças. Quebrar o próprio juramento possui consequências graves.
+            </div>
+
+            <div class="system-card">
+                <strong>14. O Guardião da Torre — Magnus Rehn</strong> (48 anos) — Poder: <strong>Limite</strong>. Estabelece limites sobrenaturais: impedir entrada ou saída, limitar velocidade ou bloquear determinada energia. Comandante da Zona da Torre.
+            </div>
+
+            <div class="system-card">
+                <strong>15. O Grande Explorador — Rafael Orpheus</strong> (36 anos) — Poder: <strong>Improviso</strong>. Utiliza objetos, ambientes e circunstâncias de maneiras sobrenaturalmente eficientes. Não cria soluções: amplia sua capacidade de encontrá-las.
+            </div>
+
+            <div class="system-card">
+                <strong>16. A Grande Comerciante de Núcleos — Vespera Cain</strong> (43 anos) — Poder: <strong>Afinidade</strong>. Percebe compatibilidade entre coisas — se um Núcleo combina com uma arma, pessoa ou artefato.
+            </div>
+
+            <div class="system-card">
+                <strong>17. A Diplomata — Isolde Maren</strong> (40 anos) — Poder: <strong>Trégua</strong>. Cria uma área em que determinadas formas de hostilidade são temporariamente suprimidas, permitindo negociação mesmo entre pessoas hostis.
+            </div>
+
+            <div class="system-card">
+                <strong>18. O Homem do Submundo — Silas</strong> (idade desconhecida) — Poder: <strong>Rastro</strong>. Percebe rastros deixados por ações — movimentações, objetos, pessoas, energia e informações.
+            </div>
+
+            <div class="system-card">
+                <strong>19. O Pesquisador Impossível — Octavian Rook</strong> (61 anos) — Poder: <strong>Hipótese</strong>. Cria hipóteses sobrenaturais e pode testá-las através de manifestações limitadas. Transforma pesquisa em experimentação direta.
+            </div>
+
+            <div class="system-card">
+                <strong>20. O Homem que Voltou da Torre — Ezekiel</strong> (aparentemente 32 anos) — Poder: <strong>desconhecido</strong>. Entrou em uma Torre extremamente perigosa e voltou sozinho. Ninguém sabe quanto tempo passou para ele. Alguns acreditam que talvez não tenha sido a única coisa que voltou.
+            </div>
+
+            
         </section>
+
+      
       <div style="height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);margin:2.8rem 0;opacity:.35"></div>
       <section id="criacao-monstros">
             <h1>III. Criação e Gestão de Monstros</h1>
