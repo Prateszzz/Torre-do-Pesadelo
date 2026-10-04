@@ -4128,22 +4128,22 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 3; }                     /* Atributos */
   #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 4; }                 /* Ficha Base */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 5; }           /* Poder */
-  #ficha-content > .ficha-layout-cols { order: 6; }                                      /* Recursos de Combate / Armas */
-  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 8; }      /* Perícias */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 9; }          /* Árvore da Alma */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 10; }         /* Traços da Alma */
-  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 11; }         /* Inventário */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 12; }             /* Aparência */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 13; }           /* Lore */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 14; } /* Relacionamentos */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 15; }        /* Combate */
-  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 16; }              /* Pets & Montarias */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 17; }    /* Acampamento */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 18; }          /* Forja e Barmans */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 19; }        /* Sessões e XP */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 20; }    /* Utilizações Registradas */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-rituais) { order: 21; }        /* Rituais */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 22; }      /* Corrupção & Atenção */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 6; }     /* Utilizações Registradas */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-rituais) { order: 7; }         /* Rituais */
+  #ficha-content > .ficha-layout-cols { order: 8; }                                      /* Recursos de Combate / Armas */
+  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 10; }     /* Perícias */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 11; }         /* Árvore da Alma */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 12; }         /* Traços da Alma */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 13; }      /* Corrupção & Atenção */
+  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 14; }         /* Inventário */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 15; }             /* Aparência */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 16; }           /* Lore */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 17; } /* Relacionamentos */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 18; }        /* Combate */
+  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 19; }              /* Pets & Montarias */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 20; }    /* Acampamento */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 21; }          /* Forja e Barmans */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 22; }        /* Sessões e XP */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-grimorio) { order: 23; }       /* Grimório */
 }
 
@@ -4184,10 +4184,10 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 
   /* ── #FICHA-CONTENT COMO COLUNA ÚNICA ORDENÁVEL ──
      Nova ordem mobile: Personagens > Hero > Atributos > Ficha Base > Poder >
-     Recursos de Combate > Armas > Perícias > Árvore da Alma > Traços da Alma >
-     Inventário > Aparência > Lore > Relacionamentos > Combate > Pets & Montarias >
-     Acampamento > Forja e Barmans > Sessões e XP > Utilizações Registradas >
-     Rituais > Corrupção & Atenção > Grimório */
+     Utilizações Registradas > Rituais > Recursos de Combate > Armas > Perícias >
+     Árvore da Alma > Traços da Alma > Corrupção & Atenção > Inventário > Aparência >
+     Lore > Relacionamentos > Combate > Pets & Montarias > Acampamento >
+     Forja e Barmans > Sessões e XP > Grimório */
   #ficha-content {
     display: flex;
     flex-direction: column;
@@ -4202,6 +4202,8 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   #ficha-content > .ficha-full-row:has(.atributos-grid) { order: 3; }                     /* Atributos */
   #ficha-content > .ficha-panel.ficha-full-row:has(#f-nivel) { order: 4; }                 /* Ficha Base */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-poder) { order: 5; }           /* Poder */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 6; }     /* Utilizações Registradas */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-rituais) { order: 7; }         /* Rituais */
 
   /* Layout de duas colunas (Recursos / Armas) -> coluna única, cada bloco direto no fluxo */
   .ficha-layout-cols {
@@ -4210,25 +4212,23 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
   .ficha-col-left, .ficha-col-right {
     display: contents;
   }
-  .ficha-col-left .ficha-panel  { order: 6; } /* Recursos de Combate */
-  .ficha-col-right .ficha-panel { order: 7; } /* Armas */
+  .ficha-col-left .ficha-panel  { order: 8; } /* Recursos de Combate */
+  .ficha-col-right .ficha-panel { order: 9; } /* Armas */
 
-  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 8; }      /* Perícias */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 9; }          /* Árvore da Alma */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 10; }         /* Traços da Alma */
+  #ficha-content .ficha-panel.ficha-full-row:has(#pericias-panel-body) { order: 10; }     /* Perícias */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-arvore) { order: 11; }         /* Árvore da Alma */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-tracos) { order: 12; }         /* Traços da Alma */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 13; }      /* Corrupção & Atenção */
 
-  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 11; }         /* Inventário */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 12; }             /* Aparência */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 13; }           /* Lore */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 14; } /* Relacionamentos */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 15; }        /* Combate */
-  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 16; }              /* Pets & Montarias */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 17; }    /* Acampamento */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 18; }          /* Forja e Barmans */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 19; }        /* Sessões e XP */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-utilizacoes) { order: 20; }    /* Utilizações Registradas */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-rituais) { order: 21; }        /* Rituais */
-  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-corrupcao) { order: 22; }      /* Corrupção & Atenção */
+  #ficha-content .ficha-panel.ficha-full-row:has(#inv-itens-tbody) { order: 14; }         /* Inventário */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#f-cabelos) { order: 15; }             /* Aparência */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-lore) { order: 16; }           /* Lore */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-relacionamentos) { order: 17; } /* Relacionamentos */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-combate) { order: 18; }        /* Combate */
+  #ficha-content .ficha-panel.ficha-full-row:has(#pets-lista) { order: 19; }              /* Pets & Montarias */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-acampamento) { order: 20; }    /* Acampamento */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-forja) { order: 21; }          /* Forja e Barmans */
+  #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-sessoes) { order: 22; }        /* Sessões e XP */
   #ficha-content > .ficha-panel.ficha-full-row:has(#toggle-grimorio) { order: 23; }       /* Grimório */
 
   .save-bar { order: 100; }
