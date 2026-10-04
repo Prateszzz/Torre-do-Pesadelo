@@ -15919,7 +15919,7 @@ function registrarSessao() {
 // ─── C11 · ÁRVORE DA ALMA — 4 Aspectos × 10 níveis (livro #arvore-alma) ───
 const ARVORE_DADOS = {
   belico: [
-    { nv:1, nome:'Instinto Marcial', efeito:'Maestria em 3 perícias: Atletismo, Reflexo e Luta OU Pontaria (escolha 1). Ataques causam <strong>1d10</strong> em vez de 1d8.' },
+    { nv:1, nome:'Instinto Marcial', efeito:'Especialização em 3 perícias: Atletismo, Reflexo e Luta OU Pontaria (escolha 1). Ataques causam <strong>1d10</strong> em vez de 1d8.' },
     { nv:2, nome:'Foco de Batalha', efeito:'Vantagem nas 3 perícias do próprio Aspecto (Atletismo, Reflexo e Luta/Pontaria) durante combate.' },
     { nv:3, nome:'Versatilidade Marcial', efeito:'Pode usar Luta ou Pontaria no lugar de outra perícia quando a situação puder ser resolvida através de sua capacidade marcial. Exige justificativa do Mestre.' },
     { nv:4, nome:'Contra-Ataque', efeito:'Quando uma criatura errar um ataque contra você, pode realizar imediatamente um ataque. 1× por rodada, gastando sua Reação.' },
@@ -15931,7 +15931,7 @@ const ARVORE_DADOS = {
     { nv:10, nome:'Domínio Marcial Absoluto', efeito:'Vantagem em 1 jogada de ataque por rodada. Recebe 1 <strong>Técnica Suprema Bélica</strong>.' }
   ],
   lucido: [
-    { nv:1, nome:'Alma Desperta', efeito:'Maestria em 3 perícias: Navegação, Vontade e Magia OU Feitiçaria (escolha 1). Magia é o uso direto de poderes; Feitiçaria exige preparação, cântico ou ritual. +50% XP ao absorver Núcleos. Vantagem para identificar e avaliar Núcleos.' },
+    { nv:1, nome:'Alma Desperta', efeito:'Especialização em 3 perícias: Navegação, Vontade e Magia OU Feitiçaria (escolha 1). Magia é o uso direto de poderes; Feitiçaria exige preparação, cântico ou ritual. +50% XP ao absorver Núcleos. Vantagem para identificar e avaliar Núcleos.' },
     { nv:2, nome:'Domínio da Manifestação', efeito:'Vantagem em 1 utilização da Manifestação por rodada. A utilização pode ser uma ação de ataque, caso cause dano. Se realizar várias utilizações na mesma rodada, escolhe apenas 1 para receber a Vantagem.' },
     { nv:3, nome:'Versatilidade da Alma', efeito:'Pode usar Magia ou Feitiçaria no lugar de outra perícia quando sua Manifestação permitir resolver a situação. Exige justificativa do Mestre.' },
     { nv:4, nome:'Manifestação Rápida', efeito:'Recebe uma Ação Bônus adicional 1× por rodada para utilizar EXCLUSIVAMENTE a Manifestação. Pode ser usada para QUALQUER utilização (não apenas Simples).' },
@@ -15943,7 +15943,7 @@ const ARVORE_DADOS = {
     { nv:10, nome:'Transcendência da Alma', efeito:'Recebe 1 <strong>Técnica Suprema</strong> + 1 <strong>Passiva Suprema</strong> relacionadas à sua Manifestação.' }
   ],
   resiliente: [
-    { nv:1, nome:'Corpo de Ferro', efeito:'Maestria em 3 perícias: Integridade, Fortitude e Sobrevivência. Ao sofrer dano, acumula +1 na próxima jogada de ataque ou teste de Vigor (acúmulo máximo +3; zera ao usar).' },
+    { nv:1, nome:'Corpo de Ferro', efeito:'Especialização em 3 perícias: Integridade, Fortitude e Sobrevivência. Ao sofrer dano, acumula +1 na próxima jogada de ataque ou teste de Vigor (acúmulo máximo +3; zera ao usar).' },
     { nv:2, nome:'Resistência Treinada', efeito:'Vantagem nas 3 perícias do Nível 1.' },
     { nv:3, nome:'Versatilidade Resiliente', efeito:'Pode usar suas perícias do Aspecto no lugar de outras perícias quando puder resolver a situação através de força, resistência ou sobrevivência. Exige justificativa do Mestre.' },
     { nv:4, nome:'Redução Absoluta', efeito:'Reduz 4 pontos de todo dano recebido, inclusive dano verdadeiro.' },
@@ -15955,7 +15955,7 @@ const ARVORE_DADOS = {
     { nv:10, nome:'Adaptação Absoluta', efeito:'Cada vez que uma fonte o atinge, recebe +2 Redução de Dano e +1 Absorção contra ela. Acumula até 3 vezes: +6 RD e +3 Absorção. Recebe 1 <strong>Técnica Suprema Resiliente</strong>.' }
   ],
   perceptivo: [
-    { nv:1, nome:'Olhos da Alma', efeito:'Maestria em 3 perícias: Intuição, Percepção e Investigação. Pode pedir ao Mestre 1 dica verdadeira e relevante sobre a situação. 3× por sessão.' },
+    { nv:1, nome:'Olhos da Alma', efeito:'Especialização em 3 perícias: Intuição, Percepção e Investigação. Pode pedir ao Mestre 1 dica verdadeira e relevante sobre a situação. 3× por sessão.' },
     { nv:2, nome:'Percepção Aguçada', efeito:'Vantagem nas 3 perícias do Nível 1.' },
     { nv:3, nome:'Versatilidade Perceptiva', efeito:'Pode usar Intuição, Percepção, Reflexo, Investigação ou Astúcia no lugar de outras perícias quando fizer sentido. Exige justificativa do Mestre.' },
     { nv:4, nome:'Observação', efeito:'Ao observar uma criatura, acumula benefícios por rodada (máx 3 estágios): 1ª rodada: Vantagem na próxima jogada. 2ª rodada: Vantagem em ações não ofensivas e Desvantagem do alvo. 3ª rodada: Vantagem em todas as ações e Desvantagem do alvo em todas as ações. Enquanto continuar gastando a Ação Bônus para observar o MESMO alvo, mantém os bônus. Para de observar ou muda de alvo → perde o acúmulo.' },
@@ -24079,7 +24079,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <table>
                     <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Instinto Marcial</strong></td><td>Maestria em 3 perícias: Atletismo, Reflexo e Luta OU Pontaria (escolha 1). Ataques causam <strong>1d10</strong> em vez de 1d8.</td></tr>
+                        <tr><td><strong>1</strong></td><td><strong>Instinto Marcial</strong></td><td>Especialização em 3 perícias: Atletismo, Reflexo e Luta OU Pontaria (escolha 1). Ataques causam <strong>1d10</strong> em vez de 1d8.</td></tr>
                         <tr><td><strong>2</strong></td><td><strong>Foco de Batalha</strong></td><td>Vantagem nas 3 perícias do próprio Aspecto (Atletismo, Reflexo e Luta/Pontaria) durante combate.</td></tr>
                         <tr><td><strong>3</strong></td><td><strong>Versatilidade Marcial</strong></td><td>Pode usar Luta ou Pontaria no lugar de outra perícia quando a situação puder ser resolvida através de sua capacidade marcial. Exige justificativa do Mestre.</td></tr>
                         <tr><td><strong>4</strong></td><td><strong>Contra-Ataque</strong></td><td>Quando uma criatura errar um ataque contra você, pode realizar imediatamente um ataque. 1× por rodada, gastando sua Reação.</td></tr>
@@ -24101,7 +24101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <table>
                     <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Alma Desperta</strong></td><td>Maestria em 3 perícias: Navegação, Vontade e Magia OU Feitiçaria (escolha 1). Magia é o uso direto de poderes; Feitiçaria exige preparação, cântico ou ritual. +50% XP ao absorver Núcleos. Vantagem para identificar e avaliar Núcleos.</td></tr>
+                        <tr><td><strong>1</strong></td><td><strong>Alma Desperta</strong></td><td>Especialização em 3 perícias: Navegação, Vontade e Magia OU Feitiçaria (escolha 1). Magia é o uso direto de poderes; Feitiçaria exige preparação, cântico ou ritual. +50% XP ao absorver Núcleos. Vantagem para identificar e avaliar Núcleos.</td></tr>
                         <tr><td><strong>2</strong></td><td><strong>Domínio da Manifestação</strong></td><td>Vantagem em 1 utilização da Manifestação por rodada. A utilização pode ser uma ação de ataque, caso cause dano. Se realizar várias utilizações na mesma rodada, escolhe apenas 1 para receber a Vantagem.</td></tr>
                         <tr><td><strong>3</strong></td><td><strong>Versatilidade da Alma</strong></td><td>Pode usar Magia ou Feitiçaria no lugar de outra perícia quando sua Manifestação permitir resolver a situação. Exige justificativa do Mestre.</td></tr>
                         <tr><td><strong>4</strong></td><td><strong>Manifestação Rápida</strong></td><td>Recebe uma Ação Bônus adicional 1× por rodada para utilizar EXCLUSIVAMENTE a Manifestação. Pode ser usada para QUALQUER utilização (não apenas Simples).</td></tr>
@@ -24123,7 +24123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <table>
                     <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Corpo de Ferro</strong></td><td>Maestria em 3 perícias: Integridade, Fortitude e Sobrevivência. Ao sofrer dano, acumula +1 na próxima jogada de ataque ou teste de Vigor (acúmulo máximo +3; zera ao usar).</td></tr>
+                        <tr><td><strong>1</strong></td><td><strong>Corpo de Ferro</strong></td><td>Especialização em 3 perícias: Integridade, Fortitude e Sobrevivência. Ao sofrer dano, acumula +1 na próxima jogada de ataque ou teste de Vigor (acúmulo máximo +3; zera ao usar).</td></tr>
                         <tr><td><strong>2</strong></td><td><strong>Resistência Treinada</strong></td><td>Vantagem nas 3 perícias do Nível 1.</td></tr>
                         <tr><td><strong>3</strong></td><td><strong>Versatilidade Resiliente</strong></td><td>Pode usar suas perícias do Aspecto no lugar de outras perícias quando puder resolver a situação através de força, resistência ou sobrevivência. Exige justificativa do Mestre.</td></tr>
                         <tr><td><strong>4</strong></td><td><strong>Redução Absoluta</strong></td><td>Reduz 4 pontos de todo dano recebido, inclusive dano verdadeiro.</td></tr>
@@ -24145,7 +24145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <table>
                     <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Olhos da Alma</strong></td><td>Maestria em 3 perícias: Intuição, Percepção e Investigação. Pode pedir ao Mestre 1 dica verdadeira e relevante sobre a situação. 3× por sessão.</td></tr>
+                        <tr><td><strong>1</strong></td><td><strong>Olhos da Alma</strong></td><td>Especialização em 3 perícias: Intuição, Percepção e Investigação. Pode pedir ao Mestre 1 dica verdadeira e relevante sobre a situação. 3× por sessão.</td></tr>
                         <tr><td><strong>2</strong></td><td><strong>Percepção Aguçada</strong></td><td>Vantagem nas 3 perícias do Nível 1.</td></tr>
                         <tr><td><strong>3</strong></td><td><strong>Versatilidade Perceptiva</strong></td><td>Pode usar Intuição, Percepção, Reflexo, Investigação ou Astúcia no lugar de outras perícias quando fizer sentido. Exige justificativa do Mestre.</td></tr>
                         <tr><td><strong>4</strong></td><td><strong>Observação</strong></td><td>Ao observar uma criatura, acumula benefícios por rodada (máx 3 estágios): 1ª rodada: Vantagem na próxima jogada. 2ª rodada: Vantagem em ações não ofensivas e Desvantagem do alvo. 3ª rodada: Vantagem em todas as ações e Desvantagem do alvo em todas as ações. Enquanto continuar gastando a Ação Bônus para observar o MESMO alvo, mantém os bônus. Para de observar ou muda de alvo → perde o acúmulo.</td></tr>
