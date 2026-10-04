@@ -13144,6 +13144,41 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
       <p style="font-size:.68rem;color:var(--text-muted);margin:.5rem 0 0">O XP é a fonte de verdade do nível: ao registrar sessões, o campo Nível da Ficha Base é atualizado automaticamente. O nível também pode ser ajustado manualmente na Ficha Base.</p>
     </div>
 
+    <!-- PROGRESSÃO — ganhos por nível (Tabela de Progressão) -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Progressão — Ganhos por Nível</div>
+      <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.6rem">
+        Técnicas registradas: <strong id="tec-contador" style="color:var(--silver)">0</strong> de <span id="tec-esperadas" style="color:var(--silver)">3</span> esperadas no nível <span id="tec-nivel">1</span>
+      </div>
+      <div class="table-wrapper" style="max-height:240px;overflow-y:auto">
+        <table>
+          <thead><tr><th>Nível</th><th>Técnicas</th><th>Traço</th><th>Aspecto</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1</strong></td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>2</strong></td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>3</strong> ⭐</td><td>1× Nv2 + 2× Nv1</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>4</strong></td><td>1× Nv2 + 2× Nv1</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>5</strong></td><td>1× Nv2 + 2× Nv1</td><td>+1</td><td>—</td></tr>
+            <tr><td><strong>6</strong> ⭐</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>7</strong></td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>8</strong></td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>9</strong> ⭐</td><td>1× Nv4 + 2× Nv3</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>10</strong></td><td>1× Nv4 + 2× Nv3</td><td>+1</td><td>+1</td></tr>
+            <tr><td><strong>11</strong></td><td>1× Nv4 + 2× Nv3</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>12</strong> ⭐</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>13</strong></td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>14</strong></td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td></tr>
+            <tr><td><strong>15</strong> ⭐</td><td>1× SUPREMA + 1× Nv5 + 2× Nv4</td><td>+1</td><td>+1</td></tr>
+            <tr><td><strong>16</strong></td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>17</strong></td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>18</strong> ⭐</td><td>1× SUPREMA + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>19</strong></td><td>1× SUPREMA + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>20</strong></td><td>1× SUPREMA + 1× Nv5 + 2× Nv4</td><td>+1</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- HISTÓRICO DE SESSÕES -->
     <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Histórico de Sessões</div>
@@ -13998,12 +14033,13 @@ function addTecnica() {
   d.innerHTML = `<div class="poder-tecnica-header"><span class="poder-tecnica-num">${numTecnicas}</span><input type="text" placeholder="Nome da Técnica" style="flex:1;background:transparent;border:none;color:var(--text);font-family:'Playfair Display',serif;font-size:.95rem;outline:none" id="tn-${numTecnicas}" oninput="salvarLocal()"><input type="number" placeholder="PE" style="background:transparent;border:none;color:var(--accent-light);width:50px;text-align:right;font-size:.9rem;outline:none" id="tc-${numTecnicas}" oninput="salvarLocal()"><button onclick="event.stopPropagation();removerTecnicaEl(this)" title="Remover técnica" style="background:none;border:none;color:#555;font-size:.85rem;cursor:pointer;padding:.15rem .4rem;margin-left:.25rem" onmouseover="this.style.color='var(--accent-text)'" onmouseout="this.style.color='#555'">✕</button></div><div class="poder-tecnica-body"><textarea placeholder="Descrição..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem;font-family:inherit;font-size:.87rem;resize:vertical;width:100%;outline:none;min-height:70px" id="td-${numTecnicas}" oninput="salvarLocal()"></textarea><textarea placeholder="Efeitos, alcance..." style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.5rem;font-family:inherit;font-size:.87rem;resize:vertical;width:100%;outline:none;min-height:70px" id="te-${numTecnicas}" oninput="salvarLocal()"></textarea></div>`;
   c.appendChild(d);
   salvarLocal();
+  atualizarProgressao();
 }
 
 function removeTecnica() {
   if (numTecnicas <= 0) return;
   const el = document.getElementById(`tec-${numTecnicas}`);
-  if (el) { el.remove(); numTecnicas--; salvarLocal(); }
+  if (el) { el.remove(); numTecnicas--; salvarLocal(); atualizarProgressao(); }
 }
 
 function removerTecnicaEl(btn) {
@@ -14018,6 +14054,7 @@ function removerTecnicaEl(btn) {
     .map(el => parseInt(el.id.match(/^tec-(\d+)$/)?.[1]) || 0);
   numTecnicas = existentes.length ? Math.max(0, ...existentes) : 0;
   salvarLocal();
+  atualizarProgressao();
 }
 
 // Nota: a antiga getChave() foi removida nesta auditoria — nunca era chamada
@@ -15361,7 +15398,33 @@ function atualizarProgressoXP() {
   }
   const fill = document.getElementById('xp-barra-fill');
   if (fill) fill.style.width = res.progresso + '%';
+  atualizarProgressao();
   calcTudoDebounced();
+}
+
+// Técnicas esperadas por nível (Tabela de Progressão — ganhos por nível)
+function tecnicasEsperadas(nivel) {
+  if (nivel <= 14) return nivel * 3;
+  if (nivel === 15) return 46;
+  if (nivel === 16) return 49;
+  if (nivel === 17) return 52;
+  if (nivel === 18) return 56;
+  if (nivel === 19) return 60;
+  if (nivel >= 20) return 64;
+  return 0;
+}
+
+// Contador de técnicas registradas vs. esperadas no nível atual
+function atualizarProgressao() {
+  const nivel = parseInt(document.getElementById('f-nivel')?.value, 10) || 1;
+  const tecnicas = document.querySelectorAll('#tecnicas-lista .poder-tecnica').length;
+  const esperadas = tecnicasEsperadas(nivel);
+  const elCont = document.getElementById('tec-contador');
+  const elEsp = document.getElementById('tec-esperadas');
+  const elNiv = document.getElementById('tec-nivel');
+  if (elCont) elCont.textContent = tecnicas;
+  if (elEsp) elEsp.textContent = esperadas;
+  if (elNiv) elNiv.textContent = nivel;
 }
 
 // Sugestão de XP pelo tipo/qualidade da sessão (pré-preenche o campo)
