@@ -16996,6 +16996,58 @@ function _mostrarBarraGmAssumindo(targetUser, nomePersonagem) {
 }
 
 
+// Flags para lazy-load das abas do painel GM/ADM (evita re-renderizar toda vez)
+window._gmTabCarregada = window._gmTabCarregada || {};
+window._admTabCarregada = window._admTabCarregada || {};
+
+function _abrirPainelGM(tabId) {
+  const painel = document.getElementById('painel-gm');
+  if (!painel) return;
+  painel.style.display = 'block';
+  if (tabId) mostrarTab(tabId);
+  else _carregarTabGM('tab-fichas');
+}
+
+function _carregarTabGM(tabId) {
+  if (!tabId) tabId = 'tab-fichas';
+  if (window._gmTabCarregada[tabId]) return;
+  if (tabId === 'tab-fichas') {
+    renderGMPlayers();
+    window._gmTabCarregada[tabId] = true;
+  } else if (tabId === 'tab-formulas') {
+    carregarFormulaEditor();
+    window._gmTabCarregada[tabId] = true;
+  }
+  // tab-ranking-audit tem botões manuais; tab-visibilidade já chama renderGMRankingVisibilidade no onclick.
+}
+
+function _abrirPainelADM(tabId) {
+  const painel = document.getElementById('painel-adm');
+  if (!painel) return;
+  painel.style.display = 'block';
+  if (tabId) mostrarTab(tabId);
+  else _carregarTabADM('tab-adm-fichas');
+}
+
+function _carregarTabADM(tabId) {
+  if (!tabId) tabId = 'tab-adm-fichas';
+  if (window._admTabCarregada[tabId]) return;
+  if (tabId === 'tab-adm-fichas') {
+    renderADMPlayers();
+    window._admTabCarregada[tabId] = true;
+  }
+  // tab-adm-visibilidade já chama renderGMRankingVisibilidade no onclick.
+}
+
+function _resetarLazyPainelGM() {
+  window._gmTabCarregada = {};
+  window._admTabCarregada = {};
+  const pgm = document.getElementById('painel-gm');
+  const padm = document.getElementById('painel-adm');
+  if (pgm) pgm.style.display = 'none';
+  if (padm) padm.style.display = 'none';
+}
+
 async function renderGMPlayers() {
   const lista = document.getElementById('gm-players-list');
   if(!lista) return;
@@ -17383,6 +17435,15 @@ function mostrarTab(tabId) {
   document.querySelectorAll('.gm-tab-content').forEach(c=>c.classList.remove('active'));
   document.getElementById(tabId)?.classList.add('active');
   document.getElementById('content-' + tabId)?.classList.add('active');
+
+  // Lazy-load do conteúdo do painel GM/ADM quando visível
+  const painelGM = document.getElementById('painel-gm');
+  const painelADM = document.getElementById('painel-adm');
+  if (tabId.startsWith('tab-adm-') && painelADM && painelADM.style.display !== 'none') {
+    _carregarTabADM(tabId);
+  } else if (painelGM && painelGM.style.display !== 'none') {
+    _carregarTabGM(tabId);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -17564,6 +17625,7 @@ async function logout() {
   usuarioAtual=null; roleAtual=null; numTecnicas=0;
   _atualizarVisibilidadeLivroMestre();
   _gmContextoOriginal = null; // evita restaurar contexto de uma sessão GM anterior
+  _resetarLazyPainelGM(); // reseta lazy-load dos painéis GM/ADM
   document.getElementById('gm-assumindo-bar')?.remove();
   document.getElementById('app').style.display='none';
   _toggleTabbar(false);
@@ -17760,6 +17822,8 @@ async function iniciarObservador() {
   document.getElementById('sb-adm-section')?.style.setProperty('display','none','important');
   document.getElementById('painel-gm')?.style.setProperty('display','none','important');
   document.getElementById('painel-adm')?.style.setProperty('display','none','important');
+  window._gmTabCarregada = {};
+  window._admTabCarregada = {};
 
   // ── Ficha: gera exatamente como para um player, no modo observador ──
   const fichaSection = document.getElementById('ficha');
@@ -17820,6 +17884,10 @@ function aguardarFirebase() {
 }
 
 async function iniciar() {
+  // Reseta lazy-load dos painéis GM/ADM a cada novo login
+  window._gmTabCarregada = {};
+  window._admTabCarregada = {};
+
   const info = USUARIOS[usuarioAtual];
   const roleBadgeMap = {gm:'badge-gm',adm:'badge-adm',player:'badge-player'};
   document.getElementById('sb-player-name').innerHTML = `${info.nome} <span class="role-badge ${roleBadgeMap[roleAtual]||''}">${roleAtual.toUpperCase()}</span>`;
@@ -17843,9 +17911,7 @@ async function iniciar() {
   // GM
   if(roleAtual === 'gm') {
     document.getElementById('sb-gm-section').style.display='block';
-    document.getElementById('painel-gm').style.display='block';
-    carregarFormulaEditor();
-    renderGMPlayers();
+    // Painel GM é lazy: só é mostrado/carregado quando o usuário clica no menu GM.
     document.getElementById('ficha-viewer-label').textContent = 'Visualizando como Game Master — acesso total';
     ativarEdicaoBlocosGM();
     carregarBlocosGMDaNuvem();
@@ -17853,8 +17919,7 @@ async function iniciar() {
   // ADM
   if(roleAtual === 'adm') {
     document.getElementById('sb-adm-section').style.display='block';
-    document.getElementById('painel-adm').style.display='block';
-    renderADMPlayers();
+    // Painel ADM é lazy: só é mostrado/carregado quando o usuário clica no menu ADM.
     document.getElementById('ficha-viewer-label').textContent = 'Visualizando como Administrador — campos narrativos protegidos';
   }
 
@@ -18167,6 +18232,14 @@ function navTo(id) {
   const backdrop = document.getElementById('sidebar-backdrop');
   if (arrow) { arrow.classList.remove('open'); arrow.querySelector('.arrow-ic').textContent = '▶'; }
   if (backdrop) backdrop.classList.remove('show');
+
+  // Abre painéis GM/ADM de forma lazy ao navegar para eles
+  if (id === 'painel-gm') {
+    _abrirPainelGM('tab-fichas');
+  } else if (id === 'painel-adm') {
+    _abrirPainelADM('tab-adm-fichas');
+  }
+
   setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); },100);
   _syncTabbar(id);
   // Auto-refresh do ranking ao navegar para o Livro das Lendas (secao-ranking):
