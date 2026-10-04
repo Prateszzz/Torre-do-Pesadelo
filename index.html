@@ -648,6 +648,241 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
 /* campos bloqueados */
 .field-group input[readonly],.field-group textarea[readonly] { opacity:.55; cursor:not-allowed; border-style:dashed; }
 
+/* ═══════════════════════════════════════════════════════════
+   ÁRVORE DA ALMA — visualização em árvore de habilidades
+   ═══════════════════════════════════════════════════════════ */
+.aa-arvore-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: .5rem;
+}
+.aa-arvore-select-wrap {
+  display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+}
+.aa-arvore-label {
+  font-size: .7rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--accent-light);
+}
+.aa-arvore-meta {
+  font-size: .78rem; color: var(--text-muted);
+}
+.aa-arvore-meta strong {
+  color: var(--silver);
+}
+.aa-arvore-ajuda {
+  font-size: .78rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.55;
+}
+.aa-arvore-msg {
+  text-align: center; color: var(--text-muted); font-size: .85rem; padding: 1.25rem 1rem;
+  border: 1px dashed var(--border); border-radius: var(--r-sm);
+}
+
+/* Inputs compactos dos 4 Aspectos */
+.aa-niveis-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem;
+  margin-bottom: 1.25rem;
+}
+.aa-nivel-card {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-top: 2px solid var(--border); border-radius: var(--r-sm);
+  padding: .6rem .5rem; text-align: center;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+}
+.aa-nivel-card.ativo {
+  border-color: var(--accent-t50); border-top-color: var(--accent);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), .10);
+}
+.aa-nivel-emoji {
+  font-size: 1.1rem; line-height: 1; margin-bottom: .25rem;
+}
+.aa-nivel-nome {
+  font-size: .62rem; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: .4rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.aa-nivel-card input {
+  width: 100%; background: var(--bg-input); border: 1px solid var(--border);
+  color: var(--text); text-align: center; font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; padding: .35rem .2rem; border-radius: var(--r-sm); outline: none;
+}
+.aa-nivel-card input:focus {
+  border-color: var(--accent-light);
+}
+.aa-nivel-prog {
+  display: block; font-size: .58rem; color: var(--text-faint);
+  margin-top: .3rem; letter-spacing: .5px; line-height: 1.3;
+}
+
+/* Árvore de habilidades */
+.aa-arvore-tree {
+  position: relative;
+  display: flex; flex-direction: column-reverse; gap: .5rem;
+  padding: .25rem 1.5rem 1rem; max-width: 680px; margin: 0 auto;
+}
+.aa-arvore-tree::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to top, var(--accent-t35), var(--border) 70%);
+  transform: translateX(-50%); z-index: 0;
+}
+
+.aa-arvore-node {
+  position: relative; z-index: 1;
+  width: calc(50% - 1.25rem);
+  display: flex; align-items: center; gap: .65rem;
+  padding: .55rem .8rem; background: var(--bg-elevated);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  cursor: help; outline: none;
+  transition: transform .2s var(--ease), box-shadow .2s, opacity .2s, border-color .2s, filter .2s;
+}
+.aa-arvore-node:nth-child(odd) {
+  align-self: flex-start; margin-left: 0;
+}
+.aa-arvore-node:nth-child(even) {
+  align-self: flex-end; margin-right: 0;
+}
+.aa-arvore-node::after {
+  content: ''; position: absolute; top: 50%;
+  width: 1.25rem; height: 2px; background: var(--border-strong);
+  transform: translateY(-50%);
+}
+.aa-arvore-node:nth-child(odd)::after {
+  right: -1.25rem;
+}
+.aa-arvore-node:nth-child(even)::after {
+  left: -1.25rem;
+}
+
+.aa-arvore-node:hover,
+.aa-arvore-node:focus,
+.aa-arvore-node.ativo {
+  transform: translateY(-2px); border-color: var(--accent-light);
+}
+
+/* Estados de progresso */
+.aa-arvore-node.locked {
+  opacity: .45; filter: grayscale(.65); border-style: dashed;
+}
+.aa-arvore-node.locked .aa-arvore-nome {
+  color: var(--text-faint);
+}
+.aa-arvore-node.unlocked {
+  border-color: var(--accent-t50);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), .12), inset 0 1px 0 rgba(255,255,255,.02);
+}
+.aa-arvore-node.unlocked::after {
+  background: var(--accent);
+}
+
+/* Ápice */
+.aa-arvore-node.apex {
+  border-color: var(--gold);
+}
+.aa-arvore-node.apex.unlocked {
+  background: linear-gradient(90deg, rgba(var(--gold-rgb), .10), var(--bg-elevated));
+  box-shadow: 0 0 24px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.aa-arvore-node.apex.unlocked::after {
+  background: var(--gold-light);
+}
+
+/* Badge do nível */
+.aa-arvore-badge {
+  flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--bg-raised); border: 1px solid var(--border-strong);
+  font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--silver);
+}
+.aa-arvore-node.unlocked .aa-arvore-badge {
+  background: var(--accent-deep); border-color: var(--accent-light); color: #fff;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+.aa-arvore-node.apex .aa-arvore-badge {
+  background: rgba(var(--gold-rgb), .15); border-color: var(--gold); color: var(--gold-light);
+}
+.aa-arvore-node.apex.unlocked .aa-arvore-badge {
+  background: var(--gold); border-color: var(--gold-light); color: #0a090d;
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+/* Informação do nó */
+.aa-arvore-info {
+  min-width: 0; flex: 1;
+}
+.aa-arvore-nome {
+  font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.aa-arvore-tipo {
+  font-size: .58rem; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-faint);
+}
+.aa-arvore-node.apex .aa-arvore-tipo {
+  color: var(--gold-light);
+}
+
+/* Tooltip fixo (evita corte pelo overflow do painel) */
+.aa-arvore-tooltip {
+  position: fixed; z-index: 9002;
+  max-width: 340px; width: max-content;
+  background: var(--bg-raised); border: 1px solid var(--border-strong);
+  border-top: 2px solid var(--accent-light); border-radius: var(--r-sm);
+  padding: .75rem 1rem; box-shadow: var(--sh-lg);
+  color: var(--text); pointer-events: none;
+  opacity: 0; visibility: hidden;
+  transition: opacity .18s var(--ease), visibility .18s;
+}
+.aa-arvore-tooltip.visivel {
+  opacity: 1; visibility: visible;
+}
+.aa-arvore-tooltip-nome {
+  font-family: 'Playfair Display', serif; font-size: .95rem;
+  color: var(--accent-light); margin-bottom: .35rem;
+  padding-bottom: .35rem; border-bottom: 1px solid var(--border);
+}
+.aa-arvore-tooltip-efeito {
+  font-size: .82rem; color: var(--text-muted); line-height: 1.55;
+}
+.aa-arvore-tooltip-efeito strong {
+  color: var(--silver);
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+  .aa-niveis-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem;
+  }
+  .aa-arvore-header {
+    flex-direction: column; align-items: flex-start; gap: .5rem;
+  }
+  .aa-arvore-tree::before {
+    left: 1.25rem; transform: none;
+  }
+  .aa-arvore-node {
+    width: calc(100% - 2.5rem);
+    margin-left: 2.5rem !important; align-self: flex-start !important;
+    padding: .5rem .7rem;
+  }
+  .aa-arvore-node::after,
+  .aa-arvore-node:nth-child(odd)::after,
+  .aa-arvore-node:nth-child(even)::after {
+    left: -1.25rem; right: auto; width: 1.25rem;
+  }
+  .aa-arvore-nome {
+    font-size: .85rem;
+  }
+  .aa-arvore-tooltip {
+    left: 1rem !important; right: 1rem !important;
+    top: 50% !important; bottom: auto !important;
+    transform: translateY(-50%) !important;
+    width: auto; max-width: none;
+  }
+}
+@media (max-width: 380px) {
+  .aa-niveis-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ATRIBUTOS — redesign impactante GRANDE */
 .atributos-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.75rem; }
 .atributo-box {
@@ -12650,57 +12885,57 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div>
 </div>
 
-<!-- ÁRVORE DA ALMA — aspecto escolhido e níveis por aspecto -->
+<!-- ÁRVORE DA ALMA — visualização em árvore de habilidades -->
 <div class="ficha-panel ficha-full-row" style="margin-bottom:.75rem">
   <div class="ficha-panel-title ficha-expand-toggle" onclick="toggleFichaExpand('arvore')" id="toggle-arvore">
     <span class="ficha-expand-seta" id="seta-arvore">▶</span> Árvore da Alma
+    <span class="ficha-expand-resumo" id="resumo-arvore"></span>
   </div>
   <div class="ficha-expand-area" id="area-arvore">
   <div class="ficha-panel-body">
-    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap">
-      <span style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-light)">Aspecto escolhido</span>
-      <select id="aa-aspecto" onchange="atualizarArvoreResumo()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none">
-        <option value="">— Escolha seu Aspecto —</option>
-        <option value="belico">⚔️ Bélico</option>
-        <option value="lucido">🧠 Lúcido</option>
-        <option value="resiliente">🛡️ Resiliente</option>
-        <option value="perceptivo">👁️ Perceptivo</option>
-      </select>
-      <span style="font-size:.78rem;color:var(--text-muted)">Nível do Aspecto: <strong id="aa-total-gasto" style="color:var(--silver)">0</strong>/10</span>
+    <div class="aa-arvore-header">
+      <div class="aa-arvore-select-wrap">
+        <span class="aa-arvore-label">Aspecto escolhido</span>
+        <select id="aa-aspecto" onchange="atualizarArvoreResumo()" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'Playfair Display',serif;font-size:1rem;outline:none">
+          <option value="">— Escolha seu Aspecto —</option>
+          <option value="belico">⚔️ Bélico</option>
+          <option value="lucido">🧠 Lúcido</option>
+          <option value="resiliente">🛡️ Resiliente</option>
+          <option value="perceptivo">👁️ Perceptivo</option>
+        </select>
+      </div>
+      <div class="aa-arvore-meta">Nível do Aspecto: <strong id="aa-total-gasto" style="color:var(--silver)">0</strong>/10</div>
     </div>
-    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem">1 Aspecto por personagem · evolui nos níveis 2, 4, 6, 8, 10, 11, 12, 13, 14 e 15 · o nível 10 (Ápice) exige missão especial · clique em ⓘ para ver os 10 níveis do Aspecto</p>
+    <p class="aa-arvore-ajuda">1 Aspecto por personagem · evolui nos níveis 2, 4, 6, 8, 10, 11, 12, 13, 14 e 15 · o nível 10 (Ápice) exige missão especial · passe o mouse ou toque nos galhos para ver a habilidade</p>
 
-    <!-- BÉLICO -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">⚔️ Bélico</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-belico" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('belico')" title="Ver os 10 níveis do Aspecto Bélico" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-belico" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
+    <div class="aa-niveis-grid">
+      <div class="aa-nivel-card" data-aspecto="belico">
+        <div class="aa-nivel-emoji">⚔️</div>
+        <div class="aa-nivel-nome">Bélico</div>
+        <input type="number" id="aa-belico" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+        <span class="aa-nivel-prog" id="aa-prog-belico">(0/10)</span>
+      </div>
+      <div class="aa-nivel-card" data-aspecto="lucido">
+        <div class="aa-nivel-emoji">🧠</div>
+        <div class="aa-nivel-nome">Lúcido</div>
+        <input type="number" id="aa-lucido" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+        <span class="aa-nivel-prog" id="aa-prog-lucido">(0/10)</span>
+      </div>
+      <div class="aa-nivel-card" data-aspecto="resiliente">
+        <div class="aa-nivel-emoji">🛡️</div>
+        <div class="aa-nivel-nome">Resiliente</div>
+        <input type="number" id="aa-resiliente" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+        <span class="aa-nivel-prog" id="aa-prog-resiliente">(0/10)</span>
+      </div>
+      <div class="aa-nivel-card" data-aspecto="perceptivo">
+        <div class="aa-nivel-emoji">👁️</div>
+        <div class="aa-nivel-nome">Perceptivo</div>
+        <input type="number" id="aa-perceptivo" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+        <span class="aa-nivel-prog" id="aa-prog-perceptivo">(0/10)</span>
       </div>
     </div>
 
-    <!-- LÚCIDO -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">🧠 Lúcido</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-lucido" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('lucido')" title="Ver os 10 níveis do Aspecto Lúcido" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-lucido" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- RESILIENTE -->
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">🛡️ Resiliente</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-resiliente" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('resiliente')" title="Ver os 10 níveis do Aspecto Resiliente" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-resiliente" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
-
-    <!-- PERCEPTIVO -->
-    <div>
-      <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">👁️ Perceptivo</div>
-      <div class="field-row cols-3">
-        <div class="field-group"><label style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">Nível do Aspecto <span id="aa-prog-perceptivo" style="font-size:.62rem;color:var(--text-muted);font-weight:400">(0/10)</span><button type="button" onclick="abrirArvoreRamo('perceptivo')" title="Ver os 10 níveis do Aspecto Perceptivo" style="background:none;border:none;color:var(--accent-light);cursor:pointer;font-size:.72rem;padding:0 .1rem;line-height:1">ⓘ</button></label><input type="number" id="aa-perceptivo" min="0" max="10" value="0" oninput="atualizarArvoreResumo()"></div>
-      </div>
-    </div>
+    <div id="aa-arvore-tree-wrap"></div>
   </div>
   </div><!-- /area-arvore -->
 </div>
@@ -15709,10 +15944,12 @@ const _ARVORE_RAMOS = [
 
 // Total gasto + progresso do Aspecto (marcos: níveis de personagem 2/4/6/8/10/11/12/13/14/15 · Ápice 10)
 function atualizarArvoreResumo() {
+  const aspectoAtivo = document.getElementById('aa-aspecto')?.value || '';
   let total = 0;
   _ARVORE_RAMOS.forEach(([a]) => {
     const inp = document.getElementById(`aa-${a}`);
     const prog = document.getElementById(`aa-prog-${a}`);
+    const card = document.querySelector(`.aa-nivel-card[data-aspecto="${a}"]`);
     const v = inp ? (parseInt(inp.value, 10) || 0) : 0;
     total += v;
     if (prog) {
@@ -15729,10 +15966,132 @@ function atualizarArvoreResumo() {
       if (v >= 10) txt += ' · Ápice 15';
       prog.textContent = txt;
     }
+    if (card) card.classList.toggle('ativo', a === aspectoAtivo);
   });
   const gastoEl = document.getElementById('aa-total-gasto');
-  if (gastoEl) gastoEl.textContent = total;
+  if (gastoEl) {
+    const ativoVal = aspectoAtivo ? (parseInt(document.getElementById(`aa-${aspectoAtivo}`)?.value, 10) || 0) : 0;
+    gastoEl.textContent = ativoVal;
+  }
+  const resumo = document.getElementById('resumo-arvore');
+  if (resumo) {
+    if (aspectoAtivo) {
+      const nome = _ARVORE_ASPECTO_NOME[aspectoAtivo] || aspectoAtivo;
+      const emoji = _ARVORE_ASPECTO_EMOJI[aspectoAtivo] || '';
+      const v = parseInt(document.getElementById(`aa-${aspectoAtivo}`)?.value, 10) || 0;
+      resumo.textContent = `${emoji} ${nome} · nv ${v}/10`;
+    } else {
+      resumo.textContent = 'Nenhum Aspecto selecionado';
+    }
+  }
+  renderArvoreTree();
   salvarLocal();
+}
+
+// Renderiza a árvore de habilidades do Aspecto selecionado
+function renderArvoreTree() {
+  const wrap = document.getElementById('aa-arvore-tree-wrap');
+  if (!wrap) return;
+  const aspecto = document.getElementById('aa-aspecto')?.value || '';
+  if (!aspecto || !ARVORE_DADOS[aspecto]) {
+    wrap.innerHTML = '<div class="aa-arvore-msg">Selecione um Aspecto para visualizar sua Árvore da Alma.</div>';
+    return;
+  }
+  const atual = parseInt(document.getElementById(`aa-${aspecto}`)?.value, 10) || 0;
+  const dados = ARVORE_DADOS[aspecto];
+  const emoji = _ARVORE_ASPECTO_EMOJI[aspecto] || '';
+  const nomeAspecto = _ARVORE_ASPECTO_NOME[aspecto] || aspecto;
+
+  const tree = document.createElement('div');
+  tree.className = 'aa-arvore-tree';
+
+  dados.forEach(hab => {
+    const unlocked = hab.nv <= atual;
+    const isApex = hab.nv === 10;
+    const node = document.createElement('div');
+    node.className = `aa-arvore-node ${unlocked ? 'unlocked' : 'locked'} ${isApex ? 'apex' : ''}`;
+    node.tabIndex = 0;
+    node.dataset.nome = hab.nome;
+    node.dataset.efeito = hab.efeito;
+    node.dataset.nv = hab.nv;
+
+    const tipo = isApex ? 'Ápice' : `Nível ${hab.nv}`;
+    node.innerHTML = `
+      <div class="aa-arvore-badge">${hab.nv}</div>
+      <div class="aa-arvore-info">
+        <div class="aa-arvore-nome">${hab.nome}</div>
+        <div class="aa-arvore-tipo">${emoji} ${nomeAspecto} · ${tipo}</div>
+      </div>
+    `;
+
+    node.addEventListener('mouseenter', () => _mostrarArvoreTooltip(node));
+    node.addEventListener('mouseleave', () => _esconderArvoreTooltip());
+    node.addEventListener('click', e => {
+      e.stopPropagation();
+      _toggleArvoreTooltip(node);
+    });
+
+    tree.appendChild(node);
+  });
+
+  wrap.innerHTML = '';
+  wrap.appendChild(tree);
+}
+
+// Tooltip fixo da Árvore da Alma (evita corte pelo overflow do painel)
+function _initArvoreTooltip() {
+  if (document.getElementById('aa-arvore-tooltip')) return;
+  const tip = document.createElement('div');
+  tip.id = 'aa-arvore-tooltip';
+  tip.className = 'aa-arvore-tooltip';
+  tip.innerHTML = '<div class="aa-arvore-tooltip-nome"></div><div class="aa-arvore-tooltip-efeito"></div>';
+  document.body.appendChild(tip);
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.aa-arvore-node')) _esconderArvoreTooltip();
+  });
+  window.addEventListener('scroll', _esconderArvoreTooltip, true);
+  window.addEventListener('resize', _esconderArvoreTooltip);
+}
+
+function _mostrarArvoreTooltip(node) {
+  _initArvoreTooltip();
+  const tip = document.getElementById('aa-arvore-tooltip');
+  if (!tip) return;
+  tip.querySelector('.aa-arvore-tooltip-nome').textContent = node.dataset.nome || '';
+  tip.querySelector('.aa-arvore-tooltip-efeito').innerHTML = node.dataset.efeito || '';
+  tip.classList.add('visivel');
+
+  requestAnimationFrame(() => {
+    const rect = node.getBoundingClientRect();
+    const tipRect = tip.getBoundingClientRect();
+    const margin = 12;
+    let top = rect.top - tipRect.height - margin;
+    let left = rect.left + rect.width / 2 - tipRect.width / 2;
+
+    if (left < margin) left = margin;
+    if (left + tipRect.width > window.innerWidth - margin) left = window.innerWidth - tipRect.width - margin;
+    if (top < margin) top = rect.bottom + margin;
+
+    tip.style.top = top + 'px';
+    tip.style.left = left + 'px';
+  });
+}
+
+function _esconderArvoreTooltip() {
+  const tip = document.getElementById('aa-arvore-tooltip');
+  if (tip) tip.classList.remove('visivel');
+}
+
+function _toggleArvoreTooltip(node) {
+  const tip = document.getElementById('aa-arvore-tooltip');
+  if (tip && tip.classList.contains('visivel') && tip.dataset.ultimoNv === node.dataset.nv) {
+    _esconderArvoreTooltip();
+    tip.dataset.ultimoNv = '';
+  } else {
+    if (tip) tip.dataset.ultimoNv = node.dataset.nv;
+    _mostrarArvoreTooltip(node);
+  }
 }
 
 // Modal com a tabela dos 10 níveis do Aspecto (linha atual destacada)
