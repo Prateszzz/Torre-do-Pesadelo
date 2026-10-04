@@ -13148,7 +13148,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
       <div style="font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:.6rem">Progressão — Ganhos por Nível</div>
       <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.6rem">
-        Técnicas registradas: <strong id="tec-contador" style="color:var(--silver)">0</strong> de <span id="tec-esperadas" style="color:var(--silver)">3</span> esperadas no nível <span id="tec-nivel">1</span>
+        Técnicas/Habilidades registradas: <strong id="tec-contador" style="color:var(--silver)">0</strong> de <span id="tec-esperadas" style="color:var(--silver)">3</span> esperadas no nível <span id="tec-nivel">1</span>
       </div>
       <div class="table-wrapper" style="max-height:240px;overflow-y:auto">
         <table>
@@ -14454,6 +14454,7 @@ function addPassiva() {
   `;
   tbody.appendChild(tr);
   salvarLocal();
+  atualizarProgressao();
 }
 
 function removePassiva() {
@@ -14461,7 +14462,7 @@ function removePassiva() {
   const tbody = document.getElementById('passivas-tbody');
   if (!tbody) return;
   const rows = tbody.querySelectorAll('tr');
-  if (rows.length > 1) { rows[rows.length-1].remove(); numPassivas--; salvarLocal(); }
+  if (rows.length > 1) { rows[rows.length-1].remove(); numPassivas--; salvarLocal(); atualizarProgressao(); }
 }
 
 function addDespertar() {
@@ -15414,15 +15415,20 @@ function tecnicasEsperadas(nivel) {
   return 0;
 }
 
-// Contador de técnicas registradas vs. esperadas no nível atual
+// Contador de técnicas/habilidades registradas vs. esperadas no nível atual
 function atualizarProgressao() {
   const nivel = parseInt(document.getElementById('f-nivel')?.value, 10) || 1;
   const tecnicas = document.querySelectorAll('#tecnicas-lista .poder-tecnica').length;
+  const passivas = Array.from(document.querySelectorAll('#passivas-tbody tr')).filter(tr => {
+    const nome = tr.querySelector('input[id$="-nome"]');
+    return nome && nome.value.trim() !== '';
+  }).length;
+  const total = tecnicas + passivas;
   const esperadas = tecnicasEsperadas(nivel);
   const elCont = document.getElementById('tec-contador');
   const elEsp = document.getElementById('tec-esperadas');
   const elNiv = document.getElementById('tec-nivel');
-  if (elCont) elCont.textContent = tecnicas;
+  if (elCont) elCont.textContent = total;
   if (elEsp) elEsp.textContent = esperadas;
   if (elNiv) elNiv.textContent = nivel;
 }
@@ -23038,7 +23044,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="system-card">
                 <strong>Forma 2 — Up de Nível (XP):</strong><br><br>
-                Cada subida de Nível (1–20) concede <strong>técnicas conforme a Tabela de Progressão</strong> (ver <a href="#sessoes-xp">Sistema de Sessões e XP</a>): nos níveis normais, o padrão do marco ultrapassado; nos marcos (3, 6, 9, 12), um novo nível de técnica é liberado. <strong>Técnicas Supremas</strong> são concedidas nos níveis 15, 18, 19 e 20.<br><br>
+                Cada subida de Nível (1–20) concede <strong>técnicas/habilidades conforme a Tabela de Progressão</strong> (ver <a href="#sessoes-xp">Sistema de Sessões e XP</a>): nos níveis normais, o padrão do marco ultrapassado; nos marcos (3, 6, 9, 12), um novo nível de técnica/habilidade é liberado. <strong>Técnicas Supremas</strong> são concedidas nos níveis 15, 18, 19 e 20.<br><br>
                 <em>Exemplo:</em> ao subir para o nível 3 (marco), o personagem ganha 1 técnica Nv2 + 2 técnicas Nv1.
             </div>
             <div class="system-card">
@@ -24142,11 +24148,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <h2>A Tabela de Progressão — O que Você Ganha em Cada Nível</h2>
-            <p>Subir de nível não é apenas acumular XP. Cada nível concede <strong>técnicas</strong>, e os marcos liberam novos níveis de técnica. Esta é a <strong>tabela oficial de evolução</strong> — ela consolida os ganhos de técnicas, Maestria, Traços e Aspecto em um único lugar.</p>
+            <p>Subir de nível não é apenas acumular XP. Cada nível concede <strong>técnicas/habilidades</strong> — técnicas ativas, passivas e suplementares — e os marcos liberam novos níveis. Esta é a <strong>tabela oficial de evolução</strong> — ela consolida os ganhos de técnicas/habilidades, Maestria, Traços e Aspecto em um único lugar.</p>
 
             <div class="table-wrapper">
                 <table>
-                    <thead><tr><th>Nível</th><th>Maestria</th><th>Técnicas ganhas</th><th>Traço</th><th>Aspecto</th></tr></thead>
+                    <thead><tr><th>Nível</th><th>Maestria</th><th>Técnicas/Habilidades ganhas</th><th>Traço</th><th>Aspecto</th></tr></thead>
                     <tbody>
                         <tr><td><strong>1</strong></td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>—</td></tr>
                         <tr><td><strong>2</strong></td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>+1</td></tr>
@@ -24173,13 +24179,25 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="system-card">
-                <strong>Como funcionam as técnicas por nível:</strong><br><br>
-                • Todas as técnicas ganhas são de <strong>escolha livre</strong> (ofensiva, defensiva, passiva, suplementar...) — o jogador decide o foco, sempre dentro do conceito do Poder.<br>
-                • Não existe limite de técnicas conhecidas: o acúmulo é livre, e cada técnica tem seu custo em PE.<br>
-                • <strong>Marcos ⭐</strong> (níveis 3, 6, 9, 12, 15, 18): liberam um novo nível de técnica e concedem o padrão do marco.<br>
+                <strong>Como funcionam as técnicas/habilidades por nível:</strong><br><br>
+                • Todas as técnicas/habilidades ganhas são de <strong>escolha livre</strong> (ofensiva, defensiva, passiva, suplementar...) — o jogador decide o foco, sempre dentro do conceito do Poder.<br>
+                • <strong>Passivas contam como habilidades:</strong> uma passiva Nv0 ocupa um slot de Nv0, uma passiva Nv2 ocupa um slot de Nv2, e assim por diante. O jogador decide o equilíbrio entre técnicas ativas e passivas.<br>
+                • Não existe limite de técnicas/habilidades conhecidas: o acúmulo é livre, e cada uma tem seu custo em PE.<br>
+                • <strong>Marcos ⭐</strong> (níveis 3, 6, 9, 12, 15, 18): liberam um novo nível de técnica/habilidade e concedem o padrão do marco.<br>
                 • Nos níveis entre marcos, o ganho <strong>repete o padrão do marco ultrapassado</strong>.<br>
                 • <strong>Técnicas Supremas</strong>: concedidas nos níveis 15, 18, 19 e 20 (4 no total).<br><br>
-                <em>Além das técnicas, todo nível também aumenta PV, STA e PE pelas fórmulas de Vigor/Alma/Intelecto, e as perícias crescem pela fórmula de Maestria/Especialização.</em>
+                <em>Além das técnicas/habilidades, todo nível também aumenta PV, STA e PE pelas fórmulas de Vigor/Alma/Intelecto, e as perícias crescem pela fórmula de Maestria/Especialização.</em>
+            </div>
+
+            <div class="system-card">
+                <strong>Como funciona na prática (exemplo):</strong><br><br>
+                Um personagem que sobe do nível 1 ao 5 ganha:<br>
+                • <strong>Nível 1:</strong> 2 habilidades Nv0 + 1 habilidade Nv1.<br>
+                • <strong>Nível 2:</strong> 2 habilidades Nv0 + 1 habilidade Nv1 (repete o nível 1).<br>
+                • <strong>Nível 3 (marco ⭐):</strong> 1 habilidade Nv2 + 2 habilidades Nv1 — libera o nível 2 de técnica/habilidade.<br>
+                • <strong>Nível 4:</strong> 1 habilidade Nv2 + 2 habilidades Nv1 (repete o marco 3).<br>
+                • <strong>Nível 5:</strong> 1 habilidade Nv2 + 2 habilidades Nv1 (repete o marco 3).<br><br>
+                Total no nível 5: <strong>15 técnicas/habilidades</strong> — o jogador decide quantas são ativas e quantas são passivas.
             </div>
 
             <div class="lore-box">
