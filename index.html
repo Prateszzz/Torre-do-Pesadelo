@@ -676,60 +676,65 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
   border: 1px dashed var(--border); border-radius: var(--r-sm);
 }
 
-/* Inputs compactos dos 4 Aspectos */
-.aa-niveis-grid {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem;
-  margin-bottom: 1.25rem;
+/* Editor único do nível do Aspecto ativo */
+.aa-nivel-editor {
+  display: flex; align-items: center; gap: .75rem;
+  margin-bottom: 1.25rem; flex-wrap: wrap;
 }
-.aa-nivel-card {
-  background: var(--bg-elevated); border: 1px solid var(--border);
-  border-top: 2px solid var(--border); border-radius: var(--r-sm);
-  padding: .6rem .5rem; text-align: center;
-  transition: border-color .2s, box-shadow .2s, transform .15s;
+.aa-nivel-editor label {
+  font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-muted);
 }
-.aa-nivel-card.ativo {
-  border-color: var(--accent-t50); border-top-color: var(--accent);
-  box-shadow: 0 0 18px rgba(var(--accent-rgb), .10);
-}
-.aa-nivel-emoji {
-  font-size: 1.1rem; line-height: 1; margin-bottom: .25rem;
-}
-.aa-nivel-nome {
-  font-size: .62rem; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--text-muted); margin-bottom: .4rem;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.aa-nivel-card input {
-  width: 100%; background: var(--bg-input); border: 1px solid var(--border);
+.aa-nivel-editor input {
+  width: 72px; background: var(--bg-input); border: 1px solid var(--border);
   color: var(--text); text-align: center; font-family: 'Playfair Display', serif;
-  font-size: 1.1rem; padding: .35rem .2rem; border-radius: var(--r-sm); outline: none;
+  font-size: 1.1rem; padding: .4rem .2rem; border-radius: var(--r-sm); outline: none;
 }
-.aa-nivel-card input:focus {
+.aa-nivel-editor input:focus {
   border-color: var(--accent-light);
 }
-.aa-nivel-prog {
-  display: block; font-size: .58rem; color: var(--text-faint);
-  margin-top: .3rem; letter-spacing: .5px; line-height: 1.3;
+.aa-prog-ativo {
+  font-size: .75rem; color: var(--text-faint); letter-spacing: .3px;
 }
 
-/* Árvore de habilidades */
+/* Árvore de habilidades — galhos, folhas e tronco */
 .aa-arvore-tree {
   position: relative;
   display: flex; flex-direction: column-reverse; gap: .5rem;
-  padding: .25rem 1.5rem 1rem; max-width: 680px; margin: 0 auto;
+  padding: .25rem 2rem 1.75rem; max-width: 680px; margin: 0 auto;
 }
+/* Tronco central */
 .aa-arvore-tree::before {
   content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
-  width: 2px;
-  background: linear-gradient(to top, var(--accent-t35), var(--border) 70%);
+  width: 4px;
+  background:
+    linear-gradient(90deg, rgba(75,50,32,.60), rgba(115,78,48,.45), rgba(75,50,32,.60)),
+    linear-gradient(to top, rgba(193,63,63,.22), rgba(115,78,48,.35) 55%, rgba(60,40,25,.22));
   transform: translateX(-50%); z-index: 0;
+  border-radius: 2px;
+  box-shadow: 0 0 14px rgba(0,0,0,.45);
+}
+
+/* Folhas decorativas */
+.aa-arvore-folha {
+  position: absolute;
+  width: .85rem; height: 1.25rem;
+  background: linear-gradient(135deg, rgba(85,118,58,.28), rgba(55,85,42,.12));
+  border-radius: 0 80% 0 80%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(.2px);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.04);
+}
+.aa-arvore-folha.alt {
+  background: linear-gradient(135deg, rgba(110,145,75,.22), rgba(65,95,48,.10));
 }
 
 .aa-arvore-node {
   position: relative; z-index: 1;
-  width: calc(50% - 1.25rem);
+  width: calc(50% - 2rem);
   display: flex; align-items: center; gap: .65rem;
-  padding: .55rem .8rem; background: var(--bg-elevated);
+  padding: .6rem .9rem; background: var(--bg-elevated);
   border: 1px solid var(--border); border-radius: var(--r-sm);
   cursor: help; outline: none;
   transition: transform .2s var(--ease), box-shadow .2s, opacity .2s, border-color .2s, filter .2s;
@@ -740,16 +745,39 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
 .aa-arvore-node:nth-child(even) {
   align-self: flex-end; margin-right: 0;
 }
+
+/* Ícone/emoji do Aspecto translúcido atrás do conteúdo */
+.aa-arvore-node::before {
+  content: attr(data-icon);
+  position: absolute; right: .35rem; top: 50%;
+  transform: translateY(-50%);
+  font-size: 3.4rem; line-height: 1;
+  opacity: .09; pointer-events: none;
+  z-index: 0;
+}
+.aa-arvore-node.apex::before {
+  opacity: .13; color: var(--gold-light);
+}
+
+/* Galhos curvos conectando os nós ao tronco */
 .aa-arvore-node::after {
   content: ''; position: absolute; top: 50%;
-  width: 1.25rem; height: 2px; background: var(--border-strong);
+  width: 2rem; height: 1.5rem;
+  border-style: solid;
+  border-color: rgba(110,75,45,.42);
   transform: translateY(-50%);
+  z-index: -1;
+  pointer-events: none;
 }
 .aa-arvore-node:nth-child(odd)::after {
-  right: -1.25rem;
+  right: -2rem;
+  border-width: 2px 2px 0 0;
+  border-radius: 0 70% 0 0;
 }
 .aa-arvore-node:nth-child(even)::after {
-  left: -1.25rem;
+  left: -2rem;
+  border-width: 2px 0 0 2px;
+  border-radius: 70% 0 0 0;
 }
 
 .aa-arvore-node:hover,
@@ -765,12 +793,15 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
 .aa-arvore-node.locked .aa-arvore-nome {
   color: var(--text-faint);
 }
+.aa-arvore-node.locked::before {
+  opacity: .05;
+}
 .aa-arvore-node.unlocked {
   border-color: var(--accent-t50);
   box-shadow: 0 0 18px rgba(var(--accent-rgb), .12), inset 0 1px 0 rgba(255,255,255,.02);
 }
 .aa-arvore-node.unlocked::after {
-  background: var(--accent);
+  border-color: rgba(170,65,65,.48);
 }
 
 /* Ápice */
@@ -782,13 +813,13 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
   box-shadow: 0 0 24px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,.04);
 }
 .aa-arvore-node.apex.unlocked::after {
-  background: var(--gold-light);
+  border-color: rgba(184,151,42,.60);
 }
 
 /* Badge do nível */
 .aa-arvore-badge {
   flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
-  display: grid; place-items: center;
+  display: grid; place-items: center; position: relative; z-index: 1;
   background: var(--bg-raised); border: 1px solid var(--border-strong);
   font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--silver);
 }
@@ -806,7 +837,7 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
 
 /* Informação do nó */
 .aa-arvore-info {
-  min-width: 0; flex: 1;
+  min-width: 0; flex: 1; position: relative; z-index: 1;
 }
 .aa-arvore-nome {
   font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--text);
@@ -848,24 +879,39 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
 
 /* Responsivo */
 @media (max-width: 640px) {
-  .aa-niveis-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem;
-  }
   .aa-arvore-header {
     flex-direction: column; align-items: flex-start; gap: .5rem;
+  }
+  .aa-nivel-editor {
+    width: 100%;
+  }
+  .aa-arvore-tree {
+    padding: .25rem 1.5rem 1.5rem;
   }
   .aa-arvore-tree::before {
     left: 1.25rem; transform: none;
   }
   .aa-arvore-node {
-    width: calc(100% - 2.5rem);
+    width: calc(100% - 5.5rem);
     margin-left: 2.5rem !important; align-self: flex-start !important;
     padding: .5rem .7rem;
+  }
+  .aa-arvore-node::before {
+    font-size: 2.6rem; right: .2rem;
   }
   .aa-arvore-node::after,
   .aa-arvore-node:nth-child(odd)::after,
   .aa-arvore-node:nth-child(even)::after {
-    left: -1.25rem; right: auto; width: 1.25rem;
+    left: -1.25rem; right: auto;
+    width: 1.25rem; height: 2px;
+    background: rgba(110,75,45,.42);
+    border: none; border-radius: 0;
+  }
+  .aa-arvore-node.unlocked::after {
+    background: rgba(170,65,65,.48);
+  }
+  .aa-arvore-node.apex.unlocked::after {
+    background: rgba(184,151,42,.60);
   }
   .aa-arvore-nome {
     font-size: .85rem;
@@ -875,11 +921,6 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
     top: 50% !important; bottom: auto !important;
     transform: translateY(-50%) !important;
     width: auto; max-width: none;
-  }
-}
-@media (max-width: 380px) {
-  .aa-niveis-grid {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -12908,31 +12949,22 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
     </div>
     <p class="aa-arvore-ajuda">1 Aspecto por personagem · evolui nos níveis 2, 4, 6, 8, 10, 11, 12, 13, 14 e 15 · o nível 10 (Ápice) exige missão especial · passe o mouse ou toque nos galhos para ver a habilidade</p>
 
-    <div class="aa-niveis-grid">
-      <div class="aa-nivel-card" data-aspecto="belico">
-        <div class="aa-nivel-emoji">⚔️</div>
-        <div class="aa-nivel-nome">Bélico</div>
-        <input type="number" id="aa-belico" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
-        <span class="aa-nivel-prog" id="aa-prog-belico">(0/10)</span>
-      </div>
-      <div class="aa-nivel-card" data-aspecto="lucido">
-        <div class="aa-nivel-emoji">🧠</div>
-        <div class="aa-nivel-nome">Lúcido</div>
-        <input type="number" id="aa-lucido" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
-        <span class="aa-nivel-prog" id="aa-prog-lucido">(0/10)</span>
-      </div>
-      <div class="aa-nivel-card" data-aspecto="resiliente">
-        <div class="aa-nivel-emoji">🛡️</div>
-        <div class="aa-nivel-nome">Resiliente</div>
-        <input type="number" id="aa-resiliente" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
-        <span class="aa-nivel-prog" id="aa-prog-resiliente">(0/10)</span>
-      </div>
-      <div class="aa-nivel-card" data-aspecto="perceptivo">
-        <div class="aa-nivel-emoji">👁️</div>
-        <div class="aa-nivel-nome">Perceptivo</div>
-        <input type="number" id="aa-perceptivo" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
-        <span class="aa-nivel-prog" id="aa-prog-perceptivo">(0/10)</span>
-      </div>
+    <div class="aa-nivel-editor">
+      <label for="aa-nivel-ativo">Nível do Aspecto</label>
+      <input type="number" id="aa-nivel-ativo" min="0" max="10" value="0" oninput="_atualizarNivelAtivo(this.value)">
+      <span id="aa-prog-ativo" class="aa-prog-ativo">(0/10)</span>
+    </div>
+
+    <!-- Persistência dos 4 Aspectos (mantidos para salvarLocal) -->
+    <div style="display:none">
+      <input type="number" id="aa-belico" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+      <input type="number" id="aa-lucido" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+      <input type="number" id="aa-resiliente" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+      <input type="number" id="aa-perceptivo" min="0" max="10" value="0" oninput="atualizarArvoreResumo()">
+      <span id="aa-prog-belico"></span>
+      <span id="aa-prog-lucido"></span>
+      <span id="aa-prog-resiliente"></span>
+      <span id="aa-prog-perceptivo"></span>
     </div>
 
     <div id="aa-arvore-tree-wrap"></div>
@@ -15942,6 +15974,32 @@ const _ARVORE_RAMOS = [
   ['belico'], ['lucido'], ['resiliente'], ['perceptivo']
 ];
 
+// Texto de progresso dos marcos da Árvore da Alma
+function _textoProgressoArvore(v) {
+  let txt = `(${v}/10)`;
+  if (v >= 1) txt += ' · Nv 2';
+  if (v >= 2) txt += '/4';
+  if (v >= 3) txt += '/6';
+  if (v >= 4) txt += '/8';
+  if (v >= 5) txt += '/10';
+  if (v >= 6) txt += '/11';
+  if (v >= 7) txt += '/12';
+  if (v >= 8) txt += '/13';
+  if (v >= 9) txt += '/14';
+  if (v >= 10) txt += ' · Ápice 15';
+  return txt;
+}
+
+// Atualiza o nível do Aspecto ativo a partir do input visível
+function _atualizarNivelAtivo(val) {
+  const aspecto = document.getElementById('aa-aspecto')?.value || '';
+  if (!aspecto) return;
+  const num = Math.max(0, Math.min(10, parseInt(val, 10) || 0));
+  const inp = document.getElementById(`aa-${aspecto}`);
+  if (inp) inp.value = num;
+  atualizarArvoreResumo();
+}
+
 // Total gasto + progresso do Aspecto (marcos: níveis de personagem 2/4/6/8/10/11/12/13/14/15 · Ápice 10)
 function atualizarArvoreResumo() {
   const aspectoAtivo = document.getElementById('aa-aspecto')?.value || '';
@@ -15952,34 +16010,25 @@ function atualizarArvoreResumo() {
     const card = document.querySelector(`.aa-nivel-card[data-aspecto="${a}"]`);
     const v = inp ? (parseInt(inp.value, 10) || 0) : 0;
     total += v;
-    if (prog) {
-      let txt = `(${v}/10)`;
-      if (v >= 1) txt += ' · Nv 2';
-      if (v >= 2) txt += '/4';
-      if (v >= 3) txt += '/6';
-      if (v >= 4) txt += '/8';
-      if (v >= 5) txt += '/10';
-      if (v >= 6) txt += '/11';
-      if (v >= 7) txt += '/12';
-      if (v >= 8) txt += '/13';
-      if (v >= 9) txt += '/14';
-      if (v >= 10) txt += ' · Ápice 15';
-      prog.textContent = txt;
-    }
+    if (prog) prog.textContent = _textoProgressoArvore(v);
     if (card) card.classList.toggle('ativo', a === aspectoAtivo);
   });
+  const ativoVal = aspectoAtivo ? (parseInt(document.getElementById(`aa-${aspectoAtivo}`)?.value, 10) || 0) : 0;
   const gastoEl = document.getElementById('aa-total-gasto');
-  if (gastoEl) {
-    const ativoVal = aspectoAtivo ? (parseInt(document.getElementById(`aa-${aspectoAtivo}`)?.value, 10) || 0) : 0;
-    gastoEl.textContent = ativoVal;
+  if (gastoEl) gastoEl.textContent = ativoVal;
+  const visInp = document.getElementById('aa-nivel-ativo');
+  if (visInp) {
+    visInp.value = ativoVal;
+    visInp.disabled = !aspectoAtivo;
   }
+  const visProg = document.getElementById('aa-prog-ativo');
+  if (visProg) visProg.textContent = _textoProgressoArvore(ativoVal);
   const resumo = document.getElementById('resumo-arvore');
   if (resumo) {
     if (aspectoAtivo) {
       const nome = _ARVORE_ASPECTO_NOME[aspectoAtivo] || aspectoAtivo;
       const emoji = _ARVORE_ASPECTO_EMOJI[aspectoAtivo] || '';
-      const v = parseInt(document.getElementById(`aa-${aspectoAtivo}`)?.value, 10) || 0;
-      resumo.textContent = `${emoji} ${nome} · nv ${v}/10`;
+      resumo.textContent = `${emoji} ${nome} · nv ${ativoVal}/10`;
     } else {
       resumo.textContent = 'Nenhum Aspecto selecionado';
     }
@@ -16014,6 +16063,7 @@ function renderArvoreTree() {
     node.dataset.nome = hab.nome;
     node.dataset.efeito = hab.efeito;
     node.dataset.nv = hab.nv;
+    node.dataset.icon = emoji;
 
     const tipo = isApex ? 'Ápice' : `Nível ${hab.nv}`;
     node.innerHTML = `
@@ -16032,6 +16082,30 @@ function renderArvoreTree() {
     });
 
     tree.appendChild(node);
+  });
+
+  // Folhas decorativas espalhadas pela árvore
+  const folhas = [
+    { t: '8%', l: '18%', r: -25 },
+    { t: '22%', l: '78%', r: 35 },
+    { t: '38%', l: '12%', r: -40 },
+    { t: '55%', l: '82%', r: 20 },
+    { t: '70%', l: '20%', r: -30 },
+    { t: '85%', l: '75%', r: 45 },
+    { t: '15%', l: '65%', r: -15 },
+    { t: '48%', l: '25%', r: 30 },
+    { t: '62%', l: '70%', r: -20 },
+    { t: '90%', l: '35%', r: 15 },
+    { t: '33%', l: '88%', r: 50 },
+    { t: '78%', l: '10%', r: -35 }
+  ];
+  folhas.forEach((f, idx) => {
+    const leaf = document.createElement('div');
+    leaf.className = 'aa-arvore-folha' + (idx % 2 === 1 ? ' alt' : '');
+    leaf.style.top = f.t;
+    leaf.style.left = f.l;
+    leaf.style.transform = `rotate(${f.r}deg)`;
+    tree.appendChild(leaf);
   });
 
   wrap.innerHTML = '';
