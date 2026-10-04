@@ -1128,6 +1128,111 @@ tr:hover td { background:rgba(var(--deep-rgb), .05); }
 .pericias-todas-badge.mt { color:var(--accent-light); }
 .pericias-todas-badge.es { color:var(--gold-light); }
 
+/* ─── Resumo de fontes das Perícias ─── */
+.pericias-fontes-resumo {
+  background: linear-gradient(160deg, rgba(var(--deep-rgb), .08), var(--bg-elevated));
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--r-sm);
+  padding: .9rem 1rem 1rem;
+  margin-top: 1rem;
+}
+.pericias-fontes-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: .78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: .75rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.pericias-fontes-titulo::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, var(--accent), transparent);
+  opacity: .35;
+}
+.pericias-fontes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .6rem;
+  margin-bottom: .75rem;
+}
+.pericias-fonte-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  text-align: center;
+  padding: .5rem .4rem;
+  background: rgba(0,0,0,.15);
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: var(--r-sm);
+}
+.pericias-fonte-icone {
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: .85;
+}
+.pericias-fonte-item label {
+  font-size: .6rem;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1.25;
+}
+.pericias-fonte-item input {
+  width: 52px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  padding: .3rem .15rem;
+  border-radius: var(--r-sm);
+  outline: none;
+}
+.pericias-fonte-item input:focus {
+  border-color: var(--accent-light);
+}
+.pericias-fonte-item input[readonly] {
+  opacity: .75;
+  cursor: default;
+  background: var(--bg-raised);
+}
+.pericias-fonte-total {
+  border-color: rgba(var(--gold-rgb), .25);
+  background: rgba(var(--gold-rgb), .06);
+}
+.pericias-fonte-total label {
+  color: var(--gold-light);
+}
+.pericias-fontes-auto {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: .35rem .9rem;
+  font-size: .75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: all .2s;
+  font-family: inherit;
+}
+.pericias-fontes-auto:hover {
+  border-color: var(--accent-light);
+  color: var(--accent-light);
+  background: rgba(var(--accent-rgb), .08);
+}
+@media (max-width: 640px) {
+  .pericias-fontes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* dropdown de seleção de perícia */
 .pericias-dropdown-overlay {
   position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:9000;
@@ -14100,6 +14205,62 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
   </div>`;
 }
 
+// ─── RESUMO DE FONTES DAS PERÍCIAS ───
+// Conta quantas perícias grátis o Antecedente concede a partir do texto de ANTECEDENTES_INFO.
+function _contarPericiasAntecedente(antecedente) {
+  if (!antecedente || !ANTECEDENTES_INFO[antecedente]) return 0;
+  const info = ANTECEDENTES_INFO[antecedente];
+  const treinoMatch = info.match(/Treinado\s+em\s+((?:<strong>[^<]+<\/strong>(?:\s*(?:ou|e)\s*)?)+)\s*\(/i);
+  if (!treinoMatch) return 0;
+  const strongs = treinoMatch[1].match(/<strong>([^<]+)<\/strong>/g) || [];
+  return strongs.length;
+}
+
+// Decide se deve rodar o cálculo automático das fontes (apenas quando os
+// campos ainda estão zerados e o personagem já tem perícias treinadas).
+function _deveAutoCalcularFontesPericias() {
+  const arv = parseInt(document.getElementById('f-pericia-fonte-arvore')?.value, 10) || 0;
+  const ant = parseInt(document.getElementById('f-pericia-fonte-antecedente')?.value, 10) || 0;
+  const out = parseInt(document.getElementById('f-pericia-fonte-outras')?.value, 10) || 0;
+  if (arv !== 0 || ant !== 0 || out !== 0) return false;
+  const mt = (_slotsPericia.maestrias || []).filter(Boolean).length;
+  const es = (_slotsPericia.especializacoes || []).filter(Boolean).length;
+  return (mt + es) > 0;
+}
+
+// Atualiza o resumo de fontes das perícias. Se auto=true, calcula Árvore e
+// Antecedente a partir dos dados conhecidos; depois ajusta o total e outras.
+function atualizarResumoFontesPericias(auto) {
+  const elArv = document.getElementById('f-pericia-fonte-arvore');
+  const elAnt = document.getElementById('f-pericia-fonte-antecedente');
+  const elOut = document.getElementById('f-pericia-fonte-outras');
+  const elTot = document.getElementById('f-pericia-fonte-total');
+  if (!elArv || !elAnt || !elOut || !elTot) return;
+
+  const mt = (_slotsPericia.maestrias || []).filter(Boolean).length;
+  const es = (_slotsPericia.especializacoes || []).filter(Boolean).length;
+  const total = mt + es;
+
+  if (auto) {
+    const aspecto = document.getElementById('aa-aspecto')?.value || '';
+    const nivelAspecto = aspecto ? (parseInt(document.getElementById(`aa-${aspecto}`)?.value, 10) || 0) : 0;
+    const arvore = (aspecto && nivelAspecto >= 1) ? 3 : 0;
+
+    const antecedente = document.getElementById('f-antecedente')?.value || '';
+    const antecedenteCount = _contarPericiasAntecedente(antecedente);
+
+    elArv.value = arvore;
+    elAnt.value = antecedenteCount;
+  }
+
+  const arvoreVal = parseInt(elArv.value, 10) || 0;
+  const antecedenteVal = parseInt(elAnt.value, 10) || 0;
+  const outras = Math.max(0, total - arvoreVal - antecedenteVal);
+
+  elOut.value = outras;
+  elTot.value = total;
+}
+
 // ─── PERÍCIAS — NOVO SISTEMA DE SLOTS ───
 // Estado dos slots: { maestrias: [{idx, nome, attr},...], especializacoes: [{idx, nome, attr},...] }
 let _slotsPericia = { maestrias: [], especializacoes: [] };
@@ -14150,11 +14311,41 @@ function buildPericias() {
         <div id="lista-todas-pericias"></div>
       </div>
     </div>
+    <!-- ORIGEM DAS PERÍCIAS -->
+    <div class="pericias-fontes-resumo">
+      <div class="pericias-fontes-titulo">Origem das Perícias</div>
+      <div class="pericias-fontes-grid">
+        <div class="pericias-fonte-item">
+          <span class="pericias-fonte-icone">🌳</span>
+          <label for="f-pericia-fonte-arvore">Árvore da Alma</label>
+          <input type="number" id="f-pericia-fonte-arvore" min="0" value="0" oninput="salvarLocal();atualizarResumoFontesPericias(false)">
+        </div>
+        <div class="pericias-fonte-item">
+          <span class="pericias-fonte-icone">📜</span>
+          <label for="f-pericia-fonte-antecedente">Antecedente</label>
+          <input type="number" id="f-pericia-fonte-antecedente" min="0" value="0" oninput="salvarLocal();atualizarResumoFontesPericias(false)">
+        </div>
+        <div class="pericias-fonte-item">
+          <span class="pericias-fonte-icone">✏️</span>
+          <label for="f-pericia-fonte-outras">Escolha livre / Outras</label>
+          <input type="number" id="f-pericia-fonte-outras" min="0" value="0" oninput="salvarLocal()">
+        </div>
+        <div class="pericias-fonte-item pericias-fonte-total">
+          <span class="pericias-fonte-icone">◆</span>
+          <label for="f-pericia-fonte-total">Total treinadas</label>
+          <input type="number" id="f-pericia-fonte-total" min="0" value="0" readonly>
+        </div>
+      </div>
+      <button type="button" class="pericias-fontes-auto" onclick="atualizarResumoFontesPericias(true)" title="Calcular automaticamente a partir do Aspecto e Antecedente">Auto</button>
+    </div>
   `;
 
   _renderSlots('maestria', numMt);
   _renderSlots('especializacao', numEs);
   _renderTodasPericias();
+
+  const auto = _deveAutoCalcularFontesPericias();
+  atualizarResumoFontesPericias(auto);
 }
 
 // Atualiza apenas os bônus/slots de perícia sem recriar o painel inteiro.
@@ -14168,6 +14359,7 @@ function atualizarSlotsPericia() {
   _renderSlots('maestria', numMt);
   _renderSlots('especializacao', numEs);
   _renderTodasPericias();
+  atualizarResumoFontesPericias(false);
 }
 
 // ─── TABELA DE TODAS AS PERÍCIAS ─────────────────────────────────────────
@@ -14467,6 +14659,7 @@ function coletarDados() {
     // poder
     'p-principal','p-attr','p-max','p-descricao','p-suprema','p-conceito',
     'f-como-despertou','f-sanidade','f-corrupcao','f-pericia-antecedente',
+    'f-pericia-fonte-arvore','f-pericia-fonte-antecedente','f-pericia-fonte-outras','f-pericia-fonte-total',
     // árvore da alma
 'aa-aspecto',
 'aa-belico','aa-lucido','aa-resiliente','aa-perceptivo',
@@ -16658,6 +16851,13 @@ function preencherCampos(d) {
     // Reconstrói slots de perícia com os atributos já carregados
     // para garantir que os bônus (+X) reflitam os valores reais do personagem
     buildPericias();
+    // Restaura as fontes de perícias salvas (os inputs só existem após buildPericias)
+    // e ressincroniza total/outras com os slots atuais.
+    ['f-pericia-fonte-arvore','f-pericia-fonte-antecedente'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && d[id] !== undefined) el.value = d[id];
+    });
+    atualizarResumoFontesPericias(false);
     atualizarAvisoTorre();
     // Restaura histórico de sessões e sincroniza XP → nível
     _restaurarSessHistorico();
