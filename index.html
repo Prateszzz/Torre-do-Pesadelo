@@ -13651,7 +13651,7 @@ function gerarFichaHTML(targetUser, modoVisualizacao) {
         </div>
         <div class="field-group">
           <label>Próximo Nível</label>
-          <div id="xp-proximo" style="font-size:.8rem;color:var(--text-muted);padding:.55rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:2.1em">Faltam 200 XP para o nível 2.</div>
+          <div id="xp-proximo" style="font-size:.8rem;color:var(--text-muted);padding:.55rem .7rem;background:var(--bg-input);border:1px solid var(--border);min-height:2.1em">Faltam 300 XP para o nível 2.</div>
         </div>
       </div>
       <div style="margin-top:.6rem;background:var(--bg-input);border:1px solid var(--border);height:12px;border-radius:6px;overflow:hidden">
@@ -15950,8 +15950,8 @@ function fecharRolagem() {
 }
 
 // ─── SESSÕES E XP (capítulo #sessoes-xp do Livro do Jogador) ───
-// Limiares de XP total por nível (nível → XP total): 1→2:200, 2→3:500 ... 19→20:25.000
-const XP_TABELA = [200, 500, 900, 1400, 2000, 2700, 3500, 4400, 5400, 6500, 7700, 9000, 10500, 12200, 14100, 16200, 18600, 21500, 25000];
+// Limiares de XP total por nível (nível → XP total): 1→2:300, 2→3:700 ... 19→20:26.900
+const XP_TABELA = [300, 700, 1200, 1800, 2500, 3300, 4200, 5200, 6300, 7500, 8800, 10200, 11800, 13600, 15600, 17800, 20300, 23300, 26900];
 
 // Sugestões e intervalos por tipo/qualidade (regras do livro)
 const _SESS_QUAL_SUGESTAO = { 'Simples': 50, 'Desenvolvida': 180, 'Excepcional': 350 };
@@ -24249,25 +24249,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     </thead>
                     <tbody>
                         <tr><td><strong>1</strong></td><td>—</td><td>—</td><td>+2</td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>—</td><td>Base</td><td>Base</td></tr>
-                        <tr><td><strong>2</strong></td><td>200</td><td>200</td><td>+2</td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>3</strong> ⭐</td><td>300</td><td>500</td><td>+2</td><td>+2</td><td>1× <strong>Nv2</strong> + 2× Nv1</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>4</strong></td><td>400</td><td>900</td><td>+2</td><td>+2</td><td>1× Nv2 + 2× Nv1</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>5</strong></td><td>500</td><td>1.400</td><td>+3</td><td>+2</td><td>1× Nv2 + 2× Nv1</td><td>+1</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>6</strong> ⭐</td><td>600</td><td>2.000</td><td>+3</td><td>+2</td><td>1× <strong>Nv3</strong> + 2× Nv2</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>7</strong></td><td>700</td><td>2.700</td><td>+3</td><td>+2</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>8</strong></td><td>800</td><td>3.500</td><td>+3</td><td>+2</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>9</strong> ⭐</td><td>900</td><td>4.400</td><td>+4</td><td>+2</td><td>1× <strong>Nv4</strong> + 2× Nv3</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>10</strong></td><td>1000</td><td>5.400</td><td>+4</td><td>+2</td><td>1× Nv4 + 2× Nv3</td><td>+1</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>11</strong></td><td>1100</td><td>6.500</td><td>+4</td><td>+2</td><td>1× Nv4 + 2× Nv3</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>12</strong> ⭐</td><td>1200</td><td>7.700</td><td>+4</td><td>+2</td><td>1× <strong>Nv5</strong> + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>13</strong></td><td>1300</td><td>9.000</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>14</strong></td><td>1500</td><td>10.500</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>15</strong> ⭐</td><td>1700</td><td>12.200</td><td>+5</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>16</strong></td><td>1900</td><td>14.100</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>17</strong></td><td>2100</td><td>16.200</td><td>+6</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>18</strong> ⭐</td><td>2400</td><td>18.600</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>19</strong></td><td>2900</td><td>21.500</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
-                        <tr><td><strong>20</strong></td><td>3500</td><td>25.000</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>2</strong></td><td>300</td><td>300</td><td>+2</td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>3</strong> ⭐</td><td>400</td><td>700</td><td>+2</td><td>+2</td><td>1× <strong>Nv2</strong> + 2× Nv1</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>4</strong></td><td>500</td><td>1.200</td><td>+2</td><td>+2</td><td>1× Nv2 + 2× Nv1</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>5</strong></td><td>600</td><td>1.800</td><td>+3</td><td>+2</td><td>1× Nv2 + 2× Nv1</td><td>+1</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>6</strong> ⭐</td><td>700</td><td>2.500</td><td>+3</td><td>+2</td><td>1× <strong>Nv3</strong> + 2× Nv2</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>7</strong></td><td>800</td><td>3.300</td><td>+3</td><td>+2</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>8</strong></td><td>900</td><td>4.200</td><td>+3</td><td>+2</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>9</strong> ⭐</td><td>1000</td><td>5.200</td><td>+4</td><td>+2</td><td>1× <strong>Nv4</strong> + 2× Nv3</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>10</strong></td><td>1100</td><td>6.300</td><td>+4</td><td>+2</td><td>1× Nv4 + 2× Nv3</td><td>+1</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>11</strong></td><td>1200</td><td>7.500</td><td>+4</td><td>+2</td><td>1× Nv4 + 2× Nv3</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>12</strong> ⭐</td><td>1300</td><td>8.800</td><td>+4</td><td>+2</td><td>1× <strong>Nv5</strong> + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>13</strong></td><td>1400</td><td>10.200</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>14</strong></td><td>1600</td><td>11.800</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>15</strong> ⭐</td><td>1800</td><td>13.600</td><td>+5</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>16</strong></td><td>2000</td><td>15.600</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>17</strong></td><td>2200</td><td>17.800</td><td>+6</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>18</strong> ⭐</td><td>2500</td><td>20.300</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>19</strong></td><td>3000</td><td>23.300</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>20</strong></td><td>3600</td><td>26.900</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
                     </tbody>
                 </table>
             </div>
