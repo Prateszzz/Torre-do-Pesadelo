@@ -4464,6 +4464,62 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 /* Sumário 2 colunas */
   #livro-jogador .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: stretch; }
   #livro-jogador .sumario-side-panel { background: #242030; border: 1px solid #3a3548; border-radius: 6px; padding: 1.3rem 1.4rem; font-size: .88rem; color: #c5c5d1; display: flex; flex-direction: column; gap: 1.1rem; justify-content: space-between; }
+  /* Capítulo corrompido (XI) - Vhor'Kaal */
+  #livro-jogador .capitulo-corrompido {
+      background: linear-gradient(180deg, rgba(20,10,14,0.9) 0%, rgba(12,8,10,0.95) 100%);
+      border: 1px dashed rgba(156,42,42,0.45);
+      border-left: 3px solid rgba(156,42,42,0.7);
+      padding: 2rem 2.2rem;
+      margin-top: 2rem;
+      border-radius: 6px;
+      position: relative;
+  }
+  #livro-jogador .capitulo-corrompido::before {
+      content: "CORROMPIDO";
+      position: absolute;
+      top: 0.6rem;
+      right: 0.8rem;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: rgba(156,42,42,0.35);
+      pointer-events: none;
+  }
+  #livro-jogador .corrompido-cabecalho {
+      border-bottom: 1px solid rgba(156,42,42,0.25);
+      padding-bottom: 1rem;
+      margin-bottom: 1.4rem;
+  }
+  #livro-jogador .corrompido-cabecalho h1 {
+      color: var(--accent);
+      text-shadow: 1px 0 0 rgba(255,255,255,0.1), -1px 0 0 rgba(156,42,42,0.6);
+      letter-spacing: 1px;
+  }
+  #livro-jogador .corrompido-num {
+      text-decoration: line-through double;
+      text-decoration-color: rgba(156,42,42,0.8);
+  }
+  #livro-jogador .corrompido-sub {
+      color: #a85c5c;
+      font-style: italic;
+      margin-top: 0.3rem;
+      font-size: 1.05rem;
+  }
+  #livro-jogador .corrompido-intro {
+      color: #b88;
+      font-style: italic;
+      border-left: 2px solid rgba(156,42,42,0.4);
+      padding-left: 1rem;
+      margin-bottom: 1.8rem;
+  }
+  #livro-jogador .corrompido-card {
+      background: rgba(40,16,16,0.35);
+      border-color: rgba(156,42,42,0.25);
+  }
+  #livro-jogador .corrompido-box {
+      background: rgba(50,14,14,0.25);
+      border-left-color: #9c2a2a;
+  }
+
 #livro-jogador .sumario-side-panel h4 { color: var(--accent); font-size: 1rem; margin-bottom: .8rem; padding-bottom: .4rem; border-bottom: 1px solid #2a2a32; }
 #livro-jogador .sumario-side-panel ul { list-style: none; padding: 0; margin: 0; }
 #livro-jogador .sumario-side-panel li { padding: .3rem 0; border-bottom: 1px solid #222228; font-size: .85rem; line-height: 1.3; }
@@ -4650,8 +4706,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
             #sobrevivencia,
             #sanidade,
             #relacionamentos,
-            #referencias-ferramentas {
-                break-before: page;
+            #referencias-ferramentas,\r\n            #vhor-kaal {\r\n                break-before: page;
                 page-break-before: always;
             }
 
@@ -19591,6 +19646,17 @@ document.addEventListener('DOMContentLoaded', () => {
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#indice-tabelas">Índice de Tabelas</a></li>
         </ul>
 
+        <!-- X̷I̷. Vhor'Kaal -->
+        <span class="toc-label"><span class="corrompido-num">X̷I̷</span>. Vhor'Kaal</span>
+        <ul>
+            <li><a href="#vhor-kaal">Vhor'Kaal — O Cântico que Corrompe</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#fala-antiga">A Fala Antiga</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sussurros">Os Sussurros</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#verbo-corrompe">O Verbo que Corrompe</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#marcas-falam">As Marcas que Falam</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#chamado">O Chamado</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#aviso-corrompido">Aviso Final</a></li>
+        </ul>
         <!-- Botão de saída — sempre visível ao final da lista de seções -->
         <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
           <button onclick="fecharLivro()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:.45rem;background:rgba(var(--deep-rgb), .1);border:1px solid var(--accent-t35);color:var(--accent-light);padding:.6rem .8rem;font-family:inherit;font-size:.85rem;cursor:pointer;border-radius:4px;transition:background .2s,border-color .2s" onmouseover="this.style.background=&#39;rgba(var(--deep-rgb), .22)&#39;;this.style.borderColor=&#39;var(--accent-light)&#39;" onmouseout="this.style.background=&#39;rgba(var(--deep-rgb), .1)&#39;;this.style.borderColor=&#39;var(--accent-t35)&#39;">
@@ -19784,6 +19850,21 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#indice-tabelas">Índice de Tabelas</a></li>
                         </ul>
                     </div>
+
+                    <!-- X̷I̷. Vhor'Kaal -->
+                    <div>
+                        <h3 style="color: #c13f3f; margin-bottom: 0.4rem; font-size: 1.15rem;"><span class="corrompido-num">X̷I̷</span>. Vhor'Kaal</h3>
+                        <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
+                            <li><a href="#vhor-kaal">Vhor'Kaal — O Cântico que Corrompe</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#fala-antiga">A Fala Antiga</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sussurros">Os Sussurros</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#verbo-corrompe">O Verbo que Corrompe</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#marcas-falam">As Marcas que Falam</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#chamado">O Chamado</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#aviso-corrompido">Aviso Final</a></li>
+                        </ul>
+                    </div>
+
 
                 </div>
 
@@ -27584,6 +27665,80 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </section>
 
+        <!-- X̷I̷. CAPÍTULO CORROMPIDO -->
+        <section id="vhor-kaal" data-capitulo="X̷I̷" class="capitulo-corrompido">
+            <div class="corrompido-cabecalho">
+                <h1><span class="corrompido-num" title="Onze corrompido">X̷I̷</span>. Vhor'Kaal</h1>
+                <p class="corrompido-sub">O Cântico que Corrompe</p>
+            </div>
+            <p class="corrompido-intro">Este capítulo não deveria estar aqui. As páginas seguintes parecem ter sido arrancadas de um texto mais antigo do que as Torres — manchadas, com a tinta emperrada e a gramática quebrada. Algumas palavras mudam quando você não está olhando. Leia por sua conta e risco. A Corrupção também lê.</p>
+
+            <h2 id="fala-antiga">A Fala Antiga</h2>
+            <p>Há uma língua que existia antes do Rompimento. Não é humana, não é de nenhuma facção, e não deveria ser pronunciada por bocas que ainda respiram. Os estudiosos a chamam de <strong>Vhor'Kaal</strong> — "o cântico que corrompe". A Torre não a inventou; ela a lembra.</p>
+            <div class="system-card corrompido-card">
+                <strong>Fragmentos conhecidos:</strong>
+                <ul>
+                    <li><strong>Vhor</strong> — "eu vejo / eu tenho sede".</li>
+                    <li><strong>Kaal</strong> — "canto / gancho / nome verdadeiro".</li>
+                    <li><strong>Zha</strong> — "aberto", também "infectado".</li>
+                    <li><strong>Uur</strong> — "dentro / abaixo / no núcleo".</li>
+                    <li><strong>Neth</strong> — "silêncio", mas só quando a Corrupção para de falar.</li>
+                    <li><strong>Thal</strong> — "sim", dito sem perguntar.</li>
+                </ul>
+                <p style="margin-top: 0.8rem;"><em>Dizer um desses nomes em voz alta não invoca a Corrupção. Mas ela nota. E quem é notado, é lembrado.</em></p>
+            </div>
+
+            <h2 id="sussurros">Os Sussurros</h2>
+            <p>A Corrupção não grita. Ela sussurra. Não há ouvidos que a ouçam — ela fala diretamente no Núcleo, no espaço vazio entre um pensamento e outro. Todo Desperto ouviu, pelo menos uma vez, uma voz que não era sua.</p>
+            <div class="lore-box corrompido-box">
+                <strong>Como reconhecer um Sussurro:</strong><br><br>
+                • Ele responde a pensamentos que você não terminou.<br>
+                • Ele concorda com você antes mesmo que você tenha uma opinião.<br>
+                • Ele nunca se apresenta.<br>
+                • Ele sempre soa como você, mas três segundos no futuro.
+            </div>
+            <p>Quando um personagem atinge o estágio <strong>Corrompido (6–8)</strong>, o Mestre pode introduzir Sussurros em momentos de tensão: dando informações verdadeiras com preço oculto, sugerindo escolhas violentas como se fossem óbvias, ou elogiando a Corrupção como se fosse um velho amigo.</p>
+
+            <h2 id="verbo-corrompe">O Verbo que Corrompe</h2>
+            <p>Dar nome a uma coisa a torna real. Dar nome à Corrupção a aprofunda. Quando um Desperto decide nomear sua própria corrupção — para tentar controlá-la, negociar ou simplesmente entendê-la — ele está assinando um contrato sem ler as cláusulas.</p>
+            <div class="system-card corrompido-card">
+                <strong>Regra: Nomear a Corrupção</strong><br><br>
+                Um jogador pode declarar um nome para a Corrupção do personagem. Se fizer isso:<br>
+                • Ele ganha <strong>+1d4 de Corrupção</strong> imediatamente.<br>
+                • Uma vez por sessão, pode usar um Sussurro para receber uma informação verdadeira do Mestre.<br>
+                • Cada uso subsequente aumenta a Corrupção em +1.<br>
+                • Se a Corrupção chegar a <strong>Abissal (12+)</strong>, o nome passa a ser verdadeiro de verdade — e o personagem não pode mais se livrar dele sozinho.
+            </div>
+
+            <h2 id="marcas-falam">As Marcas que Falam</h2>
+            <p>As Marcas da Corrupção (veja o Capítulo VIII) não são apenas deformações. Para quem sabe ler, elas formam uma língua. Cicatrizes, manchas, olhos extra, ossos quebrados e recompostos — tudo isso é alfabeto.</p>
+            <div class="system-card corrompido-card">
+                <strong>Leitura das Marcas:</strong><br><br>
+                • <strong>Marca única:</strong> a Corrupção ainda está observando, aprendendo o formato da alma.<br>
+                • <strong>Duas marcas conectadas:</strong> a Corrupção começou a escrever uma frase.<br>
+                • <strong>Três ou mais marcas formando um padrão:</strong> a Corrupção deixou uma mensagem — geralmente um nome, uma promessa ou uma direção.<br><br>
+                <em>Ler uma mensagem completa exige um teste de <strong>Intelecto CD 18</strong> e custa <strong>1d6 de Sanidade</strong>, independentemente do resultado.</em>
+            </div>
+
+            <h2 id="chamado">O Chamado</h2>
+            <p>Nem todo mundo luta contra a Corrupção. Alguns a seguem. Alguns a ouvem porque a alternativa é ouvir o próprio silêncio. O Chamado não é uma facção — é um impulso que a Corrupção planta em Despertos exaustos, famintos por poder ou simplesmente cansados de serem humanos.</p>
+            <div class="lore-box corrompido-box">
+                <strong>Sinais do Chamado:</strong><br><br>
+                • Fascinação involuntária por Núcleos de monstros.<br>
+                • Sonhos com uma voz que ensina técnicas proibidas.<br>
+                • A sensação de que a Torre "o conhece".<br>
+                • O desejo crescente de parar de resistir.
+            </div>
+            <p>Abraçar o Chamado não concede poder de graça. A Corrupção cobra adiantado. Um personagem que se entregar voluntariamente ganha imediatamente <strong>+1 nível de uma técnica existente</strong> ou <strong>uma passiva de custo zero</strong>, mas sobe diretamente para o estágio <strong>Profanado (9–11)</strong> e ganha uma Marca permanente escolhida pelo Mestre.</p>
+
+            <h2 id="aviso-corrompido">Aviso Final</h2>
+            <div class="warning" style="background: rgba(80,10,10,0.25); border-left-color: #c13f3f;">
+                <strong style="color:#e07070;">Não leia este capítulo em voz alta. Não memorize as palavras. Não nomeie a Corrupção se não estiver disposto a ser lembrado por ela.</strong><br><br>
+                A Torre sempre cobra. Mas a Corrupção não cobra apenas com Sanidade ou com carne. Ela cobra com significado. Cada palavra que você entende é uma palavra que ela também entende sobre você.<br><br>
+                <em style="color:#c13f3f;">Vhor'kaal thal. Vhor'kaal uur.</em>
+            </div>
+        </section>
+
         <!-- FECHAMENTO FINAL -->
         <div class="lore-box" style="margin-top: 2.5rem; text-align: center;">
             <strong>Subir não é garantido. É merecido.</strong><br><br>
@@ -31910,7 +32065,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '#livro-sumario': 'Sumário', '#intro': 'I', '#criacao': 'II', '#alma-fragmentada': 'III',
       '#progressao-ascensao-tecnicas': 'IV', '#economia': 'V', '#mecanico': 'VI',
       '#sobrevivencia': 'VII', '#sanidade': 'VIII', '#relacionamentos': 'IX',
-      '#referencias-ferramentas': 'X'
+      '#referencias-ferramentas': 'X', '#vhor-kaal': 'X̷I̷'
     };
     const sumario = document.getElementById('livro-sumario');
     if (!sumario) return;
