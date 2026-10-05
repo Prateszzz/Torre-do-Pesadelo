@@ -4518,20 +4518,38 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
             footer,
             .no-print,
             nav,
-            .toc-label {
+            .toc-label,
+            .livro-busca,
+            .busca-controles,
+            #livro-sidebar,
+            #landing-screen,
+            #home,
+            #ficha,
+            #painel-gm,
+            #painel-adm,
+            #secao-ranking,
+            #tabbar {
                 display: none !important;
+            }
+
+            /* Imprime sempre o Livro do Jogador */
+            #livro-jogador {
+                display: block !important;
             }
 
             /* Remove margens laterais do sidebar */
             main,
             .content,
             article,
-            section {
+            section,
+            #livro-content,
+            #livro-layout {
                 margin-left: 0 !important;
                 padding-left: 0 !important;
                 padding-right: 0 !important;
                 max-width: 100% !important;
             }
+            #livro-content { padding: 0 !important; }
 
             /* Títulos */
             h1, h2, h3, h4 {
@@ -4609,6 +4627,27 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
             /* Remove qualquer backdrop ou blur */
             * {
                 backdrop-filter: none !important;
+            }
+
+            /* Capítulos principais do livro começam em nova página */
+            #livro-sumario,
+            #intro,
+            #criacao,
+            #alma-fragmentada,
+            #progressao-ascensao-tecnicas,
+            #economia,
+            #mecanico,
+            #sobrevivencia,
+            #sanidade,
+            #relacionamentos {
+                break-before: page;
+                page-break-before: always;
+            }
+
+            /* Selos de capítulo no sumário (versão impressa) */
+            .capitulo-badge {
+                background: #111 !important; color: #fff !important;
+                border: 1px solid #111 !important;
             }
         }
 
@@ -5256,6 +5295,41 @@ body:has(#livro-mestre[style*="display: block"]) .tp-eye {
     @media (max-width:1024px) {
       #livro-mestre-sidebar { position: fixed !important; }
     }
+
+    /* ═══ BUSCA NO CONTEÚDO DO LIVRO + BOTÃO PDF ═══════════════════════ */
+    .btn-print {
+      background: transparent; border: 1px solid var(--border); color: var(--silver);
+      padding: 0.35rem 0.8rem; font-family: inherit; font-size: 0.78rem;
+      cursor: pointer; border-radius: 4px; transition: background 0.2s, color 0.2s, border-color 0.2s;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+    .btn-print:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .livro-busca { padding: 0.7rem 0; border-bottom: 1px solid var(--border); margin-bottom: 0.8rem; }
+    .livro-busca input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text);
+      padding: 0.5rem 0.7rem; font-family: inherit; font-size: 0.88rem; border-radius: 4px; outline: none;
+    }
+    .livro-busca input:focus { border-color: var(--accent-light); }
+    .busca-controles {
+      display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem;
+      font-size: 0.78rem; color: var(--text-muted);
+    }
+    .busca-controles button {
+      background: var(--bg-elevated); border: 1px solid var(--border); color: var(--silver);
+      padding: 0.25rem 0.5rem; cursor: pointer; border-radius: 3px; font-size: 0.75rem; line-height: 1;
+    }
+    .busca-controles button:hover { background: var(--accent); color: #fff; }
+    #busca-contador { min-width: 2.5em; text-align: center; }
+    mark.busca-highlight { background: #d4a017; color: #000; padding: 0.05rem 0; border-radius: 2px; }
+
+    /* Selos de capítulo no sumário */
+    .capitulo-badge {
+      display: inline-flex; align-items: center; justify-content: center; min-width: 1.7em;
+      background: var(--accent); color: #fff; font-size: 0.68rem; padding: 0.12rem 0.35rem;
+      border-radius: 3px; margin-right: 0.45rem; font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700; letter-spacing: 0.5px; vertical-align: middle;
+    }
+    #livro-sumario a { display: inline-flex; align-items: center; }
   </style></head>
 <body>
 
@@ -5487,6 +5561,7 @@ body:has(#livro-mestre[style*="display: block"]) .tp-eye {
       <svg class="ic ic-lg"><use href="#ic-menu"></use></svg>
     </button>
     <span class="topbar-logo">Torre do Pesadelo</span>
+    <button type="button" class="btn-print no-print" onclick="window.print()" title="Baixar PDF / Imprimir" aria-label="Baixar PDF">🖶 PDF</button>
     <button class="topbar-menu-btn" id="btn-instalar-app" onclick="instalarApp()" aria-label="Instalar App" title="Instalar o app no dispositivo" style="display:none">
       <svg class="ic ic-lg"><use href="#ic-download"></use></svg>
     </button>
@@ -19273,6 +19348,16 @@ document.addEventListener('DOMContentLoaded', () => {
     <aside id="livro-sidebar">
       <div style="font-family:&#39;Playfair Display&#39;,serif;font-size:.95rem;color:var(--accent-light);margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:2px solid var(--accent)">Índice</div>
 
+      <div class="livro-busca no-print">
+        <input type="text" id="busca-input" placeholder="Buscar no livro..." autocomplete="off" aria-label="Buscar no livro">
+        <div class="busca-controles">
+          <span id="busca-contador">0/0</span>
+          <button type="button" id="busca-anterior" title="Resultado anterior">▲</button>
+          <button type="button" id="busca-proximo" title="Próximo resultado">▼</button>
+          <button type="button" id="busca-limpar" title="Limpar busca">✕</button>
+        </div>
+      </div>
+
         <ul style="margin-bottom: 0.6rem;">
             <li><a href="#livro-sumario" style="color: var(--accent); font-weight: 600;">→ Sumário Interativo</a></li>
         </ul>
@@ -19423,7 +19508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </header>
 
         <!-- SUMÁRIO INTERATIVO -->
-        <section id="livro-sumario" style="margin-bottom: 2.5rem;">
+        <section id="livro-sumario" data-capitulo="Sumário" style="margin-bottom: 2.5rem;">
             <h2 style="text-align: center; color: var(--accent); font-size: 1.6rem; margin-bottom: 1.2rem; letter-spacing: 1px;">Sumário</h2>
             
             <p style="text-align: center; max-width: 700px; margin: 0 auto 1.5rem; color: #a8a8b3; font-size: 0.95rem;">
@@ -19625,7 +19710,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="section-divider"></div>
 
         <!-- INTRO + LORE -->
-        <section id="intro">
+        <section id="intro" data-capitulo="I">
             <h1>O Mundo de Torre do Pesadelo</h1>
             <p>O mundo não acabou em uma explosão nuclear. Ele acabou quando as Torres surgiram.</p>
             <p>Milhares de torres apareceram simultaneamente pelo planeta, alterando a geografia, destruindo ecossistemas e mudando completamente a realidade conhecida. No centro de tudo ergue-se a <strong>Torre do Pesadelo</strong>, cercada pelas seis torres periféricas das grandes regiões.</p>
@@ -21033,7 +21118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="section-divider"></div>
 
         <!-- CRIAÇÃO DE PERSONAGEM -->
-        <section id="criacao">
+        <section id="criacao" data-capitulo="II">
             <h1>Criação de Personagem</h1>
             <h2>Guia Completo de Criação</h2>
             
@@ -23781,7 +23866,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="section-divider"></div>
 
         <!-- SISTEMA DE PODER -->
-        <section id="alma-fragmentada">
+        <section id="alma-fragmentada" data-capitulo="III">
             <h1>Sistema de Poder — Alma Fragmentada</h1>
             
             <p>O poder de um Desperto não permanece estático. Com evolução, experiência, domínio e expansão conceitual, uma habilidade pode atravessar múltiplos estágios de despertar. Despertares não existem apenas para aumentar números — eles existem para expandir possibilidades.</p>
@@ -24186,7 +24271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ═══════════════════════════════════════════════════════════ -->
 <div class="section-divider"></div>
 
-<section id="progressao-ascensao-tecnicas" class="section-anchor">
+<section id="progressao-ascensao-tecnicas" data-capitulo="IV" class="section-anchor">
     <h1>Progressão, Ascensão e Técnicas</h1>
 </section>
 <div class="section-divider"></div>
@@ -25168,7 +25253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="highlight" style="display:block; margin:1rem 0; padding:0.8rem 1rem; font-style:italic;">
                 “Subir não é ambição. É desespero disfarçado de esperança.”
             </p>
-        </section><section id="economia">
+        </section><section id="economia" data-capitulo="V">
         <h1>Sistema Monetário e de Equipamentos</h1>
 
         <h2 id="moeda">A Moeda é Espíritos (Esp)</h2>
@@ -25752,7 +25837,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="section-divider"></div>
 
-        <section id="mecanico">
+        <section id="mecanico" data-capitulo="VI">
             <h1 id="sistema-resolucao">Sistema de Resolução — O Julgamento da Alma</h1>
 
             <p>O mundo das Torres não perdoa a fraqueza. Toda ação importante — seja lutar, resistir à corrupção, atravessar a Névoa ou confrontar um pesadelo — é resolvida por um <strong>d20</strong>, o dado que representa o olhar frio da Torre sobre sua alma.</p>
@@ -26784,7 +26869,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="section-divider"></div>
 
-        <section id="sobrevivencia">
+        <section id="sobrevivencia" data-capitulo="VII">
             <h2>Sobrevivência nas Torres</h2>
 
         <h3 id="acampamento">Sistema de Acampamento</h3>
@@ -26857,7 +26942,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         </section>
 
-<section id="sanidade">
+<section id="sanidade" data-capitulo="VIII">
             <h1>Sanidade e Corrupção — O Preço da Alma</h1>
         <p>A Sanidade é a sua capacidade de continuar sendo você mesmo diante do impossível. As Torres não destroem apenas o corpo — elas comem a mente, devoram memórias, distorcem o que você ama e transformam o familiar em pesadelo.</p>
 
@@ -27048,7 +27133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         </section>
 
-<section id="relacionamentos">
+<section id="relacionamentos" data-capitulo="IX">
             <h1>Relacionamentos — Laços que a Torre Cobra</h1>
 
         <p>Em um mundo onde a Torre tenta quebrar tudo que é humano, os laços que as pessoas formam entre si se tornam uma das poucas coisas que ainda valem a pena defender. O amor, a amizade profunda e a confiança cega são tanto uma fonte de força quanto uma das maiores fraquezas que um Desperto pode carregar.</p>
@@ -31375,5 +31460,150 @@ document.addEventListener('DOMContentLoaded', () => {
   // Se o navegador não dispara beforeinstallprompt (iOS/Firefox/desktop),
   // mostra os botões mesmo assim — o clique exibe as instruções.
   setTimeout(_mostrarBotoesInstalar, 1500);
+
+  /* ═══ BUSCA NO CONTEÚDO DO LIVRO DO JOGADOR ═══════════════════════════ */
+  (function() {
+    const INPUT_ID = 'busca-input';
+    const CONTADOR_ID = 'busca-contador';
+    const BTN_ANT = 'busca-anterior';
+    const BTN_PROX = 'busca-proximo';
+    const BTN_LIMPAR = 'busca-limpar';
+    const MARK_CLASS = 'busca-highlight';
+    const SCOPE_SELECTOR = '#livro-content';
+
+    let matches = [];
+    let current = -1;
+    let debounce = null;
+
+    function getScope() { return document.querySelector(SCOPE_SELECTOR); }
+
+    function clearHighlights() {
+      const scope = getScope();
+      if (!scope) return;
+      const marks = Array.from(scope.querySelectorAll('mark.' + MARK_CLASS));
+      marks.forEach(mark => {
+        const parent = mark.parentNode;
+        while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+        parent.removeChild(mark);
+        parent.normalize();
+      });
+      matches = [];
+      current = -1;
+      updateCounter();
+    }
+
+    function updateCounter() {
+      const el = document.getElementById(CONTADOR_ID);
+      if (!el) return;
+      el.textContent = matches.length ? (current + 1) + '/' + matches.length : '0/0';
+    }
+
+    function scrollTo(index) {
+      if (!matches.length) return;
+      current = ((index % matches.length) + matches.length) % matches.length;
+      const mark = matches[current];
+      mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      matches.forEach((m, i) => { m.style.background = (i === current) ? '#ffeb3b' : ''; });
+      updateCounter();
+    }
+
+    function escapeRegex(s) {
+      return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function highlight(term) {
+      clearHighlights();
+      term = term.replace(/\s+/g, ' ').trim();
+      if (!term) return;
+      const scope = getScope();
+      if (!scope) return;
+      const lower = term.toLowerCase();
+      const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, node => {
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        const tag = parent.tagName;
+        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
+        if (parent.closest('script, style, noscript')) return NodeFilter.FILTER_REJECT;
+        if (parent.classList && parent.classList.contains(MARK_CLASS)) return NodeFilter.FILTER_REJECT;
+        if (node.textContent.toLowerCase().indexOf(lower) !== -1) return NodeFilter.FILTER_ACCEPT;
+        return NodeFilter.FILTER_SKIP;
+      }, false);
+
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+
+      nodes.forEach(node => {
+        const text = node.textContent;
+        const parent = node.parentNode;
+        const regex = new RegExp('(' + escapeRegex(term) + ')', 'gi');
+        const parts = text.split(regex);
+        const fragment = document.createDocumentFragment();
+        parts.forEach((part, i) => {
+          if (i % 2 === 1) {
+            const mark = document.createElement('mark');
+            mark.className = MARK_CLASS;
+            mark.textContent = part;
+            fragment.appendChild(mark);
+            matches.push(mark);
+          } else {
+            fragment.appendChild(document.createTextNode(part));
+          }
+        });
+        parent.replaceChild(fragment, node);
+      });
+
+      if (matches.length) scrollTo(0);
+      else updateCounter();
+    }
+
+    function init() {
+      const input = document.getElementById(INPUT_ID);
+      const btnAnt = document.getElementById(BTN_ANT);
+      const btnProx = document.getElementById(BTN_PROX);
+      const btnLimpar = document.getElementById(BTN_LIMPAR);
+      if (!input) return;
+
+      input.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => highlight(input.value), 250);
+      });
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (matches.length) scrollTo(current + 1);
+          else highlight(input.value);
+        }
+      });
+      if (btnAnt) btnAnt.addEventListener('click', () => scrollTo(current - 1));
+      if (btnProx) btnProx.addEventListener('click', () => scrollTo(current + 1));
+      if (btnLimpar) btnLimpar.addEventListener('click', () => { input.value = ''; clearHighlights(); input.focus(); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+
+  /* Insere selos de capítulo no Sumário Interativo do Livro */
+  (function() {
+    const map = {
+      '#livro-sumario': 'Sumário', '#intro': 'I', '#criacao': 'II', '#alma-fragmentada': 'III',
+      '#progressao-ascensao-tecnicas': 'IV', '#economia': 'V', '#mecanico': 'VI',
+      '#sobrevivencia': 'VII', '#sanidade': 'VIII', '#relacionamentos': 'IX'
+    };
+    const sumario = document.getElementById('livro-sumario');
+    if (!sumario) return;
+    Object.keys(map).forEach(href => {
+      const link = sumario.querySelector('a[href="' + href + '"]');
+      if (link) {
+        const badge = document.createElement('span');
+        badge.className = 'capitulo-badge';
+        badge.textContent = map[href];
+        link.insertBefore(badge, link.firstChild);
+      }
+    });
+  })();
 </script>
 </body></html>
