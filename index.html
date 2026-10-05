@@ -4462,8 +4462,8 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 #livro-jogador #sumario a:hover { color: var(--accent); text-decoration: underline; }
 
 /* Sumário 2 colunas */
-#livro-jogador .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
-#livro-jogador .sumario-side-panel { background: #242030; border: 1px solid #3a3548; border-radius: 6px; padding: 1.3rem 1.4rem; font-size: .88rem; color: #c5c5d1; display: flex; flex-direction: column; gap: 1.1rem; }
+  #livro-jogador .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: stretch; }
+  #livro-jogador .sumario-side-panel { background: #242030; border: 1px solid #3a3548; border-radius: 6px; padding: 1.3rem 1.4rem; font-size: .88rem; color: #c5c5d1; display: flex; flex-direction: column; gap: 1.1rem; justify-content: space-between; }
 #livro-jogador .sumario-side-panel h4 { color: var(--accent); font-size: 1rem; margin-bottom: .8rem; padding-bottom: .4rem; border-bottom: 1px solid #2a2a32; }
 #livro-jogador .sumario-side-panel ul { list-style: none; padding: 0; margin: 0; }
 #livro-jogador .sumario-side-panel li { padding: .3rem 0; border-bottom: 1px solid #222228; font-size: .85rem; line-height: 1.3; }
@@ -4649,7 +4649,8 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
             #mecanico,
             #sobrevivencia,
             #sanidade,
-            #relacionamentos {
+            #relacionamentos,
+            #referencias-ferramentas {
                 break-before: page;
                 page-break-before: always;
             }
@@ -19577,6 +19578,18 @@ document.addEventListener('DOMContentLoaded', () => {
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-faccoes">Facções</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-barmans">Barmans</a></li>
         </ul>
+        <!-- X. REFERÊNCIAS E FERRAMENTAS -->
+        <span class="toc-label">X. Referências e Ferramentas</span>
+        <ul>
+            <li><a href="#referencias-ferramentas">Referências e Ferramentas</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#glossario">Glossário</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#referencia-rapida">Referência Rápida</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#checklist-criacao">Checklist de Criação</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-usar-ficha">Ficha e Portal</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-jogar">Fluxo de Sessão</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faq">FAQ</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#indice-tabelas">Índice de Tabelas</a></li>
+        </ul>
 
         <!-- Botão de saída — sempre visível ao final da lista de seções -->
         <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
@@ -19757,6 +19770,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
+                    <!-- X. REFERÊNCIAS E FERRAMENTAS -->
+                    <div>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">X. Referências e Ferramentas</h3>
+                        <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
+                            <li><a href="#referencias-ferramentas">Referências e Ferramentas</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#glossario">Glossário de Termos</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#referencia-rapida">Referência Rápida Consolidada</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#checklist-criacao">Checklist de Criação</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-usar-ficha">Como Usar a Ficha e o Portal</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-jogar">Como Jogar — Fluxo de Sessão</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faq">Perguntas Frequentes</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#indice-tabelas">Índice de Tabelas</a></li>
+                        </ul>
+                    </div>
+
                 </div>
 
                 <!-- Coluna da direita: painel de panorama, trilhas e referência -->
@@ -19843,6 +19871,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <strong>Como usar este livro</strong><br>
                         Leia na ordem dos capítulos ou siga uma <em>Trilha de Leitura</em>. Clique em qualquer link para pular direto ao conteúdo. O <strong>Livro do Mestre</strong> contém segredos, monstros e ferramentas do GM.
                     </div>
+
+
 
                 </div>
 
@@ -27408,6 +27438,152 @@ document.addEventListener('DOMContentLoaded', () => {
         
         </section>
 
+        <!-- X. REFERÊNCIAS E FERRAMENTAS -->
+        <section id="referencias-ferramentas" data-capitulo="X">
+            <h1>X. Referências e Ferramentas</h1>
+            <p>Este capítulo reúne consultas rápidas para quando você estiver no meio da mesa e precisar de uma resposta sem folhear o livro inteiro. Aqui estão os termos, as fórmulas, o passo a passo de criação e as tabelas principais — tudo em um só lugar. A Torre não dá mapas, mas dá ferramentas. Use-as.</p>
+
+            <h2 id="glossario">Glossário de Termos</h2>
+            <div class="system-card">
+                <ul style="columns: 2; column-gap: 2rem;">
+                    <li><strong>Desperto:</strong> ser humano cujo Núcleo da Alma despertou, ganhando poder.</li>
+                    <li><strong>Núcleo da Alma:</strong> centelha sobrenatural que carrega a identidade e o poder de um Desperto.</li>
+                    <li><strong>Alma Fragmentada:</strong> condição de quem carrega mais de uma influência no Núcleo; risco de ruptura, fonte de força.</li>
+                    <li><strong>Névoa:</strong> fenômeno anormal que envolve territórios fora das cidades; distorce direção, percepção e realidade.</li>
+                    <li><strong>Corrupção:</strong> contaminação da Alma pela Torre. Acumula estágios e transforma quem a carrega.</li>
+                    <li><strong>Sanidade:</strong> resiliência mental e espiritual do personagem.</li>
+                    <li><strong>Ascensão:</strong> evolução do Núcleo por meio de Núcleos absorvidos, medida de 0 a 10.</li>
+                    <li><strong>Nível de Personagem:</strong> progressão por XP, de 1 a 20.</li>
+                    <li><strong>Surto Decenal:</strong> evento catastrófico que ocorre a cada dez anos, quando a Torre “respira”.</li>
+                    <li><strong>Slayer:</strong> Desperto profissional que desce e sobe as Torres para caçar, proteger ou lucrar.</li>
+                    <li><strong>Barreira:</strong> cidade-fortaleza que resiste à Névoa e aos monstros.</li>
+                    <li><strong>Zona de Transição:</strong> área entre a Barreira e a Névoa, perigosa e instável.</li>
+                    <li><strong>Aspecto:</strong> caminho da Árvore da Alma (Bélico, Lúcido, Resiliente, Perceptivo).</li>
+                    <li><strong>Árvore da Alma:</strong> sistema de progressão do Aspecto, com 10 níveis e um Ápice.</li>
+                    <li><strong>Técnica:</strong> aplicação consciente do Poder com efeito, custo e limitação.</li>
+                    <li><strong>Passiva:</strong> habilidade sempre ativa, geralmente mais fraca que uma técnica ativa.</li>
+                    <li><strong>Manifestação:</strong> forma como o Poder se expressa no mundo.</li>
+                    <li><strong>Utilização:</strong> uso direto do Poder sem criar uma técnica permanente.</li>
+                    <li><strong>Ritual:</strong> cerimônia que canaliza poder da Torre por meio de tempo, componentes e custo.</li>
+                    <li><strong>Ferreiro:</strong> especialista que forja equipamentos usando materiais e Núcleos de monstros.</li>
+                    <li><strong>Barman:</strong> membro da Rede — informante, contato e ponto de apoio nas cidades.</li>
+                    <li><strong>Facção:</strong> grupo organizado com interesses, recursos e reputação próprios.</li>
+                    <li><strong>Reputação:</strong> nível de relacionamento coletivo com uma facção, de −3 a +3.</li>
+                    <li><strong>Atenção da Torre:</strong> medida de quanto a Torre notou um grupo; 6–8 ticks disparam eventos.</li>
+                    <li><strong>Marca da Corrupção:</strong> efeito físico ou espiritual que surge nos estágios avançados de Corrupção.</li>
+                    <li><strong>Purificação:</strong> processo de remover Corrupção — raro, caro e nem sempre completo.</li>
+                    <li><strong>Despertar:</strong> evolução do Poder que expande o que o personagem pode fazer.</li>
+                    <li><strong>Ganho Profundo:</strong> mudança permanente do corpo ou da Alma após um Despertar.</li>
+                    <li><strong>Ápice:</strong> nível 10 do Aspecto na Árvore da Alma; exige missão e contexto narrativo.</li>
+                </ul>
+            </div>
+
+            <h2 id="referencia-rapida">Referência Rápida Consolidada</h2>
+            <div class="system-card">
+                <ul>
+                    <li><strong>CD de teste:</strong> 10 + Maestria + Mod do atributo</li>
+                    <li><strong>Maestria/Proficiência:</strong> 1 + ⌈Nível ÷ 4⌉ (+2 a +6)</li>
+                    <li><strong>Modificador de atributo:</strong> (Valor − 10) ÷ 2, arredondado para baixo</li>
+                    <li><strong>PV:</strong> 20 + Vigor×3 + (10 + ModVig×2)×(Nv−1)</li>
+                    <li><strong>STA:</strong> 20 + Alma×2 + Intelecto + (6 + ModAlma + ModInt)×(Nv−1)</li>
+                    <li><strong>PE:</strong> (⌊Nv÷2⌋ + 2)×(ModAlma + ModInt + 1)</li>
+                    <li><strong>Custo por PE:</strong> (STA máx ÷ 2) ÷ PE máx, arredondado para cima (mín. 1)</li>
+                    <li><strong>CA:</strong> 10 + Destreza + bônus de armadura/outros</li>
+                    <li><strong>Iniciativa:</strong> 1d20 + ModDestreza</li>
+                    <li><strong>Sanidade:</strong> 10 + ModIntelecto + ModCarisma</li>
+                    <li><strong>Faixas de Sanidade:</strong> 100–75% Estável · 74–50% Perturbado · 49–25% Abalado · 24–10% À Beira · 9–0% Ruptura Iminente</li>
+                    <li><strong>Estágios de Corrupção:</strong> 0–2 Limpo · 3–5 Marcado · 6–8 Corrompido · 9–11 Profanado · 12+ Abissal</li>
+                    <li><strong>Atenção da Torre:</strong> 6–8 ticks = evento; 9+ = evento grave</li>
+                </ul>
+            </div>
+
+            <h2 id="checklist-criacao">Checklist de Criação de Personagem</h2>
+            <div class="system-card">
+                <ol>
+                    <li><strong>Identidade:</strong> nome, idade, gênero, aparência e antecedente.</li>
+                    <li><strong>Poder Principal:</strong> conceito central da sua Alma e atributo principal.</li>
+                    <li><strong>Como Você Despertou?</strong> o trauma ou momento que acordou o Núcleo.</li>
+                    <li><strong>Atributos:</strong> distribua 80 pontos entre Força, Destreza, Vigor, Intelecto, Alma e Carisma.</li>
+                    <li><strong>Antecedente:</strong> ganhe perícia, benefício de mundo, relacionamento inicial e custo/gancho.</li>
+                    <li><strong>Traços da Alma:</strong> escolha traços e fraquezas mantendo o balanceamento (1 grátis + até 4 pagos).</li>
+                    <li><strong>Técnica Inicial:</strong> crie sua primeira técnica Nv0 ou Nv1, dentro do conceito do Poder.</li>
+                    <li><strong>Equipamento:</strong> anote itens iniciais conforme o antecedente e aprovação do Mestre.</li>
+                    <li><strong>Relacionamentos:</strong> defina pelo menos um laço inicial (NPC, facção ou Barman).</li>
+                </ol>
+            </div>
+
+            <h2 id="como-usar-ficha">Como Usar a Ficha e o Portal</h2>
+            <p>A ficha digital oficial do <strong>Torre do Pesadelo</strong> está no portal. Ela calcula PV, STA, PE, CA, modificadores, Proficiência e progressão automaticamente, além de oferecer painéis para Árvore da Alma, técnicas, utilizações, rituais, corrupção, relacionamentos e inventário.</p>
+            <div class="system-card">
+                <strong>Portal Oficial:</strong> <a href="https://prateszzz.github.io/Torre-do-Pesadelo/" target="_blank" rel="noopener">prateszzz.github.io/Torre-do-Pesadelo</a><br><br>
+                <strong>Dicas rápidas:</strong>
+                <ul>
+                    <li>Preencha os atributos primeiro — quase tudo depende deles.</li>
+                    <li>Adicione técnicas e passivas no painel Poder; o contador de técnicas esperadas ajuda a não ultrapassar o limite do nível.</li>
+                    <li>Use o wizard de criação se for sua primeira ficha.</li>
+                    <li>Salvamentos são automáticos quando você está logado.</li>
+                </ul>
+            </div>
+
+            <h2 id="como-jogar">Como Jogar — O Fluxo de uma Sessão</h2>
+            <div class="system-card">
+                <ol>
+                    <li><strong>Preparação:</strong> o Mestre apresenta a cena, o objetivo e os riscos.</li>
+                    <li><strong>Decisão do grupo:</strong> os jogadores escolhem como abordar o desafio (combate, furtividade, diplomacia, exploração).</li>
+                    <li><strong>Testes:</strong> o Mestre pede rolagens de atributo ou perícia; some Mod + Proficiência (se treinado) + 1d20.</li>
+                    <li><strong>Consequências:</strong> sucessos e falhas mudam a cena, a Atenção da Torre e os recursos do grupo.</li>
+                    <li><strong>Combate (se houver):</strong> rolagem de iniciativa, ações por rodada, dano, condições e custos de PE/STA.</li>
+                    <li><strong>Descanso:</strong> acampamento, recuperação de PV/STA/PE, eventos noturnos e possível aumento da Atenção da Torre.</li>
+                    <li><strong>Progressão:</strong> ao final da sessão, o Mestre distribui XP e marca o impacto narrativo.</li>
+                </ol>
+                <p style="margin-top: 0.8rem;"><em>Lembrete: nem todo problema é um inimigo para ser derrotado. Às vezes, sobreviver é a única vitória que a Torre permite.</em></p>
+            </div>
+
+            <h2 id="faq">Perguntas Frequentes (FAQ)</h2>
+            <div class="lore-box">
+                <strong>Posso criar uma técnica que não exista no livro?</strong><br>
+                Sim — use o sistema de criação de técnicas e habilidades. Toda técnica precisa de efeito, custo, limitação e estar dentro do conceito do seu Poder.
+            </div>
+            <div class="lore-box">
+                <strong>O que acontece se minha Sanidade chegar a 0?</strong><br>
+                Você entra em Ruptura. O Mestre define o efeito: catatonia, fuga, violência descontrolada ou uma visão que muda tudo. Não é morte, mas pode ser pior.
+            </div>
+            <div class="lore-box">
+                <strong>Corrupção e Sanidade são a mesma coisa?</strong><br>
+                Não. Sanidade mede sua resiliência mental; Corrupção mede a contaminação da Torre no seu Núcleo. Ambas cobram um preço, mas de formas diferentes.
+            </div>
+            <div class="lore-box">
+                <strong>Posso subir de nível no meio de uma incursão?</strong><br>
+                Não. O up exige um descanso seguro e um momento narrativo de reflexão ou transformação.
+            </div>
+            <div class="lore-box">
+                <strong>A ficha digital substitui o livro?</strong><br>
+                Não. A ficha automatiza cálculos; o livro contém as regras, lore e orientações do Mestre. Use os dois juntos.
+            </div>
+
+            <h2 id="indice-tabelas">Índice de Tabelas</h2>
+            <div class="system-card">
+                <ul>
+                    <li><a href="#atributos">Tabela de Atributos e Modificadores</a></li>
+                    <li><a href="#pericias">Tabela de Perícias</a></li>
+                    <li><a href="#sessoes-xp">Tabela de Progressão (1–20)</a></li>
+                    <li><a href="#corrupcao-estagios">Estágios de Corrupção</a></li>
+                    <li><a href="#sanidade-faixas">Faixas de Sanidade</a></li>
+                    <li><a href="#rel-niveis">Níveis de Relacionamento</a></li>
+                    <li><a href="#rel-eventos">Eventos de Relacionamento</a></li>
+                    <li><a href="#faccoes">Reputação com Facções</a></li>
+                    <li><a href="#ranks-equipamentos">Classificação de Equipamentos</a></li>
+                    <li><a href="#evolucao-poder">Formas de Despertar</a></li>
+                    <li><a href="#tecnicas-habilidades">Custo e Níveis de Técnicas</a></li>
+                    <li><a href="#arvore-alma">Árvore da Alma — Aspectos</a></li>
+                </ul>
+            </div>
+
+            <div class="warning" style="margin-top: 1.5rem;">
+                <strong>A Torre sempre cobra.</strong> Glossários e fórmulas ajudam a jogar, mas não substituem escolhas. Cada poder que você usa, cada amigo que você faz e cada andar que você sobe deixa a Torre um pouco mais interessada em você. E quando a Torre se interessa, ela cobra.
+            </div>
+        </section>
+
         <!-- FECHAMENTO FINAL -->
         <div class="lore-box" style="margin-top: 2.5rem; text-align: center;">
             <strong>Subir não é garantido. É merecido.</strong><br><br>
@@ -31733,7 +31909,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const map = {
       '#livro-sumario': 'Sumário', '#intro': 'I', '#criacao': 'II', '#alma-fragmentada': 'III',
       '#progressao-ascensao-tecnicas': 'IV', '#economia': 'V', '#mecanico': 'VI',
-      '#sobrevivencia': 'VII', '#sanidade': 'VIII', '#relacionamentos': 'IX'
+      '#sobrevivencia': 'VII', '#sanidade': 'VIII', '#relacionamentos': 'IX',
+      '#referencias-ferramentas': 'X'
     };
     const sumario = document.getElementById('livro-sumario');
     if (!sumario) return;
