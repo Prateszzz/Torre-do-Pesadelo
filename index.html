@@ -18856,12 +18856,12 @@ function _livroSidebarResponsiva() {
 
 // ── NAVEGAÇÃO DO LIVRO (breadcrumb + anterior/próximo) ──
 // Ordem das seções (mesma do sumário) e mapeamento para as partes I–IX.
-const _LIVRO_SECOES = ['intro','torre-pesadelo','torre-disputas','mundo-fora','nevoa','geopolitica','despertos','criacao','atributos','aparencia','tracos-alma','alma-fragmentada','poder-mente-corpo','arvore-alma','utilizacao-manifestacao','rituais','ascensao','sessoes-xp','surtos','economia','mecanico','combate','sobrecarga','recuperacao','sobrevivencia','sanidade','relacionamentos'];
+const _LIVRO_SECOES = ['intro','torre-pesadelo','torre-disputas','mundo-fora','nevoa','geopolitica','despertos','criacao','atributos','aparencia','tracos-alma','alma-fragmentada','poder-mente-corpo','utilizacao-manifestacao','rituais','progressao-ascensao-tecnicas','sessoes-xp','evolucao-poder','tecnicas-habilidades','arvore-alma','ascensao','surtos','economia','mecanico','combate','sobrecarga','recuperacao','sobrevivencia','sanidade','relacionamentos'];
 const _LIVRO_PARTES = {
   intro:'I · O Mundo', 'torre-pesadelo':'I · O Mundo', 'torre-disputas':'I · O Mundo', 'mundo-fora':'I · O Mundo', nevoa:'I · O Mundo', geopolitica:'I · O Mundo', despertos:'I · O Mundo',
   criacao:'II · Criação', atributos:'II · Criação', aparencia:'II · Criação', 'tracos-alma':'II · Criação',
-  'alma-fragmentada':'III · Sistema de Poder', 'poder-mente-corpo':'III · Sistema de Poder', 'arvore-alma':'III · Sistema de Poder', 'utilizacao-manifestacao':'III · Sistema de Poder', rituais:'III · Sistema de Poder',
-  ascensao:'IV · Progressão', 'sessoes-xp':'IV · Progressão', surtos:'IV · Progressão',
+  'alma-fragmentada':'III · Sistema de Poder', 'poder-mente-corpo':'III · Sistema de Poder', 'utilizacao-manifestacao':'III · Sistema de Poder', rituais:'III · Sistema de Poder',
+  'progressao-ascensao-tecnicas':'IV · Progressão, Ascensão e Técnicas', 'sessoes-xp':'IV · Progressão, Ascensão e Técnicas', 'evolucao-poder':'IV · Progressão, Ascensão e Técnicas', 'tecnicas-habilidades':'IV · Progressão, Ascensão e Técnicas', 'arvore-alma':'IV · Progressão, Ascensão e Técnicas', ascensao:'IV · Progressão, Ascensão e Técnicas', surtos:'IV · Progressão, Ascensão e Técnicas',
   economia:'V · Periféricanomia',
   mecanico:'VI · Regras de Jogo', combate:'VI · Regras de Jogo', sobrecarga:'VI · Regras de Jogo', recuperacao:'VI · Regras de Jogo',
   sobrevivencia:'VII · Sobrevivência',
@@ -19277,25 +19277,25 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="toc-label">III. Sistema de Poder</span>
         <ul>
             <li><a href="#alma-fragmentada">Alma Fragmentada</a></li>
-            <li><a href="#evolucao-poder">Evolução do Poder</a></li>
+            <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
+            <li><a href="#utilizacao-manifestacao">Sistema de Utilização da Manifestação</a></li>
+            <li><a href="#rituais">Sistema de Rituais</a></li>
+        </ul>
+
+        <!-- IV. PROGRESSÃO, ASCENSÃO E TÉCNICAS -->
+        <span class="toc-label">IV. Progressão, Ascensão e Técnicas</span>
+        <ul>
+            <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
+            <li><a href="#evolucao-poder">Despertares do Poder</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#transformacao-usuario">A Transformação do Usuário</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ganhos-profundos">Ganhos Profundos do Despertar</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#nucleo-desperta">O Núcleo Desperta</a></li>
-            <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
             <li><a href="#tecnicas-habilidades">Criação de Técnicas e Habilidades</a></li>
             <li><a href="#arvore-alma">A Árvore da Alma</a></li>
-            <li><a href="#utilizacao-manifestacao">Sistema de Utilização da Manifestação</a></li>
-            <li><a href="#rituais">Sistema de Rituais</a></li>
-        </ul>
-
-        <!-- IV. PROGRESSÃO E ASCENSÃO -->
-        <span class="toc-label">IV. Progressão e Ascensão</span>
-        <ul>
             <li><a href="#ascensao">As Espirais da Ascensão (Humanos)</a></li>
             <li><a href="#corrupcao">As Espirais da Corrupção — Monstros</a></li>
-            <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
             <li><a href="#surtos">Surtos Decenais</a></li>
         </ul>
 
@@ -19443,27 +19443,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">III. Sistema de Poder</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#alma-fragmentada">Alma Fragmentada</a></li>
-                            <li><a href="#evolucao-poder">Evolução do Poder</a></li>
-                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</a></li>
-                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</a></li>
-                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#transformacao-usuario">A Transformação do Usuário</a></li>
-                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ganhos-profundos">Ganhos Profundos do Despertar</a></li>
-                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#nucleo-desperta">O Núcleo Desperta</a></li>
                             <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
-                            <li><a href="#tecnicas-habilidades">Criação de Técnicas e Habilidades</a></li>
-                            <li><a href="#arvore-alma">A Árvore da Alma</a></li>
                             <li><a href="#utilizacao-manifestacao">Sistema de Utilização da Manifestação</a></li>
                             <li><a href="#rituais">Sistema de Rituais</a></li>
                         </ul>
                     </div>
 
-                    <!-- IV. PROGRESSÃO E ASCENSÃO -->
+                    <!-- IV. PROGRESSÃO, ASCENSÃO E TÉCNICAS -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IV. Progressão e Ascensão</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IV. Progressão, Ascensão e Técnicas</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
+                            <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
+                            <li><a href="#evolucao-poder">Despertares do Poder</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#transformacao-usuario">A Transformação do Usuário</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ganhos-profundos">Ganhos Profundos do Despertar</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#nucleo-desperta">O Núcleo Desperta</a></li>
+                            <li><a href="#tecnicas-habilidades">Criação de Técnicas e Habilidades</a></li>
+                            <li><a href="#arvore-alma">A Árvore da Alma</a></li>
                             <li><a href="#ascensao">As Espirais da Ascensão (Humanos)</a></li>
                             <li><a href="#corrupcao">As Espirais da Corrupção — Monstros</a></li>
-                            <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
                             <li><a href="#surtos">Surtos Decenais</a></li>
                         </ul>
                     </div>
@@ -23768,193 +23768,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>4. Regra de Coerência</h3>
             <p>Tudo deve responder: <strong>“Isso faz sentido com a alma desse personagem?”</strong> Essa é a lei fundamental. Builds quebradas ou poderes desconectados do conceito central do personagem não são permitidos.</p>
 
-            <!-- DESPERTARES / PROGRESSÃO DE PODER -->
-            <h2 id="evolucao-poder">Despertares do Poder</h2>
-            <p>Todo poder possui potencial de evolução. O objetivo dos Despertares é liberar novas interpretações do conceito original da habilidade.</p>
-
-            <p>Os Despertares de Poder estão diretamente ligados à sua Ascensão. Cada vez que você acumula energia suficiente para alcançar um novo nível na tabela das Espirais da Ascensão, sua Alma se expande o suficiente para provocar um Despertar no seu poder.</p>
-
-            <div class="system-card">
-                <strong>Como funciona a relação entre Ascensão e Despertar</strong><br><br>
-                • Ao alcançar o Nível 1 de Ascensão → Primeiro Despertar do Poder<br>
-                • Ao alcançar o Nível 2 de Ascensão → Segundo Despertar do Poder<br>
-                • Ao alcançar o Nível 3 de Ascensão → Terceiro Despertar do Poder<br>
-                • E assim por diante.<br><br>
-                Ou seja: <strong>Quantos níveis de Ascensão você possui, tantos Despertares de Poder você já experimentou.</strong><br><br>
-                Um Desperto de Nível 7 de Ascensão, por exemplo, já passou por sete Despertares de Poder ao longo de sua jornada.
-            </div>
-
-            <p>Isso faz com que a evolução do seu poder seja orgânica e diretamente proporcional ao quanto você já ascendeu. Quanto mais alto você sobe nas Espirais da Ascensão, mais vezes sua habilidade será forçada a se reinventar e se aprofundar.</p>
-
-            <h3>Princípio Fundamental</h3>
-            <p>Seu despertar <strong>não precisa ser uma continuação óbvia</strong> do poder inicial. Ele precisa possuir <strong>conexão conceitual</strong>, não necessariamente conexão mecânica direta.</p>
-
-            <p>Exemplo: Um poder baseado em “Espada” não precisa evoluir apenas para “espada maior”. Ele pode expandir para:</p>
-            <ul>
-                <li>Armadura viva formada por lâminas</li>
-                <li>Arsenal completo de armas</li>
-                <li>Campo de batalha manifestado</li>
-                <li>Juramentos militares e honra de combate</li>
-                <li>Domínio territorial</li>
-                <li>Manifestações de guerra</li>
-                <li>Memória de combatentes antigos</li>
-                <li>Materialização do próprio conflito</li>
-            </ul>
-
-            <p>Seu poder não está preso à forma inicial. Você está expandindo a <strong>ideia central</strong> dele.</p>
-
-            <h3>Tipos de Expansão nos Despertares</h3>
-            <p>Cada despertar adiciona uma nova camada ao poder. Essas camadas costumam seguir algumas direções comuns:</p>
-
-            <div class="system-card">
-                <strong>Expansão Funcional</strong><br>
-                Seu poder aprende algo novo.<br>
-                <em>Exemplos:</em> Arma → Defesa / Fogo → Mobilidade / Sombras → Cura limitada / Telecinese → Percepção espacial.
-            </div>
-
-            <div class="system-card">
-                <strong>Expansão Conceitual</strong><br>
-                Seu poder aprofunda sua própria identidade.<br>
-                <em>Exemplos:</em> Raios → Velocidade / Veneno → Deterioração / Espelhos → Percepção / Gravidade → Pressão psicológica.
-            </div>
-
-            <div class="system-card">
-                <strong>Expansão de Escala</strong><br>
-                Seu poder passa a operar em maior alcance, complexidade ou dimensão.<br>
-                <em>Exemplos:</em> Arma individual → Arsenal / Controle local → Domínio de área / Clone único → Múltiplas manifestações.
-            </div>
-
-            <div class="system-card">
-                <strong>Expansão de Aplicação</strong><br>
-                O mesmo conceito encontra novos usos.<br>
-                <em>Exemplos:</em> Gelo ofensivo → Contenção / Sangue → Rastreamento / Metal → Reconstrução estrutural.
-            </div>
-
-            <div class="system-card">
-                <strong>Expansão Simbólica</strong><br>
-                O poder começa a interagir com aquilo que representa.<br>
-                <em>Exemplos:</em> Correntes → Aprisionamento físico e mental / Máscaras → Identidade, persona e ocultação / Relógios → Ritmo, atraso e sincronização.
-            </div>
-
-            <h3>O que NÃO é um Despertar</h3>
-            <p>Despertar não significa obrigatoriamente:</p>
-            <ul>
-                <li>“Mais dano”</li>
-                <li>“Versão gigante da mesma coisa”</li>
-                <li>“Mesma habilidade com número maior”</li>
-            </ul>
-            <p>Isso é permitido, mas não é a única (nem a melhor) direção possível. Muitas vezes, os melhores despertares alteram completamente a forma como uma build joga sem abandonar seu conceito central.</p>
-
-            <h3>Exemplos de Evolução Conceitual</h3>
-            <div class="system-card">
-                <strong>Exemplo 1 – Manipulação de Espadas</strong><br><br>
-                • <strong>Base:</strong> Manipulação de espadas<br>
-                • <strong>1º Despertar</strong> (ao atingir Nível 1 de Ascensão): Controle mais preciso e letal das lâminas.<br>
-                • <strong>Despertar seguinte</strong> (Nível 3): Armadura viva formada por armas.<br>
-                • <strong>Despertar seguinte</strong> (Nível 5): Campo de batalha manifestado.<br>
-                • <strong>Despertar seguinte</strong> (Nível 7): Memória bélica capaz de reproduzir técnicas registradas.<br><br>
-                Cada novo nível de Ascensão força o poder a se expandir de forma conceitual, mantendo sua essência.
-            </div>
-
-            <div class="system-card">
-                <strong>Exemplo 2 – Manipulação de Sombras</strong><br><br>
-                • <strong>Base:</strong> Manipulação de sombras<br>
-                • <strong>1º Despertar</strong> (Nível 1): Sombras mais densas e maleáveis.<br>
-                • <strong>Despertar seguinte</strong> (Nível 3): Armazenamento dimensional dentro das sombras.<br>
-                • <strong>Despertar seguinte</strong> (Nível 5): Movimentação por superfícies escuras.<br>
-                • <strong>Despertar seguinte</strong> (Nível 7): Domínio de ausência, ocultação e apagamento sensorial.<br><br>
-                Mesmo conceito. Cada Ascensão aprofunda e transforma a expressão do poder.
-            </div>
-
-            <h3>Diretriz para Criação e Evolução de Poderes</h3>
-            <p>Ao criar sua habilidade base, pense menos em <strong>“O que meu poder faz?”</strong> e mais em <strong>“O que meu conceito representa?”</strong></p>
-
-            <p>Quanto mais forte o conceito central, maior tende a ser seu potencial de despertar.</p>
-
-            <div class="lore-box">
-                <strong>Perguntas úteis ao pensar na evolução do seu poder:</strong><br><br>
-                • Meu poder possui tema?<br>
-                • Possui símbolo?<br>
-                • Possui lógica interna?<br>
-                • Possui identidade além da mecânica inicial?<br><br>
-                Quanto mais forte o conceito central, maior tende a ser seu potencial de despertar.
-            </div>
-
-            <div class="lore-box">
-                Evoluir o poder é evoluir a si mesmo. Quanto mais você compreende quem realmente é… mais forte (e mais perigosa) sua alma se torna.
-            </div>
-
-            <h3 id="desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</h3>
-            <p>Um Despertar não é apenas uma expansão conceitual — ele também <strong>desbloqueia técnicas</strong>. Existem três formas de ganhar novas técnicas, e todas se somam:</p>
-            <div class="system-card">
-                <strong>Forma 1 — Ascensão (Despertares):</strong><br><br>
-                Cada nível de Ascensão (0–10) libera <strong>1 Despertar</strong>. Cada Despertar libera um <strong>trio de técnicas</strong>:<br>
-                • <strong>1 técnica no pico</strong> (tier = nível da Ascensão) — a técnica livre, pode ser qualquer coisa (não necessariamente ofensiva).<br>
-                • <strong>1 suplementar</strong> (tier = nível da Ascensão − 1).<br>
-                • <strong>1 livre</strong> (tier = nível da Ascensão − 1).<br><br>
-                <em>Exemplo:</em> Ascensão Nv 3 → 1 técnica tier 3 (livre) + 1 suplementar tier 2 + 1 livre tier 2.
-            </div>
-            <div class="system-card">
-                <strong>Forma 2 — Up de Nível (XP):</strong><br><br>
-                Cada subida de Nível (1–20) concede <strong>técnicas/habilidades conforme a Tabela de Progressão</strong> (ver <a href="#sessoes-xp">Sistema de Sessões e XP</a>): nos níveis normais, o padrão do marco ultrapassado; nos marcos (3, 6, 9, 12), um novo nível de técnica/habilidade é liberado. <strong>Técnicas Supremas</strong> são concedidas nos níveis 15, 18, 19 e 20.<br><br>
-                <em>Exemplo:</em> ao subir para o nível 3 (marco), o personagem ganha 1 técnica Nv2 + 2 técnicas Nv1.
-            </div>
-            <div class="system-card">
-                <strong>Forma 3 — Desenvolvimento Espontâneo:</strong><br><br>
-                Independente de nível, o jogador pode desenvolver <strong>1 técnica</strong> espontaneamente durante sessões e narrações, em <strong>momentos de pico de desenvolvimento</strong> e <strong>cenas lendárias</strong> (atuações e desenvolvimento muito bons do personagem). Concedido pelo Mestre como recompensa narrativa. A técnica espontânea pode ser de qualquer tier até o limite do personagem.
-            </div>
-
-            <h3 id="aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</h3>
-            <p>Quando o Despertar ocorre (ao subir de Ascensão), o jogador <strong>escolhe</strong> o que fazer com ele:</p>
-            <div class="system-card">
-                <strong>Aceitar:</strong><br>
-                Você paga o <strong>custo temático</strong> (−2 de Sanidade máxima, +1 de Corrupção, +1 de Atenção da Torre, ou Relacionamento −1 nível — o mesmo menu dos Traços da Alma) e recebe a <strong>transformação completa</strong>: o trio de técnicas + a transformação estética + <strong>1 ganho profundo</strong> (ver <a href="#ganhos-profundos">Ganhos Profundos do Despertar</a>).
-            </div>
-            <div class="system-card">
-                <strong>Negligenciar:</strong><br>
-                O Despertar fica <strong>adormecido</strong>: sem efeito mecânico, sem custo, sem transformação. O personagem vai contra a corrupção e se mantém mais humano. O jogador pode <strong>aceitar depois</strong> a qualquer momento (pagando o custo temático). Negligenciar repetidamente pode gerar tensão narrativa — a Torre insiste.
-            </div>
-            <div class="lore-box">
-                <strong>A Torre sempre cobra:</strong> todo poder tem um preço. Mas você pode escolher <strong>quando</strong> pagar. Negligenciar um Despertar é uma forma de resistência — e a Torre não gosta de ser ignorada.
-            </div>
-
-            <h3 id="transformacao-usuario">A Transformação do Usuário</h3>
-            <p>O Despertar é bem mais que ganho de poder: <strong>o poder se transforma e o usuário também, assim como o seu núcleo</strong>.</p>
-            <div class="system-card">
-                <strong>Estética:</strong> o personagem pode mudar — marcas, olhos, aura, forma do poder. Registre a transformação na ficha. A transformação pode incluir os <strong>ganhos profundos</strong> (ver <a href="#ganhos-profundos">Ganhos Profundos do Despertar</a>).<br><br>
-                <strong>Técnicas:</strong> podem se transformar — renomear/reflavor com o mesmo efeito, ou efeito evoluído.<br><br>
-                <strong>Conexão com a Corrupção:</strong> quando o custo de aceitar for Corrupção, a transformação estética conecta-se às <strong>Marcas da Corrupção</strong> (tabela d12 da seção <a href="#sanidade">Sanidade e Corrupção</a>).
-            </div>
-            <div class="lore-box">
-                <strong>Exemplo — Manipulação de Espadas:</strong> no 1º Despertar, o controle fica mais preciso. A técnica "Corte" vira <strong>"Corte Preciso"</strong> — mesmo efeito, nova forma. O usuário pode ganhar marcas finas nos braços, como cicatrizes de lâmina, conectadas à sua Corrupção.
-            </div>
-
-            <h3 id="ganhos-profundos">Ganhos Profundos do Despertar</h3>
-            <p>Cada Despertar <strong>aceito</strong> concede, além do trio de técnicas, <strong>1 ganho profundo</strong> escolhido de um menu — o jogador escolhe 1 por Despertar:</p>
-            <div class="system-card">
-                <strong>Menu de Ganhos Profundos:</strong><br><br>
-                <strong>1. Nova Manifestação</strong> — o poder ganha um uso novo e temático (uma Utilização registrada de graça, categoria ≤ limite do nível).<br><br>
-                <strong>2. Transformação Estética Marcante</strong> — aura, olhos, forma do poder mudam visivelmente (registrado na ficha; conecta com as Marcas da Corrupção se o custo for Corrupção).<br><br>
-                <strong>3. Voz do Núcleo</strong> — o poder ganha uma "voz"/instinto próprio: 1×/cena, o Mestre pode dar uma dica temática do poder (ou o poder se manifesta sem comando em momento de perigo).<br><br>
-                <strong>4. Dado Temático</strong> — +1 dado em testes temáticos do poder (ex.: +1d4 em testes de Alma/Intelecto relacionados à Manifestação).<br><br>
-                <strong>5. Ressonância</strong> — o poder ressoa com a <a href="#arvore-alma">Árvore da Alma</a>: o Aspecto escolhido ganha +1 nível (ou o equivalente em progresso do Aspecto).
-            </div>
-            <div class="lore-box">
-                <strong>A Torre sempre cobra:</strong> mas o que ela devolve pode ser maior que o preço. Cada Despertar aceito é uma negociação — e os ganhos profundos são o troco que você escolhe.
-            </div>
-
-            <h3 id="nucleo-desperta">O Núcleo Desperta</h3>
-            <p>A partir do <strong>3º Despertar aceito</strong>, o Núcleo do personagem pode "despertar" uma característica própria:</p>
-            <div class="system-card">
-                <strong>O Núcleo desperta automaticamente no 3º Despertar aceito</strong> — o jogador escolhe a forma:<br><br>
-                • <strong>Voz:</strong> o poder ganha voz/instinto — manifesta-se sem comando em momentos de perigo (1×/cena).<br>
-                • <strong>Marca:</strong> deixa uma marca permanente (conectada à Corrupção se o custo for Corrupção).<br>
-                • <strong>Presença:</strong> o personagem sente o Núcleo como uma presença — ganchos narrativos; o Mestre pode usar para tensão.<br><br>
-                A partir daí, cada Despertar adicional pode aprofundar a escolha (ex.: a voz fala mais, a marca cresce).
-            </div>
-            <div class="lore-box">
-                <strong>Seu Núcleo não é mais só seu</strong> — e isso pode ser tanto um presente quanto um preço. Ele sussurra, marca e observa. A Torre sempre cobra — mas agora ela tem com quem conversar.
-            </div>
         </section>
 
         <section id="poder-mente-corpo">
@@ -24034,440 +23847,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 • OU uma <strong>fraqueza temática</strong> (Traço da Alma) que represente o desequilíbrio.
             </div>
 
-            <h2 id="tecnicas-habilidades">Criação de Técnicas e Habilidades</h2>
-            
-            <p>Enquanto o Poder Principal define o conceito amplo da sua Alma e os Despertares expandem suas possibilidades, as <strong>Técnicas</strong> são as aplicações concretas que você usa em combate. Elas transformam o conceito abstrato em ações práticas, com custos, efeitos e limitações claras.</p>
-            
-            <p>Toda técnica pertence a um <strong>Tipo</strong> e possui um <strong>Nível</strong> (1 a 5). O nível determina o poder base, o custo em recursos e o escopo das capacidades. Técnicas são criadas ou evoluídas junto com o seu poder, sempre mantendo coerência com o conceito da sua Alma.</p>
-
-            <h3>Tipos de Técnicas</h3>
-            
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tipo</th>
-                            <th>Descrição</th>
-                            <th>Ação Requerida</th>
-                            <th>Foco Principal</th>
-                            <th>Exemplos de Uso</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Passiva</strong></td>
-                            <td>Efeitos contínuos, gatilhos automáticos ou auras que não exigem ativação consciente. Representam a "natureza" do seu poder.</td>
-                            <td>Nenhuma (ou Reação em alguns casos)</td>
-                            <td>Buffs permanentes, resistências, auras, efeitos condicionais, manutenção.</td>
-                            <td>Aura de dano, resistência a um elemento, bônus passivo em testes, regeneração lenta, presença intimidadora.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Suplementar</strong></td>
-                            <td>Efeitos de suporte, controle de campo, mobilidade, informação ou debuffs/buffs. Não são puro dano, mas alteram o cenário da luta.</td>
-                            <td>Ação Principal (às vezes Bônus)</td>
-                            <td>Controle, utilidade, sinergia com aliados, debuffs em inimigos, reposicionamento.</td>
-                            <td>Teleporte curto, cegar inimigo, buff de ataque para aliado, criar terreno difícil, drenar STA do alvo.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Defensiva</strong></td>
-                            <td>Proteção, mitigação de dano, cura, escapes, contra-ataques e defesas ativas. Foco em sobrevivência e resposta.</td>
-                            <td>Reação ou Ação Principal</td>
-                            <td>Escudos, cura, redução de dano, contra-ataque, remoção de condições, mobilidade defensiva.</td>
-                            <td>Escudo que absorve dano, cura aliados, contra-ataque quando atingido, desvio com vantagem, purificar corrupção.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ofensiva</strong></td>
-                            <td>Ataques diretos, dano em área, controle através de dano e efeitos de status ofensivos. O "dano principal" do seu poder.</td>
-                            <td>Ação Principal</td>
-                            <td>Dano bruto, burst, controle de oponente (stun, knockback, DoT), múltiplos alvos.</td>
-                            <td>Corte de energia, explosão, rajada de projéteis, drenagem de vida, onda de choque.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>Diferenças de Dano e Capacidades por Nível e Tipo</h3>
-            
-            <p>O <strong>Nível da Técnica</strong> vai de 0 a 5. O nível 0 representa técnicas rudimentares ou recém-descobertas (comuns no início da jornada de um Desperto). O nível máximo que você pode criar é limitado pelo seu número de Despertares de Poder (ou seu nível de Ascensão, à critério do Mestre).</p>
-            
-            <p><strong>Modificador de Dano/Efeito:</strong> Use o modificador do atributo mais relevante ao seu poder (geralmente <strong>Alma</strong>, mas pode ser Força para poderes físicos, Intelecto para mentais, etc.).</p>
-
-            <p><strong>Dano Base sem Técnica:</strong> 1d8 + modificador relevante.</p>
-
-            <p><strong>Progressão de Dados por Nível:</strong> Cada nível de técnica adiciona um dado de dano. Existem três linhas de progressão dependendo da natureza da técnica:</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nível</th>
-                            <th>Ofensiva Pura (foco total em dano)</th>
-                            <th>Mista (dano + efeitos/condições complexas)</th>
-                            <th>Padrão / Equilibrada (efeitos básicos)</th>
-                            <th>Custo Base (principalmente PE)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>0</strong></td>
-                            <td>2d10 + mod</td>
-                            <td>2d6 + mod</td>
-                            <td>2d8 + mod</td>
-                            <td>2 PE</td>
-                        </tr>
-                        <tr>
-                            <td><strong>1</strong></td>
-                            <td>3d10 + mod</td>
-                            <td>3d6 + mod</td>
-                            <td>3d8 + mod</td>
-                            <td>4 PE</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2</strong></td>
-                            <td>4d10 + mod</td>
-                            <td>4d6 + mod</td>
-                            <td>4d8 + mod</td>
-                            <td>6 PE</td>
-                        </tr>
-                        <tr>
-                            <td><strong>3</strong></td>
-                            <td>5d10 + mod</td>
-                            <td>5d6 + mod</td>
-                            <td>5d8 + mod</td>
-                            <td>8 PE</td>
-                        </tr>
-                        <tr>
-                            <td><strong>4</strong></td>
-                            <td>6d10 + mod</td>
-                            <td>6d6 + mod</td>
-                            <td>6d8 + mod</td>
-                            <td>10 PE</td>
-                        </tr>
-                        <tr>
-                            <td><strong>5</strong></td>
-                            <td>7d10 + mod</td>
-                            <td>7d6 + mod</td>
-                            <td>7d8 + mod</td>
-                            <td>12 PE</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <p><strong>Sobre o Custo:</strong> O custo das técnicas é focado principalmente em <strong>pontos de energia (PE)</strong>. A Stamina (STA) é gasta principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (manutenção, campos, auras, etc.). O custo em PE começa em 2 no Nível 0 e aumenta de 2 em 2 a cada nível.</p>
-
-            <ul>
-                <li><strong>Ofensiva Pura (d10)</strong>: Técnicas cujo único propósito é causar o máximo de dano possível. Não costumam ter efeitos adicionais complexos.</li>
-                <li><strong>Mista (d6)</strong>: Técnicas que causam dano mas também aplicam efeitos e condições mais complexas (controle, debuffs fortes, transformações, etc.).</li>
-                <li><strong>Padrão / Equilibrada (d8)</strong>: A maioria das técnicas — bom equilíbrio entre dano e versatilidade. Podem ter efeitos básicos.</li>
-            </ul>
-
-            <h4>Exemplos de Efeitos e Poderes Acompanhantes para Técnicas</h4>
-            <p>Aqui estão exemplos de efeitos e poderes que podem acompanhar <strong>qualquer tipo de técnica</strong> (Passiva, Suplementar, Defensiva ou Ofensiva), inspirados no conceito do seu poder. Adapte o efeito ao tipo da técnica: em Ofensivas ele geralmente se manifesta no impacto ou dano; em Defensivas como resposta, escudo ou contra-efeito; em Suplementares como campo, alteração ou controle de área; em Passivas como aura constante, gatilho automático ou modificador contínuo. Use-os como inspiração para enriquecer suas técnicas com camadas temáticas e mecânicas adicionais, sempre respeitando o conceito da sua Alma. Mesmo no Nível 0, os efeitos estão acima do nível humano comum e representam poder significativo.</p>
-            
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nível</th>
-                            <th>Exemplos de Efeitos e Poderes que podem acompanhar a técnica (adapte ao tipo)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>0</strong><br>(Básico)</td>
-                            <td>
-                                • A técnica aplica um efeito de enfraquecimento básico (ex: penalidade leve em testes de um atributo ou recurso)<br>
-                                • Causa um efeito adicional quando o alvo ou a situação está em uma condição específica (ex: ferido, em movimento, exposto à Névoa, sob efeito de outra técnica)<br>
-                                • Impõe desvantagem temporária em defesas, esquivas ou testes de resistência do alvo<br>
-                                • A técnica drena um recurso menor do alvo (STA, movimento, percepção ou similar conceitual)<br>
-                                • Ganha vantagem em testes ou ações contra o alvo (ou tipo de situação) nas próximas rodadas<br>
-                                • O efeito causa uma "ressonância" que repete parte do impacto ou benefício na rodada seguinte ou em uma ação subsequente
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>1</strong></td>
-                            <td>
-                                • A técnica causa um status moderado (ex: desvantagem em testes ou redução de movimento)<br>
-                                • Deixa uma marca que permite ao usuário causar dano extra, impor condições ou obter vantagem em ações subsequentes contra o mesmo alvo<br>
-                                • Enfraquece a resistência do alvo a um tipo específico de dano, efeito ou conceito<br>
-                                • Causa um efeito adicional significativo se o alvo falhar em um teste de resistência conceitual<br>
-                                • A técnica aplica um efeito de "sangramento", "queima" ou "contágio" temática que persiste levemente ao longo das rodadas<br>
-                                • Ganha um bônus temporário relevante (ataque, defesa, testes) contra o alvo ou em situações relacionadas<br>
-                                • Cria uma ressonância que afeta outros alvos próximos de forma menor ou secundária
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>2</strong></td>
-                            <td>
-                                • A técnica aplica um status forte (ex: stun leve por 1 rodada, cegar temporário, desorientação conceitual)<br>
-                                • Causa efeito extra contra alvos que estão em desvantagem, feridos ou sob condições específicas<br>
-                                • Deixa o alvo marcado de forma que aliados ou efeitos subsequentes contra ele ganham bônus claros<br>
-                                • A técnica drena um recurso significativo do alvo (ex: penalidade forte em ações futuras, redução de recursos)<br>
-                                • Aplica um efeito de "contágio conceitual" que enfraquece o alvo progressivamente ao longo do tempo<br>
-                                • Permite um contra-efeito ou ação reativa na próxima vez que o alvo agir ou falhar em algo<br>
-                                • Causa efeito adicional se o alvo estiver sob efeito de outra técnica, condição ou vulnerabilidade
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>3</strong></td>
-                            <td>
-                                • A técnica aplica controle forte (ex: imobilizar, dominar movimento por 1 rodada, suprimir uma ação chave)<br>
-                                • Causa efeito extra que escala com a "fraqueza" do alvo (ex: mais impacto contra alvos com status, feridos ou em desvantagem)<br>
-                                • Deixa uma maldição conceitual que reduz as capacidades do alvo de forma acumulativa em rodadas futuras<br>
-                                • Permite "roubar", suprimir ou redirecionar um efeito ou bônus temporário do alvo para si ou aliados<br>
-                                • Aplica um efeito de "ressonância" que amplifica todos os ataques, efeitos ou ações subsequentes contra o alvo (próprios ou de aliados)<br>
-                                • Causa efeito adicional contra alvos que tentam se defender, contra-atacar ou resistir ativamente<br>
-                                • Deixa o alvo vulnerável a um tipo específico de ataque, efeito ou poder conceitual
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>4</strong></td>
-                            <td>
-                                • A técnica aplica múltiplos status complexos ao mesmo tempo (ex: enfraquecer + marcar + drenar + desvantagem progressiva)<br>
-                                • Causa um efeito que "copia", reflete ou explora fraquezas conceituais do alvo de forma direta e poderosa<br>
-                                • Deixa uma marca profunda (quase permanente por cena) que permite rastreamento confiável e concede vantagem conceitual significativa em ações futuras contra o alvo<br>
-                                • Invoca um elemento secundário ou "eco" do poder que causa efeitos adicionais persistentes em rodadas seguintes (dano, condições ou controle)<br>
-                                • Aplica um efeito de "quebra" que reduz permanentemente (por cena) a resistência, regeneração ou capacidades do alvo a certos ataques ou conceitos<br>
-                                • Permite um "juízo" ou efeito narrativo forte baseado no conceito do poder (ex: cortar "destinos", memórias, lealdades ou conceitos chave do alvo)<br>
-                                • Causa efeito extra que escala diretamente com o nível de Ascensão do usuário<br>
-                                • Cria um laço conceitual que permite ao usuário drenar poder, impor condições ou transferir efeitos do alvo em ações futuras
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>5</strong></td>
-                            <td>
-                                • A técnica aplica uma combinação sinérgica de múltiplos efeitos complexos e interligados de uma só vez, criando uma situação extremamente difícil de reverter (ex: marca profunda + drenagem contínua + supressão de ações + vulnerabilidade conceitual).<br>
-                                • Cria uma marca conceitual profunda e persistente que permite rastreamento em longa distância (mesma Torre ou além em casos extremos) e faz com que o alvo sofra automaticamente dano, condições ou perda de recursos sempre que ativar seu poder principal ou gastar recursos significativos.<br>
-                                • Invoca uma manifestação secundária ou "aspecto" semi-independente do poder que age por várias rodadas (1d4+1 ou mais), podendo ser um campo persistente, uma entidade conceitual menor, uma maldição ativa ou um eco que repete ou amplia a técnica original.<br>
-                                • Aplica uma "quebra conceitual" grave que remove ou suprime permanentemente (por cena ou até ser reparado de forma custosa) uma resistência, imunidade, regeneração, bônus importante ou até o acesso a uma capacidade chave do alvo diretamente ligada ao conceito do poder.<br>
-                                • Permite um "juízo da Alma" poderoso: o alvo deve superar um teste conceitual difícil baseado no Poder Principal do usuário; em falha, sofre um efeito narrativo e mecânico grave (ex: para um poder de justiça, o alvo é forçado a "pagar" por atos passados com perda de recursos ou ações; para um poder de ecos, o alvo perde a capacidade de se comunicar ou ouvir por cena).<br>
-                                • O efeito escala diretamente com o nível de Ascensão do usuário e permite drenar um recurso de forma semi-permanente (ex: reduzir o máximo de STA, PE ou Sanidade do alvo por cena, ou impor uma penalidade acumulativa).<br>
-                                • Cria um laço conceitual bidirecional forte que permite ao usuário transferir parte do dano, condições ou efeitos negativos sofridos de volta para o alvo, ou compartilhar poder de forma poderosa com aliados próximos (bônus significativos ou cura conceitual).<br>
-                                • A técnica amplifica drasticamente a atenção da Torre sobre o alvo (e possivelmente sobre o usuário), podendo ser usada taticamente para forçar eventos aleatórios, distrair inimigos poderosos ou criar aberturas — mas traz riscos graves de corrupção, atenção hostil ou consequências narrativas para todos envolvidos.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>Como Criar uma Técnica</h3>
-            <ol>
-                <li><strong>Escolha o Tipo</strong> (Passiva, Suplementar, Defensiva ou Ofensiva). Deve fazer sentido com seu conceito de poder.</li>
-                <li><strong>Escolha o Nível</strong> (0 a 5). O Nível máximo disponível é geralmente igual ao seu número atual de Despertares de Poder (ou seu nível de Ascensão, à critério do Mestre). Nível 0 representa técnicas básicas ou recém-descobertas.</li>
-                <li><strong>Defina o Conceito</strong>: "O que essa técnica faz dentro do meu poder?" Ex: Para um poder de "Espada" → "Corte que drena força" (Ofensiva).</li>
-                <li><strong>Consulte as Tabelas</strong>: Escolha a linha de dado de acordo com a natureza da técnica (d10 para ofensiva pura, d6 para mistas, d8 para equilibradas). Use os exemplos de efeitos e poderes acompanhantes abaixo como inspiração para enriquecer sua técnica com camadas temáticas e mecânicas adicionais (adapte ao tipo escolhido).</li>
-                <li><strong>Defina Custo</strong>: O custo principal é em PE (começa em 2 no Nível 0 e sobe de 2 em 2 por nível). Stamina é usada principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (campos, auras, manutenção, etc.).</li>
-                <li><strong>Equilíbrio</strong>: Se a técnica for muito forte para o nível, adicione um custo extra, limitação conceitual ou cooldown (ex: só 1x por cena).</li>
-                <li><strong>Nome e Flavor</strong>: Dê um nome que combine com seu poder e descreva o visual/efeito narrativo.</li>
-            </ol>
-
-            <h3>Exemplos de Técnicas Criadas</h3>
-
-            <div class="system-card">
-                <strong>Poder: Espada de Justiça Impiedosa (Elara)</strong><br><br>
-                <strong>Ofensiva Nível 1 – "Corte Executor"</strong><br>
-                Dano: 3d8 + mod Alma (ofensiva pura). Custo: 4 PE. Efeito: O alvo sofre -1 em testes de Vigor até o fim da cena (sangramento conceitual).<br><br>
-                
-                <strong>Defensiva Nível 2 – "Lâmina Protetora"</strong><br>
-                Efeito: Absorve 3d8 dano de um ataque contra você ou aliado próximo (mista). Se o escudo absorver todo o dano, você causa 1d6 de retaliate no atacante. Custo: 6 PE + 2 STA por rodada de manutenção (Reação).<br><br>
-                
-                <strong>Suplementar Nível 3 – "Campo de Lâminas Orbitais"</strong><br>
-                Efeito: Cria um campo ao seu redor por 1d4 rodadas. Inimigos que entrarem ou começarem o turno dentro sofrem 4d6 dano e têm desvantagem em testes de movimento. Custo: 8 PE + 3 STA por rodada de manutenção. (Alcance e área definidos pelo conceito do poder).
-            </div>
-
-            <div class="system-card">
-                <strong>Poder: Manipulação de Ecos e Silêncio (Lucian)</strong><br><br>
-                <strong>Passiva Nível 1 – "Ouvido do Passado"</strong><br>
-                Efeito: Você pode ouvir ecos de conversas ou eventos importantes que aconteceram no local nas últimas 24 horas (teste de Intelecto baseado em atributo + perícia relevante para detalhes claros). Não gasta recursos.<br><br>
-                
-                <strong>Ofensiva Nível 2 – "Grito do Silêncio"</strong><br>
-                Dano: 3d8 psíquico (mista) + o alvo fica surdo por 1 rodada (não pode ouvir comandos ou usar poderes baseados em som). Custo: 6 PE.<br><br>
-                
-                <strong>Defensiva Nível 3 – "Bolha de Ausência"</strong><br>
-                Efeito: Cria uma bolha onde sons e poderes auditivos/mentais são suprimidos por 1d4 rodadas. Aliados dentro ganham +2 em Salvaguardas contra ilusão e medo. Inimigos dentro têm desvantagem em testes de percepção. Custo: 8 PE + 3 STA por rodada de manutenção. (Alcance e tamanho definidos pelo conceito do poder).
-            </div>
-
-            <div class="system-card">
-                <strong>Poder: Telecinese (exemplo genérico)</strong><br><br>
-                <strong>Suplementar Nível 1 – "Empurrão Telecinético"</strong><br>
-                Efeito: Empurra um alvo para trás. Se o alvo bater em obstáculo, sofre 3d6 dano (mista). Custo: 4 PE. (Alcance definido pelo conceito do poder).<br><br>
-                
-                <strong>Ofensiva Nível 4 – "Esmagamento Gravitacional"</strong><br>
-                Dano: 6d10 + mod em alvo único (ofensiva pura). O alvo fica imobilizado por 1 rodada (salvaguarda de Vigor baseada em atributo + perícia relevante para resistir). Custo: 10 PE.<br><br>
-                
-                <strong>Passiva Nível 2 – "Leveza Mental"</strong><br>
-                Efeito: Você pode levitar permanentemente (sem custo). Ganha +1 em testes de Destreza para equilíbrio e pode ignorar terreno difícil de chão. Custo de manutenção: 2 STA por rodada se quiser manter em combate intenso.
-            </div>
-
-            <div class="lore-box">
-                <strong>Nota para Jogadores e Mestres:</strong> Técnicas devem sempre refletir o conceito do poder. Uma técnica que não faz sentido com a Alma do personagem pode ser negada ou custar mais (ou gerar Corrupção). A criatividade é encorajada, mas a coerência conceitual é a regra fundamental do sistema.
-            </div>
         </section>
 
 
-        <div class="section-divider"></div>
-
-        <!-- ═══════════════════════════════════════════════════════════
-             A ÁRVORE DA ALMA — novo capítulo (15/08/2026)
-             Fonte: Google Doc do usuário + decisões de design resolvidas.
-             Estrutura oficial: 5 Aspectos × 3 Ramos × 10 níveis (3×10).
-        ═══════════════════════════════════════════════════════════ -->
-<!-- ═══════════════════════════════════════════════════════════
-             A ÁRVORE DA ALMA — novo sistema (4 Aspectos × 10 níveis)
-             Fonte: balanceamento aprovado (Revisão 3) + decisões do usuário.
-             Estrutura oficial: 4 Aspectos (Ramos) × 10 níveis. 1 Aspecto por personagem.
-        ═══════════════════════════════════════════════════════════ -->
-        <section id="arvore-alma">
-            <h1>A Árvore da Alma</h1>
-
-            <p>Cada Manifestação nasce de uma alma única. Ao longo da jornada, essa alma amadurece e passa a desenvolver um <strong>Aspecto</strong> dominante — o caminho que define como o personagem evolui sua Manifestação e molda completamente seu estilo de combate.</p>
-
-            <div class="system-card">
-                <strong>A Cadeia da Alma:</strong><br>
-                Manifestação (seu poder, único e imutável) → <strong>Aspecto</strong> (4 caminhos de evolução) → <strong>10 níveis</strong> de maestria → <strong>Ápice do Aspecto</strong> (nível 10).
-            </div>
-
-            <p>Todo personagem escolhe <strong>um único Aspecto</strong> para seguir — a identidade que sua alma assume diante da Torre. Essa escolha é definitiva: é o caminho que você percorrerá até o fim do jogo. Cada Aspecto possui <strong>10 níveis</strong> de maestria, e completá-lo representa o domínio absoluto daquela identidade.</p>
-
-            <div class="lore-box">
-                <strong>Como a Árvore da Alma funciona na prática:</strong><br>
-                • Você escolhe <strong>1 Aspecto</strong> na criação do personagem — sua identidade de alma.<br>
-                • O Aspecto evolui em <strong>10 níveis</strong>, ganhos nos níveis de personagem <strong>2, 4, 6, 8, 10, 11, 12, 13, 14 e 15</strong>.<br>
-                • O <strong>último nível (15)</strong> exige algo especial para ser liberado: um contexto complicado, uma missão especial ou um momento narrativo marcante — a Torre não entrega o ápice de graça.<br>
-                • Ao completar o Aspecto, você alcança o <strong>Ápice</strong>: a forma mais pura da sua identidade.<br><br>
-                <em>Os níveis de Aspecto também aparecem consolidados na <a href="#sessoes-xp">Tabela de Progressão</a> (Sistema de Sessões e XP).</em>
-            </div>
-
-            <h2>Os Princípios da Árvore</h2>
-            <p>Sete princípios regem toda a Árvore da Alma. Qualquer conteúdo criado para ela — Aspectos, níveis ou o Ápice — deve respeitá-los:</p>
-            <ul>
-                <li><strong>Princípio da Especialização</strong> — Cada Aspecto melhora apenas <strong>uma</strong> identidade de combate. Nunca duas.</li>
-                <li><strong>Princípio da Compatibilidade</strong> — A Árvore nunca cria capacidades que a Manifestação seja incapaz de realizar. Ela apenas amplia o que já faz parte do potencial do poder.</li>
-                <li><strong>Princípio da Universalidade</strong> — Toda melhoria da Árvore deve funcionar em Técnicas, Passivas, Usos Comuns, Evoluções da Manifestação e Habilidades Permanentes — desde que compartilhem a propriedade fortalecida.</li>
-                <li><strong>Princípio da Identidade</strong> — Nenhum Aspecto pode realizar melhor a função principal de outro Aspecto. O Bélico jamais será melhor que o Lúcido em manifestação; o Lúcido jamais será melhor que o Bélico em dano.</li>
-                <li><strong>Princípio da Progressão</strong> — Níveis baixos fortalecem números; níveis altos fortalecem possibilidades; o Ápice fortalece identidade.</li>
-                <li><strong>Princípio da Criatividade</strong> — A Árvore nunca limita a criatividade do jogador. Ela apenas recompensa diferentes formas de utilizar a Manifestação dentro da identidade do personagem.</li>
-                <li><strong>Princípio da Especialização Crescente</strong> — Os bônus dos níveis não crescem de forma linear. O ganho do nível 9 deve ser muito mais impactante que o do nível 2.</li>
-            </ul>
-
-            <div class="lore-box">
-                <strong>A regra mais importante:</strong> nenhum Aspecto concede algo que sua Manifestação seja incapaz de realizar. Ele apenas fortalece propriedades já existentes. Quem respeita essa regra nunca quebra o jogo — quem a ignora, desperta algo que não era seu. E a Torre sempre nota.
-            </div>
-
-            <h2>Os Aspectos</h2>
-            <p>Existem quatro Aspectos, cada um com uma pergunta fundamental. Você escolhe <strong>um</strong> — e ele define sua identidade até o fim do jogo:</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Aspecto</th><th>Frase</th><th>Identidade</th></tr></thead>
-                    <tbody>
-                        <tr><td>⚔️ <strong>Bélico</strong></td><td>"Eu transformo minha Manifestação em uma arma."</td><td>Combate, dano e domínio marcial.</td></tr>
-                        <tr><td>🧠 <strong>Lúcido</strong></td><td>"Eu aperfeiçoo minha Manifestação."</td><td>Poder, alma e domínio da manifestação.</td></tr>
-                        <tr><td>🛡️ <strong>Resiliente</strong></td><td>"Nada será capaz de me derrubar."</td><td>Resistência, sobrevivência e defesa absoluta.</td></tr>
-                        <tr><td>👁️ <strong>Perceptivo</strong></td><td>"Eu vejo antes que aconteça."</td><td>Observação, previsão e reação.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- ─────────── ASPECTO BÉLICO ─────────── -->
-            <h2 id="aspecto-belico">⚔️ Aspecto Bélico</h2>
-            <p><em>"Eu transformo minha Manifestação em uma arma."</em> O Aspecto Bélico representa aqueles que buscam o domínio absoluto do combate. Quanto maior sua maestria, mais letal e implacável se torna sua presença na batalha.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Instinto Marcial</strong></td><td>Especialização em 3 perícias: Atletismo, Reflexo e Luta OU Pontaria (escolha 1). Ataques causam <strong>1d10</strong> em vez de 1d8.</td></tr>
-                        <tr><td><strong>2</strong></td><td><strong>Foco de Batalha</strong></td><td>Vantagem nas 3 perícias do próprio Aspecto (Atletismo, Reflexo e Luta/Pontaria) durante combate.</td></tr>
-                        <tr><td><strong>3</strong></td><td><strong>Versatilidade Marcial</strong></td><td>Pode usar Luta ou Pontaria no lugar de outra perícia quando a situação puder ser resolvida através de sua capacidade marcial. Exige justificativa do Mestre.</td></tr>
-                        <tr><td><strong>4</strong></td><td><strong>Contra-Ataque</strong></td><td>Quando uma criatura errar um ataque contra você, pode realizar imediatamente um ataque. 1× por rodada, gastando sua Reação.</td></tr>
-                        <tr><td><strong>5</strong></td><td><strong>Modo Berserker</strong></td><td>Abaixo de 50% PV: +2 Ataque (na jogada) e +1 CA. A 25% ou menos: +4 Ataque, +2 nas jogadas de ataque e dano mínimo 6. A 1%: continua lutando por 3 rodadas mesmo chegando a 0 PV — e, nesse estado, recebe Vantagem em TODOS os ataques.</td></tr>
-                        <tr><td><strong>6</strong></td><td><strong>Turno Marcial</strong></td><td>Pode gastar sua Ação Bônus do turno para realizar uma jogada de ataque a mais.</td></tr>
-                        <tr><td><strong>7</strong></td><td><strong>Técnica Inevitável</strong></td><td>Cria uma Técnica cuja consequência específica é garantida caso o ataque acerte.</td></tr>
-                        <tr><td><strong>8</strong></td><td><strong>Combate Ininterrupto</strong></td><td>Ao acertar um ataque com a Ação Principal, pode realizar imediatamente mais um ataque. 1× por rodada. Não acumula com o ataque extra do Nível 6 (escolhe um dos dois por rodada).</td></tr>
-                        <tr><td><strong>9</strong></td><td><strong>Precisão Absoluta</strong></td><td>+4 em todas as jogadas de ataque, dano mínimo 6 e Crítico de 18–20.</td></tr>
-                        <tr><td><strong>10</strong> 🌸</td><td><strong>Domínio Marcial Absoluto</strong></td><td>Vantagem em 1 jogada de ataque por rodada. Recebe 1 <strong>Técnica Suprema Bélica</strong>.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- ─────────── ASPECTO LÚCIDO ─────────── -->
-            <h2 id="aspecto-lucido">🧠 Aspecto Lúcido</h2>
-            <p><em>"Eu aperfeiçoo minha Manifestação."</em> O Aspecto Lúcido representa aqueles que buscam o domínio absoluto sobre o próprio poder. Quanto maior sua maestria, menor a diferença entre aquilo que imagina e aquilo que sua alma realiza.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Alma Desperta</strong></td><td>Especialização em 3 perícias: Navegação, Vontade e Magia OU Feitiçaria (escolha 1). Magia é o uso direto de poderes; Feitiçaria exige preparação, cântico ou ritual. +50% XP ao absorver Núcleos. Vantagem para identificar e avaliar Núcleos.</td></tr>
-                        <tr><td><strong>2</strong></td><td><strong>Domínio da Manifestação</strong></td><td>Vantagem em 1 utilização da Manifestação por rodada. A utilização pode ser uma ação de ataque, caso cause dano. Se realizar várias utilizações na mesma rodada, escolhe apenas 1 para receber a Vantagem.</td></tr>
-                        <tr><td><strong>3</strong></td><td><strong>Versatilidade da Alma</strong></td><td>Pode usar Magia ou Feitiçaria no lugar de outra perícia quando sua Manifestação permitir resolver a situação. Exige justificativa do Mestre.</td></tr>
-                        <tr><td><strong>4</strong></td><td><strong>Manifestação Rápida</strong></td><td>Recebe uma Ação Bônus adicional 1× por rodada para utilizar EXCLUSIVAMENTE a Manifestação. Pode ser usada para QUALQUER utilização (não apenas Simples).</td></tr>
-                        <tr><td><strong>5</strong></td><td><strong>Controle da Alma</strong></td><td>Todo uso do Poder custa 4 STA a menos (mínimo 1). Recupera 5 STA a cada 3 rodadas. Ao chegar a 0 STA, recupera 10% da STA máxima.</td></tr>
-                        <tr><td><strong>6</strong></td><td><strong>Segundo Turno da Alma</strong></td><td>Mantém uma utilização Simples ou Média do Poder ATIVA sem gastar STA (sustenta uma utilização já ativa sem continuar pagando seu custo — não é uma Ação Bônus extra, nem transforma em Passiva).</td></tr>
-                        <tr><td><strong>7</strong></td><td><strong>Manifestação Permanente</strong></td><td>Transforma uma utilização do Poder em uma Manifestação Passiva de Escala Média, sem custo de STA e sem reativação. Concede uma PASSIVA ADICIONAL — não ocupa um dos slots normais de Passiva.</td></tr>
-                        <tr><td><strong>8</strong></td><td><strong>Eficiência de Manifestação</strong></td><td>1× por rodada: pode reduzir a Escala de uma utilização da Manifestação em 1 nível, pagando o custo correspondente à Escala reduzida, mas mantendo os efeitos da Escala original. Aplica-se a QUALQUER utilização, EXCETO Utilizações Supremas.</td></tr>
-                        <tr><td><strong>9</strong></td><td><strong>Nova Manifestação</strong></td><td>Desenvolve 1 nova Utilização permanente da própria Manifestação.</td></tr>
-                        <tr><td><strong>10</strong> 🌸</td><td><strong>Transcendência da Alma</strong></td><td>Recebe 1 <strong>Técnica Suprema</strong> + 1 <strong>Passiva Suprema</strong> relacionadas à sua Manifestação.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- ─────────── ASPECTO RESILIENTE ─────────── -->
-            <h2 id="aspecto-resiliente">🛡️ Aspecto Resiliente</h2>
-            <p><em>"Nada será capaz de me derrubar."</em> O Aspecto Resiliente representa aqueles que transformam o próprio corpo e a própria alma em uma fortaleza. Quanto maior sua maestria, mais difícil se torna derrubá-lo — e mais perigoso é tentar.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Corpo de Ferro</strong></td><td>Especialização em 3 perícias: Integridade, Fortitude e Sobrevivência. Ao sofrer dano, acumula +1 na próxima jogada de ataque ou teste de Vigor (acúmulo máximo +3; zera ao usar).</td></tr>
-                        <tr><td><strong>2</strong></td><td><strong>Resistência Treinada</strong></td><td>Vantagem nas 3 perícias do Nível 1.</td></tr>
-                        <tr><td><strong>3</strong></td><td><strong>Versatilidade Resiliente</strong></td><td>Pode usar suas perícias do Aspecto no lugar de outras perícias quando puder resolver a situação através de força, resistência ou sobrevivência. Exige justificativa do Mestre.</td></tr>
-                        <tr><td><strong>4</strong></td><td><strong>Redução Absoluta</strong></td><td>Reduz 4 pontos de todo dano recebido, inclusive dano verdadeiro.</td></tr>
-                        <tr><td><strong>5</strong></td><td><strong>Resistência Crescente</strong></td><td>Abaixo de 50% PV: Redução de Dano aumenta para 4. Recupera 2 PV sempre que recebe dano. Ao chegar a 1 PV: recupera 10% da vida E fica invulnerável por 1 rodada. Se essa vida for perdida de novo e voltar ao estado crítico, a mecânica pode acontecer novamente.</td></tr>
-                        <tr><td><strong>6</strong></td><td><strong>Corpo Reativo</strong></td><td>Recebe uma REAÇÃO ADICIONAL defensiva, com Vantagem. Essa Reação pode ser usada para defender a si mesmo OU proteger outra pessoa.</td></tr>
-                        <tr><td><strong>7</strong></td><td><strong>Defesa Absoluta</strong></td><td>Cria uma Técnica defensiva capaz de negar completamente uma fonte específica de dano comum ou consequência. SEM limite de usos por combate — pode utilizar sempre que quiser, desde que pague normalmente o custo de STA.</td></tr>
-                        <tr><td><strong>8</strong></td><td><strong>Resistência Adaptativa</strong></td><td>Funciona como CA contra TÉCNICAS específicas: se um inimigo usa uma Técnica contra você, na próxima vez que ele usar a MESMA Técnica, você recebe +1 CA contra ela. Cada repetição aumenta o bônus (+1 → +2 → +3). Limite por Técnica: máximo de +3 CA e +2 Absorção de Dano. Funciona individualmente para CADA Técnica.</td></tr>
-                        <tr><td><strong>9</strong></td><td><strong>Corpo Intransponível</strong></td><td>Imune a paralisia, imobilização, agarrões, prisões e restrições físicas. Nenhum ataque individual pode causar mais de 30% dos PV máximos.</td></tr>
-                        <tr><td><strong>10</strong> 🌸</td><td><strong>Adaptação Absoluta</strong></td><td>Cada vez que uma fonte o atinge, recebe +2 Redução de Dano e +1 Absorção contra ela. Acumula até 3 vezes: +6 RD e +3 Absorção. Recebe 1 <strong>Técnica Suprema Resiliente</strong>.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- ─────────── ASPECTO PERCEPTIVO ─────────── -->
-            <h2 id="aspecto-perceptivo">👁️ Aspecto Perceptivo</h2>
-            <p><em>"Eu vejo antes que aconteça."</em> O Aspecto Perceptivo representa aqueles que transformam a observação em arma. Quanto mais observam, mais entendem; quanto mais entendem, mais preveem; quanto mais preveem, mais difícil é surpreendê-los.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>1</strong></td><td><strong>Olhos da Alma</strong></td><td>Especialização em 3 perícias: Intuição, Percepção e Investigação. Pode pedir ao Mestre 1 dica verdadeira e relevante sobre a situação. 3× por sessão.</td></tr>
-                        <tr><td><strong>2</strong></td><td><strong>Percepção Aguçada</strong></td><td>Vantagem nas 3 perícias do Nível 1.</td></tr>
-                        <tr><td><strong>3</strong></td><td><strong>Versatilidade Perceptiva</strong></td><td>Pode usar Intuição, Percepção, Reflexo, Investigação ou Astúcia no lugar de outras perícias quando fizer sentido. Exige justificativa do Mestre.</td></tr>
-                        <tr><td><strong>4</strong></td><td><strong>Observação</strong></td><td>Ao observar uma criatura, acumula benefícios por rodada (máx 3 estágios): 1ª rodada: Vantagem na próxima jogada. 2ª rodada: Vantagem em ações não ofensivas e Desvantagem do alvo. 3ª rodada: Vantagem em todas as ações e Desvantagem do alvo em todas as ações. Enquanto continuar gastando a Ação Bônus para observar o MESMO alvo, mantém os bônus. Para de observar ou muda de alvo → perde o acúmulo.</td></tr>
-                        <tr><td><strong>5</strong></td><td><strong>Previsão</strong></td><td>Pode prever e evitar completamente algo que iria afetá-lo diretamente. 3 usos por combate; 5 usos por sessão fora de combate. Recebe +2 CA permanente. Enquanto estiver abaixo de 50% dos PV, recebe +2 CA adicional.</td></tr>
-                        <tr><td><strong>6</strong></td><td><strong>Reação Instintiva</strong></td><td>Recebe uma Reação adicional. Pode tentar evitar um dano ou efeito mesmo depois de ser atingido, usando 1d20 + Destreza + Intelecto, jogando contra a jogada de ataque do adversário. 3× por descanso curto.</td></tr>
-                        <tr><td><strong>7</strong></td><td><strong>Técnica Adaptativa</strong></td><td>Cria Técnicas temporárias durante uma situação, baseadas naquilo que observou e compreendeu. Pode criar NOVAS Técnicas Adaptativas conforme continua observando: se a situação mudar ou obtiver novas informações, pode criar outra na rodada seguinte.</td></tr>
-                        <tr><td><strong>8</strong></td><td><strong>Leitura Instantânea</strong></td><td>1× por rodada: analisa uma ação observada e descobre 1 detalhe sobre intenção, funcionamento, fraqueza, limitação, Técnica ou padrão. Além da informação, recebe benefício defensivo contra aquela ação: Vantagem para desviar/evitar aquele golpe E o inimigo realiza aquele ataque com Desvantagem contra o Perceptivo.</td></tr>
-                        <tr><td><strong>9</strong></td><td><strong>Previsão do Futuro</strong></td><td>Gasta 20 STA para VISUALIZAR O FUTURO — vê diretamente algo que está prestes a acontecer (o inimigo vai atacar, um ataque vai acertá-lo, uma bomba vai explodir, uma Técnica será usada). Pode agir ANTES do acontecimento para se preparar ou evitar. Referência conceitual: Haki da Observação.</td></tr>
-                        <tr><td><strong>10</strong> 🌸</td><td><strong>Aprendizado de Combate</strong></td><td>Ao observar e compreender uma Técnica, ataque ou ação, recebe +1 CA contra aquela utilização nas próximas vezes (acumula até +5 CA). Recebe +3 nas jogadas relacionadas àquela utilização/ação específica contra o alvo. NOVA FUNÇÃO — Previsão do Movimento: gasta uma Ação Bônus (precisa estar VENDO o alvo) para saber o que o inimigo pretende fazer na próxima rodada, de maneira simples ("Ele vai atacar", "vai desviar", "vai fugir", "vai usar uma Técnica"...). Recebe 1 <strong>Técnica Suprema Perceptiva</strong>.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>Regra Comum — Instinto do Aspecto</h2>
-            <p>Todos os Aspectos compartilham uma regra comum, que representa a conexão instintiva entre a alma e sua identidade:</p>
-            <div class="system-card">
-                <strong>Instinto do Aspecto:</strong> rerrola 1 em ações diretamente relacionadas ao Aspecto. 1× por rodada.
-            </div>
-
-            <div class="lore-box">
-                <strong>Aviso da Torre:</strong> a Árvore da Alma é o caminho mais direto para o domínio absoluto de um Desperto — e o mais vigiado. Alcançar o Ápice de um Aspecto (nível 10) exige mais do que níveis: exige um <strong>evento narrativo</strong> (uma missão, um ritual, um momento marcante) e, nos casos mais poderosos, um preço que a alma paga em <strong>Sanidade ou Corrupção</strong>. A Torre sempre cobra — e ela observa com atenção redobrada quem floresce.
-            </div>
-        </section>
         <div class="section-divider"></div>
 
         <!-- ═══════════════════════════════════════════════════════════
@@ -24757,6 +24139,819 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </section>
 
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             SISTEMA DE SESSÕES E EXPERIÊNCIA (XP)
+             Novo capítulo (15/08/2026) — Google Doc + decisões.
+             "O XP é concedido pela história que foi construída,
+             não pela quantidade de ações realizadas."
+        ═══════════════════════════════════════════════════════════ -->
+<div class="section-divider"></div>
+
+<section id="progressao-ascensao-tecnicas" class="section-anchor">
+    <h1>Progressão, Ascensão e Técnicas</h1>
+</section>
+<div class="section-divider"></div>
+
+        <section id="sessoes-xp">
+            <h1>Sistema de Sessões e Experiência (XP)</h1>
+
+            <p>A progressão do seu personagem é baseada na <strong>qualidade da história</strong>, e não apenas em combates ou no tempo de jogo. Ao final de cada sessão, o Mestre avalia diversos aspectos da narrativa e concede XP de acordo com o que foi construído. O objetivo não é terminar uma sessão rapidamente — é criar uma narrativa interessante, coerente e marcante.</p>
+
+            <div class="lore-box">
+                <strong>A filosofia do sistema:</strong><br>
+                "O XP é concedido pela história que foi construída, não pela quantidade de ações realizadas. Quanto mais viva e bem desenvolvida for a história, maior será sua recompensa."
+            </div>
+
+            <h2>Os Tipos de Sessão</h2>
+            <p>O RPG possui três tipos de sessão, cada uma com objetivos e recompensas próprias.</p>
+
+            <div class="system-card">
+                <strong>1. Sessão Oficial</strong> — Sessões narradas por um Mestre. São as principais aventuras do RPG e normalmente fazem parte da história principal ou de missões importantes.<br><br>
+                <strong>Recompensas:</strong> em média, <strong>300 de XP por sessão</strong>, além de itens e outros. Em casos extraordinários, o Mestre (com o acordo do grupo) poderá conceder mais de 500 XP. Também podem ser concedidos: Núcleos, Equipamentos, Títulos, Contatos, Benefícios narrativos e outras recompensas especiais.
+            </div>
+
+            <div class="system-card">
+                <strong>2. Sessão Livre</strong> — Sessões organizadas pelos próprios jogadores. Seu objetivo é desenvolver personagens, relações e pequenas histórias dentro do mundo. Não é necessário haver combate.<br><br>
+                <strong>Recompensas:</strong> 25–75 XP para uma sessão simples · 100–250 XP para uma sessão bem desenvolvida · até 500 XP apenas mediante aprovação do Mestre com o acordo do grupo. Também existe a possibilidade de receber Núcleos ou outras recompensas se a narrativa justificar. <em>Sessões criadas apenas para farm de XP ou com desenvolvimento superficial receberão pouca ou nenhuma recompensa.</em>
+            </div>
+
+            <div class="system-card">
+                <strong>3. Sessão de Lore</strong> — Sessões exclusivas focadas na história de um personagem. Normalmente são divididas em diversas etapas até a conclusão de um arco narrativo.<br><br>
+                <strong>Recompensas:</strong> em cada etapa, cerca de <strong>250 XP</strong>; ao concluir o arco, o personagem normalmente recebe entre <strong>750 e 1.500 XP</strong> totais. Além do XP, o Mestre poderá conceder: Núcleos, Equipamentos, Técnicas, Contatos, Informações, Benefícios exclusivos e Evoluções narrativas.
+            </div>
+
+            <h2>Como o XP é Calculado</h2>
+            <p>O Mestre avalia a sessão utilizando os seguintes critérios:</p>
+            <ul>
+                <li><strong>Desenvolvimento da narrativa</strong></li>
+                <li><strong>Dificuldade dos desafios</strong></li>
+                <li><strong>Quantidade de desafios relevantes</strong></li>
+                <li><strong>Consequências das escolhas</strong></li>
+                <li><strong>Risco enfrentado</strong></li>
+                <li><strong>Evolução da história dos personagens</strong></li>
+                <li><strong>Descobertas importantes</strong></li>
+                <li><strong>Qualidade da interpretação</strong></li>
+                <li><strong>Criatividade na resolução dos problemas</strong></li>
+            </ul>
+            <p>Cada categoria concede uma quantidade de XP de acordo com sua importância durante a sessão. Não é necessário que todos os critérios estejam presentes — uma sessão sem combate pode conceder mais XP do que uma sessão cheia de lutas, desde que apresente maior qualidade narrativa.</p>
+
+            <div class="system-card">
+                <strong>Bônus por Risco:</strong><br>
+                Além do XP por qualidade narrativa, quem <strong>arrisca a alma aprende mais</strong>. O Mestre concede um <strong>+bônus de XP por rolagens pagas com Sanidade</strong> (push) ou resolvidas <strong>em situação desesperada</strong> — <strong>1 vez por sessão</strong>, com valor pequeno (ex.: <strong>+25 a +50 XP</strong>).
+            </div>
+
+            <h2>A Escala de Qualidade da Sessão</h2>
+
+            <div class="system-card">
+                <strong>Sessão Simples (25–100 XP)</strong> — Histórias rápidas, com poucos acontecimentos e pouco desenvolvimento: pequenos conflitos, missões curtas, acontecimentos com poucas consequências. Existe um início, meio e fim, mas praticamente não há desenvolvimento.
+            </div>
+
+            <div class="system-card">
+                <strong>Sessão Desenvolvida (125–250 XP)</strong> — Sessões bem construídas, com desenvolvimento consistente, diversos diálogos, mais de um desafio e consequências reais nas escolhas. Uma sessão nesse nível deve parecer um episódio completo: investigações, negociações, perseguições, estratégias, pequenas reviravoltas. <em>Esse será o padrão da maioria das boas aventuras.</em>
+            </div>
+
+            <div class="system-card">
+                <strong>Sessão Excepcional (275–500 XP)</strong> — Sessões marcantes, com narrativa profunda, subtramas, NPCs com objetivos próprios, mundo vivo, grandes revelações, conflitos internos, reviravoltas e consequências duradouras. Uma sessão desse nível deve ser rara — ao terminar, os jogadores devem sentir que participaram de algo memorável.
+            </div>
+
+            <p><strong>Recompensas acima de 500 XP</strong> são reservadas apenas para acontecimentos extraordinários aprovados pelo Mestre com o acordo do grupo (finais de arco, guerras, derrotas de chefes lendários, acontecimentos únicos). Nesse nível, também podem ser concedidos Núcleos, Equipamentos, Itens raros, Contatos, Informações exclusivas, Títulos, Licenças, Reconhecimento e Benefícios narrativos.</p>
+
+            <h2>Diretrizes Gerais</h2>
+            <ul>
+                <li>O XP recompensa a qualidade da narrativa, e não apenas a quantidade de eventos.</li>
+                <li>Sessões curtas, repetitivas ou criadas apenas para obter XP receberão recompensas reduzidas.</li>
+                <li>Combates, por si só, não aumentam significativamente a recompensa — eles precisam estar inseridos em uma narrativa coerente e contribuir para o desenvolvimento da história.</li>
+                <li>Uma sessão sem combate pode conceder mais XP do que uma sessão com diversas lutas, desde que apresente maior qualidade narrativa.</li>
+                <li>Recompensas acima de 500 XP são reservadas para acontecimentos extraordinários e só poderão ser concedidas mediante aprovação do Mestre com o acordo do grupo.</li>
+            </ul>
+
+            <h2>Tabela de Progressão Completa</h2>
+            <p>Cada nível de personagem (1–20) exige XP crescente e concede ganhos em Maestria, Atributos, Técnicas/Habilidades, Traços da Alma, Aspecto, PV/STA/PE e Perícias. O Nível de Personagem é alimentado por XP; a Ascensão (0–10) é alimentada por Núcleos — dois eixos independentes.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nível</th>
+                            <th>XP para subir</th>
+                            <th>XP Total</th>
+                            <th>Maestria</th>
+                            <th>Atributos</th>
+                            <th>Técnicas / Habilidades</th>
+                            <th>Traço</th>
+                            <th>Aspecto</th>
+                            <th>PV / STA / PE</th>
+                            <th>Perícias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td>—</td><td>—</td><td>+2</td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>—</td><td>Base</td><td>Base</td></tr>
+                        <tr><td><strong>2</strong></td><td>200</td><td>200</td><td>+2</td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>3</strong> ⭐</td><td>300</td><td>500</td><td>+2</td><td>+2</td><td>1× <strong>Nv2</strong> + 2× Nv1</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>4</strong></td><td>400</td><td>900</td><td>+2</td><td>+2</td><td>1× Nv2 + 2× Nv1</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>5</strong></td><td>500</td><td>1.400</td><td>+3</td><td>+2</td><td>1× Nv2 + 2× Nv1</td><td>+1</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>6</strong> ⭐</td><td>600</td><td>2.000</td><td>+3</td><td>+2</td><td>1× <strong>Nv3</strong> + 2× Nv2</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>7</strong></td><td>700</td><td>2.700</td><td>+3</td><td>+2</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>8</strong></td><td>800</td><td>3.500</td><td>+3</td><td>+2</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>9</strong> ⭐</td><td>900</td><td>4.400</td><td>+4</td><td>+2</td><td>1× <strong>Nv4</strong> + 2× Nv3</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>10</strong></td><td>1000</td><td>5.400</td><td>+4</td><td>+2</td><td>1× Nv4 + 2× Nv3</td><td>+1</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>11</strong></td><td>1100</td><td>6.500</td><td>+4</td><td>+2</td><td>1× Nv4 + 2× Nv3</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>12</strong> ⭐</td><td>1200</td><td>7.700</td><td>+4</td><td>+2</td><td>1× <strong>Nv5</strong> + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>13</strong></td><td>1300</td><td>9.000</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>14</strong></td><td>1500</td><td>10.500</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>15</strong> ⭐</td><td>1700</td><td>12.200</td><td>+5</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>+1</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>16</strong></td><td>1900</td><td>14.100</td><td>+5</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>17</strong></td><td>2100</td><td>16.200</td><td>+6</td><td>+2</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>18</strong> ⭐</td><td>2400</td><td>18.600</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>19</strong></td><td>2900</td><td>21.500</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                        <tr><td><strong>20</strong></td><td>3500</td><td>25.000</td><td>+6</td><td>+2</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>—</td><td>+ fórmulas</td><td>+ fórmulas</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-card">
+                <strong>Notas da Tabela:</strong><br><br>
+                • <strong>Marcos ⭐</strong> (níveis 3, 6, 9, 12, 15, 18): liberam um novo nível máximo de técnica/habilidade e concedem o padrão do marco.<br>
+                • Nos níveis entre marcos, o ganho de técnicas/habilidades <strong>repete o padrão do último marco ultrapassado</strong>.<br>
+                • <strong>Técnicas Supremas</strong> são concedidas nos níveis 15, 18, 19 e 20 (4 no total).<br>
+                • <strong>Atributos:</strong> +2 pontos por nível (1–20).<br>
+                • <strong>Traço da Alma:</strong> +1 nos níveis 5, 10, 15 e 20.<br>
+                • <strong>Aspecto:</strong> +1 nos níveis 2, 4, 6, 8, 10, 11, 12, 13, 14 e 15.<br>
+                • <strong>PV, STA e PE</strong> aumentam pelas fórmulas de Vigor, Alma e Intelecto a cada nível.<br>
+                • <strong>Perícias</strong> crescem pelas fórmulas de Maestria/Especialização a cada nível.
+            </div>
+
+            <div class="system-card">
+                <strong>Como funcionam as técnicas/habilidades por nível:</strong><br><br>
+                • Todas as técnicas/habilidades ganhas são de <strong>escolha livre</strong> (ofensiva, defensiva, passiva, suplementar...) — o jogador decide o foco, sempre dentro do conceito do Poder.<br>
+                • <strong>Passivas contam como habilidades:</strong> uma passiva Nv0 ocupa um slot de Nv0, uma passiva Nv2 ocupa um slot de Nv2, e assim por diante. O jogador decide o equilíbrio entre técnicas ativas e passivas.<br>
+                • Não existe limite de técnicas/habilidades conhecidas: o acúmulo é livre, e cada uma tem seu custo em PE.<br>
+                • <strong>Marcos ⭐</strong> (níveis 3, 6, 9, 12, 15, 18): liberam um novo nível de técnica/habilidade e concedem o padrão do marco.<br>
+                • Nos níveis entre marcos, o ganho <strong>repete o padrão do marco ultrapassado</strong>.<br>
+                • <strong>Técnicas Supremas</strong>: concedidas nos níveis 15, 18, 19 e 20 (4 no total).<br><br>
+                <em>Além das técnicas/habilidades, todo nível também aumenta PV, STA e PE pelas fórmulas de Vigor/Alma/Intelecto, e as perícias crescem pela fórmula de Maestria/Especialização.</em>
+            </div>
+
+            <div class="system-card">
+                <strong>Como funciona na prática (exemplo):</strong><br><br>
+                Um personagem que sobe do nível 1 ao 5 ganha:<br>
+                • <strong>Nível 1:</strong> 2 habilidades Nv0 + 1 habilidade Nv1.<br>
+                • <strong>Nível 2:</strong> 2 habilidades Nv0 + 1 habilidade Nv1 (repete o nível 1).<br>
+                • <strong>Nível 3 (marco ⭐):</strong> 1 habilidade Nv2 + 2 habilidades Nv1 — libera o nível 2 de técnica/habilidade.<br>
+                • <strong>Nível 4:</strong> 1 habilidade Nv2 + 2 habilidades Nv1 (repete o marco 3).<br>
+                • <strong>Nível 5:</strong> 1 habilidade Nv2 + 2 habilidades Nv1 (repete o marco 3).<br><br>
+                Total no nível 5: <strong>15 técnicas/habilidades</strong> — o jogador decide quantas são ativas e quantas são passivas.
+            </div>
+
+            <div class="lore-box">
+                <strong>Ritual de up:</strong> ao subir de nível, o personagem precisa de um descanso e de um momento de foco para assimilar o novo poder — um sonho com a Torre, uma sessão de treino ou uma escolha consciente. O Mestre pode pedir uma cena simples para registrar o up.
+            </div>
+
+            <div class="system-card">
+                <strong>Referência de Progressão:</strong><br>
+                • <strong>Iniciante</strong> (níveis 1–5): aprendendo o mundo e desenvolvendo as primeiras habilidades.<br>
+                • <strong>Aprendiz</strong> (níveis 6–10): já enfrentou diversas ameaças e começa a ganhar reconhecimento.<br>
+                • <strong>Veterano</strong> (níveis 11–15): experiente, capaz de influenciar acontecimentos importantes.<br>
+                • <strong>Elite</strong> (níveis 16–20): entre os indivíduos mais poderosos do mundo. Cada nível é uma grande conquista.<br>
+                • Níveis além do 20 (até 25) existem apenas como faixa de <strong>eventos únicos narrativos</strong>, sem tabela de XP — a Maestria, PV/STA/PE e perícias não têm fórmulas definidas além do nível 20.
+            </div>
+
+            <div class="lore-box">
+                <strong>Lembrete da Torre:</strong> subir de nível é a recompensa por histórias bem contadas — não por números acumulados. A Torre não premia quem corre em círculos. Ela premia quem constrói algo que vale a pena ser lembrado. E ela lembra de tudo.
+            </div>
+        </section>
+<div class="section-divider"></div>
+
+        <section id="evolucao-poder">
+            <!-- DESPERTARES / PROGRESSÃO DE PODER -->
+            <h1>Despertares do Poder</h1>
+            <p>Todo poder possui potencial de evolução. O objetivo dos Despertares é liberar novas interpretações do conceito original da habilidade.</p>
+
+            <p>Os Despertares de Poder estão diretamente ligados à sua Ascensão. Cada vez que você acumula energia suficiente para alcançar um novo nível na tabela das Espirais da Ascensão, sua Alma se expande o suficiente para provocar um Despertar no seu poder.</p>
+
+            <div class="system-card">
+                <strong>Como funciona a relação entre Ascensão e Despertar</strong><br><br>
+                • Ao alcançar o Nível 1 de Ascensão → Primeiro Despertar do Poder<br>
+                • Ao alcançar o Nível 2 de Ascensão → Segundo Despertar do Poder<br>
+                • Ao alcançar o Nível 3 de Ascensão → Terceiro Despertar do Poder<br>
+                • E assim por diante.<br><br>
+                Ou seja: <strong>Quantos níveis de Ascensão você possui, tantos Despertares de Poder você já experimentou.</strong><br><br>
+                Um Desperto de Nível 7 de Ascensão, por exemplo, já passou por sete Despertares de Poder ao longo de sua jornada.
+            </div>
+
+            <p>Isso faz com que a evolução do seu poder seja orgânica e diretamente proporcional ao quanto você já ascendeu. Quanto mais alto você sobe nas Espirais da Ascensão, mais vezes sua habilidade será forçada a se reinventar e se aprofundar.</p>
+
+            <h3>Princípio Fundamental</h3>
+            <p>Seu despertar <strong>não precisa ser uma continuação óbvia</strong> do poder inicial. Ele precisa possuir <strong>conexão conceitual</strong>, não necessariamente conexão mecânica direta.</p>
+
+            <p>Exemplo: Um poder baseado em “Espada” não precisa evoluir apenas para “espada maior”. Ele pode expandir para:</p>
+            <ul>
+                <li>Armadura viva formada por lâminas</li>
+                <li>Arsenal completo de armas</li>
+                <li>Campo de batalha manifestado</li>
+                <li>Juramentos militares e honra de combate</li>
+                <li>Domínio territorial</li>
+                <li>Manifestações de guerra</li>
+                <li>Memória de combatentes antigos</li>
+                <li>Materialização do próprio conflito</li>
+            </ul>
+
+            <p>Seu poder não está preso à forma inicial. Você está expandindo a <strong>ideia central</strong> dele.</p>
+
+            <h3>Tipos de Expansão nos Despertares</h3>
+            <p>Cada despertar adiciona uma nova camada ao poder. Essas camadas costumam seguir algumas direções comuns:</p>
+
+            <div class="system-card">
+                <strong>Expansão Funcional</strong><br>
+                Seu poder aprende algo novo.<br>
+                <em>Exemplos:</em> Arma → Defesa / Fogo → Mobilidade / Sombras → Cura limitada / Telecinese → Percepção espacial.
+            </div>
+
+            <div class="system-card">
+                <strong>Expansão Conceitual</strong><br>
+                Seu poder aprofunda sua própria identidade.<br>
+                <em>Exemplos:</em> Raios → Velocidade / Veneno → Deterioração / Espelhos → Percepção / Gravidade → Pressão psicológica.
+            </div>
+
+            <div class="system-card">
+                <strong>Expansão de Escala</strong><br>
+                Seu poder passa a operar em maior alcance, complexidade ou dimensão.<br>
+                <em>Exemplos:</em> Arma individual → Arsenal / Controle local → Domínio de área / Clone único → Múltiplas manifestações.
+            </div>
+
+            <div class="system-card">
+                <strong>Expansão de Aplicação</strong><br>
+                O mesmo conceito encontra novos usos.<br>
+                <em>Exemplos:</em> Gelo ofensivo → Contenção / Sangue → Rastreamento / Metal → Reconstrução estrutural.
+            </div>
+
+            <div class="system-card">
+                <strong>Expansão Simbólica</strong><br>
+                O poder começa a interagir com aquilo que representa.<br>
+                <em>Exemplos:</em> Correntes → Aprisionamento físico e mental / Máscaras → Identidade, persona e ocultação / Relógios → Ritmo, atraso e sincronização.
+            </div>
+
+            <h3>O que NÃO é um Despertar</h3>
+            <p>Despertar não significa obrigatoriamente:</p>
+            <ul>
+                <li>“Mais dano”</li>
+                <li>“Versão gigante da mesma coisa”</li>
+                <li>“Mesma habilidade com número maior”</li>
+            </ul>
+            <p>Isso é permitido, mas não é a única (nem a melhor) direção possível. Muitas vezes, os melhores despertares alteram completamente a forma como uma build joga sem abandonar seu conceito central.</p>
+
+            <h3>Exemplos de Evolução Conceitual</h3>
+            <div class="system-card">
+                <strong>Exemplo 1 – Manipulação de Espadas</strong><br><br>
+                • <strong>Base:</strong> Manipulação de espadas<br>
+                • <strong>1º Despertar</strong> (ao atingir Nível 1 de Ascensão): Controle mais preciso e letal das lâminas.<br>
+                • <strong>Despertar seguinte</strong> (Nível 3): Armadura viva formada por armas.<br>
+                • <strong>Despertar seguinte</strong> (Nível 5): Campo de batalha manifestado.<br>
+                • <strong>Despertar seguinte</strong> (Nível 7): Memória bélica capaz de reproduzir técnicas registradas.<br><br>
+                Cada novo nível de Ascensão força o poder a se expandir de forma conceitual, mantendo sua essência.
+            </div>
+
+            <div class="system-card">
+                <strong>Exemplo 2 – Manipulação de Sombras</strong><br><br>
+                • <strong>Base:</strong> Manipulação de sombras<br>
+                • <strong>1º Despertar</strong> (Nível 1): Sombras mais densas e maleáveis.<br>
+                • <strong>Despertar seguinte</strong> (Nível 3): Armazenamento dimensional dentro das sombras.<br>
+                • <strong>Despertar seguinte</strong> (Nível 5): Movimentação por superfícies escuras.<br>
+                • <strong>Despertar seguinte</strong> (Nível 7): Domínio de ausência, ocultação e apagamento sensorial.<br><br>
+                Mesmo conceito. Cada Ascensão aprofunda e transforma a expressão do poder.
+            </div>
+
+            <h3>Diretriz para Criação e Evolução de Poderes</h3>
+            <p>Ao criar sua habilidade base, pense menos em <strong>“O que meu poder faz?”</strong> e mais em <strong>“O que meu conceito representa?”</strong></p>
+
+            <p>Quanto mais forte o conceito central, maior tende a ser seu potencial de despertar.</p>
+
+            <div class="lore-box">
+                <strong>Perguntas úteis ao pensar na evolução do seu poder:</strong><br><br>
+                • Meu poder possui tema?<br>
+                • Possui símbolo?<br>
+                • Possui lógica interna?<br>
+                • Possui identidade além da mecânica inicial?<br><br>
+                Quanto mais forte o conceito central, maior tende a ser seu potencial de despertar.
+            </div>
+
+            <div class="lore-box">
+                Evoluir o poder é evoluir a si mesmo. Quanto mais você compreende quem realmente é… mais forte (e mais perigosa) sua alma se torna.
+            </div>
+
+            <h3 id="desbloquear-tecnicas">As Três Formas de Desbloquear Técnicas</h3>
+            <p>Um Despertar não é apenas uma expansão conceitual — ele também <strong>desbloqueia técnicas</strong>. Existem três formas de ganhar novas técnicas, e todas se somam:</p>
+            <div class="system-card">
+                <strong>Forma 1 — Ascensão (Despertares):</strong><br><br>
+                Cada nível de Ascensão (0–10) libera <strong>1 Despertar</strong>. Cada Despertar libera um <strong>trio de técnicas</strong>:<br>
+                • <strong>1 técnica no pico</strong> (tier = nível da Ascensão) — a técnica livre, pode ser qualquer coisa (não necessariamente ofensiva).<br>
+                • <strong>1 suplementar</strong> (tier = nível da Ascensão − 1).<br>
+                • <strong>1 livre</strong> (tier = nível da Ascensão − 1).<br><br>
+                <em>Exemplo:</em> Ascensão Nv 3 → 1 técnica tier 3 (livre) + 1 suplementar tier 2 + 1 livre tier 2.
+            </div>
+            <div class="system-card">
+                <strong>Forma 2 — Up de Nível (XP):</strong><br><br>
+                Cada subida de Nível (1–20) concede <strong>técnicas/habilidades conforme a Tabela de Progressão</strong> (ver <a href="#sessoes-xp">Sistema de Sessões e XP</a>): nos níveis normais, o padrão do marco ultrapassado; nos marcos (3, 6, 9, 12), um novo nível de técnica/habilidade é liberado. <strong>Técnicas Supremas</strong> são concedidas nos níveis 15, 18, 19 e 20.<br><br>
+                <em>Exemplo:</em> ao subir para o nível 3 (marco), o personagem ganha 1 técnica Nv2 + 2 técnicas Nv1.
+            </div>
+            <div class="system-card">
+                <strong>Forma 3 — Desenvolvimento Espontâneo:</strong><br><br>
+                Independente de nível, o jogador pode desenvolver <strong>1 técnica</strong> espontaneamente durante sessões e narrações, em <strong>momentos de pico de desenvolvimento</strong> e <strong>cenas lendárias</strong> (atuações e desenvolvimento muito bons do personagem). Concedido pelo Mestre como recompensa narrativa. A técnica espontânea pode ser de qualquer tier até o limite do personagem.
+            </div>
+
+            <h3 id="aceitar-negligenciar">Aceitar ou Negligenciar o Despertar</h3>
+            <p>Quando o Despertar ocorre (ao subir de Ascensão), o jogador <strong>escolhe</strong> o que fazer com ele:</p>
+            <div class="system-card">
+                <strong>Aceitar:</strong><br>
+                Você paga o <strong>custo temático</strong> (−2 de Sanidade máxima, +1 de Corrupção, +1 de Atenção da Torre, ou Relacionamento −1 nível — o mesmo menu dos Traços da Alma) e recebe a <strong>transformação completa</strong>: o trio de técnicas + a transformação estética + <strong>1 ganho profundo</strong> (ver <a href="#ganhos-profundos">Ganhos Profundos do Despertar</a>).
+            </div>
+            <div class="system-card">
+                <strong>Negligenciar:</strong><br>
+                O Despertar fica <strong>adormecido</strong>: sem efeito mecânico, sem custo, sem transformação. O personagem vai contra a corrupção e se mantém mais humano. O jogador pode <strong>aceitar depois</strong> a qualquer momento (pagando o custo temático). Negligenciar repetidamente pode gerar tensão narrativa — a Torre insiste.
+            </div>
+            <div class="lore-box">
+                <strong>A Torre sempre cobra:</strong> todo poder tem um preço. Mas você pode escolher <strong>quando</strong> pagar. Negligenciar um Despertar é uma forma de resistência — e a Torre não gosta de ser ignorada.
+            </div>
+
+            <h3 id="transformacao-usuario">A Transformação do Usuário</h3>
+            <p>O Despertar é bem mais que ganho de poder: <strong>o poder se transforma e o usuário também, assim como o seu núcleo</strong>.</p>
+            <div class="system-card">
+                <strong>Estética:</strong> o personagem pode mudar — marcas, olhos, aura, forma do poder. Registre a transformação na ficha. A transformação pode incluir os <strong>ganhos profundos</strong> (ver <a href="#ganhos-profundos">Ganhos Profundos do Despertar</a>).<br><br>
+                <strong>Técnicas:</strong> podem se transformar — renomear/reflavor com o mesmo efeito, ou efeito evoluído.<br><br>
+                <strong>Conexão com a Corrupção:</strong> quando o custo de aceitar for Corrupção, a transformação estética conecta-se às <strong>Marcas da Corrupção</strong> (tabela d12 da seção <a href="#sanidade">Sanidade e Corrupção</a>).
+            </div>
+            <div class="lore-box">
+                <strong>Exemplo — Manipulação de Espadas:</strong> no 1º Despertar, o controle fica mais preciso. A técnica "Corte" vira <strong>"Corte Preciso"</strong> — mesmo efeito, nova forma. O usuário pode ganhar marcas finas nos braços, como cicatrizes de lâmina, conectadas à sua Corrupção.
+            </div>
+
+            <h3 id="ganhos-profundos">Ganhos Profundos do Despertar</h3>
+            <p>Cada Despertar <strong>aceito</strong> concede, além do trio de técnicas, <strong>1 ganho profundo</strong> escolhido de um menu — o jogador escolhe 1 por Despertar:</p>
+            <div class="system-card">
+                <strong>Menu de Ganhos Profundos:</strong><br><br>
+                <strong>1. Nova Manifestação</strong> — o poder ganha um uso novo e temático (uma Utilização registrada de graça, categoria ≤ limite do nível).<br><br>
+                <strong>2. Transformação Estética Marcante</strong> — aura, olhos, forma do poder mudam visivelmente (registrado na ficha; conecta com as Marcas da Corrupção se o custo for Corrupção).<br><br>
+                <strong>3. Voz do Núcleo</strong> — o poder ganha uma "voz"/instinto próprio: 1×/cena, o Mestre pode dar uma dica temática do poder (ou o poder se manifesta sem comando em momento de perigo).<br><br>
+                <strong>4. Dado Temático</strong> — +1 dado em testes temáticos do poder (ex.: +1d4 em testes de Alma/Intelecto relacionados à Manifestação).<br><br>
+                <strong>5. Ressonância</strong> — o poder ressoa com a <a href="#arvore-alma">Árvore da Alma</a>: o Aspecto escolhido ganha +1 nível (ou o equivalente em progresso do Aspecto).
+            </div>
+            <div class="lore-box">
+                <strong>A Torre sempre cobra:</strong> mas o que ela devolve pode ser maior que o preço. Cada Despertar aceito é uma negociação — e os ganhos profundos são o troco que você escolhe.
+            </div>
+
+            <h3 id="nucleo-desperta">O Núcleo Desperta</h3>
+            <p>A partir do <strong>3º Despertar aceito</strong>, o Núcleo do personagem pode "despertar" uma característica própria:</p>
+            <div class="system-card">
+                <strong>O Núcleo desperta automaticamente no 3º Despertar aceito</strong> — o jogador escolhe a forma:<br><br>
+                • <strong>Voz:</strong> o poder ganha voz/instinto — manifesta-se sem comando em momentos de perigo (1×/cena).<br>
+                • <strong>Marca:</strong> deixa uma marca permanente (conectada à Corrupção se o custo for Corrupção).<br>
+                • <strong>Presença:</strong> o personagem sente o Núcleo como uma presença — ganchos narrativos; o Mestre pode usar para tensão.<br><br>
+                A partir daí, cada Despertar adicional pode aprofundar a escolha (ex.: a voz fala mais, a marca cresce).
+            </div>
+            <div class="lore-box">
+                <strong>Seu Núcleo não é mais só seu</strong> — e isso pode ser tanto um presente quanto um preço. Ele sussurra, marca e observa. A Torre sempre cobra — mas agora ela tem com quem conversar.
+            </div>
+        </section>
+<div class="section-divider"></div>
+
+        <section id="tecnicas-habilidades">
+            <h1>Criação de Técnicas e Habilidades</h1>
+            
+            <p>Enquanto o Poder Principal define o conceito amplo da sua Alma e os Despertares expandem suas possibilidades, as <strong>Técnicas</strong> são as aplicações concretas que você usa em combate. Elas transformam o conceito abstrato em ações práticas, com custos, efeitos e limitações claras.</p>
+            
+            <p>Toda técnica pertence a um <strong>Tipo</strong> e possui um <strong>Nível</strong> (1 a 5). O nível determina o poder base, o custo em recursos e o escopo das capacidades. Técnicas são criadas ou evoluídas junto com o seu poder, sempre mantendo coerência com o conceito da sua Alma.</p>
+
+            <h3>Tipos de Técnicas</h3>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                            <th>Ação Requerida</th>
+                            <th>Foco Principal</th>
+                            <th>Exemplos de Uso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Passiva</strong></td>
+                            <td>Efeitos contínuos, gatilhos automáticos ou auras que não exigem ativação consciente. Representam a "natureza" do seu poder.</td>
+                            <td>Nenhuma (ou Reação em alguns casos)</td>
+                            <td>Buffs permanentes, resistências, auras, efeitos condicionais, manutenção.</td>
+                            <td>Aura de dano, resistência a um elemento, bônus passivo em testes, regeneração lenta, presença intimidadora.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Suplementar</strong></td>
+                            <td>Efeitos de suporte, controle de campo, mobilidade, informação ou debuffs/buffs. Não são puro dano, mas alteram o cenário da luta.</td>
+                            <td>Ação Principal (às vezes Bônus)</td>
+                            <td>Controle, utilidade, sinergia com aliados, debuffs em inimigos, reposicionamento.</td>
+                            <td>Teleporte curto, cegar inimigo, buff de ataque para aliado, criar terreno difícil, drenar STA do alvo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Defensiva</strong></td>
+                            <td>Proteção, mitigação de dano, cura, escapes, contra-ataques e defesas ativas. Foco em sobrevivência e resposta.</td>
+                            <td>Reação ou Ação Principal</td>
+                            <td>Escudos, cura, redução de dano, contra-ataque, remoção de condições, mobilidade defensiva.</td>
+                            <td>Escudo que absorve dano, cura aliados, contra-ataque quando atingido, desvio com vantagem, purificar corrupção.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ofensiva</strong></td>
+                            <td>Ataques diretos, dano em área, controle através de dano e efeitos de status ofensivos. O "dano principal" do seu poder.</td>
+                            <td>Ação Principal</td>
+                            <td>Dano bruto, burst, controle de oponente (stun, knockback, DoT), múltiplos alvos.</td>
+                            <td>Corte de energia, explosão, rajada de projéteis, drenagem de vida, onda de choque.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Diferenças de Dano e Capacidades por Nível e Tipo</h3>
+            
+            <p>O <strong>Nível da Técnica</strong> vai de 0 a 5. O nível 0 representa técnicas rudimentares ou recém-descobertas (comuns no início da jornada de um Desperto). O nível máximo que você pode criar é limitado pelo seu número de Despertares de Poder (ou seu nível de Ascensão, à critério do Mestre).</p>
+            
+            <p><strong>Modificador de Dano/Efeito:</strong> Use o modificador do atributo mais relevante ao seu poder (geralmente <strong>Alma</strong>, mas pode ser Força para poderes físicos, Intelecto para mentais, etc.).</p>
+
+            <p><strong>Dano Base sem Técnica:</strong> 1d8 + modificador relevante.</p>
+
+            <p><strong>Progressão de Dados por Nível:</strong> Cada nível de técnica adiciona um dado de dano. Existem três linhas de progressão dependendo da natureza da técnica:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nível</th>
+                            <th>Ofensiva Pura (foco total em dano)</th>
+                            <th>Mista (dano + efeitos/condições complexas)</th>
+                            <th>Padrão / Equilibrada (efeitos básicos)</th>
+                            <th>Custo Base (principalmente PE)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td>2d10 + mod</td>
+                            <td>2d6 + mod</td>
+                            <td>2d8 + mod</td>
+                            <td>2 PE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>3d10 + mod</td>
+                            <td>3d6 + mod</td>
+                            <td>3d8 + mod</td>
+                            <td>4 PE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>4d10 + mod</td>
+                            <td>4d6 + mod</td>
+                            <td>4d8 + mod</td>
+                            <td>6 PE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>5d10 + mod</td>
+                            <td>5d6 + mod</td>
+                            <td>5d8 + mod</td>
+                            <td>8 PE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>6d10 + mod</td>
+                            <td>6d6 + mod</td>
+                            <td>6d8 + mod</td>
+                            <td>10 PE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>7d10 + mod</td>
+                            <td>7d6 + mod</td>
+                            <td>7d8 + mod</td>
+                            <td>12 PE</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Sobre o Custo:</strong> O custo das técnicas é focado principalmente em <strong>pontos de energia (PE)</strong>. A Stamina (STA) é gasta principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (manutenção, campos, auras, etc.). O custo em PE começa em 2 no Nível 0 e aumenta de 2 em 2 a cada nível.</p>
+
+            <ul>
+                <li><strong>Ofensiva Pura (d10)</strong>: Técnicas cujo único propósito é causar o máximo de dano possível. Não costumam ter efeitos adicionais complexos.</li>
+                <li><strong>Mista (d6)</strong>: Técnicas que causam dano mas também aplicam efeitos e condições mais complexas (controle, debuffs fortes, transformações, etc.).</li>
+                <li><strong>Padrão / Equilibrada (d8)</strong>: A maioria das técnicas — bom equilíbrio entre dano e versatilidade. Podem ter efeitos básicos.</li>
+            </ul>
+
+            <h4>Exemplos de Efeitos e Poderes Acompanhantes para Técnicas</h4>
+            <p>Aqui estão exemplos de efeitos e poderes que podem acompanhar <strong>qualquer tipo de técnica</strong> (Passiva, Suplementar, Defensiva ou Ofensiva), inspirados no conceito do seu poder. Adapte o efeito ao tipo da técnica: em Ofensivas ele geralmente se manifesta no impacto ou dano; em Defensivas como resposta, escudo ou contra-efeito; em Suplementares como campo, alteração ou controle de área; em Passivas como aura constante, gatilho automático ou modificador contínuo. Use-os como inspiração para enriquecer suas técnicas com camadas temáticas e mecânicas adicionais, sempre respeitando o conceito da sua Alma. Mesmo no Nível 0, os efeitos estão acima do nível humano comum e representam poder significativo.</p>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nível</th>
+                            <th>Exemplos de Efeitos e Poderes que podem acompanhar a técnica (adapte ao tipo)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong><br>(Básico)</td>
+                            <td>
+                                • A técnica aplica um efeito de enfraquecimento básico (ex: penalidade leve em testes de um atributo ou recurso)<br>
+                                • Causa um efeito adicional quando o alvo ou a situação está em uma condição específica (ex: ferido, em movimento, exposto à Névoa, sob efeito de outra técnica)<br>
+                                • Impõe desvantagem temporária em defesas, esquivas ou testes de resistência do alvo<br>
+                                • A técnica drena um recurso menor do alvo (STA, movimento, percepção ou similar conceitual)<br>
+                                • Ganha vantagem em testes ou ações contra o alvo (ou tipo de situação) nas próximas rodadas<br>
+                                • O efeito causa uma "ressonância" que repete parte do impacto ou benefício na rodada seguinte ou em uma ação subsequente
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>
+                                • A técnica causa um status moderado (ex: desvantagem em testes ou redução de movimento)<br>
+                                • Deixa uma marca que permite ao usuário causar dano extra, impor condições ou obter vantagem em ações subsequentes contra o mesmo alvo<br>
+                                • Enfraquece a resistência do alvo a um tipo específico de dano, efeito ou conceito<br>
+                                • Causa um efeito adicional significativo se o alvo falhar em um teste de resistência conceitual<br>
+                                • A técnica aplica um efeito de "sangramento", "queima" ou "contágio" temática que persiste levemente ao longo das rodadas<br>
+                                • Ganha um bônus temporário relevante (ataque, defesa, testes) contra o alvo ou em situações relacionadas<br>
+                                • Cria uma ressonância que afeta outros alvos próximos de forma menor ou secundária
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>
+                                • A técnica aplica um status forte (ex: stun leve por 1 rodada, cegar temporário, desorientação conceitual)<br>
+                                • Causa efeito extra contra alvos que estão em desvantagem, feridos ou sob condições específicas<br>
+                                • Deixa o alvo marcado de forma que aliados ou efeitos subsequentes contra ele ganham bônus claros<br>
+                                • A técnica drena um recurso significativo do alvo (ex: penalidade forte em ações futuras, redução de recursos)<br>
+                                • Aplica um efeito de "contágio conceitual" que enfraquece o alvo progressivamente ao longo do tempo<br>
+                                • Permite um contra-efeito ou ação reativa na próxima vez que o alvo agir ou falhar em algo<br>
+                                • Causa efeito adicional se o alvo estiver sob efeito de outra técnica, condição ou vulnerabilidade
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>
+                                • A técnica aplica controle forte (ex: imobilizar, dominar movimento por 1 rodada, suprimir uma ação chave)<br>
+                                • Causa efeito extra que escala com a "fraqueza" do alvo (ex: mais impacto contra alvos com status, feridos ou em desvantagem)<br>
+                                • Deixa uma maldição conceitual que reduz as capacidades do alvo de forma acumulativa em rodadas futuras<br>
+                                • Permite "roubar", suprimir ou redirecionar um efeito ou bônus temporário do alvo para si ou aliados<br>
+                                • Aplica um efeito de "ressonância" que amplifica todos os ataques, efeitos ou ações subsequentes contra o alvo (próprios ou de aliados)<br>
+                                • Causa efeito adicional contra alvos que tentam se defender, contra-atacar ou resistir ativamente<br>
+                                • Deixa o alvo vulnerável a um tipo específico de ataque, efeito ou poder conceitual
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>
+                                • A técnica aplica múltiplos status complexos ao mesmo tempo (ex: enfraquecer + marcar + drenar + desvantagem progressiva)<br>
+                                • Causa um efeito que "copia", reflete ou explora fraquezas conceituais do alvo de forma direta e poderosa<br>
+                                • Deixa uma marca profunda (quase permanente por cena) que permite rastreamento confiável e concede vantagem conceitual significativa em ações futuras contra o alvo<br>
+                                • Invoca um elemento secundário ou "eco" do poder que causa efeitos adicionais persistentes em rodadas seguintes (dano, condições ou controle)<br>
+                                • Aplica um efeito de "quebra" que reduz permanentemente (por cena) a resistência, regeneração ou capacidades do alvo a certos ataques ou conceitos<br>
+                                • Permite um "juízo" ou efeito narrativo forte baseado no conceito do poder (ex: cortar "destinos", memórias, lealdades ou conceitos chave do alvo)<br>
+                                • Causa efeito extra que escala diretamente com o nível de Ascensão do usuário<br>
+                                • Cria um laço conceitual que permite ao usuário drenar poder, impor condições ou transferir efeitos do alvo em ações futuras
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>
+                                • A técnica aplica uma combinação sinérgica de múltiplos efeitos complexos e interligados de uma só vez, criando uma situação extremamente difícil de reverter (ex: marca profunda + drenagem contínua + supressão de ações + vulnerabilidade conceitual).<br>
+                                • Cria uma marca conceitual profunda e persistente que permite rastreamento em longa distância (mesma Torre ou além em casos extremos) e faz com que o alvo sofra automaticamente dano, condições ou perda de recursos sempre que ativar seu poder principal ou gastar recursos significativos.<br>
+                                • Invoca uma manifestação secundária ou "aspecto" semi-independente do poder que age por várias rodadas (1d4+1 ou mais), podendo ser um campo persistente, uma entidade conceitual menor, uma maldição ativa ou um eco que repete ou amplia a técnica original.<br>
+                                • Aplica uma "quebra conceitual" grave que remove ou suprime permanentemente (por cena ou até ser reparado de forma custosa) uma resistência, imunidade, regeneração, bônus importante ou até o acesso a uma capacidade chave do alvo diretamente ligada ao conceito do poder.<br>
+                                • Permite um "juízo da Alma" poderoso: o alvo deve superar um teste conceitual difícil baseado no Poder Principal do usuário; em falha, sofre um efeito narrativo e mecânico grave (ex: para um poder de justiça, o alvo é forçado a "pagar" por atos passados com perda de recursos ou ações; para um poder de ecos, o alvo perde a capacidade de se comunicar ou ouvir por cena).<br>
+                                • O efeito escala diretamente com o nível de Ascensão do usuário e permite drenar um recurso de forma semi-permanente (ex: reduzir o máximo de STA, PE ou Sanidade do alvo por cena, ou impor uma penalidade acumulativa).<br>
+                                • Cria um laço conceitual bidirecional forte que permite ao usuário transferir parte do dano, condições ou efeitos negativos sofridos de volta para o alvo, ou compartilhar poder de forma poderosa com aliados próximos (bônus significativos ou cura conceitual).<br>
+                                • A técnica amplifica drasticamente a atenção da Torre sobre o alvo (e possivelmente sobre o usuário), podendo ser usada taticamente para forçar eventos aleatórios, distrair inimigos poderosos ou criar aberturas — mas traz riscos graves de corrupção, atenção hostil ou consequências narrativas para todos envolvidos.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Como Criar uma Técnica</h3>
+            <ol>
+                <li><strong>Escolha o Tipo</strong> (Passiva, Suplementar, Defensiva ou Ofensiva). Deve fazer sentido com seu conceito de poder.</li>
+                <li><strong>Escolha o Nível</strong> (0 a 5). O Nível máximo disponível é geralmente igual ao seu número atual de Despertares de Poder (ou seu nível de Ascensão, à critério do Mestre). Nível 0 representa técnicas básicas ou recém-descobertas.</li>
+                <li><strong>Defina o Conceito</strong>: "O que essa técnica faz dentro do meu poder?" Ex: Para um poder de "Espada" → "Corte que drena força" (Ofensiva).</li>
+                <li><strong>Consulte as Tabelas</strong>: Escolha a linha de dado de acordo com a natureza da técnica (d10 para ofensiva pura, d6 para mistas, d8 para equilibradas). Use os exemplos de efeitos e poderes acompanhantes abaixo como inspiração para enriquecer sua técnica com camadas temáticas e mecânicas adicionais (adapte ao tipo escolhido).</li>
+                <li><strong>Defina Custo</strong>: O custo principal é em PE (começa em 2 no Nível 0 e sobe de 2 em 2 por nível). Stamina é usada principalmente para sustentar efeitos ou técnicas que demandam gasto por turno (campos, auras, manutenção, etc.).</li>
+                <li><strong>Equilíbrio</strong>: Se a técnica for muito forte para o nível, adicione um custo extra, limitação conceitual ou cooldown (ex: só 1x por cena).</li>
+                <li><strong>Nome e Flavor</strong>: Dê um nome que combine com seu poder e descreva o visual/efeito narrativo.</li>
+            </ol>
+
+            <h3>Exemplos de Técnicas Criadas</h3>
+
+            <div class="system-card">
+                <strong>Poder: Espada de Justiça Impiedosa (Elara)</strong><br><br>
+                <strong>Ofensiva Nível 1 – "Corte Executor"</strong><br>
+                Dano: 3d8 + mod Alma (ofensiva pura). Custo: 4 PE. Efeito: O alvo sofre -1 em testes de Vigor até o fim da cena (sangramento conceitual).<br><br>
+                
+                <strong>Defensiva Nível 2 – "Lâmina Protetora"</strong><br>
+                Efeito: Absorve 3d8 dano de um ataque contra você ou aliado próximo (mista). Se o escudo absorver todo o dano, você causa 1d6 de retaliate no atacante. Custo: 6 PE + 2 STA por rodada de manutenção (Reação).<br><br>
+                
+                <strong>Suplementar Nível 3 – "Campo de Lâminas Orbitais"</strong><br>
+                Efeito: Cria um campo ao seu redor por 1d4 rodadas. Inimigos que entrarem ou começarem o turno dentro sofrem 4d6 dano e têm desvantagem em testes de movimento. Custo: 8 PE + 3 STA por rodada de manutenção. (Alcance e área definidos pelo conceito do poder).
+            </div>
+
+            <div class="system-card">
+                <strong>Poder: Manipulação de Ecos e Silêncio (Lucian)</strong><br><br>
+                <strong>Passiva Nível 1 – "Ouvido do Passado"</strong><br>
+                Efeito: Você pode ouvir ecos de conversas ou eventos importantes que aconteceram no local nas últimas 24 horas (teste de Intelecto baseado em atributo + perícia relevante para detalhes claros). Não gasta recursos.<br><br>
+                
+                <strong>Ofensiva Nível 2 – "Grito do Silêncio"</strong><br>
+                Dano: 3d8 psíquico (mista) + o alvo fica surdo por 1 rodada (não pode ouvir comandos ou usar poderes baseados em som). Custo: 6 PE.<br><br>
+                
+                <strong>Defensiva Nível 3 – "Bolha de Ausência"</strong><br>
+                Efeito: Cria uma bolha onde sons e poderes auditivos/mentais são suprimidos por 1d4 rodadas. Aliados dentro ganham +2 em Salvaguardas contra ilusão e medo. Inimigos dentro têm desvantagem em testes de percepção. Custo: 8 PE + 3 STA por rodada de manutenção. (Alcance e tamanho definidos pelo conceito do poder).
+            </div>
+
+            <div class="system-card">
+                <strong>Poder: Telecinese (exemplo genérico)</strong><br><br>
+                <strong>Suplementar Nível 1 – "Empurrão Telecinético"</strong><br>
+                Efeito: Empurra um alvo para trás. Se o alvo bater em obstáculo, sofre 3d6 dano (mista). Custo: 4 PE. (Alcance definido pelo conceito do poder).<br><br>
+                
+                <strong>Ofensiva Nível 4 – "Esmagamento Gravitacional"</strong><br>
+                Dano: 6d10 + mod em alvo único (ofensiva pura). O alvo fica imobilizado por 1 rodada (salvaguarda de Vigor baseada em atributo + perícia relevante para resistir). Custo: 10 PE.<br><br>
+                
+                <strong>Passiva Nível 2 – "Leveza Mental"</strong><br>
+                Efeito: Você pode levitar permanentemente (sem custo). Ganha +1 em testes de Destreza para equilíbrio e pode ignorar terreno difícil de chão. Custo de manutenção: 2 STA por rodada se quiser manter em combate intenso.
+            </div>
+
+            <div class="lore-box">
+                <strong>Nota para Jogadores e Mestres:</strong> Técnicas devem sempre refletir o conceito do poder. Uma técnica que não faz sentido com a Alma do personagem pode ser negada ou custar mais (ou gerar Corrupção). A criatividade é encorajada, mas a coerência conceitual é a regra fundamental do sistema.
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             A ÁRVORE DA ALMA — novo capítulo (15/08/2026)
+             Fonte: Google Doc do usuário + decisões de design resolvidas.
+             Estrutura oficial: 5 Aspectos × 3 Ramos × 10 níveis (3×10).
+        ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════
+             A ÁRVORE DA ALMA — novo sistema (4 Aspectos × 10 níveis)
+             Fonte: balanceamento aprovado (Revisão 3) + decisões do usuário.
+             Estrutura oficial: 4 Aspectos (Ramos) × 10 níveis. 1 Aspecto por personagem.
+        ═══════════════════════════════════════════════════════════ -->
+        <section id="arvore-alma">
+            <h1>A Árvore da Alma</h1>
+
+            <p>Cada Manifestação nasce de uma alma única. Ao longo da jornada, essa alma amadurece e passa a desenvolver um <strong>Aspecto</strong> dominante — o caminho que define como o personagem evolui sua Manifestação e molda completamente seu estilo de combate.</p>
+
+            <div class="system-card">
+                <strong>A Cadeia da Alma:</strong><br>
+                Manifestação (seu poder, único e imutável) → <strong>Aspecto</strong> (4 caminhos de evolução) → <strong>10 níveis</strong> de maestria → <strong>Ápice do Aspecto</strong> (nível 10).
+            </div>
+
+            <p>Todo personagem escolhe <strong>um único Aspecto</strong> para seguir — a identidade que sua alma assume diante da Torre. Essa escolha é definitiva: é o caminho que você percorrerá até o fim do jogo. Cada Aspecto possui <strong>10 níveis</strong> de maestria, e completá-lo representa o domínio absoluto daquela identidade.</p>
+
+            <div class="lore-box">
+                <strong>Como a Árvore da Alma funciona na prática:</strong><br>
+                • Você escolhe <strong>1 Aspecto</strong> na criação do personagem — sua identidade de alma.<br>
+                • O Aspecto evolui em <strong>10 níveis</strong>, ganhos nos níveis de personagem <strong>2, 4, 6, 8, 10, 11, 12, 13, 14 e 15</strong>.<br>
+                • O <strong>último nível (15)</strong> exige algo especial para ser liberado: um contexto complicado, uma missão especial ou um momento narrativo marcante — a Torre não entrega o ápice de graça.<br>
+                • Ao completar o Aspecto, você alcança o <strong>Ápice</strong>: a forma mais pura da sua identidade.<br><br>
+                <em>Os níveis de Aspecto também aparecem consolidados na <a href="#sessoes-xp">Tabela de Progressão</a> (Sistema de Sessões e XP).</em>
+            </div>
+
+            <h2>Os Princípios da Árvore</h2>
+            <p>Sete princípios regem toda a Árvore da Alma. Qualquer conteúdo criado para ela — Aspectos, níveis ou o Ápice — deve respeitá-los:</p>
+            <ul>
+                <li><strong>Princípio da Especialização</strong> — Cada Aspecto melhora apenas <strong>uma</strong> identidade de combate. Nunca duas.</li>
+                <li><strong>Princípio da Compatibilidade</strong> — A Árvore nunca cria capacidades que a Manifestação seja incapaz de realizar. Ela apenas amplia o que já faz parte do potencial do poder.</li>
+                <li><strong>Princípio da Universalidade</strong> — Toda melhoria da Árvore deve funcionar em Técnicas, Passivas, Usos Comuns, Evoluções da Manifestação e Habilidades Permanentes — desde que compartilhem a propriedade fortalecida.</li>
+                <li><strong>Princípio da Identidade</strong> — Nenhum Aspecto pode realizar melhor a função principal de outro Aspecto. O Bélico jamais será melhor que o Lúcido em manifestação; o Lúcido jamais será melhor que o Bélico em dano.</li>
+                <li><strong>Princípio da Progressão</strong> — Níveis baixos fortalecem números; níveis altos fortalecem possibilidades; o Ápice fortalece identidade.</li>
+                <li><strong>Princípio da Criatividade</strong> — A Árvore nunca limita a criatividade do jogador. Ela apenas recompensa diferentes formas de utilizar a Manifestação dentro da identidade do personagem.</li>
+                <li><strong>Princípio da Especialização Crescente</strong> — Os bônus dos níveis não crescem de forma linear. O ganho do nível 9 deve ser muito mais impactante que o do nível 2.</li>
+            </ul>
+
+            <div class="lore-box">
+                <strong>A regra mais importante:</strong> nenhum Aspecto concede algo que sua Manifestação seja incapaz de realizar. Ele apenas fortalece propriedades já existentes. Quem respeita essa regra nunca quebra o jogo — quem a ignora, desperta algo que não era seu. E a Torre sempre nota.
+            </div>
+
+            <h2>Os Aspectos</h2>
+            <p>Existem quatro Aspectos, cada um com uma pergunta fundamental. Você escolhe <strong>um</strong> — e ele define sua identidade até o fim do jogo:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Aspecto</th><th>Frase</th><th>Identidade</th></tr></thead>
+                    <tbody>
+                        <tr><td>⚔️ <strong>Bélico</strong></td><td>"Eu transformo minha Manifestação em uma arma."</td><td>Combate, dano e domínio marcial.</td></tr>
+                        <tr><td>🧠 <strong>Lúcido</strong></td><td>"Eu aperfeiçoo minha Manifestação."</td><td>Poder, alma e domínio da manifestação.</td></tr>
+                        <tr><td>🛡️ <strong>Resiliente</strong></td><td>"Nada será capaz de me derrubar."</td><td>Resistência, sobrevivência e defesa absoluta.</td></tr>
+                        <tr><td>👁️ <strong>Perceptivo</strong></td><td>"Eu vejo antes que aconteça."</td><td>Observação, previsão e reação.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─────────── ASPECTO BÉLICO ─────────── -->
+            <h2 id="aspecto-belico">⚔️ Aspecto Bélico</h2>
+            <p><em>"Eu transformo minha Manifestação em uma arma."</em> O Aspecto Bélico representa aqueles que buscam o domínio absoluto do combate. Quanto maior sua maestria, mais letal e implacável se torna sua presença na batalha.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Instinto Marcial</strong></td><td>Especialização em 3 perícias: Atletismo, Reflexo e Luta OU Pontaria (escolha 1). Ataques causam <strong>1d10</strong> em vez de 1d8.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Foco de Batalha</strong></td><td>Vantagem nas 3 perícias do próprio Aspecto (Atletismo, Reflexo e Luta/Pontaria) durante combate.</td></tr>
+                        <tr><td><strong>3</strong></td><td><strong>Versatilidade Marcial</strong></td><td>Pode usar Luta ou Pontaria no lugar de outra perícia quando a situação puder ser resolvida através de sua capacidade marcial. Exige justificativa do Mestre.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Contra-Ataque</strong></td><td>Quando uma criatura errar um ataque contra você, pode realizar imediatamente um ataque. 1× por rodada, gastando sua Reação.</td></tr>
+                        <tr><td><strong>5</strong></td><td><strong>Modo Berserker</strong></td><td>Abaixo de 50% PV: +2 Ataque (na jogada) e +1 CA. A 25% ou menos: +4 Ataque, +2 nas jogadas de ataque e dano mínimo 6. A 1%: continua lutando por 3 rodadas mesmo chegando a 0 PV — e, nesse estado, recebe Vantagem em TODOS os ataques.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Turno Marcial</strong></td><td>Pode gastar sua Ação Bônus do turno para realizar uma jogada de ataque a mais.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Técnica Inevitável</strong></td><td>Cria uma Técnica cuja consequência específica é garantida caso o ataque acerte.</td></tr>
+                        <tr><td><strong>8</strong></td><td><strong>Combate Ininterrupto</strong></td><td>Ao acertar um ataque com a Ação Principal, pode realizar imediatamente mais um ataque. 1× por rodada. Não acumula com o ataque extra do Nível 6 (escolhe um dos dois por rodada).</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Precisão Absoluta</strong></td><td>+4 em todas as jogadas de ataque, dano mínimo 6 e Crítico de 18–20.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Domínio Marcial Absoluto</strong></td><td>Vantagem em 1 jogada de ataque por rodada. Recebe 1 <strong>Técnica Suprema Bélica</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─────────── ASPECTO LÚCIDO ─────────── -->
+            <h2 id="aspecto-lucido">🧠 Aspecto Lúcido</h2>
+            <p><em>"Eu aperfeiçoo minha Manifestação."</em> O Aspecto Lúcido representa aqueles que buscam o domínio absoluto sobre o próprio poder. Quanto maior sua maestria, menor a diferença entre aquilo que imagina e aquilo que sua alma realiza.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Alma Desperta</strong></td><td>Especialização em 3 perícias: Navegação, Vontade e Magia OU Feitiçaria (escolha 1). Magia é o uso direto de poderes; Feitiçaria exige preparação, cântico ou ritual. +50% XP ao absorver Núcleos. Vantagem para identificar e avaliar Núcleos.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Domínio da Manifestação</strong></td><td>Vantagem em 1 utilização da Manifestação por rodada. A utilização pode ser uma ação de ataque, caso cause dano. Se realizar várias utilizações na mesma rodada, escolhe apenas 1 para receber a Vantagem.</td></tr>
+                        <tr><td><strong>3</strong></td><td><strong>Versatilidade da Alma</strong></td><td>Pode usar Magia ou Feitiçaria no lugar de outra perícia quando sua Manifestação permitir resolver a situação. Exige justificativa do Mestre.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Manifestação Rápida</strong></td><td>Recebe uma Ação Bônus adicional 1× por rodada para utilizar EXCLUSIVAMENTE a Manifestação. Pode ser usada para QUALQUER utilização (não apenas Simples).</td></tr>
+                        <tr><td><strong>5</strong></td><td><strong>Controle da Alma</strong></td><td>Todo uso do Poder custa 4 STA a menos (mínimo 1). Recupera 5 STA a cada 3 rodadas. Ao chegar a 0 STA, recupera 10% da STA máxima.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Segundo Turno da Alma</strong></td><td>Mantém uma utilização Simples ou Média do Poder ATIVA sem gastar STA (sustenta uma utilização já ativa sem continuar pagando seu custo — não é uma Ação Bônus extra, nem transforma em Passiva).</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Manifestação Permanente</strong></td><td>Transforma uma utilização do Poder em uma Manifestação Passiva de Escala Média, sem custo de STA e sem reativação. Concede uma PASSIVA ADICIONAL — não ocupa um dos slots normais de Passiva.</td></tr>
+                        <tr><td><strong>8</strong></td><td><strong>Eficiência de Manifestação</strong></td><td>1× por rodada: pode reduzir a Escala de uma utilização da Manifestação em 1 nível, pagando o custo correspondente à Escala reduzida, mas mantendo os efeitos da Escala original. Aplica-se a QUALQUER utilização, EXCETO Utilizações Supremas.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Nova Manifestação</strong></td><td>Desenvolve 1 nova Utilização permanente da própria Manifestação.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Transcendência da Alma</strong></td><td>Recebe 1 <strong>Técnica Suprema</strong> + 1 <strong>Passiva Suprema</strong> relacionadas à sua Manifestação.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─────────── ASPECTO RESILIENTE ─────────── -->
+            <h2 id="aspecto-resiliente">🛡️ Aspecto Resiliente</h2>
+            <p><em>"Nada será capaz de me derrubar."</em> O Aspecto Resiliente representa aqueles que transformam o próprio corpo e a própria alma em uma fortaleza. Quanto maior sua maestria, mais difícil se torna derrubá-lo — e mais perigoso é tentar.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Corpo de Ferro</strong></td><td>Especialização em 3 perícias: Integridade, Fortitude e Sobrevivência. Ao sofrer dano, acumula +1 na próxima jogada de ataque ou teste de Vigor (acúmulo máximo +3; zera ao usar).</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Resistência Treinada</strong></td><td>Vantagem nas 3 perícias do Nível 1.</td></tr>
+                        <tr><td><strong>3</strong></td><td><strong>Versatilidade Resiliente</strong></td><td>Pode usar suas perícias do Aspecto no lugar de outras perícias quando puder resolver a situação através de força, resistência ou sobrevivência. Exige justificativa do Mestre.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Redução Absoluta</strong></td><td>Reduz 4 pontos de todo dano recebido, inclusive dano verdadeiro.</td></tr>
+                        <tr><td><strong>5</strong></td><td><strong>Resistência Crescente</strong></td><td>Abaixo de 50% PV: Redução de Dano aumenta para 4. Recupera 2 PV sempre que recebe dano. Ao chegar a 1 PV: recupera 10% da vida E fica invulnerável por 1 rodada. Se essa vida for perdida de novo e voltar ao estado crítico, a mecânica pode acontecer novamente.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Corpo Reativo</strong></td><td>Recebe uma REAÇÃO ADICIONAL defensiva, com Vantagem. Essa Reação pode ser usada para defender a si mesmo OU proteger outra pessoa.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Defesa Absoluta</strong></td><td>Cria uma Técnica defensiva capaz de negar completamente uma fonte específica de dano comum ou consequência. SEM limite de usos por combate — pode utilizar sempre que quiser, desde que pague normalmente o custo de STA.</td></tr>
+                        <tr><td><strong>8</strong></td><td><strong>Resistência Adaptativa</strong></td><td>Funciona como CA contra TÉCNICAS específicas: se um inimigo usa uma Técnica contra você, na próxima vez que ele usar a MESMA Técnica, você recebe +1 CA contra ela. Cada repetição aumenta o bônus (+1 → +2 → +3). Limite por Técnica: máximo de +3 CA e +2 Absorção de Dano. Funciona individualmente para CADA Técnica.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Corpo Intransponível</strong></td><td>Imune a paralisia, imobilização, agarrões, prisões e restrições físicas. Nenhum ataque individual pode causar mais de 30% dos PV máximos.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Adaptação Absoluta</strong></td><td>Cada vez que uma fonte o atinge, recebe +2 Redução de Dano e +1 Absorção contra ela. Acumula até 3 vezes: +6 RD e +3 Absorção. Recebe 1 <strong>Técnica Suprema Resiliente</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─────────── ASPECTO PERCEPTIVO ─────────── -->
+            <h2 id="aspecto-perceptivo">👁️ Aspecto Perceptivo</h2>
+            <p><em>"Eu vejo antes que aconteça."</em> O Aspecto Perceptivo representa aqueles que transformam a observação em arma. Quanto mais observam, mais entendem; quanto mais entendem, mais preveem; quanto mais preveem, mais difícil é surpreendê-los.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Nível</th><th>Habilidade</th><th>Efeito</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td><td><strong>Olhos da Alma</strong></td><td>Especialização em 3 perícias: Intuição, Percepção e Investigação. Pode pedir ao Mestre 1 dica verdadeira e relevante sobre a situação. 3× por sessão.</td></tr>
+                        <tr><td><strong>2</strong></td><td><strong>Percepção Aguçada</strong></td><td>Vantagem nas 3 perícias do Nível 1.</td></tr>
+                        <tr><td><strong>3</strong></td><td><strong>Versatilidade Perceptiva</strong></td><td>Pode usar Intuição, Percepção, Reflexo, Investigação ou Astúcia no lugar de outras perícias quando fizer sentido. Exige justificativa do Mestre.</td></tr>
+                        <tr><td><strong>4</strong></td><td><strong>Observação</strong></td><td>Ao observar uma criatura, acumula benefícios por rodada (máx 3 estágios): 1ª rodada: Vantagem na próxima jogada. 2ª rodada: Vantagem em ações não ofensivas e Desvantagem do alvo. 3ª rodada: Vantagem em todas as ações e Desvantagem do alvo em todas as ações. Enquanto continuar gastando a Ação Bônus para observar o MESMO alvo, mantém os bônus. Para de observar ou muda de alvo → perde o acúmulo.</td></tr>
+                        <tr><td><strong>5</strong></td><td><strong>Previsão</strong></td><td>Pode prever e evitar completamente algo que iria afetá-lo diretamente. 3 usos por combate; 5 usos por sessão fora de combate. Recebe +2 CA permanente. Enquanto estiver abaixo de 50% dos PV, recebe +2 CA adicional.</td></tr>
+                        <tr><td><strong>6</strong></td><td><strong>Reação Instintiva</strong></td><td>Recebe uma Reação adicional. Pode tentar evitar um dano ou efeito mesmo depois de ser atingido, usando 1d20 + Destreza + Intelecto, jogando contra a jogada de ataque do adversário. 3× por descanso curto.</td></tr>
+                        <tr><td><strong>7</strong></td><td><strong>Técnica Adaptativa</strong></td><td>Cria Técnicas temporárias durante uma situação, baseadas naquilo que observou e compreendeu. Pode criar NOVAS Técnicas Adaptativas conforme continua observando: se a situação mudar ou obtiver novas informações, pode criar outra na rodada seguinte.</td></tr>
+                        <tr><td><strong>8</strong></td><td><strong>Leitura Instantânea</strong></td><td>1× por rodada: analisa uma ação observada e descobre 1 detalhe sobre intenção, funcionamento, fraqueza, limitação, Técnica ou padrão. Além da informação, recebe benefício defensivo contra aquela ação: Vantagem para desviar/evitar aquele golpe E o inimigo realiza aquele ataque com Desvantagem contra o Perceptivo.</td></tr>
+                        <tr><td><strong>9</strong></td><td><strong>Previsão do Futuro</strong></td><td>Gasta 20 STA para VISUALIZAR O FUTURO — vê diretamente algo que está prestes a acontecer (o inimigo vai atacar, um ataque vai acertá-lo, uma bomba vai explodir, uma Técnica será usada). Pode agir ANTES do acontecimento para se preparar ou evitar. Referência conceitual: Haki da Observação.</td></tr>
+                        <tr><td><strong>10</strong> 🌸</td><td><strong>Aprendizado de Combate</strong></td><td>Ao observar e compreender uma Técnica, ataque ou ação, recebe +1 CA contra aquela utilização nas próximas vezes (acumula até +5 CA). Recebe +3 nas jogadas relacionadas àquela utilização/ação específica contra o alvo. NOVA FUNÇÃO — Previsão do Movimento: gasta uma Ação Bônus (precisa estar VENDO o alvo) para saber o que o inimigo pretende fazer na próxima rodada, de maneira simples ("Ele vai atacar", "vai desviar", "vai fugir", "vai usar uma Técnica"...). Recebe 1 <strong>Técnica Suprema Perceptiva</strong>.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Regra Comum — Instinto do Aspecto</h2>
+            <p>Todos os Aspectos compartilham uma regra comum, que representa a conexão instintiva entre a alma e sua identidade:</p>
+            <div class="system-card">
+                <strong>Instinto do Aspecto:</strong> rerrola 1 em ações diretamente relacionadas ao Aspecto. 1× por rodada.
+            </div>
+
+            <div class="lore-box">
+                <strong>Aviso da Torre:</strong> a Árvore da Alma é o caminho mais direto para o domínio absoluto de um Desperto — e o mais vigiado. Alcançar o Ápice de um Aspecto (nível 10) exige mais do que níveis: exige um <strong>evento narrativo</strong> (uma missão, um ritual, um momento marcante) e, nos casos mais poderosos, um preço que a alma paga em <strong>Sanidade ou Corrupção</strong>. A Torre sempre cobra — e ela observa com atenção redobrada quem floresce.
+            </div>
+        </section>
+<div class="section-divider"></div>
+
     <section id="ascensao">
         <h1>As Espirais da Ascensão</h1>
         
@@ -24887,188 +25082,6 @@ document.addEventListener('DOMContentLoaded', () => {
             Os detalhes completos de como esses monstros são criados, suas capacidades exatas por tier e qualidade, e as regras de runas são informações que cabem ao Mestre. O que importa para você é simples: quanto mais alto o tier e mais rara a qualidade, maior o poder... e maior o preço que você pode pagar por absorver aquilo que sobrou deles.
         </p>
     </section>
-
-        <div class="section-divider"></div>
-
-        <!-- ═══════════════════════════════════════════════════════════
-             SISTEMA DE SESSÕES E EXPERIÊNCIA (XP)
-             Novo capítulo (15/08/2026) — Google Doc + decisões.
-             "O XP é concedido pela história que foi construída,
-             não pela quantidade de ações realizadas."
-        ═══════════════════════════════════════════════════════════ -->
-        <section id="sessoes-xp">
-            <h1>Sistema de Sessões e Experiência (XP)</h1>
-
-            <p>A progressão do seu personagem é baseada na <strong>qualidade da história</strong>, e não apenas em combates ou no tempo de jogo. Ao final de cada sessão, o Mestre avalia diversos aspectos da narrativa e concede XP de acordo com o que foi construído. O objetivo não é terminar uma sessão rapidamente — é criar uma narrativa interessante, coerente e marcante.</p>
-
-            <div class="lore-box">
-                <strong>A filosofia do sistema:</strong><br>
-                "O XP é concedido pela história que foi construída, não pela quantidade de ações realizadas. Quanto mais viva e bem desenvolvida for a história, maior será sua recompensa."
-            </div>
-
-            <h2>Os Tipos de Sessão</h2>
-            <p>O RPG possui três tipos de sessão, cada uma com objetivos e recompensas próprias.</p>
-
-            <div class="system-card">
-                <strong>1. Sessão Oficial</strong> — Sessões narradas por um Mestre. São as principais aventuras do RPG e normalmente fazem parte da história principal ou de missões importantes.<br><br>
-                <strong>Recompensas:</strong> em média, <strong>300 de XP por sessão</strong>, além de itens e outros. Em casos extraordinários, o Mestre (com o acordo do grupo) poderá conceder mais de 500 XP. Também podem ser concedidos: Núcleos, Equipamentos, Títulos, Contatos, Benefícios narrativos e outras recompensas especiais.
-            </div>
-
-            <div class="system-card">
-                <strong>2. Sessão Livre</strong> — Sessões organizadas pelos próprios jogadores. Seu objetivo é desenvolver personagens, relações e pequenas histórias dentro do mundo. Não é necessário haver combate.<br><br>
-                <strong>Recompensas:</strong> 25–75 XP para uma sessão simples · 100–250 XP para uma sessão bem desenvolvida · até 500 XP apenas mediante aprovação do Mestre com o acordo do grupo. Também existe a possibilidade de receber Núcleos ou outras recompensas se a narrativa justificar. <em>Sessões criadas apenas para farm de XP ou com desenvolvimento superficial receberão pouca ou nenhuma recompensa.</em>
-            </div>
-
-            <div class="system-card">
-                <strong>3. Sessão de Lore</strong> — Sessões exclusivas focadas na história de um personagem. Normalmente são divididas em diversas etapas até a conclusão de um arco narrativo.<br><br>
-                <strong>Recompensas:</strong> em cada etapa, cerca de <strong>250 XP</strong>; ao concluir o arco, o personagem normalmente recebe entre <strong>750 e 1.500 XP</strong> totais. Além do XP, o Mestre poderá conceder: Núcleos, Equipamentos, Técnicas, Contatos, Informações, Benefícios exclusivos e Evoluções narrativas.
-            </div>
-
-            <h2>Como o XP é Calculado</h2>
-            <p>O Mestre avalia a sessão utilizando os seguintes critérios:</p>
-            <ul>
-                <li><strong>Desenvolvimento da narrativa</strong></li>
-                <li><strong>Dificuldade dos desafios</strong></li>
-                <li><strong>Quantidade de desafios relevantes</strong></li>
-                <li><strong>Consequências das escolhas</strong></li>
-                <li><strong>Risco enfrentado</strong></li>
-                <li><strong>Evolução da história dos personagens</strong></li>
-                <li><strong>Descobertas importantes</strong></li>
-                <li><strong>Qualidade da interpretação</strong></li>
-                <li><strong>Criatividade na resolução dos problemas</strong></li>
-            </ul>
-            <p>Cada categoria concede uma quantidade de XP de acordo com sua importância durante a sessão. Não é necessário que todos os critérios estejam presentes — uma sessão sem combate pode conceder mais XP do que uma sessão cheia de lutas, desde que apresente maior qualidade narrativa.</p>
-
-            <div class="system-card">
-                <strong>Bônus por Risco:</strong><br>
-                Além do XP por qualidade narrativa, quem <strong>arrisca a alma aprende mais</strong>. O Mestre concede um <strong>+bônus de XP por rolagens pagas com Sanidade</strong> (push) ou resolvidas <strong>em situação desesperada</strong> — <strong>1 vez por sessão</strong>, com valor pequeno (ex.: <strong>+25 a +50 XP</strong>).
-            </div>
-
-            <h2>A Escala de Qualidade da Sessão</h2>
-
-            <div class="system-card">
-                <strong>Sessão Simples (25–100 XP)</strong> — Histórias rápidas, com poucos acontecimentos e pouco desenvolvimento: pequenos conflitos, missões curtas, acontecimentos com poucas consequências. Existe um início, meio e fim, mas praticamente não há desenvolvimento.
-            </div>
-
-            <div class="system-card">
-                <strong>Sessão Desenvolvida (125–250 XP)</strong> — Sessões bem construídas, com desenvolvimento consistente, diversos diálogos, mais de um desafio e consequências reais nas escolhas. Uma sessão nesse nível deve parecer um episódio completo: investigações, negociações, perseguições, estratégias, pequenas reviravoltas. <em>Esse será o padrão da maioria das boas aventuras.</em>
-            </div>
-
-            <div class="system-card">
-                <strong>Sessão Excepcional (275–500 XP)</strong> — Sessões marcantes, com narrativa profunda, subtramas, NPCs com objetivos próprios, mundo vivo, grandes revelações, conflitos internos, reviravoltas e consequências duradouras. Uma sessão desse nível deve ser rara — ao terminar, os jogadores devem sentir que participaram de algo memorável.
-            </div>
-
-            <p><strong>Recompensas acima de 500 XP</strong> são reservadas apenas para acontecimentos extraordinários aprovados pelo Mestre com o acordo do grupo (finais de arco, guerras, derrotas de chefes lendários, acontecimentos únicos). Nesse nível, também podem ser concedidos Núcleos, Equipamentos, Itens raros, Contatos, Informações exclusivas, Títulos, Licenças, Reconhecimento e Benefícios narrativos.</p>
-
-            <h2>Diretrizes Gerais</h2>
-            <ul>
-                <li>O XP recompensa a qualidade da narrativa, e não apenas a quantidade de eventos.</li>
-                <li>Sessões curtas, repetitivas ou criadas apenas para obter XP receberão recompensas reduzidas.</li>
-                <li>Combates, por si só, não aumentam significativamente a recompensa — eles precisam estar inseridos em uma narrativa coerente e contribuir para o desenvolvimento da história.</li>
-                <li>Uma sessão sem combate pode conceder mais XP do que uma sessão com diversas lutas, desde que apresente maior qualidade narrativa.</li>
-                <li>Recompensas acima de 500 XP são reservadas para acontecimentos extraordinários e só poderão ser concedidas mediante aprovação do Mestre com o acordo do grupo.</li>
-            </ul>
-
-            <h2>A Tabela de XP por Nível</h2>
-            <p>Cada nível de personagem exige uma quantidade crescente de XP para ser alcançado. Lembre-se: o Nível de Personagem (1–20) é alimentado por XP; a Ascensão (0–10) por núcleos — dois eixos independentes.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Nível</th><th>XP para subir</th><th>XP Total</th></tr></thead>
-                    <tbody>
-                        <tr><td>1 → 2</td><td>200</td><td>200</td></tr>
-                        <tr><td>2 → 3</td><td>300</td><td>500</td></tr>
-                        <tr><td>3 → 4</td><td>400</td><td>900</td></tr>
-                        <tr><td>4 → 5</td><td>500</td><td>1.400</td></tr>
-                        <tr><td>5 → 6</td><td>600</td><td>2.000</td></tr>
-                        <tr><td>6 → 7</td><td>700</td><td>2.700</td></tr>
-                        <tr><td>7 → 8</td><td>800</td><td>3.500</td></tr>
-                        <tr><td>8 → 9</td><td>900</td><td>4.400</td></tr>
-                        <tr><td>9 → 10</td><td>1.000</td><td>5.400</td></tr>
-                        <tr><td>10 → 11</td><td>1.100</td><td>6.500</td></tr>
-                        <tr><td>11 → 12</td><td>1.200</td><td>7.700</td></tr>
-                        <tr><td>12 → 13</td><td>1.300</td><td>9.000</td></tr>
-                        <tr><td>13 → 14</td><td>1.500</td><td>10.500</td></tr>
-                        <tr><td>14 → 15</td><td>1.700</td><td>12.200</td></tr>
-                        <tr><td>15 → 16</td><td>1.900</td><td>14.100</td></tr>
-                        <tr><td>16 → 17</td><td>2.100</td><td>16.200</td></tr>
-                        <tr><td>17 → 18</td><td>2.400</td><td>18.600</td></tr>
-                        <tr><td>18 → 19</td><td>2.900</td><td>21.500</td></tr>
-                        <tr><td>19 → 20</td><td>3.500</td><td><strong>25.000</strong></td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>A Tabela de Progressão — O que Você Ganha em Cada Nível</h2>
-            <p>Subir de nível não é apenas acumular XP. Cada nível concede <strong>técnicas/habilidades</strong> — técnicas ativas, passivas e suplementares — e os marcos liberam novos níveis. Esta é a <strong>tabela oficial de evolução</strong> — ela consolida os ganhos de técnicas/habilidades, Maestria, Traços e Aspecto em um único lugar.</p>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Nível</th><th>Maestria</th><th>Técnicas/Habilidades ganhas</th><th>Traço</th><th>Aspecto</th></tr></thead>
-                    <tbody>
-                        <tr><td><strong>1</strong></td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>2</strong></td><td>+2</td><td>2× Nv0 + 1× Nv1</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>3</strong> ⭐</td><td>+2</td><td>1× <strong>Nv2</strong> + 2× Nv1</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>4</strong></td><td>+2</td><td>1× Nv2 + 2× Nv1</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>5</strong></td><td>+3</td><td>1× Nv2 + 2× Nv1</td><td>+1</td><td>—</td></tr>
-                        <tr><td><strong>6</strong> ⭐</td><td>+3</td><td>1× <strong>Nv3</strong> + 2× Nv2</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>7</strong></td><td>+3</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>8</strong></td><td>+3</td><td>1× Nv3 + 2× Nv2</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>9</strong> ⭐</td><td>+4</td><td>1× <strong>Nv4</strong> + 2× Nv3</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>10</strong></td><td>+4</td><td>1× Nv4 + 2× Nv3</td><td>+1</td><td>+1</td></tr>
-                        <tr><td><strong>11</strong></td><td>+4</td><td>1× Nv4 + 2× Nv3</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>12</strong> ⭐</td><td>+4</td><td>1× <strong>Nv5</strong> + 2× Nv4</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>13</strong></td><td>+5</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>14</strong></td><td>+5</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>+1</td></tr>
-                        <tr><td><strong>15</strong> ⭐</td><td>+5</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>+1</td></tr>
-                        <tr><td><strong>16</strong></td><td>+5</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>17</strong></td><td>+6</td><td>1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>18</strong> ⭐</td><td>+6</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>19</strong></td><td>+6</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>—</td><td>—</td></tr>
-                        <tr><td><strong>20</strong></td><td>+6</td><td>1× <strong>SUPREMA</strong> + 1× Nv5 + 2× Nv4</td><td>+1</td><td>—</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="system-card">
-                <strong>Como funcionam as técnicas/habilidades por nível:</strong><br><br>
-                • Todas as técnicas/habilidades ganhas são de <strong>escolha livre</strong> (ofensiva, defensiva, passiva, suplementar...) — o jogador decide o foco, sempre dentro do conceito do Poder.<br>
-                • <strong>Passivas contam como habilidades:</strong> uma passiva Nv0 ocupa um slot de Nv0, uma passiva Nv2 ocupa um slot de Nv2, e assim por diante. O jogador decide o equilíbrio entre técnicas ativas e passivas.<br>
-                • Não existe limite de técnicas/habilidades conhecidas: o acúmulo é livre, e cada uma tem seu custo em PE.<br>
-                • <strong>Marcos ⭐</strong> (níveis 3, 6, 9, 12, 15, 18): liberam um novo nível de técnica/habilidade e concedem o padrão do marco.<br>
-                • Nos níveis entre marcos, o ganho <strong>repete o padrão do marco ultrapassado</strong>.<br>
-                • <strong>Técnicas Supremas</strong>: concedidas nos níveis 15, 18, 19 e 20 (4 no total).<br><br>
-                <em>Além das técnicas/habilidades, todo nível também aumenta PV, STA e PE pelas fórmulas de Vigor/Alma/Intelecto, e as perícias crescem pela fórmula de Maestria/Especialização.</em>
-            </div>
-
-            <div class="system-card">
-                <strong>Como funciona na prática (exemplo):</strong><br><br>
-                Um personagem que sobe do nível 1 ao 5 ganha:<br>
-                • <strong>Nível 1:</strong> 2 habilidades Nv0 + 1 habilidade Nv1.<br>
-                • <strong>Nível 2:</strong> 2 habilidades Nv0 + 1 habilidade Nv1 (repete o nível 1).<br>
-                • <strong>Nível 3 (marco ⭐):</strong> 1 habilidade Nv2 + 2 habilidades Nv1 — libera o nível 2 de técnica/habilidade.<br>
-                • <strong>Nível 4:</strong> 1 habilidade Nv2 + 2 habilidades Nv1 (repete o marco 3).<br>
-                • <strong>Nível 5:</strong> 1 habilidade Nv2 + 2 habilidades Nv1 (repete o marco 3).<br><br>
-                Total no nível 5: <strong>15 técnicas/habilidades</strong> — o jogador decide quantas são ativas e quantas são passivas.
-            </div>
-
-            <div class="lore-box">
-                <strong>Ritual de up:</strong> ao subir de nível, o personagem precisa de um descanso e de um momento de foco para assimilar o novo poder — um sonho com a Torre, uma sessão de treino ou uma escolha consciente. O Mestre pode pedir uma cena simples para registrar o up.
-            </div>
-
-            <div class="system-card">
-                <strong>Referência de Progressão:</strong><br>
-                • <strong>Iniciante</strong> (níveis 1–5): aprendendo o mundo e desenvolvendo as primeiras habilidades.<br>
-                • <strong>Aprendiz</strong> (níveis 6–10): já enfrentou diversas ameaças e começa a ganhar reconhecimento.<br>
-                • <strong>Veterano</strong> (níveis 11–15): experiente, capaz de influenciar acontecimentos importantes.<br>
-                • <strong>Elite</strong> (níveis 16–20): entre os indivíduos mais poderosos do mundo. Cada nível é uma grande conquista.<br>
-                • Níveis além do 20 (até 25) existem apenas como faixa de <strong>eventos únicos narrativos</strong>, sem tabela de XP — a Maestria, PV/STA/PE e perícias não têm fórmulas definidas além do nível 20.
-            </div>
-
-            <div class="lore-box">
-                <strong>Lembrete da Torre:</strong> subir de nível é a recompensa por histórias bem contadas — não por números acumulados. A Torre não premia quem corre em círculos. Ela premia quem constrói algo que vale a pena ser lembrado. E ela lembra de tudo.
-            </div>
-        </section>
     <section id="surtos">
             <h2>Surtos Decenais</h2>
             <p>A cada dez anos, as Torres liberam uma onda massiva de monstros. O nível dessas criaturas não é aleatório — ele é diretamente ligado ao maior andar que a humanidade já alcançou naquela torre.</p>
