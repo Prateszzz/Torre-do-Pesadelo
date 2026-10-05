@@ -4462,7 +4462,7 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
 #livro-jogador #sumario a:hover { color: var(--accent); text-decoration: underline; }
 
 /* Sumário 2 colunas */
-#livro-jogador .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: stretch; }
+#livro-jogador .sumario-content { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
 #livro-jogador .sumario-side-panel { background: #242030; border: 1px solid #3a3548; border-radius: 6px; padding: 1.3rem 1.4rem; font-size: .88rem; color: #c5c5d1; display: flex; flex-direction: column; gap: 1.1rem; }
 #livro-jogador .sumario-side-panel h4 { color: var(--accent); font-size: 1rem; margin-bottom: .8rem; padding-bottom: .4rem; border-bottom: 1px solid #2a2a32; }
 #livro-jogador .sumario-side-panel ul { list-style: none; padding: 0; margin: 0; }
@@ -19759,50 +19759,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 </div>
 
-                <!-- Coluna da direita (dentro do mesmo bloco visual) -->
+                <!-- Coluna da direita: painel de panorama, trilhas e referência -->
                 <div class="sumario-side-panel">
-                    <h4>Panorama do Mundo</h4>
-                    <ul>
-                        <li><strong>Torres conhecidas:</strong> Centenas espalhadas pelo mundo. Apenas uma fração foi explorada além do 20º andar.</li>
-                        <li><strong>As Sete Regiões:</strong> Seis torres periféricas cercam a Torre do Pesadelo — cada uma com seu próprio domínio, cultura e ameaça.</li>
-                        <li><strong>Ameaça atual:</strong> Crescente. Os Surtos estão chegando mais cedo e com mais força.</li>
-                        <li><strong>Facções dominantes:</strong> Irmandade do Vazio, Consórcio Carmesim, Ordem do Eco, Círculo Onírico e a Fraternidade Gélida.</li>
-                    </ul>
 
-                    <h4>Sistemas em Destaque</h4>
-                    <ul class="sumario-destaques">
-                        <li><a href="#sanidade">Sanidade e Corrupção</a> — Quanto mais você sobe, menos você volta. E o que sobra nem sempre é você.</li>
-                        <li><a href="#rituais">Sistema de Rituais</a> — O poder da Torre tem preço — e os rituais sabem cobrar.</li>
-                        <li><a href="#forja">Sistema de Forja</a> — Transformar o poder dos monstros em armas. Mas a forja nunca devolve só metal.</li>
-                        <li><a href="#barmans">Barmans</a> — As únicas pessoas que realmente sabem o que está acontecendo nas sombras das cidades.</li>
-                        <li><a href="#relacionamentos">Relacionamentos</a> — O único escudo contra a solidão... e a maior fraqueza que a Torre pode explorar.</li>
-                        <li><a href="#arvore-alma">A Árvore da Alma</a> — Escolha seu Aspecto: a identidade que sua alma assume diante da Torre.</li>
-                        <li><a href="#tracos-alma">Traços da Alma</a> — Sua personalidade não é só quem você é. É o que a Torre vai usar contra você.</li>
-                        <li><a href="#surtos">Surtos Decenais</a> — A cada dez anos, o mundo lembra por que ninguém deveria ter subido tanto.</li>
-                        <li><a href="#ascensao">Ascensão</a> — Cada nível te torna mais forte. E menos humano. Até o dia em que a Torre te reconhece.</li>
-                    </ul>
-
-                    <h4>Referência Rápida</h4>
-                    <ul class="sumario-ref">
-                        <li><strong>CD</strong> = 10 + Maestria + Mod</li>
-                        <li><strong>Maestria</strong> = 1 + ⌈Nível ÷ 4⌉</li>
-                        <li><strong>PV</strong> = 20 + Vigor×3 + (10 + ModVig×2)×(Nv−1)</li>
-                        <li><strong>STA</strong> = 20 + Alma×2 + Intelecto + (6 + ModAlma + ModInt)×(Nv−1)</li>
-                        <li><strong>PE</strong> = (⌊Nv÷2⌋+2)×(ModAlma+ModInt+1)</li>
-                        <li><strong>Sanidade</strong> = 10 + ModInt + ModCar</li>
-                        <li><strong>Corrupção:</strong> 0–2 Limpo · 3–5 Marcado · 6–8 Corrompido · 9–11 Profanado · 12+ Abissal</li>
-                        <li><strong>Atenção da Torre:</strong> 6–8 ticks = evento</li>
-                    </ul>
-
-                    <div class="lore-box" style="margin-top:1rem;padding:.6rem .75rem;font-size:.8rem">
-                        <strong>Dica do Mestre:</strong> a Torre cobra tudo — mas cobra antes. Leia as regras de Sanidade e Corrupção antes de subir o primeiro andar.
+                    <div class="system-card" style="background: rgba(20,20,26,.55); border-color: #3a3548;">
+                        <h4>Panorama do Mundo</h4>
+                        <p style="font-size: .83rem; color: var(--text-muted); line-height: 1.5; margin: .3rem 0 .7rem;">
+                            O mundo mudou quando as Torres surgiram. O que você precisa saber antes de subir:
+                        </p>
+                        <ul class="sumario-ref">
+                            <li><a href="#intro">O Rompimento e o surgimento das Torres</a></li>
+                            <li><a href="#nevoa">A Névoa e o que ela esconde</a></li>
+                            <li><a href="#corrupcao">A Corrupção e sua expansão</a></li>
+                            <li><a href="#regioes-torres">As Sete Regiões/Torres</a></li>
+                            <li><a href="#despertos">Despertos e o Núcleo da Alma</a></li>
+                            <li><a href="#faccoes">As 5 Facções</a></li>
+                            <li><a href="#surtos">Surtos Decenais</a></li>
+                            <li><a href="#economia">Economia em Espíritos</a></li>
+                            <li><a href="#sessoes-xp">Nível 1–20 (XP)</a> × <a href="#ascensao">Ascensão 0–10 (Núcleos)</a></li>
+                        </ul>
                     </div>
 
-                    <div class="warning" style="margin-top: auto;">
-                        <strong>Lembrete dos que Sobreviveram:</strong><br>
-                        Quanto mais você sobe, mais a Torre aprende com você.<br>
-                        E ela tem uma memória excelente.
+                    <div class="lore-box" style="padding: .85rem 1rem; font-size: .85rem;">
+                        <h4 style="color: var(--accent); margin-bottom: .55rem; font-size: .95rem;">Comece por Aqui — Trilhas</h4>
+                        <div style="margin-bottom: .55rem;">
+                            <strong style="color: var(--silver);">Criar seu personagem</strong><br>
+                            <a href="#criacao">Guia</a> · <a href="#como-voce-despertou">Despertar</a> · <a href="#atributos">Atributos</a> · <a href="#aparencia">Aparência</a> · <a href="#tracos-alma">Traços</a>
+                        </div>
+                        <div style="margin-bottom: .55rem;">
+                            <strong style="color: var(--silver);">Entender o Poder</strong><br>
+                            <a href="#poder-mente-corpo">Poder</a> · <a href="#arvore-alma">Árvore</a> · <a href="#tecnicas-habilidades">Técnicas</a> · <a href="#utilizacao-manifestacao">Manifestação</a>
+                        </div>
+                        <div style="margin-bottom: .55rem;">
+                            <strong style="color: var(--silver);">Sobreviver</strong><br>
+                            <a href="#sanidade">Sanidade</a> · <a href="#sobrevivencia">Sobrevivência</a> · <a href="#combate">Combate</a> · <a href="#recuperacao">Recuperação</a>
+                        </div>
+                        <div style="margin-bottom: .55rem;">
+                            <strong style="color: var(--silver);">Progredir</strong><br>
+                            <a href="#sessoes-xp">XP</a> · <a href="#ascensao">Ascensão</a> · <a href="#evolucao-poder">Despertares</a>
+                        </div>
+                        <div>
+                            <strong style="color: var(--silver);">Explorar o mundo</strong><br>
+                            <a href="#intro">Intro</a> · <a href="#regioes-torres">Regiões</a> · <a href="#faccoes">Facções</a> · <a href="#nevoa">Névoa</a>
+                        </div>
                     </div>
+
+                    <div class="system-card" style="background: rgba(20,20,26,.55); border-color: #3a3548;">
+                        <h4>Sistemas em Destaque</h4>
+                        <ul class="sumario-destaques">
+                            <li><a href="#sanidade">Sanidade e Corrupção</a> — quanto mais você sobe, menos volta.</li>
+                            <li><a href="#rituais">Rituais</a> — o poder da Torre tem preço.</li>
+                            <li><a href="#forja">Forja</a> — transforme monstros em armas.</li>
+                            <li><a href="#barmans">Barmans</a> — as vozes nas sombras das cidades.</li>
+                            <li><a href="#relacionamentos">Relacionamentos</a> — laços que a Torre explora.</li>
+                            <li><a href="#arvore-alma">Árvore da Alma</a> — escolha quem você se torna.</li>
+                            <li><a href="#tracos-alma">Traços da Alma</a> — personalidade como fraqueza.</li>
+                            <li><a href="#surtos">Surtos Decenais</a> — a cada dez anos, o mundo paga.</li>
+                        </ul>
+                    </div>
+
+                    <div class="system-card" style="background: rgba(20,20,26,.55); border-color: #3a3548;">
+                        <h4>Referência Rápida</h4>
+                        <ul class="sumario-ref">
+                            <li><strong>CD</strong> = 10 + Maestria + Mod</li>
+                            <li><strong>Maestria</strong> = 1 + ⌈Nível ÷ 4⌉</li>
+                            <li><strong>PV</strong> = 20 + Vigor×3 + (10 + ModVig×2)×(Nv−1)</li>
+                            <li><strong>STA</strong> = 20 + Alma×2 + Intelecto + (6 + ModAlma + ModInt)×(Nv−1)</li>
+                            <li><strong>PE</strong> = (⌊Nv÷2⌋+2)×(ModAlma+ModInt+1)</li>
+                            <li><strong>CA</strong> = 10 + Destreza + bônus</li>
+                            <li><strong>Iniciativa</strong> = 1d20 + ModDestreza</li>
+                            <li><strong>Sanidade</strong> = 10 + ModInt + ModCar</li>
+                            <li><strong>Corrupção:</strong> 0–2 Limpo · 3–5 Marcado · 6–8 Corrompido · 9–11 Profanado · 12+ Abissal</li>
+                            <li><strong>Atenção da Torre:</strong> 6–8 ticks = evento</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning" style="font-size: .85rem;">
+                        <strong>A Torre sempre cobra</strong><br>
+                        Todo ganho de poder tem custo: Sanidade, Corrupção, Exaustão, Relacionamentos ou a atenção da própria Torre. Nada é de graça nas Torres.
+                    </div>
+
+                    <div class="lore-box" style="padding: .85rem 1rem; font-size: .82rem;">
+                        <strong>Como usar este livro</strong><br>
+                        Leia na ordem dos capítulos ou siga uma <em>Trilha de Leitura</em>. Clique em qualquer link para pular direto ao conteúdo. O <strong>Livro do Mestre</strong> contém segredos, monstros e ferramentas do GM.
+                    </div>
+
                 </div>
 
             </div>
