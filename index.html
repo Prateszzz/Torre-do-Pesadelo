@@ -4500,6 +4500,16 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
             @page {
                 size: A4 portrait;
                 margin: 1.8cm 1.5cm;
+                @bottom-center {
+                    content: "Página " counter(page) " de " counter(pages);
+                    font-size: 9pt;
+                    color: #444;
+                }
+                @top-right {
+                    content: "Torre do Pesadelo — Livro do Jogador";
+                    font-size: 8pt;
+                    color: #888;
+                }
             }
 
             /* Força tema claro para impressão */
