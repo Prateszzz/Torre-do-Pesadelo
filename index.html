@@ -620,6 +620,13 @@ th { background:#1f1f26; color:var(--silver); padding:.6rem .9rem; text-align:le
 td { padding:.55rem .9rem; border-bottom:1px solid var(--border); color:#d4d4dc; }
 tr:hover td { background:rgba(var(--deep-rgb), .05); }
 
+/* Tabela larga da Progressão (#sessoes-xp): scroll horizontal acessível */
+#sessoes-xp .table-wrapper { overflow-x:auto; width:100%; max-width:100%; }
+#sessoes-xp .table-wrapper table { min-width:max-content; width:100%; }
+#sessoes-xp .table-wrapper th,
+#sessoes-xp .table-wrapper td { white-space:nowrap; padding:.45rem .65rem; font-size:.82rem; }
+#sessoes-xp .table-wrapper th { font-size:.7rem; }
+
 /* FICHA */
 .ficha-panel { background:var(--bg-surface); border:1px solid var(--border); margin-bottom:1.5rem; position:relative; }
 .ficha-panel::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(to right,var(--accent),transparent); }
@@ -4349,6 +4356,35 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
     font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase;
     color: var(--accent-light); margin-bottom: .25rem;
   }
+
+  /* Tabela de Progressão no livro: mantém layout tabular com scroll horizontal */
+  #sessoes-xp .table-wrapper,
+  #sessoes-xp .table-wrapper table,
+  #sessoes-xp .table-wrapper tbody,
+  #sessoes-xp .table-wrapper thead,
+  #sessoes-xp .table-wrapper tr,
+  #sessoes-xp .table-wrapper td,
+  #sessoes-xp .table-wrapper th {
+    display: revert;
+    width: auto;
+    min-width: auto;
+    position: static;
+    border: revert;
+    margin: 0;
+    padding: revert;
+    background: revert;
+  }
+  #sessoes-xp .table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    margin: 1.2rem 0;
+  }
+  #sessoes-xp .table-wrapper table { min-width: max-content; width: 100%; }
+  #sessoes-xp .table-wrapper th,
+  #sessoes-xp .table-wrapper td { white-space: nowrap; padding: .4rem .55rem; font-size: .78rem; border-bottom: 1px solid var(--border); }
+  #sessoes-xp .table-wrapper th { font-size: .68rem; border-bottom: 2px solid var(--accent); }
+  #sessoes-xp .table-wrapper td::before { content: none; }
 
   /* ── PERÍCIAS: acordeões por grupo (Maestrias / Especializações) ── */
   .pericias-mobile-group {
@@ -19366,7 +19402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </aside>
 
     <!-- Conteúdo do Livro -->
-    <div id="livro-content" style="flex:1;padding:2.5rem 3rem 5rem;max-width:900px;overflow-x:hidden">
+    <div id="livro-content" style="flex:1;padding:2.5rem 3rem 5rem;max-width:900px">
 
         <!-- HERO — título de abertura do Livro do Jogador.
              BUG CORRIGIDO: esta seção existia no arquivo de referência
