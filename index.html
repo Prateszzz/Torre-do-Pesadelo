@@ -5340,6 +5340,94 @@ body:has(#livro-mestre[style*="display: block"]) .tp-eye {
       font-weight: 700; letter-spacing: 0.5px; vertical-align: middle;
     }
     #livro-sumario a { display: inline-flex; align-items: center; }
+
+    /* ═══ PAGINAÇÃO VISUAL DO LIVRO (MODO PÁGINA + INDICADOR) ═══════════ */
+    #modo-pagina-toggle {
+      background: transparent; border: 1px solid var(--border); color: var(--silver);
+      padding: 0.35rem 0.8rem; font-family: inherit; font-size: 0.78rem;
+      cursor: pointer; border-radius: 4px; transition: background 0.2s, color 0.2s, border-color 0.2s;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+    #modo-pagina-toggle:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    #modo-pagina-toggle.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .pagina-indicador {
+      position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 500;
+      background: rgba(20,20,24,0.94); color: var(--silver);
+      border: 1px solid var(--border); border-radius: 999px;
+      padding: 0.45rem 0.9rem; font-size: 0.82rem; font-family: 'Playfair Display', Georgia, serif;
+      display: flex; align-items: center; gap: 0.55rem;
+      backdrop-filter: blur(10px); box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+      transition: opacity 0.3s, transform 0.3s;
+      user-select: none;
+    }
+    .pagina-indicador .pagina-texto { white-space: nowrap; }
+    .pagina-indicador .pagina-controles { display: flex; align-items: center; gap: 0.3rem; }
+    .pagina-indicador button {
+      background: transparent; border: 1px solid var(--border); color: var(--silver);
+      width: 1.6rem; height: 1.6rem; border-radius: 3px; cursor: pointer; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;
+    }
+    .pagina-indicador button:hover { background: var(--accent); color: #fff; }
+    .pagina-indicador input {
+      width: 2.6rem; background: transparent; border: 1px solid var(--border); color: var(--text);
+      text-align: center; font-family: inherit; font-size: 0.78rem; border-radius: 3px; padding: 0.15rem;
+      -moz-appearance: textfield;
+    }
+    .pagina-indicador input::-webkit-outer-spin-button,
+    .pagina-indicador input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    /* Modo Página: o livro vira folhas A4 empilhadas horizontalmente */
+    .modo-pagina #livro-layout { display: block !important; }
+    .modo-pagina #livro-content {
+      width: 210mm !important; height: 297mm !important; max-width: none !important;
+      padding: 0 !important; margin: 1rem auto !important;
+      background: #fff !important; color: #111 !important;
+      font-size: 11pt !important; line-height: 1.5 !important;
+      column-width: 210mm !important; column-gap: 0 !important;
+      column-rule: 1px solid #e0e0e0;
+      overflow-x: auto !important; overflow-y: hidden !important;
+      box-shadow: 0 0 0 1px #ddd, 0 14px 48px rgba(0,0,0,0.35);
+      scroll-behavior: smooth;
+    }
+    .modo-pagina #livro-content h1,
+    .modo-pagina #livro-content h2,
+    .modo-pagina #livro-content h3 { break-after: avoid; page-break-after: avoid; }
+    .modo-pagina #livro-content section,
+    .modo-pagina #livro-content .system-card,
+    .modo-pagina #livro-content .lore-box,
+    .modo-pagina #livro-content .table-wrapper,
+    .modo-pagina #livro-content blockquote,
+    .modo-pagina #livro-content figure,
+    .modo-pagina #livro-content pre { break-inside: avoid; page-break-inside: avoid; }
+    .modo-pagina #livro-content table { break-inside: auto; page-break-inside: auto; }
+    .modo-pagina #livro-content tr { break-inside: avoid; page-break-inside: avoid; }
+    .modo-pagina #livro-content a { color: #000 !important; text-decoration: underline !important; border-bottom: none !important; }
+    .modo-pagina #livro-content th { background: #f4f4f4 !important; color: #111 !important; }
+    .modo-pagina #livro-content td,
+    .modo-pagina #livro-content th { border-color: #888 !important; }
+    .modo-pagina #livro-content .system-card,
+    .modo-pagina #livro-content .lore-box { background: #fff !important; border: 1px solid #999 !important; color: #111 !important; box-shadow: none !important; }
+    .modo-pagina #livro-content .livro-hero { background: #fff !important; }
+    .modo-pagina #livro-content .livro-hero h1,
+    .modo-pagina #livro-content .livro-hero p,
+    .modo-pagina #livro-content .livro-hero-subtitle,
+    .modo-pagina #livro-content .livro-hero-tags,
+    .modo-pagina #livro-content .livro-hero-aviso { color: #111 !important; text-shadow: none !important; }
+
+    @media (max-width: 640px) {
+      .pagina-indicador { bottom: calc(var(--tabbar-h, 56px) + 0.75rem); right: 0.75rem; padding: 0.4rem 0.7rem; font-size: 0.78rem; }
+      .modo-pagina #livro-content { width: 100vw !important; height: auto !important; min-height: 100vh !important; margin: 0 !important; column-width: 100vw !important; column-rule: none; overflow-x: auto !important; overflow-y: hidden !important; }
+    }
+
+    @media print {
+      .pagina-indicador, #modo-pagina-toggle { display: none !important; }
+      .modo-pagina #livro-content {
+        width: auto !important; height: auto !important; column-width: auto !important; column-rule: none;
+        margin: 0 !important; background: #fff !important; color: #111 !important;
+        overflow: visible !important; box-shadow: none !important;
+      }
+    }
   </style></head>
 <body>
 
@@ -19338,6 +19426,9 @@ document.addEventListener('DOMContentLoaded', () => {
       <svg class="ic ic-sm"><use href="#ic-arrow-left"></use></svg> Voltar
     </button>
     <span style="font-family:&#39;Playfair Display&#39;,serif;font-size:1rem;color:var(--gold-light);flex:1;text-align:center">Torre do Pesadelo • Livro do Jogador</span>
+    <button type="button" id="modo-pagina-toggle" onclick="toggleModoPaginaLivro()" title="Alternar entre rolagem e modo página (Alt+P)">
+      <svg class="ic ic-sm"><use href="#ic-scroll"></use></svg> Página
+    </button>
     <div id="livro-gm-tools" style="display:none;flex-shrink:0">
       <button id="btn-livro-editor" onclick="toggleModoEditorLivro()" style="background:rgba(180,140,30,.12);border:1px solid rgba(180,140,30,.4);color:var(--gold-light);padding:.3rem .8rem;font-family:inherit;font-size:.76rem;cursor:pointer;transition:all .2s;border-radius:var(--r-sm)">
         <svg class="ic ic-sm"><use href="#ic-edit"></use></svg> Modo Editor
@@ -31614,6 +31705,166 @@ document.addEventListener('DOMContentLoaded', () => {
         link.insertBefore(badge, link.firstChild);
       }
     });
+  })();
+
+  /* ═══ PAGINAÇÃO VISUAL DO LIVRO (INDICADOR + MODO PÁGINA) ═══════════ */
+  (function() {
+    const LIVRO_ID = 'livro-content';
+    const JOGADOR_ID = 'livro-jogador';
+    const INDICADOR_ID = 'pagina-indicador';
+    const TOGGLE_ID = 'modo-pagina-toggle';
+    const INPUT_ID = 'pagina-input';
+    const BTN_ANT = 'pagina-anterior';
+    const BTN_PROX = 'pagina-proxima';
+
+    const content = document.getElementById(LIVRO_ID);
+    const jogador = document.getElementById(JOGADOR_ID);
+    if (!content || !jogador) return;
+
+    const A4_W_MM = 210;
+    const A4_H_MM = 297;
+    const PX_PER_PT = 96 / 72;
+    const PX_PER_MM = 96 / 25.4;
+    const A4_W_PX = A4_W_MM * PX_PER_MM;
+    const A4_H_PX = A4_H_MM * PX_PER_MM;
+    const PRINT_FONT_PX = 11 * PX_PER_PT;
+    const PRINT_LINE_HEIGHT = 1.5;
+
+    let modoPagina = false;
+    let raf = null;
+
+    const indicador = document.createElement('div');
+    indicador.id = INDICADOR_ID;
+    indicador.className = 'pagina-indicador no-print';
+    indicador.innerHTML =
+      '<span class="pagina-texto" id="pagina-texto">Página 1 / 1</span>' +
+      '<div class="pagina-controles">' +
+        '<button type="button" id="' + BTN_ANT + '" title="Página anterior">‹</button>' +
+        '<input type="number" id="' + INPUT_ID + '" min="1" value="1" title="Ir para página">' +
+        '<button type="button" id="' + BTN_PROX + '" title="Próxima página">›</button>' +
+      '</div>';
+    jogador.appendChild(indicador);
+
+    const elTexto = document.getElementById('pagina-texto');
+    const elInput = document.getElementById(INPUT_ID);
+    const elToggleTop = document.getElementById(TOGGLE_ID);
+
+    function getScrollHeight() {
+      const body = document.body;
+      const html = document.documentElement;
+      return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    }
+
+    function getScrollTop() {
+      return window.pageYOffset || document.documentElement.scrollTop || 0;
+    }
+
+    function getComputedMetrics() {
+      const style = window.getComputedStyle(content);
+      const fontSize = parseFloat(style.fontSize) || PRINT_FONT_PX;
+      const lineHeightStr = style.lineHeight;
+      let lineHeight = PRINT_LINE_HEIGHT;
+      if (lineHeightStr && lineHeightStr !== 'normal') {
+        const val = parseFloat(lineHeightStr);
+        if (val) {
+          lineHeight = /px$/.test(lineHeightStr) ? val / fontSize : val;
+        }
+      }
+      return { fontSize, lineHeight };
+    }
+
+    function estimatedPageHeight() {
+      const m = getComputedMetrics();
+      const scale = (m.fontSize / PRINT_FONT_PX) * (m.lineHeight / PRINT_LINE_HEIGHT);
+      return A4_H_PX * scale;
+    }
+
+    function pageWidthPx() {
+      return modoPagina ? Math.max(1, content.clientWidth || A4_W_PX) : A4_W_PX;
+    }
+
+    function getTotalPages() {
+      if (modoPagina) {
+        return Math.max(1, Math.round(content.scrollWidth / pageWidthPx()));
+      }
+      const totalH = getScrollHeight();
+      return Math.max(1, Math.round(totalH / estimatedPageHeight()));
+    }
+
+    function getCurrentPage() {
+      if (modoPagina) {
+        return Math.min(getTotalPages(), Math.max(1, Math.round(content.scrollLeft / pageWidthPx()) + 1));
+      }
+      const pageH = estimatedPageHeight();
+      return Math.min(getTotalPages(), Math.max(1, Math.round(getScrollTop() / pageH) + 1));
+    }
+
+    function update() {
+      if (!elTexto || !elInput) return;
+      const total = getTotalPages();
+      const current = getCurrentPage();
+      elTexto.textContent = 'Página ' + current + ' / ' + total;
+      elInput.value = current;
+      elInput.max = total;
+    }
+
+    function goToPage(n) {
+      const total = getTotalPages();
+      n = Math.min(total, Math.max(1, parseInt(n, 10) || 1));
+      if (modoPagina) {
+        content.scrollLeft = (n - 1) * pageWidthPx();
+      } else {
+        window.scrollTo({ top: (n - 1) * estimatedPageHeight(), behavior: 'smooth' });
+      }
+    }
+
+    function setToggleLabel() {
+      if (elToggleTop) elToggleTop.textContent = modoPagina ? 'Rolagem' : 'Página';
+      if (elToggleTop) elToggleTop.classList.toggle('active', modoPagina);
+    }
+
+    window.toggleModoPaginaLivro = function() {
+      modoPagina = !modoPagina;
+      const current = getCurrentPage();
+      if (modoPagina) {
+        jogador.classList.add('modo-pagina');
+      } else {
+        jogador.classList.remove('modo-pagina');
+      }
+      setToggleLabel();
+      setTimeout(function() {
+        goToPage(current);
+        update();
+      }, 80);
+    };
+
+    function onScroll() {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    }
+
+    content.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+
+    const btnAnt = document.getElementById(BTN_ANT);
+    const btnProx = document.getElementById(BTN_PROX);
+    if (btnAnt) btnAnt.addEventListener('click', function() { goToPage(getCurrentPage() - 1); });
+    if (btnProx) btnProx.addEventListener('click', function() { goToPage(getCurrentPage() + 1); });
+    if (elInput) {
+      elInput.addEventListener('change', function() { goToPage(elInput.value); });
+      elInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); goToPage(elInput.value); } });
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.altKey && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        window.toggleModoPaginaLivro();
+      }
+    });
+
+    setToggleLabel();
+    update();
   })();
 </script>
 </body></html>
