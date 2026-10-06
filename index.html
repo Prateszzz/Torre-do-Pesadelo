@@ -4706,7 +4706,10 @@ main { margin-left: auto !important; margin-right: auto !important; max-width: 1
             #sobrevivencia,
             #sanidade,
             #relacionamentos,
-            #referencias-ferramentas,\r\n            #korrith {\r\n                break-before: page;
+                        #referencias-ferramentas,
+            #guildas-faccoes,
+            #korrith {
+                break-before: page;
                 page-break-before: always;
             }
 
@@ -19121,17 +19124,18 @@ function _livroSidebarResponsiva() {
 
 // ── NAVEGAÇÃO DO LIVRO (breadcrumb + anterior/próximo) ──
 // Ordem das seções (mesma do sumário) e mapeamento para as partes I–IX.
-const _LIVRO_SECOES = ['intro','torre-pesadelo','torre-disputas','mundo-fora','nevoa','geopolitica','despertos','criacao','atributos','aparencia','tracos-alma','alma-fragmentada','poder-mente-corpo','utilizacao-manifestacao','rituais','progressao-ascensao-tecnicas','sessoes-xp','evolucao-poder','tecnicas-habilidades','arvore-alma','ascensao','surtos','economia','mecanico','combate','sobrecarga','recuperacao','sobrevivencia','sanidade','relacionamentos'];
+const _LIVRO_SECOES = ['intro','torre-pesadelo','torre-disputas','mundo-fora','nevoa','geopolitica','despertos','guildas-faccoes','criacao','atributos','aparencia','tracos-alma','alma-fragmentada','poder-mente-corpo','utilizacao-manifestacao','rituais','progressao-ascensao-tecnicas','sessoes-xp','evolucao-poder','tecnicas-habilidades','arvore-alma','ascensao','surtos','economia','mecanico','combate','sobrecarga','recuperacao','sobrevivencia','sanidade','relacionamentos'];
 const _LIVRO_PARTES = {
   intro:'I · O Mundo', 'torre-pesadelo':'I · O Mundo', 'torre-disputas':'I · O Mundo', 'mundo-fora':'I · O Mundo', nevoa:'I · O Mundo', geopolitica:'I · O Mundo', despertos:'I · O Mundo',
-  criacao:'II · Criação', atributos:'II · Criação', aparencia:'II · Criação', 'tracos-alma':'II · Criação',
-  'alma-fragmentada':'III · Sistema de Poder', 'poder-mente-corpo':'III · Sistema de Poder', 'utilizacao-manifestacao':'III · Sistema de Poder', rituais:'III · Sistema de Poder',
-  'progressao-ascensao-tecnicas':'IV · Progressão, Ascensão e Técnicas', 'sessoes-xp':'IV · Progressão, Ascensão e Técnicas', 'evolucao-poder':'IV · Progressão, Ascensão e Técnicas', 'tecnicas-habilidades':'IV · Progressão, Ascensão e Técnicas', 'arvore-alma':'IV · Progressão, Ascensão e Técnicas', ascensao:'IV · Progressão, Ascensão e Técnicas', surtos:'IV · Progressão, Ascensão e Técnicas',
-  economia:'V · Periféricanomia',
-  mecanico:'VI · Regras de Jogo', combate:'VI · Regras de Jogo', sobrecarga:'VI · Regras de Jogo', recuperacao:'VI · Regras de Jogo',
-  sobrevivencia:'VII · Sobrevivência',
-  sanidade:'VIII · Sanidade e Corrupção',
-  relacionamentos:'IX · Relacionamentos'
+  'guildas-faccoes':'II · Guildas e Facções',
+  criacao:'III · Criação', atributos:'III · Criação', aparencia:'III · Criação', 'tracos-alma':'III · Criação',
+  'alma-fragmentada':'IV · Sistema de Poder', 'poder-mente-corpo':'IV · Sistema de Poder', 'utilizacao-manifestacao':'IV · Sistema de Poder', rituais:'IV · Sistema de Poder',
+  'progressao-ascensao-tecnicas':'V · Progressão, Ascensão e Técnicas', 'sessoes-xp':'V · Progressão, Ascensão e Técnicas', 'evolucao-poder':'V · Progressão, Ascensão e Técnicas', 'tecnicas-habilidades':'V · Progressão, Ascensão e Técnicas', 'arvore-alma':'V · Progressão, Ascensão e Técnicas', ascensao:'V · Progressão, Ascensão e Técnicas', surtos:'V · Progressão, Ascensão e Técnicas',
+  economia:'VI · Economia e Artesanato',
+  mecanico:'VII · Regras de Jogo', combate:'VII · Regras de Jogo', sobrecarga:'VII · Regras de Jogo', recuperacao:'VII · Regras de Jogo',
+  sobrevivencia:'VIII · Sobrevivência',
+  sanidade:'IX · Sanidade e Corrupção',
+  relacionamentos:'X · Relacionamentos'
 };
 
 // Injeta breadcrumb (topo) e botões "← Anterior / Próximo →" (fim) em cada
@@ -19534,13 +19538,42 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#torre-disputas">A Torre das Disputas</a></li>
             <li><a href="#mundo-fora">O Mundo Fora das Torres</a></li>
             <li><a href="#nevoa">A Névoa e o Mundo Exterior</a></li>
-            <li><a href="#geopolitica">Geopolítica e Facções</a></li>
-            <li><a href="#faccoes">Facções — Quem Manda no Mundo</a></li>
+            <li><a href="#geopolitica">Geopolítica do Mundo</a></li>
             <li><a href="#despertos">Os Despertos</a></li>
         </ul>
 
-        <!-- II. CRIAÇÃO DE PERSONAGEM -->
-        <span class="toc-label">II. Criação de Personagem</span>
+                <!-- GUILDAS E FACÇÕES -->
+        <span class="toc-label">II. Guildas e Facções</span>
+        <ul>
+            <li><a href="#guildas-faccoes">Guildas e Facções</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-consorcio">O Consórcio Carmesim</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-patentes">Patentes do Consórcio</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-npcs">NPCs do Consórcio</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-vazio">A Irmandade do Vazio</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-eco">A Ordem do Eco</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-onirico">O Círculo Onírico</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-gelida">A Fraternidade Gélida</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#beneficios-reputacao">Benefícios por Reputação</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccoes-criacao">Facções e a Criação</a></li>
+        </ul>
+                    <!-- GUILDAS E FACÇÕES -->
+                    <div style="margin-bottom: 1.4rem;">
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">II. Guildas e Facções</h3>
+                        <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
+                            <li><a href="#guildas-faccoes">Guildas e Facções</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-consorcio">O Consórcio Carmesim</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-patentes">Patentes do Consórcio</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-npcs">NPCs do Consórcio</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-vazio">A Irmandade do Vazio</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-eco">A Ordem do Eco</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-onirico">O Círculo Onírico</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-gelida">A Fraternidade Gélida</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#beneficios-reputacao">Benefícios por Reputação</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccoes-criacao">Facções e a Criação</a></li>
+                        </ul>
+                    </div>
+<!-- III. CRIAÇÃO DE PERSONAGEM -->
+        <span class="toc-label">III. Criação de Personagem</span>
         <ul>
             <li><a href="#criacao">Guia de Criação</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-voce-despertou">Como Você Despertou?</a></li>
@@ -19551,8 +19584,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#tracos-alma">Traços da Alma</a></li>
         </ul>
 
-        <!-- III. SISTEMA DE PODER -->
-        <span class="toc-label">III. Sistema de Poder</span>
+        <!-- IV. Sistema de Poder -->
+        <span class="toc-label">IV. Sistema de Poder</span>
         <ul>
             <li><a href="#alma-fragmentada">Alma Fragmentada</a></li>
             <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
@@ -19560,8 +19593,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#rituais">Sistema de Rituais</a></li>
         </ul>
 
-        <!-- IV. PROGRESSÃO, ASCENSÃO E TÉCNICAS -->
-        <span class="toc-label">IV. Progressão, Ascensão e Técnicas</span>
+        <!-- V. Progressão, Ascensão e Técnicas -->
+        <span class="toc-label">V. Progressão, Ascensão e Técnicas</span>
         <ul>
             <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
             <li><a href="#evolucao-poder">Despertares do Poder</a></li>
@@ -19577,8 +19610,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#surtos">Surtos Decenais</a></li>
         </ul>
 
-        <!-- V. ECONOMIA E ARTESANATO -->
-        <span class="toc-label">V. Economia e Artesanato</span>
+        <!-- VI. Economia e Artesanato -->
+        <span class="toc-label">VI. Economia e Artesanato</span>
         <ul>
             <li><a href="#economia">Sistema Monetário (Espíritos)</a></li>
 <li><a href="#forja">Sistema de Forja</a></li>
@@ -19589,8 +19622,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#barmans">Barmans – As Vozes Invisíveis</a></li>
         </ul>
 
-        <!-- VI. REGRAS DE JOGO -->
-        <span class="toc-label">VI. Regras de Jogo</span>
+        <!-- VII. Regras de Jogo -->
+        <span class="toc-label">VII. Regras de Jogo</span>
         <ul>
             <li><a href="#sistema-resolucao">Sistema de Resolução</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ataques-resistencias">Ataques Diretos e Resistências</a></li>
@@ -19600,8 +19633,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="#recuperacao">Recuperação</a></li>
         </ul>
 
-        <!-- VII. SOBREVIVÊNCIA -->
-        <span class="toc-label">VII. Sobrevivência</span>
+        <!-- VIII. Sobrevivência -->
+        <span class="toc-label">VIII. Sobrevivência</span>
         <ul>
             <li><a href="#sobrevivencia">Sobrevivência nas Torres</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#acampamento">Acampamento</a></li>
@@ -19610,8 +19643,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#viagem-nevoa">Viagem pela Névoa</a></li>
         </ul>
 
-        <!-- VIII. SANIDADE E CORRUPÇÃO -->
-        <span class="toc-label">VIII. Sanidade e Corrupção</span>
+        <!-- IX. Sanidade e Corrupção -->
+        <span class="toc-label">IX. Sanidade e Corrupção</span>
         <ul>
             <li><a href="#sanidade">Sanidade e Corrupção</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-faixas">As Faixas de Sanidade</a></li>
@@ -19622,8 +19655,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-recuperacao">Recuperação</a></li>
         </ul>
 
-        <!-- IX. RELACIONAMENTOS -->
-        <span class="toc-label">IX. Relacionamentos</span>
+        <!-- X. Relacionamentos -->
+        <span class="toc-label">X. Relacionamentos</span>
         <ul>
             <li><a href="#relacionamentos">Relacionamentos e Intimidade</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-niveis">Os Quatro Níveis</a></li>
@@ -19633,8 +19666,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-faccoes">Facções</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-barmans">Barmans</a></li>
         </ul>
-        <!-- X. REFERÊNCIAS E FERRAMENTAS -->
-        <span class="toc-label">X. Referências e Ferramentas</span>
+        <!-- XI. Referências e Ferramentas -->
+        <span class="toc-label">XI. Referências e Ferramentas</span>
         <ul>
             <li><a href="#referencias-ferramentas">Referências e Ferramentas</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#glossario">Glossário</a></li>
@@ -19647,7 +19680,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </ul>
 
         <!-- X̷I̷. Korrith — A Fala que Nomeia -->
-        <span class="toc-label"><span class="corrompido-num">X̷I̷</span>. Korrith — A Fala que Nomeia</span>
+        <span class="toc-label"><span class="corrompido-num">X̷I̷I̷</span>. Korrith — A Fala que Nomeia</span>
         <ul>
             <li><a href="#korrith">Korrith — A Fala que Nomeia</a></li>
             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#fala-antiga">A Fala Antiga</a></li>
@@ -19719,15 +19752,44 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li><a href="#torre-disputas">A Torre das Disputas</a></li>
                             <li><a href="#mundo-fora">O Mundo Fora das Torres</a></li>
                             <li><a href="#nevoa">A Névoa e o Mundo Exterior</a></li>
-<li><a href="#geopolitica">Geopolítica e Facções</a></li>
-            <li><a href="#faccoes">Facções — Quem Manda no Mundo</a></li>
+<li><a href="#geopolitica">Geopolítica do Mundo</a></li>
             <li><a href="#despertos">Os Despertos</a></li>
                         </ul>
                     </div>
 
-                    <!-- II. CRIAÇÃO DE PERSONAGEM -->
+                            <!-- GUILDAS E FACÇÕES -->
+        <span class="toc-label">II. Guildas e Facções</span>
+        <ul>
+            <li><a href="#guildas-faccoes">Guildas e Facções</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-consorcio">O Consórcio Carmesim</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-patentes">Patentes do Consórcio</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-npcs">NPCs do Consórcio</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-vazio">A Irmandade do Vazio</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-eco">A Ordem do Eco</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-onirico">O Círculo Onírico</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-gelida">A Fraternidade Gélida</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#beneficios-reputacao">Benefícios por Reputação</a></li>
+            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccoes-criacao">Facções e a Criação</a></li>
+        </ul>
+                    <!-- GUILDAS E FACÇÕES -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">II. Criação de Personagem</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">II. Guildas e Facções</h3>
+                        <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
+                            <li><a href="#guildas-faccoes">Guildas e Facções</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-consorcio">O Consórcio Carmesim</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-patentes">Patentes do Consórcio</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#consorcio-npcs">NPCs do Consórcio</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-vazio">A Irmandade do Vazio</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-eco">A Ordem do Eco</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-onirico">O Círculo Onírico</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccao-gelida">A Fraternidade Gélida</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#beneficios-reputacao">Benefícios por Reputação</a></li>
+                            <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#faccoes-criacao">Facções e a Criação</a></li>
+                        </ul>
+                    </div>
+<!-- III. CRIAÇÃO DE PERSONAGEM -->
+                    <div style="margin-bottom: 1.4rem;">
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">III. Criação de Personagem</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#criacao">Guia de Criação</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#como-voce-despertou">Como Você Despertou?</a></li>
@@ -19739,9 +19801,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- III. SISTEMA DE PODER -->
+                    <!-- IV. Sistema de Poder -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">III. Sistema de Poder</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IV. Sistema de Poder</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#alma-fragmentada">Alma Fragmentada</a></li>
                             <li><a href="#poder-mente-corpo">Poder, Mente e Corpo</a></li>
@@ -19750,9 +19812,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- IV. PROGRESSÃO, ASCENSÃO E TÉCNICAS -->
+                    <!-- V. Progressão, Ascensão e Técnicas -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IV. Progressão, Ascensão e Técnicas</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">V. Progressão, Ascensão e Técnicas</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sessoes-xp">Sistema de Sessões e Experiência (XP)</a></li>
                             <li><a href="#evolucao-poder">Despertares do Poder</a></li>
@@ -19769,9 +19831,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- V. ECONOMIA E ARTESANATO -->
+                    <!-- VI. Economia e Artesanato -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">V. Economia e Artesanato</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VI. Economia e Artesanato</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#economia">Sistema Monetário (Espíritos)</a></li>
 <li><a href="#forja">Sistema de Forja</a></li>
@@ -19783,9 +19845,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- VI. REGRAS DE JOGO -->
+                    <!-- VII. Regras de Jogo -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VI. Regras de Jogo</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VII. Regras de Jogo</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sistema-resolucao">Sistema de Resolução</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#ataques-resistencias">Ataques Diretos e Resistências</a></li>
@@ -19796,9 +19858,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- VII. SOBREVIVÊNCIA -->
+                    <!-- VIII. Sobrevivência -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VII. Sobrevivência</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VIII. Sobrevivência</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sobrevivencia">Sobrevivência nas Torres</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#acampamento">Acampamento</a></li>
@@ -19808,9 +19870,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- VIII. SANIDADE E CORRUPÇÃO -->
+                    <!-- IX. Sanidade e Corrupção -->
                     <div style="margin-bottom: 1.4rem;">
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">VIII. Sanidade e Corrupção</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IX. Sanidade e Corrupção</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#sanidade">Sanidade e Corrupção</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#sanidade-faixas">As Faixas de Sanidade</a></li>
@@ -19822,9 +19884,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- IX. RELACIONAMENTOS -->
+                    <!-- X. Relacionamentos -->
                     <div>
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">IX. Relacionamentos</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">X. Relacionamentos</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#relacionamentos">Relacionamentos e Intimidade</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#rel-niveis">Os Quatro Níveis</a></li>
@@ -19836,9 +19898,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </ul>
                     </div>
 
-                    <!-- X. REFERÊNCIAS E FERRAMENTAS -->
+                    <!-- XI. Referências e Ferramentas -->
                     <div>
-                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">X. Referências e Ferramentas</h3>
+                        <h3 style="color: var(--accent); margin-bottom: 0.4rem; font-size: 1.15rem;">XI. Referências e Ferramentas</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#referencias-ferramentas">Referências e Ferramentas</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#glossario">Glossário de Termos</a></li>
@@ -19853,7 +19915,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     <!-- X̷I̷. Korrith — A Fala que Nomeia -->
                     <div>
-                        <h3 style="color: #c13f3f; margin-bottom: 0.4rem; font-size: 1.15rem;"><span class="corrompido-num">X̷I̷</span>. Korrith — A Fala que Nomeia</h3>
+                        <h3 style="color: #c13f3f; margin-bottom: 0.4rem; font-size: 1.15rem;"><span class="corrompido-num">X̷I̷I̷</span>. Korrith — A Fala que Nomeia</h3>
                         <ul style="list-style: none; padding-left: 1rem; line-height: 1.65;">
                             <li><a href="#korrith">Korrith — A Fala que Nomeia</a></li>
                             <li style="padding-left: 0.8rem; font-size: 0.9rem;"><a href="#fala-antiga">A Fala Antiga</a></li>
@@ -19882,7 +19944,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <li><a href="#corrupcao">A Corrupção e sua expansão</a></li>
                             <li><a href="#regioes-torres">As Sete Regiões/Torres</a></li>
                             <li><a href="#despertos">Despertos e o Núcleo da Alma</a></li>
-                            <li><a href="#faccoes">As 5 Facções</a></li>
+                            <li><a href="#guildas-faccoes">As 5 Facções</a></li>
                             <li><a href="#surtos">Surtos Decenais</a></li>
                             <li><a href="#economia">Economia em Espíritos</a></li>
                             <li><a href="#sessoes-xp">Nível 1–20 (XP)</a> × <a href="#ascensao">Ascensão 0–10 (Núcleos)</a></li>
@@ -19909,7 +19971,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div>
                             <strong style="color: var(--silver);">Explorar o mundo</strong><br>
-                            <a href="#intro">Intro</a> · <a href="#regioes-torres">Regiões</a> · <a href="#faccoes">Facções</a> · <a href="#nevoa">Névoa</a>
+                            <a href="#intro">Intro</a> · <a href="#regioes-torres">Regiões</a> · <a href="#guildas-faccoes">Facções</a> · <a href="#nevoa">Névoa</a>
                         </div>
                     </div>
 
@@ -21182,14 +21244,185 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </section>
 
-        <section id="faccoes">
-            <h1>Facções — Quem Manda no Mundo</h1>
-            <p>As facções são os verdadeiros senhores do mundo pós-Torres. Competem por território, conhecimento e — acima de tudo — por Despertos poderosos. Para elas, você é ao mesmo tempo ferramenta, ameaça e recurso. Nada é de graça: toda ajuda vem com uma dívida, e a Torre cobra de quem se apega demais a qualquer coisa, inclusive a uma bandeira.</p>
+<section id="despertos">
+            <h2>O Que é um Desperto</h2>
+            <p>Despertos são humanos capazes de manifestar o Núcleo da Alma. Eles são os únicos capazes de enfrentar monstros, explorar torres e sobreviver nas regiões mais hostis do mundo.</p>
+            <p>Dependendo da região, podem ser vistos como soldados, exploradores, mercenários, protetores, celebridades ou armas humanas. Todo grande conflito do mundo gira ao redor deles. Sem Despertos, a humanidade já teria desaparecido.</p>
+        </section>
 
-            <h2>As Cinco Grandes</h2>
-            <p>Cinco facções dominam o mundo conhecido. Cada uma tem sua imagem pública, seus objetivos e o que espera de você.</p>
+        <section id="guildas-faccoes" data-capitulo="II">
+            <h1>Guildas e Facções</h1>
+            <p>As facções são os verdadeiros senhores do mundo pós-Torres. Governos não passam de linhas em mapas apagados; quem controla tropas, rotas, núcleos e Despertos é quem define a lei. Cada facção oferece poder, proteção e propósito — e cada uma cobra seu preço em lealdade, sangue ou silêncio.</p>
+            <p>Nenhuma delas é inteiramente boa ou inteiramente má. A Irmandade salva, mas queima. A Ordem sabe, mas esconde. O Círculo cura, mas devora sonhos. A Fraternidade fortalece, mas exige renúncia. E o Consórcio... o Consórcio paga. O resto é contrato.</p>
 
-            <h3>1. A Irmandade do Vazio</h3>
+            <div class="system-card">
+                <strong>As Cinco Grandes</strong><br>
+                1. <a href="#faccao-consorcio">O Consórcio Carmesim</a> — império militar-industrial; coração de aço e sangue.<br>
+                2. <a href="#faccao-vazio">A Irmandade do Vazio</a> — protetores da humanidade contra a corrupção.<br>
+                3. <a href="#faccao-eco">A Ordem do Eco</a> — guardiãs do conhecimento e da história.<br>
+                4. <a href="#faccao-onirico">O Círculo Onírico</a> — místicos dos sonhos e da mente.<br>
+                5. <a href="#faccao-gelida">A Fraternidade Gélida</a> — ordem ascética do sacrifício e da disciplina.
+            </div>
+
+            <h2 id="faccao-consorcio">1. O Consórcio Carmesim</h2>
+            <p>O Consórcio é o maior império militar-industrial do mundo conhecido. Suas torres de aço negro erguem-se nos centros das cidadelas mais ricas; suas caravanas blindadas cortam a Névoa como navios de guerra; seus contratos são mais sagrados do que juramentos de sangue. Para o homem comum, o Consórcio é lei, emprego, proteção e dívida — tudo no mesmo envelope carmesim.</p>
+
+            <h3 id="consorcio-identidade">Identidade e Lema</h3>
+            <div class="system-card">
+                <strong>Fachada pública:</strong> corporação humanitária que reconstruiu a civilização após o Rompimento, garantindo ordem, rotas comerciais e defesa contra a Torre.<br><br>
+                <strong>Lema:</strong> <em>“Tudo tem preço. O nosso é justo.”</em><br><br>
+                <strong>Símbolo:</strong> um círculo carmesim com uma torre de aço no centro, envolvido por uma corrente que forma a palavra <em>Contrato</em>.<br><br>
+                <strong>Tom:</strong> eficiência fria, burocracia armada, contratos impecáveis, cobrança implacável.
+            </div>
+
+            <h3 id="consorcio-origem">Origem — Do Caos ao Contrato</h3>
+            <p>Quando as Torres surgiram, o mundo desmoronou em dias. Naquele caos, três caravanas de sobreviventes — mercadores, guardas e ferreiros — se uniram não por fé, mas por necessidade. Eles controlaram o primeiro poço de água potável de uma região arrasada, depois a primeira estrada, depois o primeiro armazém de núcleos.</p>
+            <p>De caravanas, viraram milícia. De milícia, viraram governo. O <strong>Primeiro Contrato</strong> foi assinado com uma cidadela faminta: proteção e suprimentos em troca de mão de obra e minerais. A cidadela sobreviveu. Outras vieram atrás. Quem recusava era deixado à Névoa — ou às “negociações” dos Diretores Militares.</p>
+            <p>Hoje o Consórcio domina metade das rotas comerciais conhecidas, a maioria das forjas de núcleos e quase todo o mercado de equipamento militar. Ele não conquista por bandeiras. Ele conquista por débito.</p>
+
+            <div class="lore-box">
+                <strong>O Primeiro Contrato original</strong> ainda é exibido na Câmara Carmesim, selado com sangue de ambos os lados. Dizem que o preço não foi apenas ouro — mas que a cidadela entregou algo que não consta dos registros públicos. O Mestre sabe o que.
+            </div>
+
+            <h3 id="consorcio-objetivo">O Objetivo Real — Fachada e Rumores</h3>
+            <p>Publicamente, o Consórcio quer estabilidade, lucro e expansão segura. Ele fala em “proteger a humanidade através da ordem econômica”. Mas nas cidadelas, nos becos e nos quartéis, circulam outros rumores:</p>
+            <div class="system-card">
+                <strong>O que se conta nas sombras:</strong><br>
+                • Despertos entram nos laboratórios do Consórcio e nunca mais são vistos inteiros.<br>
+                • Núcleos de classificação proibida são comprados e vendidos em leilões fechados.<br>
+                • Há uma divisão de “Pesquisa Avançada” que não responde ao Conselho — apenas ao Alto Comissário.<br>
+                • Algumas armas carmesim parecem “lembrar” de monstros específicos, como se tivessem sido forjadas com algo além de metal.
+            </div>
+            <p>O Livro do Jogador não confirma esses rumores. Eles são ganchos. A verdade — o quanto o Consórcio sabe sobre Corrupção, núcleos e a própria Torre — é segredo do Mestre.</p>
+
+            <div class="warning">
+                <strong>A Torre sempre cobra:</strong> poder econômico absoluto tem um preço. O Consórcio não é corrompido no sentido óbvio — ele é eficiente demais, curioso demais, silencioso demais. E quem assina contratos com silêncios costuma descobrir tarde demais o que vendeu.
+            </div>
+
+            <h3 id="consorcio-estrutura">Estrutura e Hierarquia</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Camada</th><th>Função</th><th>Quem são</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Alto Comissário</strong></td><td>Líder único; palavra final em contratos, guerra e política.</td><td>Severo Vance, o Senhor do Contrato.</td></tr>
+                        <tr><td><strong>Conselho de Diretores</strong></td><td>Cinco divisões: Militar, Comércio, Pesquisa, Logística, Inteligência.</td><td>Os cinco braços que executam a vontade do Comissário.</td></tr>
+                        <tr><td><strong>Executores</strong></td><td>Elite operacional; comandam missões críticas e células de Agentes.</td><td>Despertos veteranos, mercenários de ponta, especialistas.</td></tr>
+                        <tr><td><strong>Agentes</strong></td><td>Força de trabalho contratada; cumprem contratos, escoltas e coleta.</td><td>Despertos iniciantes, mercenários, funcionários armados.</td></tr>
+                        <tr><td><strong>Contratados</strong></td><td>Mão de obra temporária; testes, serviços e tarefas de risco baixo.</td><td>Civis, aventureiros, recrutas em provação.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>O Conselho de Diretores</h4>
+            <div class="system-card">
+                <strong>Diretoria Militar:</strong> controla exércitos privados, torres de vigia, postos avançados e a Guarda Carmesim. Decide quem é inimigo e quem é “parceiro estratégico”.<br><br>
+                <strong>Diretoria de Comércio:</strong> fixa preços de núcleos, rotas, seguros e dívidas. Nenhuma cidade rica escapa às suas comissões.<br><br>
+                <strong>Diretoria de Pesquisa:</strong> desenvolve armas, forjas e “aprimoramentos”. A fachada é ciência; os rumores falam de laboratórios subterrâneos.<br><br>
+                <strong>Diretoria de Logística:</strong> mantém caravanas, armazéns, comunicações e o mapa vivo das rotas através da Névoa.<br><br>
+                <strong>Diretoria de Inteligência:</strong> espionagem, chantagem, informantes e “contratos de exclusividade” que ninguém assina de livre vontade.
+            </div>
+
+            <h3 id="consorcio-alinhamento">Como se Alinhar e Subir</h3>
+            <p>Entrar no Consórcio é fácil. Sair... depende do que você assinou.</p>
+            <div class="system-card">
+                <strong>1. Contato:</strong> um recrutador, um Executor ou um contato urbano oferece um <em>Contrato de Teste</em>. Pode ser escoltar uma caravana, recuperar um núcleo ou eliminar uma ameaça menor.<br><br>
+                <strong>2. Contrato de Teste:</strong> se cumprido dentro do prazo e do padrão, você recebe uma insígnia carmesim e o status de <strong>Contratado</strong>.<br><br>
+                <strong>3. Ascensão por Mérito:</strong> contratos cumpridos aumentam sua Reputação. A cada patente, o Consórcio exige mais — e oferece mais.<br><br>
+                <strong>4. O Preço:</strong> cada patente vem com uma <em>cláusula de lealdade</em>. Trair o Consórcio não é apenas perder benefícios. É ter uma dívida cobrada com juros.
+            </div>
+
+            <h3 id="consorcio-patentes">Patentes e Reputação</h3>
+            <p>A patente reflete sua posição formal; a Reputação reflete o quanto o Consórcio confia em você. Ambas andam juntas, mas uma traição pode derrubar a Reputação sem tirar a patente — tornando você um alvo ambulante.</p>
+            <div class="system-card">
+                <strong>Contratado</strong> (Reputação 0) — recrutas e mão de obra temporária.<br>
+                <strong>Agente I</strong> (Rep +1) — contratos padrão, acesso a postos do Consórcio.<br>
+                <strong>Agente II</strong> (Rep +2) — arsenal intermediário, descontos maiores, escolta ocasional.<br>
+                <strong>Agente III</strong> (Rep +3) — contratos prioritários, informantes básicos, transporte seguro.<br>
+                <strong>Agente IV</strong> (Rep +4) — equipamento militar, contato direto com Executor, crédito corporativo.<br>
+                <strong>Executor</strong> (Rep +5) — comanda célula, acesso a tecnologia experimental, requisitar recursos.<br>
+                <strong>Diretor</strong> (Rep +6+) — topo do Conselho; reservado a NPCs e arcos de longo prazo.
+            </div>
+
+            <h3 id="consorcio-beneficios">Benefícios por Patente</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Patente</th><th>Rep</th><th>Benefícios</th></tr></thead>
+                    <tbody>
+                        <tr><td>Contratado</td><td>0</td><td>Contratos padrão; alojamento básico em postos carmesim; identificação como parceiro.</td></tr>
+                        <tr><td>Agente I</td><td>+1</td><td>−15% em equipamentos do Consórcio; contratos de risco moderado; insígnia carmesim.</td></tr>
+                        <tr><td>Agente II</td><td>+2</td><td>−20% em equipamentos; 1 escolta armada por missão; informante básico (1 pista por sessão).</td></tr>
+                        <tr><td>Agente III</td><td>+3</td><td>Contratos prioritários; acesso a arsenal avançado; caravana/transporte seguro entre cidades.</td></tr>
+                        <tr><td>Agente IV</td><td>+4</td><td>−30% em equipamentos; 1 favor médio por incursão; crédito de 500 Espíritos (a pagar).</td></tr>
+                        <tr><td>Executor</td><td>+5</td><td>Comanda célula de até 4 Agentes; acesso a equipamento experimental; pode requisitar recursos corporativos.</td></tr>
+                        <tr><td>Diretor</td><td>+6+</td><td>Decide políticas e contratos de alto nível; recursos quase ilimitados — e responsabilidade total. (NPC)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="consorcio-mecanicas">Mecânicas do Consórcio</h3>
+            <div class="system-card">
+                <strong>Contratos:</strong> todo trabalho do Consórcio é um contrato com prazo, pagamento (geralmente em Espíritos), cláusulas de falha e multas. Quebrar um contrato reduz a Reputação e pode gerar dívida. Cumprir com excelência abre contratos maiores.
+            </div>
+            <div class="system-card">
+                <strong>Dívida e Crédito:</strong> o Consórcio empresta equipamento, informação e dinheiro — e cobra com juros. Uma dívida não paga pode se transformar em serviço obrigatório, confisco de bens ou “renegociação” que ninguém pediu.
+            </div>
+            <div class="system-card">
+                <strong>Rede de Contatos/Informantes:</strong> a partir de Agente II, você pode comprar informações. O Mestre define o preço e a qualidade: uma pista útil, um mapa, a localização de um alvo, ou um segredo que não deveria estar à venda.
+            </div>
+            <div class="system-card">
+                <strong>Recursos Corporativos:</strong> escolta armada, caravana blindada, transporte de carga, alojamento seguro e acesso a oficinas. Requisitar recursos consome favores ou aumenta dívida.
+            </div>
+            <div class="system-card">
+                <strong>Pesquisa e Núcleos:</strong> o Consórcio compra núcleos de qualquer origem e vende equipamento forjado a preços que ditam o mercado. A Diretoria de Pesquisa é cercada de rumores: alguns dizem que ela sabe forjar com núcleos impuros; outros, que fabrica seus próprios monstros.
+            </div>
+            <div class="system-card">
+                <strong>Coração da Economia:</strong> em regiões dominadas pelo Consórcio, o preço de núcleos, armas e viagens é fixado por ele. Isso conecta diretamente com o capítulo de <a href="#economia">Economia e Artesanato</a>: vender para o Consórcio é garantia de comprador, mas raramente do melhor preço.
+            </div>
+
+            <h3 id="consorcio-npcs">NPCs do Consórcio</h3>
+            <div class="system-card">
+                <strong>Severo Vance — Alto Comissário:</strong> homem de meia-idade, terno carmesim, olhos de contador que nunca piscam. Fala em cláusulas e metáforas de preço. Dizem que já vendeu até a própria culpa. Gancho: ele pode querer que você “resolva” um problema pessoal que não pode constar em contrato.
+            </div>
+            <div class="system-card">
+                <strong>Helena Korr — Diretora Militar:</strong> veterana de cinquenta anos, cicatriz no rosto, mão de ferro. Despreza quem confia em sorte. Gancho: ela testa recrutas enviando-os para missões que deveriam ser impossíveis.
+            </div>
+            <div class="system-card">
+                <strong>Lysander Vey — Diretor de Comércio:</strong> sorriso fácil, memória de preços implacável. Transforma dívidas em lealdade. Gancho: oferece um contrato lucrativo que parece simples — até você ler a letra miúda.
+            </div>
+            <div class="system-card">
+                <strong>Dr. Oren Vahl — Diretor de Pesquisa:</strong> magro, insone, manchas de tinta nas mãos. Parece mais interessado em resultados do que em sobreviventes. Gancho: ele quer “amostras” de um andar específico da Torre.
+            </div>
+            <div class="system-card">
+                <strong>Marlon Sacks — Diretor de Logística:</strong> prático, cínico, conhece cada rota que já foi perdida na Névoa. Gancho: precisa de escolta para uma caravana que não consta nos mapas oficiais.
+            </div>
+            <div class="system-card">
+                <strong>Silas Renn — Diretor de Inteligência:</strong> ninguém sabe sua aparência; ele envia mensagens, selos e ameaças elegantes. Gancho: ele sabe algo vergonhoso sobre o passado de um personagem.
+            </div>
+            <div class="system-card">
+                <strong>Kira Valen — Executor Leal:</strong> sua primeira chefe se você se destacar. Dura, mas justa dentro das regras do Consórcio. Gancho: protege você de um rival interno — mas cobra lealdade absoluta.
+            </div>
+            <div class="system-card">
+                <strong>Dorn Mace — Executor Rival:</strong> musculoso, arrogante, vê novatos como ameaça. Gancho: sabotagem, duelos de influência, tentativa de roubar seu contrato.
+            </div>
+            <div class="system-card">
+                <strong>Agente Vega — Agente Corrompido:</strong> sumiu durante uma missão e voltou com olhos errados. Ainda usa a insígnia. Gancho: ele sabe onde fica um dos laboratórios secretos — e o que ele viu lá o deixou doente.
+            </div>
+            <div class="system-card">
+                <strong>Recrutador Radd — Primeiro Contato:</strong> simpático, falante, oferece contratos de teste nos piores lugares. Gancho: seu “teste” pode ser uma armadilha para outro candidato.
+            </div>
+
+            <h3 id="consorcio-ganchos">Ganchos, Conflitos e Riscos</h3>
+            <div class="system-card">
+                <strong>Missões-tipo:</strong> capturar monstro vivo; escoltar caravana pela Névoa; recuperar núcleo roubado; eliminar concorrente; investigar vazamento em laboratório; cobrar dívida de alguém poderoso demais.
+            </div>
+            <div class="system-card">
+                <strong>Rivalidades:</strong> a Irmandade desconfia da Pesquisa do Consórcio; a Ordem do Eco quer seus arquivos; o Círculo Onírico sente “eco” nos sonhos dos Agentes que desaparecem. Cada facção pode tentar usar o grupo contra o Consórcio.
+            </div>
+            <div class="warning">
+                <strong>O preço do poder:</strong> quanto mais alto você sobe no Consórcio, mais contratos assina em branco. E a Torre sempre cobra — às vezes em sanidade, às vezes em segredos, às vezes fazendo você perceber que já não sabe mais qual era o preço original.
+            </div>
+
+            <h2 id="faccao-vazio">2. A Irmandade do Vazio</h2>
             <div class="system-card">
                 <strong>O que é:</strong> protetores da humanidade contra a corrupção.<br>
                 <strong>O que quer:</strong> conter a corrupção e "limpar" o que ela toca.<br>
@@ -21209,41 +21442,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>+2:</strong> acesso a rituais de purificação com desconto (50%).<br>
                 • <strong>+3:</strong> a Irmandade envia ajuda quando você enfrenta corrupção em desvantagem.
             </div>
-            <div class="system-card">
-                <strong>Missões e Riscos:</strong><br>
-                • Missões: purificar um templo, escoltar um purificador, impedir uma absorção proibida.<br>
-                • Riscos: inimigos entre os corrompidos e seus protetores; a Irmandade pode exigir sacrifícios que você não quer fazer.
-            </div>
 
-            <h3>2. O Consórcio Carmesim</h3>
+            <h2 id="faccao-eco">3. A Ordem do Eco</h2>
             <div class="system-card">
-                <strong>O que é:</strong> a maior força militar e econômica do mundo.<br>
-                <strong>O que quer:</strong> poder, recursos e controle das rotas de núcleos.<br>
-                <strong>O que oferece:</strong> equipamento de qualidade, contratos lucrativos e proteção armada. O Consórcio paga bem — e paga rápido.<br>
-                <strong>O que cobra:</strong> resultados — e material de pesquisa das Torres. O Consórcio não perdoa dívidas nem fracassos.<br>
-                <strong>Gancho:</strong> um contrato para capturar um monstro vivo da torre periférica.
-            </div>
-            <div class="system-card">
-                <strong>Como se alinhar:</strong><br>
-                • <strong>Contato:</strong> um recrutador do Consórcio oferece um contrato de teste.<br>
-                • <strong>Missão de prova:</strong> cumprir um contrato com prazo e padrão exigidos.<br>
-                • <strong>Insígnia:</strong> um brasão carmesim que abre portas (e cobra comissões).
-            </div>
-            <div class="system-card">
-                <strong>Benefícios por Reputação:</strong><br>
-                • <strong>+1:</strong> preços reduzidos em equipamento (10%).<br>
-                • <strong>+2:</strong> contratos prioritários e acesso a equipamento de qualidade superior.<br>
-                • <strong>+3:</strong> proteção armada em missões e um contato direto com a liderança local.
-            </div>
-            <div class="system-card">
-                <strong>Missões e Riscos:</strong><br>
-                • Missões: capturar núcleos, escoltar caravanas, eliminar concorrentes.<br>
-                • Riscos: dívidas que crescem, rivais do Consórcio que o veem como alvo, e a atenção da Torre por operações grandes demais.
-            </div>
-
-            <h3>3. A Ordem do Eco</h3>
-            <div class="system-card">
-                <strong>O que é:</strong> guardiões do conhecimento e da história.<br>
+                <strong>O que é:</strong> guardiãs do conhecimento e da história.<br>
                 <strong>O que quer:</strong> artefatos, segredos e registros das Torres.<br>
                 <strong>O que oferece:</strong> informação, treinamento e acesso a arquivos. A Ordem sabe coisas que ninguém mais sabe.<br>
                 <strong>O que cobra:</strong> artefatos e segredos que você encontrar — nem sempre os que você quer entregar.<br>
@@ -21261,13 +21463,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>+2:</strong> treinamento gratuito em uma perícia de conhecimento.<br>
                 • <strong>+3:</strong> a Ordem revela um segredo útil por incursão (1 dica do Mestre).
             </div>
-            <div class="system-card">
-                <strong>Missões e Riscos:</strong><br>
-                • Missões: recuperar artefatos, decifrar runas, mapear andares inexplorados.<br>
-                • Riscos: conhecimento proibido atrai a atenção da Torre; a Ordem pode querer segredos que você prefere guardar.
-            </div>
 
-            <h3>4. O Círculo Onírico</h3>
+            <h2 id="faccao-onirico">4. O Círculo Onírico</h2>
             <div class="system-card">
                 <strong>O que é:</strong> místicos e estudiosos da mente e dos sonhos.<br>
                 <strong>O que quer:</strong> compreender a torre periférica e o que ela esconde.<br>
@@ -21287,13 +21484,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>+2:</strong> proteção mental (Vantagem contra ilusões e leitura de mente).<br>
                 • <strong>+3:</strong> o Círculo revela uma visão profética útil por incursão.
             </div>
-            <div class="system-card">
-                <strong>Missões e Riscos:</strong><br>
-                • Missões: explorar sonhos, investigar a torre periférica, recuperar memórias perdidas.<br>
-                • Riscos: o Círculo pode levar mais do que você ofereceu; sonhos podem se tornar pesadelos reais.
-            </div>
 
-            <h3>5. A Fraternidade Gélida</h3>
+            <h2 id="faccao-gelida">5. A Fraternidade Gélida</h2>
             <div class="system-card">
                 <strong>O que é:</strong> ordem ascética que prega o sacrifício e a disciplina.<br>
                 <strong>O que quer:</strong> forjar Despertos fortes através da renúncia.<br>
@@ -21313,27 +21505,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 • <strong>+2:</strong> acesso a técnicas de resistência (Vantagem contra Exaustão).<br>
                 • <strong>+3:</strong> a Fraternidade envia um irmão para apoiá-lo em uma missão crítica.
             </div>
-            <div class="system-card">
-                <strong>Missões e Riscos:</strong><br>
-                • Missões: provas de resistência, expedições em condições extremas, proteger irmãos.<br>
-                • Riscos: a renúncia cobra laços e conforto; a Fraternidade pode exigir sacrifícios que você não quer fazer.
-            </div>
 
-            <h3>Tabela Consolidada de Benefícios por Reputação</h3>
+            <h2 id="beneficios-reputacao">Tabela Consolidada de Benefícios por Reputação</h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>Reputação</th><th>Irmandade do Vazio</th><th>Consórcio Carmesim</th><th>Ordem do Eco</th><th>Círculo Onírico</th><th>Fraternidade Gélida</th></tr>
+                        <tr><th>Reputação</th><th>Consórcio Carmesim</th><th>Irmandade do Vazio</th><th>Ordem do Eco</th><th>Círculo Onírico</th><th>Fraternidade Gélida</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><strong>+1</strong></td><td>Abrigo gratuito</td><td>Preços −10%</td><td>Arquivos públicos</td><td>Leitura de sonho grátis</td><td>Treino físico grátis</td></tr>
-                        <tr><td><strong>+2</strong></td><td>Purificação −50%</td><td>Contratos prioritários</td><td>Treino de conhecimento</td><td>Proteção mental</td><td>Resistência à Exaustão</td></tr>
-                        <tr><td><strong>+3</strong></td><td>Ajuda contra corrupção</td><td>Proteção armada</td><td>1 segredo/incursão</td><td>Visão profética</td><td>Irmão de apoio</td></tr>
+                        <tr><td><strong>+1</strong></td><td>−15% em equipamentos</td><td>Abrigo gratuito</td><td>Arquivos públicos</td><td>Leitura de sonho grátis</td><td>Treino físico grátis</td></tr>
+                        <tr><td><strong>+2</strong></td><td>Contratos prioritários + escolta</td><td>Purificação −50%</td><td>Treino de conhecimento</td><td>Proteção mental</td><td>Resistência à Exaustão</td></tr>
+                        <tr><td><strong>+3</strong></td><td>Proteção armada + contato Executor</td><td>Ajuda contra corrupção</td><td>1 segredo/incursão</td><td>Visão profética</td><td>Irmão de apoio</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <h2>Facções e a Criação</h2>
+            <h2 id="faccoes-criacao">Facções e a Criação</h2>
             <p>Você não precisa escolher uma facção na criação — mas pode. Alguns Antecedentes e Traços já conectam você a uma delas:</p>
             <div class="system-card">
                 <strong>Antecedentes:</strong><br>
@@ -21349,7 +21536,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <p>Alinhar-se a uma facção é uma decisão de jogo: traga lealdade, e ela trará recursos; traia-a, e ela trará consequências.</p>
 
-            <h2>Reputação</h2>
+            <h2 id="faccoes-reputacao">Reputação</h2>
             <p>Cada facção tem um nível de Reputação com o grupo (de −3 a +3). Isso afeta o quanto estão dispostas a ajudar ou atrapalhar, o tipo de missões que oferecem e se revelam segredos. A tabela completa está em <a href="#relacionamentos">Relacionamentos — Reputação</a>.</p>
             <p><strong>Como ganhar:</strong> missões cumpridas, favores prestados e presentes valiosos elevam sua reputação.</p>
             <p><strong>Como perder:</strong> traições, dívidas não pagas e escolhas contra os interesses da facção derrubam sua reputação.</p>
@@ -21359,19 +21546,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         </section>
 
-        <section id="despertos">
-            <h2>O Que é um Desperto</h2>
-            <p>Despertos são humanos capazes de manifestar o Núcleo da Alma. Eles são os únicos capazes de enfrentar monstros, explorar torres e sobreviver nas regiões mais hostis do mundo.</p>
-            <p>Dependendo da região, podem ser vistos como soldados, exploradores, mercenários, protetores, celebridades ou armas humanas. Todo grande conflito do mundo gira ao redor deles. Sem Despertos, a humanidade já teria desaparecido.</p>
-        </section>
-
-        <!-- A NÉVOA (novo subtópico) -->
-        
-
-        <div class="section-divider"></div>
+<div class="section-divider"></div>
 
         <!-- CRIAÇÃO DE PERSONAGEM -->
-        <section id="criacao" data-capitulo="II">
+        <section id="criacao" data-capitulo="III">
             <h1>Criação de Personagem</h1>
             <h2>Guia Completo de Criação</h2>
             
@@ -24119,7 +24297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="section-divider"></div>
 
         <!-- SISTEMA DE PODER -->
-        <section id="alma-fragmentada" data-capitulo="III">
+        <section id="alma-fragmentada" data-capitulo="IV">
             <h1>Sistema de Poder — Alma Fragmentada</h1>
             
             <p>O poder de um Desperto não permanece estático. Com evolução, experiência, domínio e expansão conceitual, uma habilidade pode atravessar múltiplos estágios de despertar. Despertares não existem apenas para aumentar números — eles existem para expandir possibilidades.</p>
@@ -24524,7 +24702,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ═══════════════════════════════════════════════════════════ -->
 <div class="section-divider"></div>
 
-<section id="progressao-ascensao-tecnicas" data-capitulo="IV" class="section-anchor">
+<section id="progressao-ascensao-tecnicas" data-capitulo="V" class="section-anchor">
     <h1>Progressão, Ascensão e Técnicas</h1>
 </section>
 <div class="section-divider"></div>
@@ -25506,7 +25684,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="highlight" style="display:block; margin:1rem 0; padding:0.8rem 1rem; font-style:italic;">
                 “Subir não é ambição. É desespero disfarçado de esperança.”
             </p>
-        </section><section id="economia" data-capitulo="V">
+        </section><section id="economia" data-capitulo="VI">
         <h1>Sistema Monetário e de Equipamentos</h1>
 
         <h2 id="moeda">A Moeda é Espíritos (Esp)</h2>
@@ -26090,7 +26268,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="section-divider"></div>
 
-        <section id="mecanico" data-capitulo="VI">
+        <section id="mecanico" data-capitulo="VII">
             <h1 id="sistema-resolucao">Sistema de Resolução — O Julgamento da Alma</h1>
 
             <p>O mundo das Torres não perdoa a fraqueza. Toda ação importante — seja lutar, resistir à corrupção, atravessar a Névoa ou confrontar um pesadelo — é resolvida por um <strong>d20</strong>, o dado que representa o olhar frio da Torre sobre sua alma.</p>
@@ -27122,7 +27300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div class="section-divider"></div>
 
-        <section id="sobrevivencia" data-capitulo="VII">
+        <section id="sobrevivencia" data-capitulo="VIII">
             <h2>Sobrevivência nas Torres</h2>
 
         <h3 id="acampamento">Sistema de Acampamento</h3>
@@ -27195,7 +27373,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         </section>
 
-<section id="sanidade" data-capitulo="VIII">
+<section id="sanidade" data-capitulo="IX">
             <h1>Sanidade e Corrupção — O Preço da Alma</h1>
         <p>A Sanidade é a sua capacidade de continuar sendo você mesmo diante do impossível. As Torres não destroem apenas o corpo — elas comem a mente, devoram memórias, distorcem o que você ama e transformam o familiar em pesadelo.</p>
 
@@ -27386,7 +27564,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         </section>
 
-<section id="relacionamentos" data-capitulo="IX">
+<section id="relacionamentos" data-capitulo="X">
             <h1>Relacionamentos — Laços que a Torre Cobra</h1>
 
         <p>Em um mundo onde a Torre tenta quebrar tudo que é humano, os laços que as pessoas formam entre si se tornam uma das poucas coisas que ainda valem a pena defender. O amor, a amizade profunda e a confiança cega são tanto uma fonte de força quanto uma das maiores fraquezas que um Desperto pode carregar.</p>
@@ -27519,9 +27697,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         </section>
 
-        <!-- X. REFERÊNCIAS E FERRAMENTAS -->
-        <section id="referencias-ferramentas" data-capitulo="X">
-            <h1>X. Referências e Ferramentas</h1>
+        <!-- XI. Referências e Ferramentas -->
+        <section id="referencias-ferramentas" data-capitulo="XI">
+            <h1>XI. Referências e Ferramentas</h1>
             <p>Este capítulo reúne consultas rápidas para quando você estiver no meio da mesa e precisar de uma resposta sem folhear o livro inteiro. Aqui estão os termos, as fórmulas, o passo a passo de criação e as tabelas principais — tudo em um só lugar. A Torre não dá mapas, mas dá ferramentas. Use-as.</p>
 
             <h2 id="glossario">Glossário de Termos</h2>
@@ -27651,9 +27829,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li><a href="#corrupcao-estagios">Estágios de Corrupção</a></li>
                     <li><a href="#sanidade-faixas">Faixas de Sanidade</a></li>
                     <li><a href="#rel-niveis">Níveis de Relacionamento</a></li>
-                    <li><a href="#rel-eventos">Eventos de Relacionamento</a></li>
-                    <li><a href="#faccoes">Reputação com Facções</a></li>
-                    <li><a href="#ranks-equipamentos">Classificação de Equipamentos</a></li>
+                    <li><a href="#rel-eventos">Eventos de Relacionamento</a></li>                   <li><a href="#ranks-equipamentos">Classificação de Equipamentos</a></li>
                     <li><a href="#evolucao-poder">Formas de Despertar</a></li>
                     <li><a href="#tecnicas-habilidades">Custo e Níveis de Técnicas</a></li>
                     <li><a href="#arvore-alma">Árvore da Alma — Aspectos</a></li>
@@ -27666,9 +27842,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </section>
 
                 <!-- X̷I̷. CAPÍTULO CORROMPIDO -->
-        <section id="korrith" data-capitulo="X̷I̷" class="capitulo-corrompido">
+        <section id="korrith" data-capitulo="X̷I̷I̷" class="capitulo-corrompido">
             <div class="corrompido-cabecalho">
-                <h1><span class="corrompido-num" title="Onze corrompido">X̷I̷</span>. Korrith — A Fala que Nomeia</h1>
+                <h1><span class="corrompido-num" title="Doze corrompido">X̷I̷I̷</span>. Korrith — A Fala que Nomeia</h1>
                 <p class="corrompido-sub">a fome que nomeia</p>
             </div>
             <p class="corrompido-intro">Este capítulo não deveria estar aqui. As páginas seguintes parecem ter sido arrancadas de um texto mais antigo do que as Torres — manchadas, com a tinta emperrada e a gramática quebrada. Algumas palavras mudam quando você não está olhando. Leia por sua conta e risco. A Corrupção também lê.</p>
@@ -32079,10 +32255,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Insere selos de capítulo no Sumário Interativo do Livro */
   (function() {
     const map = {
-      '#livro-sumario': 'Sumário', '#intro': 'I', '#criacao': 'II', '#alma-fragmentada': 'III',
-      '#progressao-ascensao-tecnicas': 'IV', '#economia': 'V', '#mecanico': 'VI',
-      '#sobrevivencia': 'VII', '#sanidade': 'VIII', '#relacionamentos': 'IX',
-      '#referencias-ferramentas': 'X', '#korrith': 'X̷I̷'
+      '#livro-sumario': 'Sumário', '#intro': 'I', '#guildas-faccoes': 'II', '#criacao': 'III', '#alma-fragmentada': 'IV',
+      '#progressao-ascensao-tecnicas': 'V', '#economia': 'VI', '#mecanico': 'VII',
+      '#sobrevivencia': 'VIII', '#sanidade': 'IX', '#relacionamentos': 'X',
+      '#referencias-ferramentas': 'XI', '#korrith': 'X̷I̷I̷'
     };
     const sumario = document.getElementById('livro-sumario');
     if (!sumario) return;
